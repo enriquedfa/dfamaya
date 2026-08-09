@@ -52,9 +52,22 @@ When submitting an app on Google Play, use:
 > actually resolves, then append the paths above. The old root `privacy.html` /
 > `support.html` URLs still redirect to the `watchfaces/` versions.
 
+## Google Play links
+
+- Developer page (all apps): <https://play.google.com/store/apps/developer?id=Enrique+Amaya>
+- Brief: <https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication>
+- Wear OS Watch Faces: <https://play.google.com/store/apps/details?id=com.dfamaya.watchsky>
+
+Each app page and the landing page link out to its Play Store listing via the
+`.btn.btn-store` button (styled in `style.css`) and a matching `nav-store`
+pill in the header nav.
+
 ## Adding another app
 
 1. Create a folder for the app (e.g. `myapp/`).
 2. Add `myapp/index.html` (overview) and `myapp/privacy.html` (policy),
    referencing `../style.css` for styles.
-3. Add a card linking to it in the “Apps” section of `index.html`.
+3. Add a card linking to it in the “Apps” section of `index.html`, including
+   a `.btn.btn-store` button pointing at its Play Store listing.
+4. Add a `nav-store` pill to the app's own header nav, and list the app's
+   Play Store link above.
