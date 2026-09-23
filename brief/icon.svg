@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Brief's launcher icon, redrawn from the app's vector layers
+       (ic_launcher_background + ic_launcher_foreground). -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="512" x2="512" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#574A9C"/>
+      <stop offset="0.5" stop-color="#6E7BC2"/>
+      <stop offset="1" stop-color="#8FC1ED"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#g)"/>
+  <path d="M100,256 A156,156 0 0 1 256,100" fill="none" stroke="#fff" stroke-opacity="0.32" stroke-width="40" stroke-linecap="round"/>
+  <path d="M256,100 A156,156 0 1 1 256,412 A156,156 0 1 1 256,100" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round" pathLength="1" stroke-dasharray="0.75 1"/>
+  <path fill="#fff" d="M202,176 H310 C324.359,176 336,187.641 336,202 C336,216.359 324.359,228 310,228 H202 C187.641,228 176,216.359 176,202 C176,187.641 187.641,176 202,176 Z"/>
+  <path fill="#fff" fill-opacity="0.6" d="M214,242 H298 C310.15,242 320,251.85 320,264 C320,276.15 310.15,286 298,286 H214 C201.85,286 192,276.15 192,264 C192,251.85 201.85,242 214,242 Z"/>
+  <path fill="#fff" fill-opacity="0.4" d="M226,300 H286 C295.941,300 304,308.059 304,318 C304,327.941 295.941,336 286,336 H226 C216.059,336 208,327.941 208,318 C208,308.059 216.059,300 226,300 Z"/>
+</svg>

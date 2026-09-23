@@ -2,79 +2,414 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Brief — Wear OS Complication &amp; Tile</title>
-  <meta name="description" content="Brief is an 'at a glance' Wear OS complication and tile by dfamaya. About, privacy, and contact." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Brief · What's next, on your watch face</title>
+  <meta name="description" content="Brief is a Wear OS complication and tile that shows the one thing worth knowing right now: your next event, the song that's playing, a message, the weather or a reminder. Free, with no account." />
+  <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Brief · What's next, on your watch face" />
+  <meta property="og:description" content="A Wear OS complication and tile that shows the one thing worth knowing right now." />
+  <meta property="og:url" content="https://enriquedfa.github.io/dfamaya/brief/" />
+  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/brief/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
   <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="brief.css" />
+  <script src="demo.js" defer></script>
 </head>
 <body>
-  <header class="site">
-    <div class="bar">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-event" viewBox="0 -960 960 960"><path d="M509,-269q-29,-29 -29,-71t29,-71q29,-29 71,-29t71,29q29,29 29,71t-29,71q-29,29 -71,29t-71,-29ZM200,-80q-33,0 -56.5,-23.5T120,-160v-560q0,-33 23.5,-56.5T200,-800h40v-80h80v80h320v-80h80v80h40q33,0 56.5,23.5T840,-720v560q0,33 -23.5,56.5T760,-80H200Zm0,-80h560v-400H200v400Z"/></symbol>
+    <symbol id="i-music" viewBox="0 -960 960 960"><path d="M287,-167q-47,-47 -47,-113t47,-113q47,-47 113,-47 23,0 42.5,5.5T480,-418v-422h240v160H560v400q0,66 -47,113t-113,47q-66,0 -113,-47Z"/></symbol>
+    <symbol id="i-play" viewBox="0 -960 960 960"><path d="M320,-200v-560l440,280 -440,280Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 -960 960 960"><path d="M560,-200v-560h160v560H560Zm-320,0v-560h160v560H240Z"/></symbol>
+    <symbol id="i-notification" viewBox="0 0 24 24"><path d="M4,19V17H6V10Q6,7.93 7.25,6.31T10.5,4.2V3.5q0-0.63 0.44-1.06T12,2t1.06,0.44T13.5,3.5V4.2q2,0.5 3.25,2.11T18,10v7h2v2H4Zm8,3q-0.82,0-1.41-0.59T10,20h4q0,0.82-0.59,1.41T12,22ZM2,10Q2,7.5 3.11,5.41T6.1,1.95l1.17,1.6q-1.5,1.1-2.39,2.78T4,10H2Zm18,0q0-2-0.89-3.68T16.73,3.55l1.18-1.6q1.88,1.38 2.99,3.46T22,10H20Z"/></symbol>
+    <symbol id="i-battery" viewBox="0 0 960 960"><path d="M440,560h80v-240h-80v240ZM480,720q17,0 28.5,-11.5T520,680q0,-17 -11.5,-28.5T480,640q-17,0 -28.5,11.5T440,680q0,17 11.5,28.5T480,720ZM320,880q-17,0 -28.5,-11.5T280,840v-640q0,-17 11.5,-28.5T320,160h80v-80h160v80h80q17,0 28.5,11.5T680,200v640q0,17 -11.5,28.5T640,880L320,880Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 -960 960 960"><path d="M440,-760v-160h80v160h-80Zm266,110 -55,-55 112,-115 56,57 -113,113Zm54,210v-80h160v80H760ZM440,-40v-160h80v160h-80ZM254,-652 140,-763l57,-56 113,113 -56,54Zm508,512L651,-255l54,-54 114,110 -57,59ZM40,-440v-80h160v80H40Zm157,300 -56,-57 112,-112 29,27 29,28 -114,114Zm113,-170q-70,-70 -70,-170t70,-170q70,-70 170,-70t170,70q70,70 70,170t-70,170q-70,70 -170,70t-170,-70Z"/></symbol>
+    <symbol id="i-pill" viewBox="0 0 24 24"><path d="M10.5,17.5h3V15H16V12H13.5V9.5h-3V12H8v3h2.5v2.5ZM7,21q-0.82,0-1.41-0.59T5,19V8Q5,7.18 5.59,6.59T7,6H17q0.82,0 1.41,0.59Q19,7.18 19,8V19q0,0.82-0.59,1.41T17,21H7ZM6,5V3H18V5H6Z"/></symbol>
+    <symbol id="i-reminder" viewBox="0 0 960 960"><path d="M260,320h40v-40q0,-17 -11.5,-28.5T260,240q-17,0 -28.5,11.5T220,280q0,17 11.5,28.5T260,320ZM440,320q17,0 28.5,-11.5T480,280q0,-17 -11.5,-28.5T440,240q-17,0 -28.5,11.5T400,280v40h40ZM381,440h299q50,0 85,35t35,85v160q0,66 -47,113T640,880L419,880q-28,0 -52.5,-12T325,834L107,557l19,-20q20,-21 48,-25t52,11l74,45v-168h-40q-50,0 -85,-35t-35,-85q0,-50 35,-85t85,-35q11,0 20.5,2t19.5,5v-47q0,-17 11.5,-28.5T340,80q17,0 29,11.5t12,28.5v56q14,-8 28.5,-12t30.5,-4q50,0 85,35t35,85q0,50 -35,85t-85,35h-59v40Z"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M5,22q-0.83,0-1.41-0.59T3,20V6Q3,5.18 3.59,4.59T5,4H6V2H8V4h8V2h2V4h1q0.83,0 1.41,0.59Q21,5.18 21,6V20q0,0.82-0.59,1.41T19,22H5Zm0-2H19V10H5V20Z"/></symbol>
+    <symbol id="i-check" viewBox="0 -960 960 960"><path d="M382,-240 154,-468 211,-525 382,-354 749,-721 806,-664 382,-240Z"/></symbol>
+    <symbol id="i-brief" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12,2 C17.5228,2 22,6.4772 22,12 C22,17.5228 17.5228,22 12,22 C6.4772,22 2,17.5228 2,12 C2,6.4772 6.4772,2 12,2 Z M12,4 C16.4183,4 20,7.5817 20,12 C20,16.4183 16.4183,20 12,20 C7.5817,20 4,16.4183 4,12 C4,7.5817 7.5817,4 12,4 Z"/><path d="M8.75,7.5 H15.25 C15.9404,7.5 16.5,8.0596 16.5,8.75 C16.5,9.4404 15.9404,10 15.25,10 H8.75 C8.0596,10 7.5,9.4404 7.5,8.75 C7.5,8.0596 8.0596,7.5 8.75,7.5 Z"/><path d="M9.5,11.5 H14.5 C15.0523,11.5 15.5,11.9477 15.5,12.5 C15.5,13.0523 15.0523,13.5 14.5,13.5 H9.5 C8.9477,13.5 8.5,13.0523 8.5,12.5 C8.5,11.9477 8.9477,11.5 9.5,11.5 Z"/><path d="M10.25,15 H13.75 C14.1642,15 14.5,15.3358 14.5,15.75 C14.5,16.1642 14.1642,16.5 13.75,16.5 H10.25 C9.8358,16.5 9.5,16.1642 9.5,15.75 C9.5,15.3358 9.8358,15 10.25,15 Z"/></symbol>
+    <symbol id="i-phone-battery" viewBox="0 0 24 24"><path d="M8,22q-0.42,0-0.71-0.29Q7,21.43 7,21V5Q7,4.57 7.29,4.29T8,4h2V3q0-0.43 0.29-0.71T11,2h2q0.43,0 0.71,0.29T14,3V4h2q0.43,0 0.71,0.29T17,5V21q0,0.43-0.29,0.71T16,22H8Zm4.71-8.29Q13,13.43 13,13V9q0-0.43-0.29-0.71T12,8T11.29,8.29T11,9v4q0,0.42 0.29,0.71T12,14t0.71-0.29ZM12,18q0.43,0 0.71-0.29Q13,17.43 13,17t-0.29-0.71T12,16t-0.71,0.29T11,17t0.29,0.71T12,18Z"/></symbol>
+    <symbol id="i-smartphone" viewBox="0 0 24 24"><path d="M7,23q-0.82,0-1.41-0.59T5,21V3Q5,2.17 5.59,1.59T7,1H17q0.82,0 1.41,0.59T19,3V6.1q0.45,0.18 0.73,0.55T20,7.5v2q0,0.47-0.27,0.85T19,10.9V21q0,0.82-0.59,1.41T17,23H7ZM12.71,5.71Q13,5.43 13,5T12.71,4.29T12,4T11.29,4.29T11,5t0.29,0.71T12,6t0.71-0.29Z"/></symbol>
+    <symbol id="i-watch" viewBox="0 0 24 24"><path d="M10.5,22q-0.65,0-1.19-0.39q-0.54-0.39-0.74-1.04L8,18.65q-0.15-0.5-0.46-1.01T6.73,16.58q-0.85-0.92-1.29-2.1T5,12q0-1.28 0.44-2.45Q5.88,8.38 6.73,7.43q0.5-0.58 0.81-1.08T8,5.35L8.58,3.42q0.2-0.65 0.74-1.04T10.5,2h3q0.65,0 1.19,0.39t0.74,1.04L16,5.35q0.15,0.5 0.46,1.01t0.81,1.06q0.85,0.92 1.29,2.1T19,12q0,1.27-0.44,2.45t-1.29,2.13q-0.5,0.57-0.81,1.07t-0.46,1l-0.57,1.93q-0.2,0.65-0.74,1.04T13.5,22h-3Zm5.04-6.46Q17,14.08 17,12q0-2.08-1.46-3.54T12,7Q9.93,7 8.46,8.46T7,12t1.46,3.54T12,17t3.54-1.46Z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M6,22q-0.82,0-1.41-0.59T4,20V10Q4,9.17 4.59,8.59T6,8H7V6Q7,3.92 8.46,2.46T12,1t3.54,1.46T17,6V8h1q0.82,0 1.41,0.59T20,10V20q0,0.82-0.59,1.41T18,22H6Zm7.41-5.59Q14,15.83 14,15t-0.59-1.41T12,13t-1.41,0.59Q10,14.18 10,15t0.59,1.41T12,17t1.41-0.59ZM9,8h6V6q0-1.25-0.88-2.13T12,3T9.88,3.88T9,6V8Z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M9,15H5.9q-0.6,0-0.89-0.54q-0.29-0.54 0.06-1.04L12.55,2.67Q12.8,2.32 13.2,2.19T14.03,2.2t0.63,0.52t0.15,0.8L14,10h3.88q0.65,0 0.91,0.57t-0.16,1.07L10.4,21.5q-0.28,0.32-0.67,0.43T8.95,21.85T8.36,21.31T8.2,20.53L9,15Z"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M8.29,12.71Q8,12.43 8,12V5.82L6.13,7.7Q5.85,7.97 5.44,7.97q-0.41,0-0.71-0.27q-0.3-0.3-0.3-0.71q0-0.41 0.3-0.71L8.3,2.7Q8.45,2.55 8.63,2.49T9,2.42T9.38,2.49T9.7,2.7l3.6,3.6Q13.6,6.6 13.59,7T13.28,7.7q-0.3,0.27-0.7,0.29T11.88,7.7L10,5.82V12q0,0.42-0.29,0.71T9,13q-0.42,0-0.71-0.29Zm6.34,8.8q-0.17-0.06-0.32-0.21l-3.6-3.6q-0.3-0.3-0.29-0.7t0.31-0.7q0.3-0.28 0.7-0.29t0.7,0.29L14,18.18V12q0-0.43 0.29-0.71T15,11t0.71,0.29T16,12v6.18l1.88-1.88q0.28-0.28 0.69-0.28q0.41,0 0.71,0.28q0.3,0.3 0.3,0.71q0,0.41-0.3,0.71L15.7,21.3q-0.15,0.15-0.33,0.21T15,21.58t-0.38-0.06Z"/></symbol>
+    <symbol id="i-schedule" viewBox="0 0 24 24"><path d="M13,11.6V8q0-0.43-0.29-0.71T12,7T11.29,7.29T11,8v3.97q0,0.2 0.08,0.39T11.3,12.7L14.6,16q0.27,0.27 0.7,0.27T16,16q0.28-0.28 0.28-0.7q0-0.42-0.28-0.7l-3-3ZM12,22q-2.07,0-3.9-0.79q-1.82-0.79-3.17-2.14Q3.58,17.73 2.79,15.9T2,12Q2,9.92 2.79,8.1Q3.58,6.27 4.93,4.93Q6.28,3.57 8.1,2.79Q9.93,2 12,2t3.9,0.79t3.17,2.14q1.35,1.35 2.14,3.17Q22,9.92 22,12t-0.79,3.9t-2.14,3.17q-1.35,1.35-3.17,2.14T12,22Z"/></symbol>
+    <symbol id="i-dnd" viewBox="0 0 24 24"><path d="M8,13h8q0.43,0 0.71-0.29Q17,12.43 17,12t-0.29-0.71T16,11H8q-0.42,0-0.71,0.29T7,12t0.29,0.71T8,13Zm4,9q-2.07,0-3.9-0.79q-1.82-0.79-3.17-2.14Q3.58,17.73 2.79,15.9T2,12Q2,9.92 2.79,8.1Q3.58,6.27 4.93,4.93Q6.28,3.57 8.1,2.79Q9.93,2 12,2t3.9,0.79t3.17,2.14q1.35,1.35 2.14,3.17Q22,9.92 22,12t-0.79,3.9t-2.14,3.17q-1.35,1.35-3.17,2.14T12,22Z"/></symbol>
+    <symbol id="i-widgets" viewBox="0 0 24 24"><path d="M15.95,12.3L11.7,8.05Q11.55,7.9 11.49,7.72T11.43,7.35t0.06-0.38T11.7,6.65L15.95,2.4q0.15-0.15 0.33-0.21t0.38-0.06t0.38,0.06T17.35,2.4L21.6,6.65q0.15,0.15 0.21,0.32t0.06,0.38T21.81,7.72T21.6,8.05L17.35,12.3q-0.15,0.15-0.32,0.21t-0.38,0.06t-0.38-0.06T15.95,12.3ZM3,10V4Q3,3.57 3.29,3.29T4,3h6q0.43,0 0.71,0.29T11,4v6q0,0.42-0.29,0.71T10,11H4q-0.42,0-0.71-0.29Q3,10.43 3,10ZM13,20V14q0-0.43 0.29-0.71T14,13h6q0.43,0 0.71,0.29T21,14v6q0,0.43-0.29,0.71T20,21H14q-0.42,0-0.71-0.29Q13,20.43 13,20ZM3,20V14q0-0.43 0.29-0.71T4,13h6q0.43,0 0.71,0.29T11,14v6q0,0.43-0.29,0.71T10,21H4q-0.42,0-0.71-0.29Q3,20.43 3,20Z"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M16.18,13H5q-0.42,0-0.71-0.29Q4,12.43 4,12t0.29-0.71T5,11H16.18l-4.9-4.9q-0.3-0.3-0.29-0.7T11.3,4.7Q11.6,4.42 12,4.41T12.7,4.7l6.6,6.6q0.15,0.15 0.21,0.33T19.58,12t-0.06,0.38T19.3,12.7l-6.6,6.6q-0.28,0.27-0.69,0.27T11.3,19.3Q11,19 11,18.59q0-0.41 0.3-0.71L16.18,13Z"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M11,16.18V5q0-0.43 0.29-0.71T12,4t0.71,0.29T13,5V16.18l4.9-4.9q0.3-0.3 0.7-0.29t0.7,0.31q0.28,0.3 0.29,0.7T19.3,12.7l-6.6,6.6q-0.15,0.15-0.33,0.21T12,19.58t-0.38-0.06T11.3,19.3L4.7,12.7q-0.28-0.28-0.28-0.69T4.7,11.3Q5,11 5.41,11t0.71,0.3L11,16.18Z"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M11,7.82l-4.9,4.9q-0.3,0.3-0.7,0.29T4.7,12.7Q4.43,12.4 4.41,12T4.7,11.3l6.6-6.6q0.15-0.15 0.32-0.21T12,4.42t0.38,0.06T12.7,4.7l6.6,6.6q0.28,0.28 0.28,0.69T19.3,12.7Q19,13 18.59,13t-0.71-0.3L13,7.82V19q0,0.43-0.29,0.71T12,20t-0.71-0.29Q11,19.43 11,19V7.82Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4,20q-0.82,0-1.41-0.59T2,18V6Q2,5.18 2.59,4.59T4,4H20q0.83,0 1.41,0.59Q22,5.18 22,6V18q0,0.82-0.59,1.41T20,20H4Zm8.26-7.21q0.14-0.04 0.26-0.11L19.6,8.25q0.2-0.13 0.3-0.31T20,7.52q0-0.5-0.42-0.75T18.7,6.8L12,11L5.3,6.8Q4.85,6.52 4.43,6.79T4,7.52Q4,7.77 4.1,7.96T4.4,8.25l7.08,4.42q0.13,0.08 0.26,0.11T12,12.83t0.26-0.04Z"/></symbol>
+    <symbol id="i-no-account" viewBox="0 0 24 24"><path d="M15.2,10.95L10.55,6.3q0.35-0.15 0.71-0.23T12,6q1.48,0 2.49,1.01T15.5,9.5q0,0.38-0.07,0.74T15.2,10.95ZM5.85,17.1q1.27-0.98 2.85-1.54T12,15q0.45,0 0.86,0.04t0.86,0.11l-2.2-2.2q-1.17-0.15-2.01-0.99Q8.68,11.13 8.53,9.95L5.68,7.1Q4.88,8.13 4.44,9.36T4,12q0,1.47 0.49,2.78q0.49,1.3 1.36,2.33ZM18.3,16.9q0.8-1.02 1.25-2.26T20,12q0-3.33-2.34-5.66T12,4Q10.6,4 9.36,4.45T7.1,5.7L18.3,16.9ZM8.13,21.21Q6.3,20.43 4.94,19.06Q3.58,17.7 2.79,15.88T2,11.99T2.79,8.11T4.94,4.94T8.13,2.79T12.01,2t3.88,0.79t3.17,2.15t2.15,3.17T22,11.99t-0.79,3.89t-2.15,3.19t-3.17,2.15T12.01,22T8.13,21.21Z"/></symbol>
+    <symbol id="i-automation" viewBox="0 0 24 24"><path d="M7.4,17.25q-1.05,0.88-2.19,0.8T3.23,17.27q-0.85-0.7-1.16-1.84T2.48,13.1L4.35,10Q3.73,9.45 3.36,8.67T3,7Q3,5.35 4.18,4.17T7,3T9.83,4.17T11,7T9.83,9.82T7,11q-0.22,0-0.45-0.03T6.13,10.9L4.2,14.15Q3.93,14.6 4.03,15.04t0.42,0.71t0.78,0.31T6.1,15.75L16.6,6.72q1.05-0.88 2.2-0.79q1.15,0.09 2,0.79q0.85,0.7 1.15,1.84T21.53,10.9L19.65,14q0.63,0.55 0.99,1.32T21,17q0,1.65-1.17,2.82T17,21t-2.82-1.18T13,17t1.18-2.83T17,13q0.23,0 0.44,0.02t0.41,0.08L19.8,9.85q0.28-0.45 0.18-0.89T19.55,8.25q-0.32-0.28-0.77-0.31T17.9,8.25l-10.5,9Z"/></symbol>
+    <symbol id="i-translate" viewBox="0 0 24 24"><path d="M15.08,18.95l-0.85,2.43q-0.1,0.27-0.35,0.45T13.33,22q-0.5,0-0.81-0.41q-0.31-0.41-0.11-0.91l3.8-10.05q0.13-0.28 0.38-0.45T17.13,10h0.75q0.3,0 0.55,0.17t0.38,0.45L22.6,20.7q0.2,0.48-0.1,0.89T21.7,22q-0.33,0-0.56-0.18t-0.36-0.47l-0.85-2.4H15.08ZM9.05,13.98L4.7,18.3q-0.28,0.27-0.69,0.29T3.3,18.3q-0.27-0.28-0.27-0.7T3.3,16.9l4.35-4.35q-0.88-0.88-1.59-2T4.75,8h2.1q0.5,0.97 1,1.7t1.2,1.45q0.82-0.82 1.71-2.31T12.1,6H2Q1.58,6 1.29,5.71Q1,5.43 1,5T1.29,4.29T2,4H8V3Q8,2.57 8.29,2.29Q8.58,2 9,2Q9.43,2 9.71,2.29T10,3V4h6q0.43,0 0.71,0.29T17,5T16.71,5.71T16,6H14.1q-0.53,1.8-1.58,3.7t-2.07,2.9l2.4,2.45L12.1,17.1L9.05,13.98ZM15.7,17.2h3.6l-1.8-5.1l-1.8,5.1Z"/></symbol>
+    <symbol id="i-touch" viewBox="0 0 24 24"><path d="M10.48,22q-0.7,0-1.31-0.3T8.13,20.85L3.1,14.48q-0.2-0.22-0.17-0.54t0.23-0.51q0.5-0.53 1.2-0.63t1.3,0.28L7.5,14.2V6q0-0.43 0.29-0.71T8.5,5Q8.93,5 9.23,5.29Q9.53,5.57 9.53,6v5H17q1.25,0 2.13,0.88T20,14v4q0,1.65-1.18,2.82T16,22H10.48Zm1.5-13q-0.43,0-0.71-0.29T10.98,8q0-0.05 0.13-0.5q0.2-0.35 0.3-0.71Q11.5,6.43 11.5,6q0-1.25-0.88-2.13T8.5,3T6.38,3.88T5.5,6q0,0.43 0.1,0.79T5.9,7.5Q5.98,7.63 6,7.75T6.03,8q0,0.42-0.28,0.71T5.05,9Q4.78,9 4.54,8.85T4.18,8.48Q3.85,7.93 3.68,7.3T3.5,6q0-2.08 1.46-3.54T8.5,1t3.54,1.46T13.5,6q0,0.68-0.17,1.3t-0.5,1.17Q12.7,8.7 12.48,8.85T11.98,9Z"/></symbol>
+    <symbol id="i-bedtime" viewBox="0 0 24 24"><path d="M12.1,22Q10,22 8.16,21.2q-1.84-0.8-3.2-2.16T2.8,15.84T2,11.9Q2,8.7 3.8,6.1T8.63,2.45q0.55-0.2 1.03,0.14T10.1,3.5q-0.08,2.13 0.67,4.05t2.25,3.42t3.42,2.25T20.5,13.9q0.65-0.02 0.96,0.44t0.11,1.04q-1.1,3-3.69,4.81T12.1,22Z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12,21l-1.45-1.3q-2.53-2.27-4.18-3.92q-1.65-1.65-2.63-2.96Q2.78,11.5 2.39,10.4T2,8.15Q2,5.8 3.58,4.22T7.5,2.65q1.3,0 2.48,0.55T12,4.75q0.85-1 2.03-1.55T16.5,2.65q2.35,0 3.93,1.57T22,8.15q0,1.15-0.39,2.25t-1.36,2.41q-0.97,1.31-2.63,2.96q-1.65,1.65-4.17,3.92L12,21Z"/></symbol>
+    <symbol id="i-devices" viewBox="0 0 24 24"><path d="M11,20H3q-0.42,0-0.71-0.29Q2,19.43 2,19t0.29-0.71T3,18h8q0.43,0 0.71,0.29T12,19t-0.29,0.71T11,20ZM5,17q-0.83,0-1.41-0.59T3,15V6Q3,5.18 3.59,4.59T5,4H19q0.83,0 1.41,0.59Q21,5.18 21,6H15.5q-1.45,0-2.47,1.02T12,9.5V16q0,0.43-0.29,0.71T11,17H5Zm10.5,3q-0.63,0-1.06-0.44T14,18.5v-9q0-0.63 0.44-1.06T15.5,8h5q0.63,0 1.06,0.44T22,9.5v9q0,0.63-0.44,1.06T20.5,20h-5ZM18,12.5q0.32,0 0.54-0.23t0.21-0.52q0-0.33-0.21-0.54T18,11q-0.3,0-0.52,0.21q-0.23,0.21-0.23,0.54q0,0.3 0.23,0.52T18,12.5Z"/></symbol>
+    <symbol id="i-gplay" viewBox="0 0 24 24"><path d="M6.5 3.6c-.6-.4-1.5 0-1.5.8v15.2c0 .8.9 1.2 1.5.8l12.3-7.6a1 1 0 0 0 0-1.7z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap bar">
       <div class="crumbs">
-        <a class="brand" href="../">dfamaya</a>
-        <span class="sep" aria-hidden="true">›</span>
-        <a class="section" href="./">Brief</a>
+        <a class="parent" href="../">dfamaya</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a class="logo" href="./" aria-current="page">
+          <img class="logo-mark brief" src="icon.svg" alt="" width="28" height="28" />
+          <span class="logo-text">Brief</span>
+        </a>
       </div>
-      <nav aria-label="Brief sections">
-        <a href="./" aria-current="page">About</a>
+      <nav class="nav-links" aria-label="Brief">
         <a href="privacy.html">Privacy</a>
         <a href="mailto:developerdfa@gmail.com">Contact</a>
-        <a class="nav-store" href="https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication" target="_blank" rel="noopener noreferrer">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3l14 9-14 9V3z"/></svg>
-          Google Play
-        </a>
       </nav>
+      <a class="btn btn-sm btn-primary head-cta" href="https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication" target="_blank" rel="noopener noreferrer" aria-label="Get Brief on Google Play">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+        <span class="short">Get</span><span class="long">Google Play</span>
+      </a>
     </div>
   </header>
 
-  <main>
-    <h1>Brief</h1>
-    <p class="tagline">An &ldquo;at a glance&rdquo; complication &amp; tile for Wear OS.</p>
-    <a class="btn btn-store" href="https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication" target="_blank" rel="noopener noreferrer">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3l14 9-14 9V3z"/></svg>
-      Get it on Google Play
-    </a>
+  <main id="main">
+    <!-- Hero + the sources. The watch stays pinned while the list scrolls. -->
+    <section class="story" data-demo-start="event">
+      <div class="wrap story-grid">
+        <div class="story-intro">
+          <p class="app-badge rise" style="--d:0">
+            <img src="icon.svg" alt="" width="26" height="26" />
+            Brief for Wear OS
+          </p>
+          <h1 class="rise" style="--d:1"><span class="hl">What's next,</span> right on your watch face</h1>
+          <p class="lede rise" style="--d:2">
+            Brief is a complication that shows the one thing worth knowing
+            right now: your next meeting, the song that's playing, a message
+            you're waiting on, the weather. When nothing needs you, it shows
+            the date.
+          </p>
+          <div class="btn-row stack-sm rise" style="--d:3">
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication" target="_blank" rel="noopener noreferrer">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+              Get it on Google Play
+            </a>
+            <a class="btn btn-ghost" href="#how">
+              How it works
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+            </a>
+          </div>
+          <p class="fine rise" style="--d:4">Free. Needs a Wear OS 4+ watch and an Android phone.</p>
+        </div>
 
-    <div class="card">
-      <h2>About</h2>
-      <p>
-        Brief shows the single most relevant thing right now &mdash; your
-        now-playing music, your next calendar event, the current weather, a
-        scheduled reminder, or today&rsquo;s date &mdash; as a Wear OS watch
-        complication and tile.
-      </p>
-      <p>
-        It comes in two parts: the <strong>watch app</strong>, which only
-        displays what it&rsquo;s told, and the <strong>phone companion</strong>,
-        which gathers the information and sends it to your watch.
-      </p>
+        <div class="story-visual" data-tilt>
+          <div class="story-stage rise" style="--d:2">
+            <div class="watch" role="img" aria-label="A watch face with Brief in three complication slots. It cycles through now playing, a notification, a calendar countdown, low phone battery, the weather, a reminder and the date.">
+              <div class="watch-strap top"></div>
+              <div class="watch-strap bottom"></div>
+              <span class="watch-crown"></span>
+              <div class="watch-case">
+                <div class="dial">
+                  <time class="face-time" data-clock><span data-k="h">10</span><span class="colon">:</span><span data-k="m">08</span></time>
+                  <div class="cx cx-ranged" data-cx="ranged">
+                    <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
+                      <path class="ring-track" d="M17.65 82.35A45.75 45.75 0 1 1 82.35 82.35" pathLength="100" />
+                      <path class="ring-value" d="M17.65 82.35A45.75 45.75 0 1 1 82.35 82.35" pathLength="100" style="stroke-dasharray: 40 100" />
+                      <g class="ring-thumb"><circle cx="17.65" cy="82.35" r="5.5" /></g>
+                    </svg>
+                    <div class="swap-stack">
+                      <div class="swap-item cx-ranged-item"><span class="cx-lines"><span class="cx-line">12m</span></span><svg class="cx-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg></div>
+                    </div>
+                  </div>
+                  <div class="cx cx-short" data-cx="short">
+                    <div class="swap-stack">
+                      <div class="swap-item cx-short-item"><svg class="cx-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg><span class="cx-lines"><span class="cx-line">12m</span></span></div>
+                    </div>
+                  </div>
+                  <div class="cx cx-long" data-cx="long">
+                    <div class="swap-stack">
+                      <div class="swap-item cx-long-item"><svg class="cx-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg><span class="cx-lines"><span class="cx-title">In 12 mins</span><span class="cx-text">Standup</span></span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      <h2>What it can show</h2>
-      <ul>
-        <li>Now-playing music, with play/pause from your wrist</li>
-        <li>Your next calendar event</li>
-        <li>The current weather for your location</li>
-        <li>Reminders you schedule yourself</li>
-        <li>Today&rsquo;s date</li>
-      </ul>
+            <div class="chips" role="group" aria-label="Show a source on the watch">
+              <button type="button" class="chip" data-chip="music" style="--c-bg:#7B2949;--c-fg:#FFD9E2" aria-pressed="false" aria-label="Now playing"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-music"></use></svg></button>
+              <button type="button" class="chip" data-chip="notification" style="--c-bg:#00504B;--c-fg:#BCECE5" aria-pressed="false" aria-label="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-notification"></use></svg></button>
+              <button type="button" class="chip is-active" data-chip="event" style="--c-bg:#50378A;--c-fg:#E9DDFF" aria-pressed="true" aria-label="Calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg></button>
+              <button type="button" class="chip" data-chip="battery" style="--c-bg:#00531D;--c-fg:#CAEBC7" aria-pressed="false" aria-label="Phone battery"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone-battery"></use></svg></button>
+              <button type="button" class="chip" data-chip="weather" style="--c-bg:#004D64;--c-fg:#C2E8FC" aria-pressed="false" aria-label="Weather"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"></use></svg></button>
+              <button type="button" class="chip" data-chip="reminder" style="--c-bg:#604100;--c-fg:#FFDEAE" aria-pressed="false" aria-label="Reminders"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-reminder"></use></svg></button>
+              <button type="button" class="chip" data-chip="date" style="--c-bg:#3B494F;--c-fg:#DCE4E8" aria-pressed="false" aria-label="Default"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></button>
+              <button type="button" class="demo-toggle" data-demo-toggle aria-pressed="false" aria-label="Pause the demo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pause"></use></svg></button>
+            </div>
+            <p class="demo-caption" data-caption><strong data-k="name">Calendar</strong> · <span data-k="blurb">Your next event, counting down.</span></p>
+          </div>
+        </div>
 
-      <h2>Privacy</h2>
-      <p>
-        Brief has no servers, no account, no analytics, and no ads. Almost
-        everything stays on your own devices &mdash; the only thing that ever
-        leaves your phone is an approximate location, sent to a weather provider
-        so it can return your local forecast.
-      </p>
-      <p>
-        Read the full <a href="privacy.html">Brief Privacy Policy</a> for the
-        details.
-      </p>
-    </div>
+        <div class="story-steps">
+          <div class="section-head" id="how">
+            <p class="eyebrow">How it picks</p>
+            <h2>One thing at a time, in the order you choose</h2>
+            <p class="lede">
+              Brief runs down your list and shows the first source with
+              something to say. Drag them into any order in the app. Scroll to
+              see each one on the watch.
+            </p>
+          </div>
+
+          <ol class="steps">
+            <li class="step" data-step="music" style="--c-bg:#7B2949;--c-fg:#FFD9E2">
+              <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-music"></use></svg></span>
+              <h3>Now playing</h3>
+              <p>Track and artist, with a ring that follows the song. Play and pause from your wrist.</p>
+              <span class="rank" aria-hidden="true">01</span>
+            </li>
+            <li class="step" data-step="notification" style="--c-bg:#00504B;--c-fg:#BCECE5">
+              <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-notification"></use></svg></span>
+              <h3>Notifications</h3>
+              <p>Alerts from the apps you pick, and only those. Tap one to open it.</p>
+              <span class="rank" aria-hidden="true">02</span>
+            </li>
+            <li class="step" data-step="event" style="--c-bg:#50378A;--c-fg:#E9DDFF">
+              <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg></span>
+              <h3>Calendar</h3>
+              <p>Your next event, with a countdown that updates by itself.</p>
+              <span class="rank" aria-hidden="true">03</span>
+            </li>
+            <li class="step" data-step="battery" style="--c-bg:#00531D;--c-fg:#CAEBC7">
+              <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone-battery"></use></svg></span>
+              <h3>Phone battery</h3>
+              <p>Your watch tells you when your phone drops below the level you set.</p>
+              <span class="rank" aria-hidden="true">04</span>
+            </li>
+            <li class="step" data-step="weather" style="--c-bg:#004D64;--c-fg:#C2E8FC">
+              <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"></use></svg></span>
+              <h3>Weather</h3>
+              <p>Current conditions, plus a heads-up before it rains.</p>
+              <span class="rank" aria-hidden="true">05</span>
+            </li>
+            <li class="step" data-step="reminder" style="--c-bg:#604100;--c-fg:#FFDEAE">
+              <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-reminder"></use></svg></span>
+              <h3>Reminders</h3>
+              <p>Your own nudges, like &ldquo;Meds&rdquo; or &ldquo;Stand up&rdquo;, on your schedule. Mark them done from the watch.</p>
+              <span class="rank" aria-hidden="true">06</span>
+            </li>
+            <li class="step floor" data-step="date" style="--c-bg:#3B494F;--c-fg:#DCE4E8">
+              <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></span>
+              <h3>Default</h3>
+              <p>Always last. The date, your own text, your phone's battery level, or nothing at all.</p>
+              <span class="rank" aria-hidden="true">Last</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento ------------------------------------------------------------->
+    <section class="section" id="more">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <p class="eyebrow">Tile, widgets and more</p>
+          <h2>Everywhere you look</h2>
+          <p class="lede">
+            The complication, the tile, the Wear OS 7 widget and the widget on
+            your phone all show the same glance, and they change together.
+          </p>
+        </div>
+
+        <div class="bento">
+          <article class="cell cell-tile reveal">
+            <div class="cell-stage" aria-hidden="true">
+              <div class="tile" data-surface="tile">
+                <div class="swap-stack">
+                  <div class="swap-item tile-item">
+                    <div class="tile-label">In 12 mins</div>
+                    <div class="tile-card"><div class="tile-main">Standup</div><div class="tile-sub">10:20am – 10:35am</div></div>
+                    <div class="tile-edge"><svg viewBox="0 0 24 24"><use href="#i-brief"></use></svg></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cell-body">
+              <h3>Tile</h3>
+              <p>One swipe from your watch face. Bigger text, and play and pause when music is on.</p>
+            </div>
+          </article>
+
+          <article class="cell cell-widget reveal">
+            <div class="cell-stage" aria-hidden="true">
+              <div class="widget" data-surface="widget">
+                <div class="swap-stack">
+                  <div class="swap-item pw-item"><span class="pw-badge"><svg viewBox="0 0 24 24"><use href="#i-event"></use></svg></span><span class="pw-lines"><span class="pw-title">Standup</span><span class="pw-text">10:20am – 10:35am</span></span><span class="pw-pill">12 min</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="cell-body">
+              <h3>Phone widget</h3>
+              <p>The same glance on your home screen, with a progress bar or play and pause when it helps.</p>
+            </div>
+          </article>
+
+          <article class="cell cell-sm cell-batt reveal">
+            <div class="cell-body">
+              <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"></use></svg></span>
+              <h3>Easy on battery</h3>
+              <p>It only messages your watch when the glance changes.</p>
+            </div>
+          </article>
+
+          <article class="cell cell-sm cell-galaxy reveal">
+            <div class="cell-body">
+              <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-watch"></use></svg></span>
+              <h3>Galaxy Watch too</h3>
+              <p>The phone does the reading, so watches that can't read your calendar still work.</p>
+            </div>
+          </article>
+
+          <article class="cell cell-app reveal">
+            <div class="cell-body">
+              <h3>Set up on your phone</h3>
+              <p>Your phone reads your calendar, music and notifications, picks what to show, and sends only that to your watch. Drag sources into order and switch off what you don't need.</p>
+            </div>
+            <div class="cell-shot">
+              <div class="app-shot">
+                <picture>
+                  <source srcset="img/app-home-light.webp" media="(prefers-color-scheme: light)" />
+                  <img src="img/app-home-dark.webp" width="720" height="1462" loading="lazy" decoding="async"
+                    alt="The Brief phone app. A card at the top shows the watch is connected and synced, with a Sync button. Below, the sources in priority order, each with a drag handle and an on/off switch, and Default pinned last." />
+                </picture>
+              </div>
+            </div>
+          </article>
+
+          <article class="cell cell-priv reveal">
+            <div class="cell-body">
+              <div>
+                <h3>Nothing to sign up for</h3>
+                <p>No account, no Brief server, no ads, no analytics. Your calendar, music and notifications only ever go from your phone to your own watch.</p>
+                <p class="more"><a href="privacy.html">Read the privacy policy &rarr;</a></p>
+              </div>
+              <ul class="facts">
+                <li>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-no-account"></use></svg>
+                  <span><strong>No account</strong>Nothing to create and nothing to log in to.</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-devices"></use></svg>
+                  <span><strong>Phone to watch, directly</strong>Over the link your phone and watch already share, not through a server.</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"></use></svg>
+                  <span><strong>Weather is the exception</strong>A rough location, rounded to about 1&nbsp;km, goes to Open-Meteo. Or type in a city.</span>
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="cell cell-sm cell-taps reveal">
+            <div class="cell-body">
+              <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-touch"></use></svg></span>
+              <h3>Tap to act</h3>
+              <p>Play or pause, open a notification, or tick off a reminder.</p>
+            </div>
+          </article>
+
+          <article class="cell cell-sm cell-auto reveal">
+            <div class="cell-body">
+              <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-automation"></use></svg></span>
+              <h3>Works with Tasker</h3>
+              <p>Other apps can put their own text on your watch.</p>
+            </div>
+          </article>
+
+          <article class="cell cell-sm cell-free reveal">
+            <div class="cell-body">
+              <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-heart"></use></svg></span>
+              <h3>Free, no ads</h3>
+              <p>There's a tip jar if you like it. It unlocks nothing.</p>
+            </div>
+          </article>
+
+          <article class="cell cell-sm cell-quiet reveal">
+            <div class="cell-body">
+              <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bedtime"></use></svg></span>
+              <h3>Quiet when you want</h3>
+              <p>Give a source its own hours, or go quiet during Do Not Disturb.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ ---------------------------------------------------------------->
+    <section class="section" id="faq">
+      <div class="wrap faq-wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Questions</p>
+          <h2>Good to know</h2>
+        </div>
+        <div class="faq reveal">
+          <details name="faq">
+            <summary>What do I need?</summary>
+            <p>A watch with Wear OS 4 or newer, and an Android phone with Android 11 or newer. Brief doesn't work with iPhone, and the watch app needs the phone app to run.</p>
+          </details>
+          <details name="faq">
+            <summary>Which watch faces work?</summary>
+            <p>Any watch face with a complication slot. Brief fits the small circles and rings, but it looks best in a wide slot, where there's room for two lines.</p>
+          </details>
+          <details name="faq">
+            <summary>Is it free?</summary>
+            <p>Yes. There's a tip jar in the app if you'd like to say thanks. It doesn't unlock anything.</p>
+          </details>
+          <details name="faq">
+            <summary>Can other apps put things on it?</summary>
+            <p>Yes. Turn on Automation in the app's advanced settings, and Tasker (or anything else that can send an intent) can show its own text on your watch.</p>
+          </details>
+          <details name="faq">
+            <summary>Something isn't working</summary>
+            <p>Send feedback from the app's settings, or email <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>. If you allow it, the app can attach logs from both your phone and your watch. I read every message.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA ---------------------------------------------------------------->
+    <section class="section cta">
+      <div class="wrap reveal">
+        <img src="icon.svg" alt="" width="72" height="72" />
+        <h2>Try it on your watch</h2>
+        <p>Install Brief on your phone first. It walks you through getting the watch app too.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication" target="_blank" rel="noopener noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+            Get it on Google Play
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer>
-    &copy; <span id="year"></span> dfamaya
+  <footer class="site-foot">
+    <div class="wrap">
+      <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
+      <nav aria-label="Footer">
+        <a href="../">More apps</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>
+      </nav>
+    </div>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>document.querySelectorAll('[data-year]').forEach(function (n) { n.textContent = new Date().getFullYear(); });</script>
 </body>
 </html>

@@ -2,69 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Support — dfamaya Watch Faces</title>
-  <meta name="description" content="Support and contact information for Wear OS watch faces by dfamaya." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Support · dfamaya Watch Faces</title>
+  <meta name="description" content="Help and contact for the Wear OS watch faces by dfamaya." />
+  <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
   <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
-  <header class="site">
-    <div class="bar">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-watch" viewBox="0 0 24 24"><path d="M10.5,22q-0.65,0-1.19-0.39q-0.54-0.39-0.74-1.04L8,18.65q-0.15-0.5-0.46-1.01T6.73,16.58q-0.85-0.92-1.29-2.1T5,12q0-1.28 0.44-2.45Q5.88,8.38 6.73,7.43q0.5-0.58 0.81-1.08T8,5.35L8.58,3.42q0.2-0.65 0.74-1.04T10.5,2h3q0.65,0 1.19,0.39t0.74,1.04L16,5.35q0.15,0.5 0.46,1.01t0.81,1.06q0.85,0.92 1.29,2.1T19,12q0,1.27-0.44,2.45t-1.29,2.13q-0.5,0.57-0.81,1.07t-0.46,1l-0.57,1.93q-0.2,0.65-0.74,1.04T13.5,22h-3Zm5.04-6.46Q17,14.08 17,12q0-2.08-1.46-3.54T12,7Q9.93,7 8.46,8.46T7,12t1.46,3.54T12,17t3.54-1.46Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4,20q-0.82,0-1.41-0.59T2,18V6Q2,5.18 2.59,4.59T4,4H20q0.83,0 1.41,0.59Q22,5.18 22,6V18q0,0.82-0.59,1.41T20,20H4Zm8.26-7.21q0.14-0.04 0.26-0.11L19.6,8.25q0.2-0.13 0.3-0.31T20,7.52q0-0.5-0.42-0.75T18.7,6.8L12,11L5.3,6.8Q4.85,6.52 4.43,6.79T4,7.52Q4,7.77 4.1,7.96T4.4,8.25l7.08,4.42q0.13,0.08 0.26,0.11T12,12.83t0.26-0.04Z"/></symbol>
+    <symbol id="i-gplay" viewBox="0 0 24 24"><path d="M6.5 3.6c-.6-.4-1.5 0-1.5.8v15.2c0 .8.9 1.2 1.5.8l12.3-7.6a1 1 0 0 0 0-1.7z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap bar">
       <div class="crumbs">
-        <a class="brand" href="../">dfamaya</a>
-        <span class="sep" aria-hidden="true">›</span>
-        <a class="section" href="./">Watch Faces</a>
+        <a class="parent" href="../">dfamaya</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a class="logo long-name" href="./" aria-label="Watch Faces">
+          <span class="logo-mark logo-glyph" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-watch"></use></svg></span>
+          <span class="logo-text">Watch Faces</span>
+        </a>
       </div>
-      <nav aria-label="Watch Faces sections">
+      <nav class="nav-links" aria-label="Sections">
         <a href="privacy.html">Privacy</a>
         <a href="support.html" aria-current="page">Support</a>
-        <a href="mailto:developerdfa@gmail.com">Contact</a>
-        <a class="nav-store" href="https://play.google.com/store/apps/details?id=com.dfamaya.watchsky" target="_blank" rel="noopener noreferrer">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3l14 9-14 9V3z"/></svg>
-          Google Play
-        </a>
       </nav>
+      <a class="btn btn-sm btn-primary head-cta" href="https://play.google.com/store/apps/details?id=com.dfamaya.watchsky" target="_blank" rel="noopener noreferrer" aria-label="Get the watch faces on Google Play">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+        <span class="short">Get</span><span class="long">Google Play</span>
+      </a>
     </div>
   </header>
 
-  <main>
-    <h1>Support</h1>
-    <p class="tagline">Need help with a watch face? Get in touch.</p>
+  <main id="main">
+    <div class="wrap wrap-prose">
+      <header class="page-head">
+        <p class="eyebrow">Watch Faces</p>
+        <h1>Support</h1>
+        <p class="lede">Something not working, or have an idea? Send me an email.</p>
+        <div class="btn-row stack-sm">
+          <a class="btn btn-primary" href="mailto:developerdfa@gmail.com">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"></use></svg>
+            developerdfa@gmail.com
+          </a>
+        </div>
+        <p class="updated">If you can, include your watch model and Wear OS version. It makes problems much easier to track down.</p>
+      </header>
 
-    <div class="card">
-      <h2>Contact</h2>
-      <p>
-        For questions, bug reports, or feedback, email
-        <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>.
-      </p>
-      <p class="muted">
-        Please include your watch model and Wear OS version so issues
-        can be reproduced quickly.
-      </p>
+      <article class="prose">
+        <h2>Common questions</h2>
+        <dl class="qa">
+          <dt>How do I apply a watch face?</dt>
+          <dd>Long-press your current watch face, swipe through the list and tap the one you want. You can also pick it from your watch's companion app on your phone.</dd>
 
-      <h2>Common questions</h2>
-      <p><strong>How do I apply a watch face?</strong></p>
-      <ul>
-        <li>Long-press your current watch face on the watch.</li>
-        <li>Swipe through the gallery and tap the installed watch face.</li>
-        <li>Or open the Wear OS app on your phone and pick it from the &ldquo;Watch faces&rdquo; section.</li>
-      </ul>
+          <dt>How do I change colors or complications?</dt>
+          <dd>Long-press the watch face and tap <strong>Customize</strong> (or the gear icon).</dd>
 
-      <p><strong>How do I change colors or complications?</strong></p>
-      <ul>
-        <li>Long-press the active watch face on the watch, then tap the gear / customize icon.</li>
-      </ul>
-
-      <p><strong>Does the watch face work offline?</strong></p>
-      <ul>
-        <li>Yes. All watch faces run entirely on-device and require no internet connection.</li>
-      </ul>
+          <dt>Do they work offline?</dt>
+          <dd>Yes. Everything runs on the watch, so no internet connection is needed.</dd>
+        </dl>
+      </article>
     </div>
   </main>
 
-  <footer>
-    &copy; <span id="year"></span> dfamaya
+  <footer class="site-foot">
+    <div class="wrap">
+      <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
+      <nav aria-label="Footer">
+        <a href="./">Watch Faces</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="support.html">Support</a>
+        <a href="../">More apps</a>
+      </nav>
+    </div>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>document.querySelectorAll('[data-year]').forEach(function (n) { n.textContent = new Date().getFullYear(); });</script>
 </body>
 </html>

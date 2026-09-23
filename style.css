@@ -1,386 +1,328 @@
+/* ============================================================================
+   dfamaya — shared styles
+   Mobile-first. Dark by default, light when the system asks for it.
+============================================================================ */
+
+/* Colour tokens resolve per theme through light-dark(): one declaration each,
+   following the system setting via color-scheme. */
 :root {
-  --bg: #0f1115;
-  --surface: #161922;
-  --text: #e6e8ee;
-  --muted: #9aa3b2;
-  --accent: #6ea8ff;
-  --border: #232734;
-  --radius: 14px;
-  --max-width: 720px;
+  color-scheme: light dark;
+
+  --bg: light-dark(#f6f7fb, #0b0c10);
+  --bg-raised: light-dark(#ffffff, #111318);
+  --surface: light-dark(#ffffff, #15171d);
+  --surface-2: light-dark(#eef0f5, #1c1f27);
+  --text: light-dark(#101217, #eceef3);
+  --muted: light-dark(#5a6070, #9aa1ae);
+  --faint: light-dark(#8a90a0, #6b7280);
+  --border: light-dark(#e3e5ec, rgb(255 255 255 / 0.08));
+  --border-strong: light-dark(#d3d6df, rgb(255 255 255 / 0.14));
+  --accent: light-dark(#4f46a5, #a9b4ff);
+  --header-bg: light-dark(rgb(246 247 251 / 0.78), rgb(11 12 16 / 0.72));
+
+  /* Brand pair, same in both themes. White text clears WCAG AA on both stops. */
+  --brand-a: #574a9c;
+  --brand-b: #6366c8;
+  --brand-glow: #8fc1ed;
+  --brand-gradient: linear-gradient(135deg, var(--brand-a), var(--brand-b));
+
+  --radius-sm: 10px;
+  --radius: 18px;
+  --radius-lg: 28px;
+  --wrap: 1180px;
+  --prose: 740px;
+  --gutter: 16px;
+  --header-h: 60px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Fixed brand pair (same in both themes) for CTAs — tuned to keep white
-     button text at/above WCAG AA contrast against either gradient stop. */
-  --brand-a: #2563eb;
-  --brand-b: #7c4dff;
-  --brand-gradient: linear-gradient(135deg, var(--brand-a), var(--brand-b));
+  --font: "Google Sans Flex", "Google Sans", system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Lets height: auto animate (the FAQ answers) */
+  interpolate-size: allow-keywords;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f7f8fb;
-    --surface: #ffffff;
-    --text: #111418;
-    --muted: #555c6a;
-    --accent: #2563eb;
-    --border: #e5e7eb;
-  }
+@media (min-width: 640px) {
+  :root { --gutter: 24px; }
 }
 
-* { box-sizing: border-box; }
+/* Page-to-page transitions: the header stays put, shared elements morph */
+@view-transition { navigation: auto; }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 0.35s; }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
 }
 
-/* Quiet ambient glow, fixed behind the whole page — a single soft wash of
-   the brand gradient, not a pattern. Purely decorative. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(640px 420px at 15% -10%, color-mix(in srgb, var(--brand-b) 16%, transparent), transparent 70%),
-    radial-gradient(520px 360px at 100% 0%, color-mix(in srgb, var(--brand-a) 12%, transparent), transparent 70%);
-  pointer-events: none;
-}
+*,
+*::before,
+*::after { box-sizing: border-box; }
 
-/* Smooth in-page anchor scrolling, offset for the sticky header */
 html {
   scroll-behavior: smooth;
-  scroll-padding-block-start: 80px;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-main {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 48px 24px 96px;
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: var(--accent); text-underline-offset: 0.18em; }
+
+h1, h2, h3 {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p { margin: 0 0 1em; text-wrap: pretty; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus { top: 10px; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.wrap-prose { max-width: calc(var(--prose) + 2 * var(--gutter)); }
 
 /* ----------------------------------------------------------------------------
-   Sticky top bar (full-bleed blur, breadcrumb + section nav)
+   Header — always one row. Logo left, links + store button right.
 ---------------------------------------------------------------------------- */
-header.site {
+.site-head {
   position: sticky;
-  inset-block-start: 0;
-  z-index: 10;
-  background: color-mix(in srgb, var(--bg) 80%, transparent);
-  -webkit-backdrop-filter: blur(12px) saturate(1.3);
-  backdrop-filter: blur(12px) saturate(1.3);
-  border-block-end: 1px solid transparent;
-  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  top: 0;
+  z-index: 50;
+  view-transition-name: site-head;
+  background: var(--header-bg);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s var(--ease);
 }
 
-/* Inner wrapper keeps content aligned with <main> while blur spans the page */
-header.site > .bar {
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding: 14px 24px;
+@supports (animation-timeline: scroll()) {
+  .site-head {
+    animation: head-line linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 24px;
+  }
+  @keyframes head-line { to { border-bottom-color: var(--border); } }
+}
+@supports not (animation-timeline: scroll()) {
+  .site-head { border-bottom-color: var(--border); }
+}
+
+.site-head .bar {
+  height: var(--header-h);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 6px 16px;
-}
-
-/* Breadcrumb: dfamaya  ›  <App> */
-.crumbs {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  font-size: 1rem;
-}
-
-.crumbs .brand {
-  font-weight: 600;
-  color: var(--text);
-  text-decoration: none;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  transition: color 0.18s var(--ease);
-}
-
-.crumbs .brand:hover { color: var(--accent); }
-
-.crumbs .sep {
-  color: var(--muted);
-  user-select: none;
-}
-
-.crumbs .section {
-  color: var(--muted);
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: color 0.18s var(--ease);
-}
-
-.crumbs .section:hover { color: var(--text); }
-
-nav {
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 4px;
 }
 
-nav a {
-  position: relative;
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin-right: auto;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 8px;
+}
+
+.logo-glyph {
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  color: var(--text);
+}
+.logo-glyph svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* The parent crumb is its own link, sitting before the app logo */
+.crumbs {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin-right: auto;
+}
+.crumbs .logo { margin-right: 0; }
+.crumbs .parent {
+  display: none;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.18s var(--ease);
+}
+.crumbs .parent:hover { color: var(--text); }
+.crumbs .sep { display: none; color: var(--faint); user-select: none; }
+
+@media (min-width: 720px) {
+  .crumbs .parent,
+  .crumbs .sep { display: inline; }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nav-links a {
   color: var(--muted);
   text-decoration: none;
   font-size: 0.95rem;
-  padding: 6px 10px;
-  border-radius: 8px;
+  font-weight: 500;
+  padding: 7px 10px;
+  border-radius: 999px;
   white-space: nowrap;
   transition: color 0.18s var(--ease), background-color 0.18s var(--ease);
 }
 
-nav a:hover { color: var(--text); }
+.nav-links a:hover { color: var(--text); background: var(--surface-2); }
+.nav-links a[aria-current="page"] { color: var(--text); background: var(--surface-2); }
 
-/* Active section pill */
-nav a[aria-current="page"] {
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
+@media (min-width: 640px) {
+  .nav-links a { padding: 7px 12px; }
+  .site-head .bar { gap: 8px; }
 }
 
-/* Animated underline grows from center on hover (skip the active pill) */
-nav a:not([aria-current="page"])::after {
-  content: "";
-  position: absolute;
-  inset-inline: 10px;
-  inset-block-end: 2px;
-  height: 1.5px;
-  background: currentColor;
-  transform: scaleX(0);
-  transition: transform 0.2s var(--ease);
+/* Store button in the header: "Get" on phones, "Google Play" from tablet up */
+.head-cta { margin-left: 4px; }
+.nav-links,
+.head-cta { flex: none; }
+.logo-text { overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 420px) {
+  .nav-links a { padding: 7px 8px; font-size: 0.9rem; }
+  .btn.head-cta { padding: 0 12px; margin-left: 2px; }
 }
 
-nav a:not([aria-current="page"]):hover::after { transform: scaleX(1); }
-
-/* Store pill in the nav — the one link styled as a button, not text */
-nav a.nav-store {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: #fff;
-  background: var(--brand-gradient);
-  padding: 6px 12px;
-  font-weight: 600;
-  transition: filter 0.18s var(--ease), transform 0.18s var(--ease);
+/* A long app name gives way to its icon on the narrowest phones */
+@media (max-width: 379px) {
+  .logo.long-name .logo-text { display: none; }
 }
-
-nav a.nav-store:hover { color: #fff; filter: brightness(1.08); }
-nav a.nav-store:active { transform: translateY(1px); }
-nav a.nav-store::after { content: none; }
-nav a.nav-store .icon { width: 13px; height: 13px; }
-
-/* Border + shadow strengthen once the page is scrolled (progressive) */
-@supports (animation-timeline: scroll()) {
-  header.site {
-    animation: header-elevate steps(1) both;
-    animation-timeline: scroll(root block);
-    animation-range: 8px 48px;
-  }
-  @keyframes header-elevate {
-    to {
-      border-block-end-color: var(--border);
-      box-shadow: 0 6px 24px color-mix(in srgb, #000 16%, transparent);
-    }
-  }
-}
-
-/* Fallback for browsers without scroll-driven animations: a subtle static line */
-@supports not (animation-timeline: scroll()) {
-  header.site { border-block-end-color: var(--border); }
+.head-cta .long { display: none; }
+@media (min-width: 640px) {
+  .head-cta .short { display: none; }
+  .head-cta .long { display: inline; }
 }
 
 /* ----------------------------------------------------------------------------
-   Typography
----------------------------------------------------------------------------- */
-h1 {
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  margin: 0 0 8px;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  font-size: 1.2rem;
-  margin: 32px 0 8px;
-  letter-spacing: -0.01em;
-}
-
-h3 {
-  font-size: 1.05rem;
-  margin: 24px 0 8px;
-  letter-spacing: -0.01em;
-}
-
-p, li { color: var(--text); }
-
-.muted { color: var(--muted); }
-
-.tagline {
-  color: var(--muted);
-  font-size: 1.05rem;
-  margin-top: 0;
-}
-
-a { color: var(--accent); }
-
-ul { padding-left: 20px; }
-
-/* One signature gradient moment — the homepage brand mark only. Every other
-   heading stays solid so hierarchy (and legibility) doesn't get muddied. */
-.hero-title { letter-spacing: -0.02em; }
-
-@supports (background-clip: text) or (-webkit-background-clip: text) {
-  .hero-title {
-    background: var(--brand-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-}
-
-/* ----------------------------------------------------------------------------
-   Accessibility: a visible, on-brand focus ring for keyboard navigation
----------------------------------------------------------------------------- */
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-/* ----------------------------------------------------------------------------
-   Cards
----------------------------------------------------------------------------- */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  margin-top: 24px;
-  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease),
-    box-shadow 0.2s var(--ease);
-}
-
-.card h2:first-child { margin-top: 0; }
-.card h3:first-child { margin-top: 0; }
-
-/* Lift only app cards (those holding a link row), not long text cards */
-.card:has(.links):hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-  box-shadow: 0 10px 30px color-mix(in srgb, #000 14%, transparent);
-}
-
-.card table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 18px 0;
-  font-size: 0.95rem;
-}
-
-.card thead th { background: var(--bg); }
-
-.card th,
-.card td {
-  text-align: left;
-  vertical-align: top;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-}
-
-.table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ----------------------------------------------------------------------------
-   In-content link buttons
----------------------------------------------------------------------------- */
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.links a {
-  display: inline-block;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  text-decoration: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  transition: border-color 0.18s var(--ease), color 0.18s var(--ease),
-    transform 0.18s var(--ease);
-}
-
-.links a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-1px);
-}
-
-code {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 1px 6px;
-  border-radius: 6px;
-  font-size: 0.9em;
-}
-
-/* ----------------------------------------------------------------------------
-   Primary buttons (Google Play CTA)
+   Buttons
 ---------------------------------------------------------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 11px 18px;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
   border: 1px solid transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
   transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease),
+    background-color 0.18s var(--ease), border-color 0.18s var(--ease),
     filter 0.18s var(--ease);
 }
 
-.btn-store {
+.btn:active { transform: translateY(1px) scale(0.99); }
+
+.btn-sm {
+  height: 36px;
+  padding: 0 14px;
+  font-size: 0.92rem;
+  gap: 6px;
+}
+
+.btn-primary {
   background: var(--brand-gradient);
   color: #fff;
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--brand-a) 35%, transparent);
+  box-shadow: 0 6px 20px -6px color-mix(in srgb, var(--brand-b) 70%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
-
-.btn-store:hover {
+.btn-primary:hover {
   color: #fff;
-  transform: translateY(-1px);
   filter: brightness(1.08);
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--brand-a) 45%, transparent);
+  box-shadow: 0 10px 28px -8px color-mix(in srgb, var(--brand-b) 80%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 
-.btn-store:active {
-  transform: translateY(0);
-  filter: brightness(0.98);
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
 }
+.btn-ghost:hover { background: var(--surface-2); color: var(--text); }
 
-.card > .btn { margin-top: 20px; }
-.tagline + .btn { margin: 8px 0 4px; }
+.btn .icon { width: 18px; height: 18px; }
+.btn-sm .icon { width: 14px; height: 14px; }
 
 .icon {
   width: 16px;
@@ -389,41 +331,338 @@ code {
   flex: none;
 }
 
-footer {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 24px;
-  color: var(--muted);
-  font-size: 0.9rem;
-  text-align: center;
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-width: 420px) {
+  .btn-row.stack-sm { flex-direction: column; }
+  .btn-row.stack-sm .btn { width: 100%; }
 }
 
 /* ----------------------------------------------------------------------------
-   Soft entrance animation (disabled when the user prefers reduced motion)
+   Page heading + prose (privacy, support, overview pages)
+---------------------------------------------------------------------------- */
+.page-head {
+  padding-block: 40px 8px;
+}
+
+@media (min-width: 720px) {
+  .page-head { padding-block: 72px 16px; }
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-head h1 { font-size: clamp(2rem, 6vw, 3rem); }
+
+.page-head .lede {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+  max-width: 38em;
+}
+
+.page-head .btn-row { margin-top: 24px; }
+
+.updated { color: var(--muted); font-size: 0.95rem; margin-top: 10px; }
+
+.prose {
+  padding-block: 16px 72px;
+}
+
+.prose h2 {
+  font-size: 1.3rem;
+  margin: 2.2em 0 0.6em;
+}
+
+.prose h3 {
+  font-size: 1.05rem;
+  margin: 1.6em 0 0.5em;
+}
+
+.prose > :first-child,
+.prose .card > :first-child { margin-top: 0; }
+
+.prose ul,
+.prose ol { padding-left: 1.3em; margin: 0 0 1em; }
+.prose li { margin-bottom: 0.45em; }
+.prose li::marker { color: var(--faint); }
+
+.prose strong { font-weight: 600; }
+
+.muted { color: var(--muted); }
+
+code {
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 6px;
+  overflow-wrap: anywhere;
+}
+
+/* A long policy reads better without a card around every paragraph; the
+   summary box is the one highlighted block. */
+.summary-box {
+  margin: 8px 0 8px;
+  padding: 20px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.summary-box p:last-child { margin-bottom: 0; }
+
+@media (min-width: 640px) {
+  .summary-box { padding: 24px 28px; }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+@media (min-width: 640px) {
+  .card { padding: 28px; }
+}
+
+/* Tables: scroll sideways inside their own box on phones, never the page */
+.table-wrap {
+  margin: 18px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.table-wrap table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+
+.table-wrap th,
+.table-wrap td {
+  text-align: left;
+  vertical-align: top;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-wrap thead th {
+  background: var(--surface-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table-wrap tbody tr:last-child td { border-bottom: 0; }
+
+/* On phones a wide table becomes one card per row, each cell labelled */
+@media (max-width: 639px) {
+  .table-wrap.stack-sm {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+  }
+  .table-wrap.stack-sm table { min-width: 0; }
+  .table-wrap.stack-sm thead { display: none; }
+  .table-wrap.stack-sm tbody { display: grid; gap: 10px; }
+  .table-wrap.stack-sm tr {
+    display: block;
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+  .table-wrap.stack-sm td {
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .table-wrap.stack-sm td:last-child { border-bottom: 0; }
+  .table-wrap.stack-sm td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    color: var(--faint);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .table-wrap.stack-sm td:first-child::before { display: none; }
+  .table-wrap.stack-sm td:first-child { font-size: 1rem; }
+}
+
+/* Q&A lists on support pages */
+.qa { margin: 0; }
+.qa dt { font-weight: 600; margin-top: 1.4em; }
+.qa dd { margin: 0.35em 0 0; color: var(--muted); }
+
+/* ----------------------------------------------------------------------------
+   Home
+---------------------------------------------------------------------------- */
+.home-hero { padding-block: 40px 28px; }
+
+@media (min-width: 720px) {
+  .home-hero { padding-block: 88px 48px; }
+}
+
+.home-hero h1 {
+  font-size: clamp(2.4rem, 9vw, 4.4rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.home-hero .lede {
+  margin: 18px 0 0;
+  max-width: 32em;
+  color: var(--muted);
+  font-size: clamp(1.08rem, 2.6vw, 1.25rem);
+}
+
+.home-apps { padding-bottom: 72px; }
+.home-apps .wrap { display: grid; gap: 16px; }
+
+.app-card {
+  display: grid;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.app-copy { padding: 24px 20px 26px; }
+
+@media (min-width: 640px) {
+  .app-copy { padding: 36px; }
+}
+
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.app-title img { width: 48px; height: 48px; border-radius: 14px; }
+.app-title h2 { font-size: 1.6rem; letter-spacing: -0.025em; }
+.app-kind { margin: 2px 0 0; color: var(--muted); font-size: 0.92rem; }
+
+.app-glyph {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--surface-2);
+  color: var(--text);
+}
+.app-glyph svg { width: 26px; height: 26px; fill: currentColor; }
+
+.app-copy > p { color: var(--muted); max-width: 34em; }
+.app-copy .btn-row { margin-top: 22px; }
+
+.app-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 72px 0;
+  order: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(closest-side, color-mix(in srgb, var(--src-bg, #50378a) 60%, transparent), transparent) center / 110% 110% no-repeat,
+    var(--bg-raised);
+  border-bottom: 1px solid var(--border);
+}
+.app-visual .watch { --size: min(58vw, 250px); }
+
+@media (min-width: 860px) {
+  .app-card-feature { grid-template-columns: 1.1fr 1fr; align-items: stretch; }
+  .app-card-feature .app-copy { align-self: center; padding: 48px; }
+  .app-visual { order: 0; border-bottom: 0; border-left: 1px solid var(--border); padding: 96px 0; }
+  .app-visual .watch { --size: 270px; }
+}
+
+/* ----------------------------------------------------------------------------
+   Footer
+---------------------------------------------------------------------------- */
+.site-foot {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.site-foot .wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-block: 28px 36px;
+}
+
+.site-foot nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+}
+
+.site-foot a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.site-foot a:hover { color: var(--text); }
+
+@media (min-width: 720px) {
+  .site-foot .wrap {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Motion — content eases in once, never on reduced motion
 ---------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: no-preference) {
-  main > * {
-    animation: rise 0.55s var(--ease) both;
+  .rise {
+    animation: rise 0.7s var(--ease) both;
+    animation-delay: calc(var(--d, 0) * 70ms);
   }
-  main > *:nth-child(1) { animation-delay: 0.02s; }
-  main > *:nth-child(2) { animation-delay: 0.08s; }
-  main > *:nth-child(3) { animation-delay: 0.14s; }
-  main > *:nth-child(4) { animation-delay: 0.20s; }
-  main > *:nth-child(n + 5) { animation-delay: 0.24s; }
 
   @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* Sections fade up as they scroll into view, where the browser supports it */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
     }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  * { animation: none !important; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
