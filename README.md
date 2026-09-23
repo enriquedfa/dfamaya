@@ -51,8 +51,9 @@ phone widget. The clock, the event countdown and the song position are live.
   over the watch. Above the list it cycles on its own, like the app's
   onboarding. Tapping a step or a source button shows it too.
 - **Which surfaces exist** is decided by markup (`data-cx`, `data-surface`,
-  `data-chip`, `data-step`, `data-clock`, `data-tilt`), so the same script runs
-  the landing page and the small watch on the home page.
+  `data-chip`, `data-step`, `data-clock`, `data-tilt`, `data-song-toggle`),
+  so the same script runs the landing page and the small watch on the home
+  page.
 - **What each slot shows** (title vs. text line, icon, uppercase short text,
   the weather ring's marker dot) follows the watch's `ComplicationRenderer`.
   The tile follows `BriefTileRenderer` (Material 3 `primaryLayout`): a title,
@@ -67,20 +68,33 @@ phone widget. The clock, the event countdown and the song position are live.
   `res/drawable` Material Symbols, plus a few rounded symbols for the page.
 - It pauses when it's off screen or the tab is hidden, has a pause button, and
   uses a plain crossfade for people who prefer reduced motion.
-- **The song.** "Play a song" (or tapping the watch while "Now playing" is
-  on it) streams Apple's official 30-second preview of Night Tapes · storm
-  straight from Apple's servers (it is never hosted in this repo) and credits
-  it with a link to Apple Music, the same approach as tryalcove.com. It only
-  starts when someone presses play, and plays at a low volume (`SONG_VOLUME`).
-  The sound belongs to the music glance: it fades out when another glance
-  takes over and comes back when music does, until someone pauses it
-  themselves. While it plays, the watch, tile and widget follow the real
-  position, the complication's glyph flips between play and pause like the
-  watch app's, and the Media Session API puts the track in the phone's own
-  media controls. Browsers that can't play AAC never see the button. The
-  track details are the `SONG` object in `demo.js`; a preview URL can change,
-  so if it ever 404s, look the song up again with the iTunes Search API
-  (`https://itunes.apple.com/search?term=night+tapes+storm&entity=song`).
+- **Running order.** The demo cycles Calendar → Notifications → Weather →
+  Now playing → Phone battery → Reminders → Default (`RUN_ORDER` in
+  `demo.js`). That's deliberately not the app's priority order, which the
+  numbered list on the page shows: music comes fourth so a few glances go by
+  before the song kicks in.
+- **The song.** The first time "Now playing" comes up, the page starts
+  Apple's official 30-second preview of Night Tapes · storm, streamed
+  straight from Apple's servers (it is never hosted in this repo) and
+  credited with a link to Apple Music in the Now playing step, the same
+  approach as tryalcove.com. Browsers only let a page start sound after the
+  visitor has clicked or tapped something, so for most first visits the
+  music turn runs silently: the small play button beside the watch pulses,
+  and the song starts on the next music turn once they've interacted.
+  It plays at a low volume (`SONG_VOLUME`) and starts by itself at most once
+  per visit (never with Data Saver on). The sound belongs to the music
+  glance: it fades out when another glance takes over and comes back when
+  music does, until someone pauses it. While it plays the watch holds on
+  music, the watch, tile and widget follow the real position, the
+  complication's glyph flips between play and pause like the watch app's,
+  and the Media Session API puts the track in the phone's own media
+  controls. Tapping the watch, or the small button at its lower right (only
+  there during the music turn), plays or pauses. Only a page with
+  `data-song-autoplay` starts the song by itself, so the small watch on the
+  home page stays silent. Browsers that can't play AAC never see any of it.
+  The track details are the `SONG` object in `demo.js`; a preview URL can
+  change, so if it ever 404s, look the song up again with the iTunes Search
+  API (`https://itunes.apple.com/search?term=night+tapes+storm&entity=song`).
 
 To change the sample content, edit the `SOURCES` array at the top of
 `demo.js`.

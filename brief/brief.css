@@ -397,72 +397,9 @@
 .demo-caption strong { color: var(--text); font-weight: 600; }
 
 /* ----------------------------------------------------------------------------
-   Song preview button (Apple Music preview, plays on request)
+   Song (Apple Music preview): tap the watch, or the small button beside it
 ---------------------------------------------------------------------------- */
-.listen {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.listen-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  min-width: min(100%, 290px);
-  padding: 6px 6px 6px 6px;
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: border-color 0.25s var(--ease), background-color 0.25s var(--ease), scale 0.2s var(--ease);
-}
-.listen-btn:hover { border-color: color-mix(in srgb, #ffd9e2 45%, var(--border-strong)); }
-.listen-btn:active { scale: 0.98; }
-.listen-btn:disabled { opacity: 0.55; cursor: default; }
-
-.listen-art {
-  width: 40px;
-  height: 40px;
-  flex: none;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--border);
-}
-
-.listen-text { flex: 1; display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
-.listen-title { font-size: 0.95rem; font-weight: 600; }
-.listen-sub { color: var(--muted); font-size: 0.85rem; }
-
-.listen-icon {
-  width: 40px;
-  height: 40px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #ffd9e2;
-  color: #7b2949;
-}
-.listen-icon svg { width: 20px; height: 20px; fill: currentColor; }
-
-.listen-credit {
-  padding-left: 6px;
-  color: var(--faint);
-  font-size: 0.78rem;
-  text-decoration: none;
-}
-.listen-credit:hover { color: var(--muted); text-decoration: underline; }
-
-/* The record turns while it plays */
-.song-playing .listen-art { animation: record 6s linear infinite; }
-@keyframes record { to { rotate: 1turn; } }
-
 .song-playing .chip.is-active::after { opacity: 0; animation: none; }
-.no-song .listen { display: none !important; }
 
 /* Tapping the watch plays or pauses, like tapping the complication on a real
    one. It only exists while "Now playing" is on the watch. */
@@ -496,15 +433,84 @@
 }
 .watch-tap:active::after { opacity: 1; transition-duration: 0s; }
 
-/* One button per layout: under the intro on phones (the pinned watch stays
-   compact), inside the watch stage on desktop */
-.listen-intro { margin-top: 22px; }
-.listen-stage { display: none; }
-
-@media (min-width: 900px) {
-  .listen-intro { display: none; }
-  .listen-stage { display: flex; align-items: center; }
+/* The small play/pause button at the watch's lower right. It only shows while
+   "Now playing" is on the watch, and its ring follows the song. */
+.song-btn {
+  --song-p: 0;
+  --d: calc(50% + (50% + 24px) * 0.7071); /* 45° down-right, just off the case */
+  position: absolute;
+  left: var(--d);
+  top: var(--d);
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #7b2949;
+  color: #ffd9e2;
+  box-shadow: 0 8px 20px -8px rgb(0 0 0 / 0.6);
+  cursor: pointer;
+  translate: -50% -50%;
+  opacity: 0;
+  scale: 0.4;
+  visibility: hidden;
+  transition: opacity 0.3s var(--ease), scale 0.4s var(--ease), visibility 0s linear 0.4s;
 }
+.song-btn svg { width: 18px; height: 18px; fill: currentColor; }
+@media (max-width: 899px) {
+  .song-btn { --d: calc(50% + (50% + 16px) * 0.7071); width: 32px; height: 32px; }
+  .song-btn svg { width: 15px; height: 15px; }
+}
+.song-btn::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: conic-gradient(#ffd9e2 calc(var(--song-p) * 1turn), rgb(255 217 226 / 0.18) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+}
+:root[data-source="music"] .song-btn {
+  opacity: 1;
+  scale: 1;
+  visibility: visible;
+  transition-delay: 0.15s, 0.15s, 0s;
+}
+.song-btn:hover { background: #8e3257; }
+.song-btn:active { scale: 0.92; }
+.song-btn:focus-visible { outline: 2px solid #ffd9e2; outline-offset: 5px; }
+.no-song .song-btn,
+.song-btn:disabled { display: none; }
+
+/* The song couldn't start by itself: a gentle nudge to tap */
+.song-blocked:not(.song-playing) .song-btn::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgb(255 217 226 / 0.5);
+  animation: song-nudge 2.2s var(--ease) infinite;
+}
+@keyframes song-nudge {
+  70%, 100% { box-shadow: 0 0 0 12px rgb(255 217 226 / 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .song-blocked:not(.song-playing) .song-btn::after { animation: none; }
+}
+
+.step .step-credit {
+  grid-column: 2;
+  margin-top: 8px;
+  color: var(--faint);
+  font-size: 0.82rem;
+}
+.step-credit a { color: inherit; }
+.step-credit a:hover { color: var(--muted); }
+
+.no-song .step-credit { display: none; }
 
 /* ----------------------------------------------------------------------------
    Story: hero + the sources, with the watch pinned while you scroll

@@ -76,10 +76,16 @@
   };
   const SONG_VOLUME = 0.35; // background level, not a blast
   let audio = null; // created on first play
-  // Sound belongs to the "Now playing" glance: once someone starts the song it
-  // plays whenever music is on the watch, pauses when another glance takes
-  // over, and stops following the glance when they pause it themselves.
+  // Sound belongs to the "Now playing" glance: once the song starts it plays
+  // whenever music is on the watch, pauses when another glance takes over,
+  // and stops following the glance when someone pauses it themselves.
   let wantSound = false;
+  // On the Brief page the song starts by itself the first time music comes
+  // up. Browsers only allow that once the visitor has clicked or tapped
+  // something on the page; until then the glance runs silently, and it tries
+  // again on the next music turn. Once it has played (or been paused), it
+  // never starts by itself again.
+  let autoplayArmed = !!document.querySelector("[data-song-autoplay]") && !navigator.connection?.saveData;
   let songFailed = false;
   // Apple's previews are AAC; every major browser plays them, but some builds
   // (open-source Chromium, for one) can't, and then there's no button at all.
@@ -278,6 +284,12 @@
       },
     },
   ];
+
+  // The order the demo runs in. It isn't the app's priority order (that's the
+  // numbered list on the page): music comes fourth, so a few glances go by
+  // before the song kicks in.
+  const RUN_ORDER = ["event", "notification", "weather", "music", "battery", "reminder", "date"];
+  SOURCES.sort((a, b) => RUN_ORDER.indexOf(a.id) - RUN_ORDER.indexOf(b.id));
 
   const indexOf = (id) => SOURCES.findIndex((s) => s.id === id);
 
@@ -603,7 +615,7 @@
     root.style.setProperty("--src-fg", src.fg);
     root.dataset.source = src.id;
     surfaces.forEach((s) => s.mount(src, g, animate));
-    if (src.id === "music" && wantSound) startAudio();
+    if (src.id === "music" && (wantSound || autoplayArmed)) startAudio({ auto: !wantSound });
 
     chips.forEach((c) => {
       const on = c.dataset.chip === src.id;
@@ -652,9 +664,10 @@
   toggles.forEach((t) => t.addEventListener("click", () => setPaused(!paused)));
 
   // ---------------------------------------------------------------------------
-  // The song preview: plays on request only, drives the music glance, and
-  // tells the OS what's playing (Media Session), so a phone with Brief on it
-  // would put this very track on its watch.
+  // The song preview: starts on the first music turn (when the browser lets
+  // it) or on a tap, drives the music glance, and tells the OS what's playing
+  // (Media Session), so a phone with Brief on it would put this very track on
+  // its watch.
   // ---------------------------------------------------------------------------
   const songToggles = $$("[data-song-toggle]");
   const musicIndex = indexOf("music");
@@ -693,13 +706,17 @@
     songToggles.forEach((b) => {
       b.setAttribute("aria-pressed", String(on));
       b.setAttribute("aria-label", on ? `Pause ${SONG.title} by ${SONG.artist}` : `Play ${SONG.title} by ${SONG.artist}`);
-      if (b.classList.contains("watch-tap")) b.title = on ? "Tap to pause" : "Tap to play";
-      b.querySelector(".listen-icon use")?.setAttribute("href", on ? "#i-pause" : "#i-play");
-      const label = b.querySelector(".listen-title");
-      if (label) label.textContent = on ? "Playing on the watch" : audio?.currentTime > 0 ? "Paused" : "Play a song";
+      b.title = on ? "Pause" : "Play";
+      b.querySelector("use")?.setAttribute("href", on ? "#i-pause" : "#i-play");
     });
     if ("mediaSession" in navigator) navigator.mediaSession.playbackState = on ? "playing" : audio ? "paused" : "none";
     patchMusic();
+  };
+
+  // The play button's ring follows the song
+  const setSongProgress = () => {
+    const p = songLive() && audio.duration ? audio.currentTime / audio.duration : 0;
+    songToggles.forEach((b) => b.style.setProperty("--song-p", p.toFixed(4)));
   };
 
   const ensureAudio = () => {
@@ -713,14 +730,20 @@
       // glance changed: show() already set the timer.)
       if (current?.id === "music") schedule();
     });
+    audio.addEventListener("playing", () => {
+      autoplayArmed = false;
+      root.classList.remove("song-blocked");
+    });
     audio.addEventListener("ended", () => {
       wantSound = false;
       audio.currentTime = 0;
       refreshSongUi();
+      setSongProgress();
       schedule();
     });
     audio.addEventListener("timeupdate", () => {
       patchMusic();
+      setSongProgress();
       if ("mediaSession" in navigator && audio.duration) {
         try {
           navigator.mediaSession.setPositionState({ duration: audio.duration, position: audio.currentTime, playbackRate: 1 });
@@ -731,12 +754,9 @@
       // Couldn't stream it: say so, and hand the watch back to the demo.
       songFailed = true;
       wantSound = false;
+      autoplayArmed = false;
       refreshSongUi();
-      songToggles.forEach((b) => {
-        b.disabled = true;
-        const label = b.querySelector(".listen-title");
-        if (label) label.textContent = "Preview unavailable";
-      });
+      songToggles.forEach((b) => (b.disabled = true));
       schedule();
     });
     if ("mediaSession" in navigator) {
@@ -753,21 +773,25 @@
     return audio;
   };
 
-  // Starts the audio (the glance is already music).
-  function startAudio() {
+  // Starts the audio (the glance is already music). `auto`: nobody asked, so
+  // a blocked start is expected and the demo just carries on.
+  function startAudio({ auto = false } = {}) {
     if (!canPlaySong || songFailed) return;
     if (songPlaying()) return void fadeTo(SONG_VOLUME, 300); // cancel a fade-out
     const a = ensureAudio();
-    clearTimeout(timer);
+    wantSound = true;
     a.volume = 0;
     a.play().then(
       // The glance may have moved on while the stream was loading.
       () => (wantSound && current?.id === "music" ? fadeTo(SONG_VOLUME, 450) : pauseSong()),
       (err) => {
-        // Blocked or failed: wait for the next tap. (AbortError is just our
-        // own pause() landing before the stream started.)
-        if (err?.name !== "AbortError") wantSound = false;
+        // AbortError is just our own pause() landing before the stream
+        // started. Anything else: blocked or failed, so wait for a tap.
+        if (err?.name === "AbortError") return refreshSongUi();
+        wantSound = false;
+        if (auto) root.classList.add("song-blocked"); // the play button invites a tap
         refreshSongUi();
+        if (!auto) schedule();
       }
     );
   }
@@ -788,6 +812,7 @@
   // Someone paused it themselves: stop following the glance.
   function stopFollowing() {
     wantSound = false;
+    autoplayArmed = false;
     pauseSong();
   }
 
