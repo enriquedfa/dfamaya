@@ -860,12 +860,13 @@
 
 .tile-title {
   position: absolute;
-  top: 11cqw;
+  top: 13.4cqw;
   left: 20%;
   right: 20%;
   text-align: center;
-  font-size: 5.4cqw;
-  font-weight: 500;
+  font-size: 6.2cqw;
+  font-weight: 600;
+  line-height: 1.1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -873,9 +874,9 @@
 
 .tile-main {
   position: absolute;
-  left: 8.5%;
-  right: 8.5%;
-  top: 22.5%;
+  left: 7.6%;
+  right: 7.6%;
+  top: 23.5%;
   bottom: 23.5%;
   display: flex;
 }
@@ -888,7 +889,7 @@
   justify-content: center;
   gap: 1cqw;
   padding: 5.3cqw;
-  border-radius: 11cqw;
+  border-radius: 11.6cqw;
   background: var(--t-container);
   color: var(--t-on-container);
 }
@@ -931,7 +932,8 @@
 .t-label-sm { font-size: 5cqw; font-weight: 500; }
 .t-body { font-size: 5.2cqw; opacity: 0.9; }
 .t-display { font-size: 12.5cqw; font-weight: 500; line-height: 1.05; letter-spacing: -0.02em; }
-.t-display-sm { font-size: 10.6cqw; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; }
+.t-display-sm { font-size: 10cqw; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+.t-center .t-display-sm + .t-title { font-size: 6.4cqw; font-weight: 600; opacity: 0.78; }
 
 /* Weather: a temperature card, with rain chance and today's high/low
    stacked beside it */
@@ -962,22 +964,23 @@
 .t-hilo span { display: flex; align-items: center; gap: 0.6cqw; }
 .t-ico-hilo { width: 7.1cqw; height: 7.1cqw; }
 
-/* Edge button hugging the bottom of the screen */
+/* Edge button: soft top corners and a deep, rounded bottom, measured from
+   the rendered tile (48% wide, 20% tall, 78% down) */
 .tile-edge {
   position: absolute;
   left: 26%;
   right: 26%;
-  top: 79%;
-  height: 30%;
+  top: 78.4%;
+  height: 20.2%;
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding-top: 4.2cqw;
-  border-radius: 10cqw 10cqw 50% 50%;
+  border-radius: 16% 16% 50% 50% / 34% 34% 66% 66%;
   background: var(--t-container);
   color: var(--t-on-container);
 }
-.tile-edge svg { width: 8.5cqw; height: 8.5cqw; fill: currentColor; }
-.tile-edge.text { font-size: 5.5cqw; font-weight: 600; padding-top: 4.6cqw; }
+.tile-edge svg { width: 9.1cqw; height: 9.1cqw; fill: currentColor; }
+.tile-edge.text { font-size: 5.6cqw; font-weight: 600; }
 
 .tile-foot {
   position: absolute;
