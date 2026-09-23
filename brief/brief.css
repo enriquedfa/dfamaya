@@ -534,10 +534,15 @@
 }
 
 /* The first line takes the colour of the glance on the watch */
+/* A fixed gradient, not the current source's colour: following the watch
+   washed it out on some glances (blue on blue for weather, grey for the date) */
 .story h1 .hl {
-  --hl-a: light-dark(var(--src-bg), var(--src-fg));
-  --hl-b: light-dark(var(--brand-a), var(--brand-glow));
-  background: linear-gradient(100deg, var(--hl-a), var(--hl-b));
+  background: linear-gradient(
+    100deg,
+    light-dark(#9c3d63, #ffb0c8),
+    light-dark(#5b45a0, #d0bcff) 55%,
+    light-dark(#2f6ca3, var(--brand-glow))
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

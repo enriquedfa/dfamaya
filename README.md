@@ -62,8 +62,9 @@ phone widget. The clock, the event countdown and the song position are live.
   widget: badge, two lines, and a pill, play/pause or progress bar when the
   glance has one.
 - **Colour.** Each source has its tone-30 / tone-90 pair from the phone app's
-  `Theme.kt`. The page, the chips and the watch face all ease to the current
-  source's colour.
+  `Theme.kt`. The page glow, the chips and the watch face all ease to the
+  current source's colour. The headline gradient stays fixed, so no glance
+  can wash it out.
 - **Icons** are an inline SVG sprite built from the watch app's own
   `res/drawable` Material Symbols, plus a few rounded symbols for the page.
 - It pauses when it's off screen or the tab is hidden, has a pause button, and
