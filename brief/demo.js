@@ -16,6 +16,7 @@
  *   [data-clock]                   the time
  *   [data-demo-toggle]             pause / play
  *   [data-tilt]                    area whose pointer tilts the watch inside
+ *   [data-song-toggle]             play / pause the song preview
  */
 (() => {
   "use strict";
@@ -59,8 +60,38 @@
   const LOOKAHEAD_MIN = 30;
   let eventStart = Date.now() + 12 * MIN;
 
-  const TRACK_LEN_S = 243; // 4:03
+  const TRACK_LEN_S = 248; // 4:08
   const trackStartedAt = Date.now() - 62_000;
+
+  // The one real song: Apple's official 30 s preview, streamed from Apple
+  // (never hosted here), credited with a link back to Apple Music. It only
+  // plays when someone presses play.
+  const SONG = {
+    title: "storm",
+    artist: "Night Tapes",
+    album: "portals//polarities",
+    preview:
+      "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6a/f8/89/6af88923-480d-0a6f-ee50-d83f8a968a32/mzaf_1016940614169845687.plus.aac.p.m4a",
+    art: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f8/59/e2/f859e2a3-3d98-98b4-0c01-d8007e77093e/067003173155.png/600x600bb.jpg",
+  };
+  const SONG_VOLUME = 0.35; // background level, not a blast
+  let audio = null; // created on first play
+  // Sound belongs to the "Now playing" glance: once someone starts the song it
+  // plays whenever music is on the watch, pauses when another glance takes
+  // over, and stops following the glance when they pause it themselves.
+  let wantSound = false;
+  let songFailed = false;
+  // Apple's previews are AAC; every major browser plays them, but some builds
+  // (open-source Chromium, for one) can't, and then there's no button at all.
+  const canPlaySong = (() => {
+    try {
+      return new Audio().canPlayType('audio/mp4; codecs="mp4a.40.2"') !== "";
+    } catch {
+      return false;
+    }
+  })();
+  const songLive = () => !!audio && !songFailed && (!audio.paused || audio.currentTime > 0);
+  const songPlaying = () => !!audio && !songFailed && !audio.paused && !audio.ended;
 
   const temps = fahrenheit ? { now: 68, lo: 57, hi: 77, unit: "F" } : { now: 18, lo: 14, hi: 25, unit: "C" };
 
@@ -73,24 +104,31 @@
     {
       id: "music",
       name: "Now playing",
-      blurb: "Track and artist, with play and pause.",
+      blurb: canPlaySong ? "Tap the watch to play or pause." : "Track and artist, with play and pause.",
       bg: "#7B2949",
       fg: "#FFD9E2",
       icon: "music",
       face: "play",
       glance(now) {
-        const pos = ((now - trackStartedAt) / 1000) % TRACK_LEN_S;
+        // While the preview is loaded, everything follows the audio itself.
+        const live = songLive();
+        const progress = live
+          ? audio.currentTime / (audio.duration || 30)
+          : (((now - trackStartedAt) / 1000) % TRACK_LEN_S) / TRACK_LEN_S;
+        const paused = live && !songPlaying();
         return {
-          long: { title: "M83", text: "Midnight City" },
-          ranged: { lines: ["Midnight City"], value: pos / TRACK_LEN_S },
-          short: { lines: ["Midnight City"] },
+          // Like the watch: ▶ while playing, ⏸ while paused (a status glyph)
+          face: paused ? "pause" : "play",
+          long: { title: SONG.artist, text: SONG.title },
+          ranged: { lines: [SONG.title], value: progress },
+          short: { lines: [SONG.title] },
           tile: {
-            title: "Now playing",
-            ring: pos / TRACK_LEN_S,
-            card: { kind: "music", title: "Midnight City", artist: "M83" },
+            title: paused ? "Paused" : "Now playing",
+            ring: progress,
+            card: { kind: "music", title: SONG.title, artist: SONG.artist },
             edge: { text: "Player" },
           },
-          widget: { title: "Midnight City", text: "M83", bar: pos / TRACK_LEN_S, button: "pause" },
+          widget: { title: SONG.title, text: SONG.artist, bar: progress, button: paused ? "play" : "pause" },
         };
       },
     },
@@ -302,6 +340,12 @@
     });
   }
 
+  // A glance can swap the complication glyph while it's showing (music's play/pause).
+  const setFace = (node, face) => {
+    const use = face && node?.querySelector(".cx-icon use");
+    if (use && use.getAttribute("href") !== `#i-${face}`) use.setAttribute("href", `#i-${face}`);
+  };
+
   const linesHtml = (lines) =>
     lines.map((l, i) => `<span class="cx-line${i ? " cx-line-2" : ""}" data-k="l${i}">${esc(l)}</span>`).join("");
 
@@ -320,7 +364,7 @@
         const { title, text } = g.long;
         this.node = el(`
           <div class="cx-long-item${title ? "" : " single"}">
-            ${svgIcon(src.face, "cx-icon")}
+            ${svgIcon(g.face || src.face, "cx-icon")}
             <span class="cx-lines">
               ${title ? `<span class="cx-title" data-k="title">${esc(title)}</span>` : ""}
               <span class="cx-text" data-k="text">${esc(text)}</span>
@@ -329,6 +373,7 @@
         swap(stack, this.node, animate);
       },
       patch(g) {
+        setFace(this.node, g.face);
         setText(this.node, "title", g.long.title);
         setText(this.node, "text", g.long.text);
       },
@@ -354,12 +399,13 @@
         this.node = el(`
           <div class="cx-ranged-item${g.ranged.lines.length > 1 ? " two" : ""}">
             <span class="cx-lines">${linesHtml(g.ranged.lines)}</span>
-            ${svgIcon(src.face, "cx-icon")}
+            ${svgIcon(g.face || src.face, "cx-icon")}
           </div>`);
         swap(stack, this.node, animate);
         setRing(g.ranged);
       },
       patch(g) {
+        setFace(this.node, g.face);
         g.ranged.lines.forEach((l, i) => setText(this.node, `l${i}`, l));
         setRing(g.ranged);
       },
@@ -374,12 +420,13 @@
       mount(src, g, animate) {
         this.node = el(`
           <div class="cx-short-item${g.short.lines.length > 1 ? " two" : ""}">
-            ${svgIcon(src.face, "cx-icon")}
+            ${svgIcon(g.face || src.face, "cx-icon")}
             <span class="cx-lines">${linesHtml(g.short.lines)}</span>
           </div>`);
         swap(stack, this.node, animate);
       },
       patch(g) {
+        setFace(this.node, g.face);
         g.short.lines.forEach((l, i) => setText(this.node, `l${i}`, l));
       },
     });
@@ -464,6 +511,7 @@
         setRing(t.ring);
       },
       patch(g) {
+        setText(this.node, "t-top", g.tile.title);
         const c = g.tile.card;
         if (c.kind === "event") setText(this.node, "t-range", c.range);
         if (c.kind === "date") {
@@ -513,6 +561,7 @@
         setText(this.node, "text", g.widget.text);
         setText(this.node, "pill", g.widget.pill);
         setBar(this.node, g.widget);
+        if (g.widget.button) this.node?.querySelector(".pw-btn use")?.setAttribute("href", `#i-${g.widget.button}`);
       },
     });
   });
@@ -540,6 +589,7 @@
   function show(i, { animate = true, hold = HOLD_MS } = {}) {
     index = (i + SOURCES.length) % SOURCES.length;
     const src = SOURCES[index];
+    if (src.id !== "music" && songPlaying()) pauseSong();
     if (src === current && animate) {
       schedule(hold);
       return;
@@ -553,6 +603,7 @@
     root.style.setProperty("--src-fg", src.fg);
     root.dataset.source = src.id;
     surfaces.forEach((s) => s.mount(src, g, animate));
+    if (src.id === "music" && wantSound) startAudio();
 
     chips.forEach((c) => {
       const on = c.dataset.chip === src.id;
@@ -575,7 +626,8 @@
 
   function schedule(hold = HOLD_MS) {
     clearTimeout(timer);
-    if (paused || pinned || !visible || document.hidden) return;
+    if (!Number.isFinite(hold)) return; // held: the scroll story or the song decides
+    if (paused || pinned || songPlaying() || !visible || document.hidden) return;
     timer = setTimeout(() => show(index + 1), hold);
   }
 
@@ -598,6 +650,150 @@
     })
   );
   toggles.forEach((t) => t.addEventListener("click", () => setPaused(!paused)));
+
+  // ---------------------------------------------------------------------------
+  // The song preview: plays on request only, drives the music glance, and
+  // tells the OS what's playing (Media Session), so a phone with Brief on it
+  // would put this very track on its watch.
+  // ---------------------------------------------------------------------------
+  const songToggles = $$("[data-song-toggle]");
+  const musicIndex = indexOf("music");
+  if (!canPlaySong) root.classList.add("no-song");
+
+  // Resolves true when the fade finishes, false when a newer fade took over
+  // (e.g. music came straight back while it was fading out).
+  let fadeGen = 0;
+  const fadeTo = (target, ms) =>
+    new Promise((done) => {
+      if (!audio) return done(false);
+      const gen = ++fadeGen;
+      const from = audio.volume;
+      const t0 = performance.now();
+      const step = (t) => {
+        if (gen !== fadeGen) return done(false);
+        const k = Math.min(1, (t - t0) / ms);
+        try {
+          audio.volume = from + (target - from) * k;
+        } catch {}
+        k < 1 ? requestAnimationFrame(step) : done(true);
+      };
+      requestAnimationFrame(step);
+    });
+
+  const patchMusic = () => {
+    if (current?.id !== "music") return;
+    const g = current.glance(Date.now());
+    surfaces.forEach((s) => s.patch(g));
+  };
+
+  const refreshSongUi = () => {
+    const on = songPlaying();
+    if (on) clearTimeout(timer); // the watch stays on music while it plays
+    root.classList.toggle("song-playing", on);
+    songToggles.forEach((b) => {
+      b.setAttribute("aria-pressed", String(on));
+      b.setAttribute("aria-label", on ? `Pause ${SONG.title} by ${SONG.artist}` : `Play ${SONG.title} by ${SONG.artist}`);
+      if (b.classList.contains("watch-tap")) b.title = on ? "Tap to pause" : "Tap to play";
+      b.querySelector(".listen-icon use")?.setAttribute("href", on ? "#i-pause" : "#i-play");
+      const label = b.querySelector(".listen-title");
+      if (label) label.textContent = on ? "Playing on the watch" : audio?.currentTime > 0 ? "Paused" : "Play a song";
+    });
+    if ("mediaSession" in navigator) navigator.mediaSession.playbackState = on ? "playing" : audio ? "paused" : "none";
+    patchMusic();
+  };
+
+  const ensureAudio = () => {
+    if (audio) return audio;
+    audio = new Audio(SONG.preview);
+    audio.preload = "auto";
+    audio.addEventListener("play", refreshSongUi);
+    audio.addEventListener("pause", () => {
+      refreshSongUi();
+      // Paused on the music glance: let the demo move on. (Paused because the
+      // glance changed: show() already set the timer.)
+      if (current?.id === "music") schedule();
+    });
+    audio.addEventListener("ended", () => {
+      wantSound = false;
+      audio.currentTime = 0;
+      refreshSongUi();
+      schedule();
+    });
+    audio.addEventListener("timeupdate", () => {
+      patchMusic();
+      if ("mediaSession" in navigator && audio.duration) {
+        try {
+          navigator.mediaSession.setPositionState({ duration: audio.duration, position: audio.currentTime, playbackRate: 1 });
+        } catch {}
+      }
+    });
+    audio.addEventListener("error", () => {
+      // Couldn't stream it: say so, and hand the watch back to the demo.
+      songFailed = true;
+      wantSound = false;
+      refreshSongUi();
+      songToggles.forEach((b) => {
+        b.disabled = true;
+        const label = b.querySelector(".listen-title");
+        if (label) label.textContent = "Preview unavailable";
+      });
+      schedule();
+    });
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: SONG.title,
+        artist: SONG.artist,
+        album: SONG.album,
+        artwork: [{ src: SONG.art, sizes: "600x600", type: "image/jpeg" }],
+      });
+      navigator.mediaSession.setActionHandler("play", () => playSong());
+      navigator.mediaSession.setActionHandler("pause", () => stopFollowing());
+      navigator.mediaSession.setActionHandler("stop", () => stopFollowing());
+    }
+    return audio;
+  };
+
+  // Starts the audio (the glance is already music).
+  function startAudio() {
+    if (!canPlaySong || songFailed) return;
+    if (songPlaying()) return void fadeTo(SONG_VOLUME, 300); // cancel a fade-out
+    const a = ensureAudio();
+    clearTimeout(timer);
+    a.volume = 0;
+    a.play().then(
+      // The glance may have moved on while the stream was loading.
+      () => (wantSound && current?.id === "music" ? fadeTo(SONG_VOLUME, 450) : pauseSong()),
+      (err) => {
+        // Blocked or failed: wait for the next tap. (AbortError is just our
+        // own pause() landing before the stream started.)
+        if (err?.name !== "AbortError") wantSound = false;
+        refreshSongUi();
+      }
+    );
+  }
+
+  // Someone asked for the song: put music on the watch, and play.
+  function playSong() {
+    wantSound = true;
+    if (current?.id !== "music") show(musicIndex, { hold: Infinity });
+    else startAudio();
+  }
+
+  // Leaving the music glance: fade out, but keep following the glance.
+  async function pauseSong() {
+    if (!songPlaying()) return;
+    if (await fadeTo(0, 220)) audio.pause();
+  }
+
+  // Someone paused it themselves: stop following the glance.
+  function stopFollowing() {
+    wantSound = false;
+    pauseSong();
+  }
+
+  songToggles.forEach((b) =>
+    b.addEventListener("click", () => (songPlaying() ? stopFollowing() : playSong()))
+  );
 
   // ---------------------------------------------------------------------------
   // Scroll story: the step nearest the reading line holds the watch

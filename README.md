@@ -76,6 +76,20 @@ phone widget. The clock, the event countdown and the song position are live.
   `res/drawable` Material Symbols, plus a few rounded symbols for the page.
 - It pauses when it's off screen or the tab is hidden, has a pause button, and
   uses a plain crossfade for people who prefer reduced motion.
+- **The song.** "Play a song" (or tapping the watch while "Now playing" is
+  on it) streams Apple's official 30-second preview of Night Tapes · storm
+  straight from Apple's servers (it is never hosted in this repo) and credits
+  it with a link to Apple Music, the same approach as tryalcove.com. It only
+  starts when someone presses play, and plays at a low volume (`SONG_VOLUME`).
+  The sound belongs to the music glance: it fades out when another glance
+  takes over and comes back when music does, until someone pauses it
+  themselves. While it plays, the watch, tile and widget follow the real
+  position, the complication's glyph flips between play and pause like the
+  watch app's, and the Media Session API puts the track in the phone's own
+  media controls. Browsers that can't play AAC never see the button. The
+  track details are the `SONG` object in `demo.js`; a preview URL can change,
+  so if it ever 404s, look the song up again with the iTunes Search API
+  (`https://itunes.apple.com/search?term=night+tapes+storm&entity=song`).
 
 To change the sample content, edit the `SOURCES` array at the top of
 `demo.js`.
