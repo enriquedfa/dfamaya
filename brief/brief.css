@@ -328,12 +328,10 @@
   background: transparent;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: box-shadow 0.3s var(--ease);
 }
 :root[data-source="music"] .watch-tap { display: block; }
 .no-song .watch-tap,
 .watch-tap:disabled { display: none !important; }
-.watch-tap:hover { box-shadow: inset 0 0 0 2px oklch(from var(--src-fg) l c h / 0.35); }
 .watch-tap:focus-visible { outline: 2px solid var(--src-fg); outline-offset: 4px; }
 .watch-tap::after {
   content: "";
@@ -392,6 +390,12 @@
   scale: 1;
   visibility: visible;
   transition-delay: 0.15s, 0.15s, 0s;
+}
+/* Before the first tap, ▶ under the watch is the one play button */
+:root.demo-waiting .song-btn {
+  opacity: 0;
+  scale: 0.4;
+  visibility: hidden;
 }
 .song-btn:hover { background: #8e3257; }
 .song-btn:active { scale: 0.92; }

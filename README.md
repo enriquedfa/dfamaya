@@ -79,35 +79,34 @@ phone widget. The clock, the event countdown and the song position are live.
 - It pauses when it's off screen or the tab is hidden, has a pause button, and
   uses a plain crossfade for people who prefer reduced motion.
 - **Running order.** The demo follows the app's priority order, the same
-  order as the numbered list and the source buttons, and starts on Weather
-  (`data-demo-start`), so Now playing comes up fourth. On the Brief page
-  (`data-demo-wait`) it waits on that first glance until someone presses ▶,
-  which gives off a soft wave until then. The home page's small watch rolls
-  on its own.
-- **The song.** When "Now playing" comes up, the page starts Apple's
-  official 30-second preview of Night Tapes · storm, streamed straight from
-  Apple's servers (it is never hosted in this repo) and credited with a link
-  to Apple Music in the Now playing step, the same approach as
-  tryalcove.com. Browsers only let a page start sound after a tap, and the ▶
-  that starts the demo is that tap: Chrome and Firefox remember it for the
-  whole visit, and for Safari (every iOS browser) the tap also plays the
-  audio muted for an instant, because Safari only lets an element play
-  without a tap once it has played from one. Without any tap, the music turn
-  runs silently and the small play button beside the watch pulses.
-  It plays at a low volume (`SONG_VOLUME`; iOS ignores page volume) and
-  starts by itself at most once per visit (never with Data Saver on). The
-  sound belongs to the music glance: it fades out when another glance takes
-  over and comes back when music does, until someone pauses it. While it
-  plays the watch holds on music and moves on the moment it ends; the watch,
-  tile and widget follow the real position, the complication's glyph flips
-  between play and pause like the watch app's, and the Media Session API
-  puts the track in the phone's own media controls. Tapping the watch, or
-  the small button at its lower right (only there during the music turn),
-  plays or pauses. Only a page with `data-song-autoplay` starts the song by
-  itself, so the small watch on the home page stays silent. Browsers that
-  can't play AAC never see any of it. The track details are the `SONG`
-  object in `demo.js`; a preview URL can change, so if it ever 404s, look
-  the song up again with the iTunes Search API
+  order as the numbered list and the source buttons. On the Brief page
+  (`data-demo-wait`) it opens on Now playing (`data-demo-start`) and waits
+  for ▶, which gives off a soft wave until someone presses it. The home
+  page's small watch rolls on its own.
+- **The song.** Pressing ▶ plays Apple's official 30-second preview of
+  Night Tapes · storm, streamed straight from Apple's servers (it is never
+  hosted in this repo) and credited with a link to Apple Music in the Now
+  playing step, the same approach as tryalcove.com. The song starts inside
+  that tap, which is what browsers want before a page may play sound, so it
+  works everywhere. The watch holds on music while it plays, as Brief does,
+  and the demo moves on the moment it ends; ⏸ pauses both. Tapping the
+  watch, or the small button at its lower right (there during the music
+  turn, once the demo has started), plays or pauses too. If someone skips ▶
+  and reaches music another way (scrolling to it, say), the song tries to
+  start by itself, which browsers allow only after an earlier tap; without
+  one the turn runs silently and the small button pulses. It starts by
+  itself at most once per visit, and never with Data Saver on. It plays at
+  a low volume (`SONG_VOLUME`; iOS ignores page volume). The sound belongs
+  to the music glance: it fades out when another glance takes over and
+  comes back when music does, until someone pauses it. While it plays, the
+  watch, tile and widget follow the real position, the complication's glyph
+  flips between play and pause like the watch app's, and the Media Session
+  API puts the track in the phone's own media controls. Only a page with
+  `data-song-autoplay` starts the song by itself, so the small watch on the
+  home page stays silent. Browsers that can't play AAC never see any of it,
+  and there ▶ just starts the demo. The track details are the `SONG` object
+  in `demo.js`; a preview URL can change, so if it ever 404s, look the song
+  up again with the iTunes Search API
   (`https://itunes.apple.com/search?term=night+tapes+storm&entity=song`).
 
 To change the sample content, edit the `SOURCES` array at the top of
