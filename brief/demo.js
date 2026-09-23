@@ -84,7 +84,12 @@
           long: { title: "M83", text: "Midnight City" },
           ranged: { lines: ["Midnight City"], value: pos / TRACK_LEN_S },
           short: { lines: ["Midnight City"] },
-          tile: { label: "Now playing", main: "Midnight City", sub: "M83", edge: "pause" },
+          tile: {
+            title: "Now playing",
+            ring: pos / TRACK_LEN_S,
+            card: { kind: "music", title: "Midnight City", artist: "M83" },
+            edge: { text: "Player" },
+          },
           widget: { title: "Midnight City", text: "M83", bar: pos / TRACK_LEN_S, button: "pause" },
         };
       },
@@ -102,7 +107,11 @@
           long: { title: "Messages", text: "Alex: On my way" },
           ranged: { lines: ["Messages"], value: 0.7 },
           short: { lines: ["Messages"] },
-          tile: { label: "Messages", main: "Alex", sub: "On my way", edge: "brief" },
+          tile: {
+            title: "Notification",
+            card: { kind: "notification", app: "Messages", headline: "Alex", body: "On my way, 5 min out" },
+            edge: { icon: "brief" },
+          },
           widget: { title: "Weekend plans: Alex", text: "On my way, 5 min out" },
         };
       },
@@ -123,7 +132,12 @@
           long: { title: inWords, text: "Standup" },
           ranged: { lines: [`${mins}m`], value: clamp01(mins / LOOKAHEAD_MIN) },
           short: { lines: [`${mins}m`] },
-          tile: { label: inWords, main: "Standup", sub: range, edge: "brief" },
+          tile: {
+            title: "Up next",
+            ring: clamp01(mins / LOOKAHEAD_MIN),
+            card: { kind: "event", title: "Standup", range, location: "Room 4B" },
+            edge: { text: "Calendar" },
+          },
           widget: { title: "Standup", text: range, pill: `${mins} min` },
         };
       },
@@ -145,7 +159,11 @@
           long: { title: "15%", text: "Phone battery low" },
           ranged: { lines: ["15%"], value: 0.15 },
           short: { lines: ["15%"] },
-          tile: { label: "Phone battery", main: "15%", sub: "Battery low", edge: "brief" },
+          tile: {
+            title: "Battery",
+            card: { kind: "battery", big: "15%", label: "Phone battery low" },
+            edge: { icon: "brief" },
+          },
           widget: { title: "Phone battery low", text: "15%", bar: 0.15 },
         };
       },
@@ -165,7 +183,11 @@
           long: { title: fmtShortDate.format(now), text: `${t}°${unit} · Today ${lo}°/${hi}°` },
           ranged: { lines: [`${t}°`], value: pos, marker: true },
           short: { lines: [`${t}°`] },
-          tile: { label: "Sunny", main: `${t}°`, sub: `Today ${lo}° / ${hi}°`, edge: "brief" },
+          tile: {
+            title: "Weather",
+            card: { kind: "weather", temp: `${t}°${unit}`, sub: "Sunny", rain: "20%", hi, lo },
+            foot: "Updated 4m ago",
+          },
           widget: { title: `${t}°${unit}`, text: "Sunny", hilo: [hi, lo], bar: pos, marker: true },
         };
       },
@@ -183,7 +205,11 @@
           long: { title: null, text: "Meds" },
           ranged: { lines: ["Meds"], value: 0.62 },
           short: { lines: ["Meds"] },
-          tile: { label: "Reminder", main: "Meds", sub: "Tap when done", edge: "check" },
+          tile: {
+            title: "Reminder",
+            card: { kind: "reminder", text: "Meds" },
+            edge: { icon: "brief" },
+          },
           widget: { title: "Meds", text: "Reminder" },
         };
       },
@@ -204,7 +230,11 @@
           long: { title: fmtWeekday.format(d), text: day },
           ranged: { lines: [fmtWeekdayShort.format(d), day], value: (now - midnight) / (24 * 60 * MIN) },
           short: { lines: [fmtWeekdayShort.format(d), day] },
-          tile: { label: "Today", main: fmtWeekday.format(d), sub: fmtMonthDay.format(d), edge: "brief" },
+          tile: {
+            title: "Today",
+            card: { kind: "date", big: fmtWeekday.format(d), sub: fmtMonthDay.format(d) },
+            edge: { icon: "brief" },
+          },
           widget: { title: fmtWeekday.format(d), text: fmtMonthDay.format(d) },
         };
       },
@@ -355,28 +385,92 @@
     });
   });
 
-  // Tile
+  // Tile: Material 3 primaryLayout, after the watch's BriefTileRenderer. A
+  // title up top, one card per source, an edge button (or, for weather, when
+  // it was updated) and, for music and events, a progress ring round the rim.
+  const tileCard = (src, c) => {
+    const k = (key, v, cls) => `<span class="${cls}" data-k="${key}">${esc(v)}</span>`;
+    switch (c.kind) {
+      case "event":
+        return `<div class="t-card t-start">
+          <span class="t-row">${svgIcon("event", "t-ico")}${k("t-title", c.title, "t-title clamp2")}</span>
+          ${k("t-range", c.range, "t-label")}
+          ${k("t-loc", c.location, "t-body")}
+        </div>`;
+      case "music":
+        return `<div class="t-card t-start">
+          <span class="t-row">${svgIcon("music", "t-ico")}${k("t-title", c.title, "t-title clamp2")}</span>
+          <span class="t-row t-gap">${svgIcon("artist", "t-ico-sm")}${k("t-artist", c.artist, "t-label-sm")}</span>
+        </div>`;
+      case "notification":
+        return `<div class="t-card t-start">
+          <span class="t-row">${svgIcon("notification", "t-ico")}${k("t-app", c.app, "t-label")}</span>
+          ${k("t-head", c.headline, "t-title")}
+          ${k("t-bodytext", c.body, "t-body")}
+        </div>`;
+      case "battery":
+        return `<div class="t-card">
+          <span class="t-row t-row-hero">${svgIcon("battery", "t-ico-hero")}
+            <span class="t-col">${k("t-big", c.big, "t-display")}${k("t-lbl", c.label, "t-label")}</span>
+          </span>
+        </div>`;
+      case "reminder":
+        return `<div class="t-card">
+          <span class="t-row t-row-hero">${svgIcon(src.face, "t-ico-rem")}${k("t-title", c.text, "t-title t-grow")}${svgIcon("check", "t-ico-check")}</span>
+        </div>`;
+      case "date":
+        return `<div class="t-card t-center">${k("t-big", c.big, "t-display-sm")}${k("t-sub", c.sub, "t-title")}</div>`;
+      case "weather":
+        return `<div class="t-weather">
+          <div class="t-card t-center t-hero">
+            ${svgIcon("sun", "t-ico-hero")}${k("t-temp", c.temp, "t-display")}${k("t-cond", c.sub, "t-label-sm")}
+          </div>
+          <div class="t-side">
+            <div class="t-pill t-rain">${svgIcon("rain", "t-ico-rain")}${esc(c.rain)}</div>
+            <div class="t-pill t-hilo">
+              <span>${svgIcon("arrow-up", "t-ico-hilo")}${c.hi}°</span>
+              <span>${svgIcon("arrow-down", "t-ico-hilo")}${c.lo}°</span>
+            </div>
+          </div>
+        </div>`;
+    }
+    return "";
+  };
+
   $$('[data-surface="tile"]').forEach((host) => {
     const stack = host.querySelector(".swap-stack");
+    const ring = host.querySelector(".tile-ring");
+    const bar = host.querySelector(".tr-value");
+    const setRing = (v) => {
+      ring?.classList.toggle("on", v != null);
+      if (v != null) bar?.style.setProperty("stroke-dasharray", `${(clamp01(v) * 100).toFixed(2)} 100`);
+    };
     surfaces.push({
       host,
       mount(src, g, animate) {
         const t = g.tile;
+        const bottom = t.foot
+          ? `<div class="tile-foot">${esc(t.foot)}</div>`
+          : t.edge?.text
+            ? `<div class="tile-edge text">${esc(t.edge.text)}</div>`
+            : `<div class="tile-edge">${svgIcon(t.edge?.icon || "brief")}</div>`;
         this.node = el(`
           <div class="tile-item">
-            <div class="tile-label" data-k="label">${esc(t.label)}</div>
-            <div class="tile-card">
-              <div class="tile-main" data-k="main">${esc(t.main)}</div>
-              <div class="tile-sub" data-k="sub">${esc(t.sub)}</div>
-            </div>
-            <div class="tile-edge">${svgIcon(t.edge)}</div>
+            <div class="tile-title" data-k="t-top">${esc(t.title)}</div>
+            <div class="tile-main">${tileCard(src, t.card)}</div>
+            ${bottom}
           </div>`);
         swap(stack, this.node, animate);
+        setRing(t.ring);
       },
       patch(g) {
-        setText(this.node, "label", g.tile.label);
-        setText(this.node, "main", g.tile.main);
-        setText(this.node, "sub", g.tile.sub);
+        const c = g.tile.card;
+        if (c.kind === "event") setText(this.node, "t-range", c.range);
+        if (c.kind === "date") {
+          setText(this.node, "t-big", c.big);
+          setText(this.node, "t-sub", c.sub);
+        }
+        setRing(g.tile.ring);
       },
     });
   });

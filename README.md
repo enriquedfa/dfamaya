@@ -55,8 +55,11 @@ phone widget. The clock, the event countdown and the song position are live.
   the landing page and the small watch on the home page.
 - **What each slot shows** (title vs. text line, icon, uppercase short text,
   the weather ring's marker dot) follows the watch's `ComplicationRenderer`.
-  The widget follows the real phone widget: badge, two lines, and a pill,
-  play/pause or progress bar when the glance has one.
+  The tile follows `BriefTileRenderer` (Material 3 `primaryLayout`): a title,
+  one card layout per source, the edge button or "Updated" line, and the rim
+  progress ring for music and events. The widget follows the real phone
+  widget: badge, two lines, and a pill, play/pause or progress bar when the
+  glance has one.
 - **Colour.** Each source has its tone-30 / tone-90 pair from the phone app's
   `Theme.kt`. The page, the chips and the watch face all ease to the current
   source's colour.

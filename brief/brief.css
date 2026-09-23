@@ -654,7 +654,7 @@
   grid-template-areas:
     "tile   tile"
     "widget widget"
-    "batt   galaxy"
+    "batt   tick"
     "app    app"
     "priv   priv"
     "taps   auto"
@@ -668,7 +668,7 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-areas:
       "tile tile widget widget"
-      "tile tile batt   galaxy"
+      "tile tile batt   tick"
       "priv priv priv   priv"
       "app  app  taps   auto"
       "app  app  free   quiet";
@@ -679,7 +679,7 @@
   .bento {
     grid-template-areas:
       "tile widget widget app"
-      "tile batt   galaxy app"
+      "tile batt   tick app"
       "priv priv   priv   app"
       "taps auto   free   quiet";
   }
@@ -709,7 +709,7 @@
 .cell-app { grid-area: app; }
 .cell-priv { grid-area: priv; }
 .cell-batt { grid-area: batt; }
-.cell-galaxy { grid-area: galaxy; }
+.cell-tick { grid-area: tick; }
 .cell-taps { grid-area: taps; }
 .cell-auto { grid-area: auto; }
 .cell-free { grid-area: free; }
@@ -819,10 +819,17 @@
   .facts li { grid-template-columns: 1fr; gap: 10px; }
 }
 
-/* Tile — proportions from the app's tile_preview.png */
+/* Tile — after the watch's BriefTileRenderer (Material 3 primaryLayout) and
+   its rendered tile_preview.png. Sizes are the renderer's dp values on a
+   ~225dp round screen, in cqw so the whole tile scales as one. Colours follow
+   the source, the way a dynamic theme would. */
 .tile {
+  --t-container: var(--src-fg);
+  --t-on-container: var(--src-bg);
+  --t-primary: var(--face-accent);
+  --t-surface: color-mix(in oklab, var(--src-fg) 10%, #1b1b1f);
   position: relative;
-  width: min(60vw, 230px);
+  width: min(62vw, 240px);
   aspect-ratio: 1;
   border-radius: 50%;
   background: #000;
@@ -832,61 +839,156 @@
   box-shadow: 0 0 0 8px #1a1b1f, 0 0 0 9px rgb(255 255 255 / 0.08), 0 24px 48px -16px rgb(0 0 0 / 0.6);
 }
 
-.tile-label {
+/* Progress ring round the rim, 220° to 500°: a gap at the bottom for the
+   edge button. Music fills with the song; an event drains as it nears. */
+.tile-ring {
   position: absolute;
-  top: 12cqw;
-  left: 18%;
-  right: 18%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.tile-ring.on { opacity: 1; }
+.tile-ring path { fill: none; stroke-width: 2.3; stroke-linecap: round; }
+.tr-track { stroke: var(--t-surface); }
+.tr-value {
+  stroke: var(--t-primary);
+  stroke-dasharray: 0 100;
+  transition: stroke-dasharray 0.9s var(--ease);
+}
+
+.tile-title {
+  position: absolute;
+  top: 11cqw;
+  left: 20%;
+  right: 20%;
   text-align: center;
-  font-size: 5.6cqw;
-  font-weight: 600;
+  font-size: 5.4cqw;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.tile-card {
+.tile-main {
   position: absolute;
-  left: 7.7%;
-  right: 7.7%;
-  top: 23.5%;
+  left: 8.5%;
+  right: 8.5%;
+  top: 22.5%;
   bottom: 23.5%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1cqw;
-  padding-inline: 6cqw;
-  border-radius: 12cqw;
-  background: var(--src-fg);
-  color: var(--src-bg);
-  text-align: center;
 }
 
-.tile-main,
-.tile-sub {
+.t-card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1cqw;
+  padding: 5.3cqw;
+  border-radius: 11cqw;
+  background: var(--t-container);
+  color: var(--t-on-container);
+}
+.t-start { align-items: flex-start; }
+.t-center { align-items: center; text-align: center; }
+
+.t-row { display: flex; align-items: center; gap: 2.7cqw; min-width: 0; max-width: 100%; }
+.t-row.t-gap { margin-top: 0.8cqw; }
+.t-row-hero { gap: 3.6cqw; }
+.t-col { display: flex; flex-direction: column; min-width: 0; }
+.t-grow { flex: 1; }
+
+.t-card svg { fill: currentColor; flex: none; }
+.t-ico { width: 7.1cqw; height: 7.1cqw; }
+.t-ico-sm { width: 6.2cqw; height: 6.2cqw; }
+.t-ico-hero { width: 12.4cqw; height: 12.4cqw; }
+.t-ico-rem { width: 10.7cqw; height: 10.7cqw; }
+.t-ico-check { width: 8cqw; height: 8cqw; }
+
+.t-title,
+.t-label,
+.t-label-sm,
+.t-body,
+.t-display,
+.t-display-sm {
+  min-width: 0;
   max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.tile-main { font-size: 9.6cqw; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
-.tile-sub { font-size: 5.8cqw; font-weight: 600; opacity: 0.8; }
+.t-title { font-size: 6.2cqw; font-weight: 500; line-height: 1.2; }
+.t-title.clamp2 {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.t-label { font-size: 5.5cqw; font-weight: 500; }
+.t-label-sm { font-size: 5cqw; font-weight: 500; }
+.t-body { font-size: 5.2cqw; opacity: 0.9; }
+.t-display { font-size: 12.5cqw; font-weight: 500; line-height: 1.05; letter-spacing: -0.02em; }
+.t-display-sm { font-size: 10.6cqw; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; }
 
+/* Weather: a temperature card, with rain chance and today's high/low
+   stacked beside it */
+.t-weather { flex: 1; display: flex; gap: 1.8cqw; min-width: 0; }
+.t-hero { flex: 3; gap: 0.6cqw; padding: 3cqw; }
+.t-hero .t-display { font-size: 11cqw; }
+.t-side { flex: 2; display: flex; flex-direction: column; gap: 1.8cqw; }
+.t-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2cqw;
+  border-radius: 999px;
+  font-size: 5.5cqw;
+  font-weight: 500;
+}
+.t-pill svg { fill: currentColor; flex: none; }
+.t-rain { background: var(--t-surface); color: #e6e1e5; }
+.t-ico-rain { width: 8.9cqw; height: 8.9cqw; }
+.t-hilo {
+  flex-direction: column;
+  gap: 0;
+  background: var(--t-primary);
+  color: color-mix(in oklab, var(--src-bg) 70%, #000);
+  line-height: 1.15;
+}
+.t-hilo span { display: flex; align-items: center; gap: 0.6cqw; }
+.t-ico-hilo { width: 7.1cqw; height: 7.1cqw; }
+
+/* Edge button hugging the bottom of the screen */
 .tile-edge {
   position: absolute;
   left: 26%;
   right: 26%;
-  top: 78.5%;
+  top: 79%;
   height: 30%;
   display: flex;
   justify-content: center;
   padding-top: 4.2cqw;
   border-radius: 10cqw 10cqw 50% 50%;
-  background: var(--src-fg);
-  color: var(--src-bg);
+  background: var(--t-container);
+  color: var(--t-on-container);
 }
 .tile-edge svg { width: 8.5cqw; height: 8.5cqw; fill: currentColor; }
+.tile-edge.text { font-size: 5.5cqw; font-weight: 600; padding-top: 4.6cqw; }
+
+.tile-foot {
+  position: absolute;
+  top: 80%;
+  left: 20%;
+  right: 20%;
+  text-align: center;
+  font-size: 4.8cqw;
+  font-weight: 500;
+  color: #c9c5d0;
+}
 
 /* Phone widget, drawn after the real one: a dark card with a badge, two
    lines, and a pill, a play/pause button or a bar when the glance has one */
