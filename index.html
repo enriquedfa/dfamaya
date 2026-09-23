@@ -4,20 +4,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>dfamaya · Apps for Wear OS</title>
-  <meta name="description" content="Brief and a set of watch faces for Wear OS, made by Enrique Amaya. No ads, no accounts, no tracking." />
+  <meta name="description" content="Brief and the WatchSky watch face for Wear OS, made by Enrique Amaya. No ads, no accounts, no tracking." />
   <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="dfamaya · Apps for Wear OS" />
-  <meta property="og:description" content="Brief and a set of watch faces for Wear OS. No ads, no accounts, no tracking." />
+  <meta property="og:description" content="Brief and the WatchSky watch face for Wear OS. No ads, no accounts, no tracking." />
   <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/brief/og.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300&text=0123456789%3A&display=swap" />
   <link rel="stylesheet" href="brief/brief.css" />
+  <link rel="stylesheet" href="watchfaces/watchsky.css" />
   <script src="brief/demo.js" defer></script>
+  <script src="watchfaces/watchsky.js" defer></script>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -35,7 +38,6 @@
     <symbol id="i-brief" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12,2 C17.5228,2 22,6.4772 22,12 C22,17.5228 17.5228,22 12,22 C6.4772,22 2,17.5228 2,12 C2,6.4772 6.4772,2 12,2 Z M12,4 C16.4183,4 20,7.5817 20,12 C20,16.4183 16.4183,20 12,20 C7.5817,20 4,16.4183 4,12 C4,7.5817 7.5817,4 12,4 Z"/><path d="M8.75,7.5 H15.25 C15.9404,7.5 16.5,8.0596 16.5,8.75 C16.5,9.4404 15.9404,10 15.25,10 H8.75 C8.0596,10 7.5,9.4404 7.5,8.75 C7.5,8.0596 8.0596,7.5 8.75,7.5 Z"/><path d="M9.5,11.5 H14.5 C15.0523,11.5 15.5,11.9477 15.5,12.5 C15.5,13.0523 15.0523,13.5 14.5,13.5 H9.5 C8.9477,13.5 8.5,13.0523 8.5,12.5 C8.5,11.9477 8.9477,11.5 9.5,11.5 Z"/><path d="M10.25,15 H13.75 C14.1642,15 14.5,15.3358 14.5,15.75 C14.5,16.1642 14.1642,16.5 13.75,16.5 H10.25 C9.8358,16.5 9.5,16.1642 9.5,15.75 C9.5,15.3358 9.8358,15 10.25,15 Z"/></symbol>
     <symbol id="i-phone-battery" viewBox="0 0 24 24"><path d="M8,22q-0.42,0-0.71-0.29Q7,21.43 7,21V5Q7,4.57 7.29,4.29T8,4h2V3q0-0.43 0.29-0.71T11,2h2q0.43,0 0.71,0.29T14,3V4h2q0.43,0 0.71,0.29T17,5V21q0,0.43-0.29,0.71T16,22H8Zm4.71-8.29Q13,13.43 13,13V9q0-0.43-0.29-0.71T12,8T11.29,8.29T11,9v4q0,0.42 0.29,0.71T12,14t0.71-0.29ZM12,18q0.43,0 0.71-0.29Q13,17.43 13,17t-0.29-0.71T12,16t-0.71,0.29T11,17t0.29,0.71T12,18Z"/></symbol>
     <symbol id="i-smartphone" viewBox="0 0 24 24"><path d="M7,23q-0.82,0-1.41-0.59T5,21V3Q5,2.17 5.59,1.59T7,1H17q0.82,0 1.41,0.59T19,3V6.1q0.45,0.18 0.73,0.55T20,7.5v2q0,0.47-0.27,0.85T19,10.9V21q0,0.82-0.59,1.41T17,23H7ZM12.71,5.71Q13,5.43 13,5T12.71,4.29T12,4T11.29,4.29T11,5t0.29,0.71T12,6t0.71-0.29Z"/></symbol>
-    <symbol id="i-watch" viewBox="0 0 24 24"><path d="M10.5,22q-0.65,0-1.19-0.39q-0.54-0.39-0.74-1.04L8,18.65q-0.15-0.5-0.46-1.01T6.73,16.58q-0.85-0.92-1.29-2.1T5,12q0-1.28 0.44-2.45Q5.88,8.38 6.73,7.43q0.5-0.58 0.81-1.08T8,5.35L8.58,3.42q0.2-0.65 0.74-1.04T10.5,2h3q0.65,0 1.19,0.39t0.74,1.04L16,5.35q0.15,0.5 0.46,1.01t0.81,1.06q0.85,0.92 1.29,2.1T19,12q0,1.27-0.44,2.45t-1.29,2.13q-0.5,0.57-0.81,1.07t-0.46,1l-0.57,1.93q-0.2,0.65-0.74,1.04T13.5,22h-3Zm5.04-6.46Q17,14.08 17,12q0-2.08-1.46-3.54T12,7Q9.93,7 8.46,8.46T7,12t1.46,3.54T12,17t3.54-1.46Z"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><path d="M6,22q-0.82,0-1.41-0.59T4,20V10Q4,9.17 4.59,8.59T6,8H7V6Q7,3.92 8.46,2.46T12,1t3.54,1.46T17,6V8h1q0.82,0 1.41,0.59T20,10V20q0,0.82-0.59,1.41T18,22H6Zm7.41-5.59Q14,15.83 14,15t-0.59-1.41T12,13t-1.41,0.59Q10,14.18 10,15t0.59,1.41T12,17t1.41-0.59ZM9,8h6V6q0-1.25-0.88-2.13T12,3T9.88,3.88T9,6V8Z"/></symbol>
     <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M9,15H5.9q-0.6,0-0.89-0.54q-0.29-0.54 0.06-1.04L12.55,2.67Q12.8,2.32 13.2,2.19T14.03,2.2t0.63,0.52t0.15,0.8L14,10h3.88q0.65,0 0.91,0.57t-0.16,1.07L10.4,21.5q-0.28,0.32-0.67,0.43T8.95,21.85T8.36,21.31T8.2,20.53L9,15Z"/></symbol>
     <symbol id="i-swap" viewBox="0 0 24 24"><path d="M8.29,12.71Q8,12.43 8,12V5.82L6.13,7.7Q5.85,7.97 5.44,7.97q-0.41,0-0.71-0.27q-0.3-0.3-0.3-0.71q0-0.41 0.3-0.71L8.3,2.7Q8.45,2.55 8.63,2.49T9,2.42T9.38,2.49T9.7,2.7l3.6,3.6Q13.6,6.6 13.59,7T13.28,7.7q-0.3,0.27-0.7,0.29T11.88,7.7L10,5.82V12q0,0.42-0.29,0.71T9,13q-0.42,0-0.71-0.29Zm6.34,8.8q-0.17-0.06-0.32-0.21l-3.6-3.6q-0.3-0.3-0.29-0.7t0.31-0.7q0.3-0.28 0.7-0.29t0.7,0.29L14,18.18V12q0-0.43 0.29-0.71T15,11t0.71,0.29T16,12v6.18l1.88-1.88q0.28-0.28 0.69-0.28q0.41,0 0.71,0.28q0.3,0.3 0.3,0.71q0,0.41-0.3,0.71L15.7,21.3q-0.15,0.15-0.33,0.21T15,21.58t-0.38-0.06Z"/></symbol>
@@ -79,8 +81,8 @@
       <div class="wrap">
         <h1 class="rise" style="--d:0">Small apps for Wear&nbsp;OS</h1>
         <p class="lede rise" style="--d:1">
-          I'm Enrique Amaya. I make Brief and a few watch faces. None of them
-          have ads or accounts, and none of them track you.
+          I'm Enrique Amaya. I make Brief and the WatchSky watch face. None
+          of them have ads or accounts, and none of them track you.
         </p>
       </div>
     </section>
@@ -147,23 +149,24 @@
           </a>
         </article>
 
-        <article class="app-card rise" style="--d:3">
+        <article class="app-card app-card-feature rise" style="--d:3">
           <div class="app-copy">
             <div class="app-title">
-              <span class="app-glyph" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-watch"></use></svg></span>
+              <img class="ws-mark" src="watchfaces/img/icon.webp" alt="" width="48" height="48" />
               <div>
-                <h2>Watch Faces</h2>
-                <p class="app-kind">For Wear OS</p>
+                <h2>WatchSky</h2>
+                <p class="app-kind">Watch face</p>
               </div>
             </div>
             <p>
-              Simple watch faces with a clear time and room for the
-              complications you like. They run entirely on the watch and
-              collect nothing.
+              The real sky behind the time: dawn, golden hour, sunset and
+              stars, with the sun and moon crossing the face and the weather
+              changing the sky. It runs entirely on the watch and collects
+              nothing.
             </p>
             <div class="btn-row">
-              <a class="btn btn-ghost" href="watchfaces/">
-                Details
+              <a class="btn btn-primary" href="watchfaces/">
+                Try it live
                 <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
               </a>
               <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.dfamaya.watchsky" target="_blank" rel="noopener noreferrer">
@@ -172,6 +175,19 @@
               </a>
             </div>
           </div>
+
+          <a class="app-visual" href="watchfaces/" tabindex="-1" aria-hidden="true" data-ws-glow data-tilt>
+            <div class="watch ws-watch">
+              <div class="watch-strap top"></div>
+              <div class="watch-strap bottom"></div>
+              <span class="watch-crown"></span>
+              <div class="watch-case">
+                <div class="dial" data-ws-face data-ws-weather="partly">
+                  <img class="ws-fallback" src="watchfaces/img/preview.webp" alt="" width="454" height="454" />
+                </div>
+              </div>
+            </div>
+          </a>
         </article>
       </div>
     </section>
