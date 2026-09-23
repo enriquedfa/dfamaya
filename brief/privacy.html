@@ -2,37 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Privacy Policy — Brief</title>
-  <meta name="description" content="Privacy policy for Brief, the 'at a glance' Wear OS complication and tile by dfamaya." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Privacy policy · Brief</title>
+  <meta name="description" content="Privacy policy for Brief, the Wear OS complication and tile by dfamaya." />
+  <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
   <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
-  <header class="site">
-    <div class="bar">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-gplay" viewBox="0 0 24 24"><path d="M6.5 3.6c-.6-.4-1.5 0-1.5.8v15.2c0 .8.9 1.2 1.5.8l12.3-7.6a1 1 0 0 0 0-1.7z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap bar">
       <div class="crumbs">
-        <a class="brand" href="../">dfamaya</a>
-        <span class="sep" aria-hidden="true">›</span>
-        <a class="section" href="./">Brief</a>
+        <a class="parent" href="../">dfamaya</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a class="logo" href="./">
+          <img class="logo-mark brief" src="icon.svg" alt="" width="28" height="28" />
+          <span class="logo-text">Brief</span>
+        </a>
       </div>
-      <nav aria-label="Brief sections">
-        <a href="./">About</a>
+      <nav class="nav-links" aria-label="Sections">
         <a href="privacy.html" aria-current="page">Privacy</a>
         <a href="mailto:developerdfa@gmail.com">Contact</a>
-        <a class="nav-store" href="https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication" target="_blank" rel="noopener noreferrer">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3l14 9-14 9V3z"/></svg>
-          Google Play
-        </a>
       </nav>
+      <a class="btn btn-sm btn-primary head-cta" href="https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication" target="_blank" rel="noopener noreferrer" aria-label="Get Brief on Google Play">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+        <span class="short">Get</span><span class="long">Google Play</span>
+      </a>
     </div>
   </header>
 
-  <main>
-    <h1>Privacy Policy &mdash; Brief</h1>
-    <p class="muted">Last updated: 29 July 2026</p>
+  <main id="main">
+    <div class="wrap wrap-prose">
+      <header class="page-head">
+        <p class="eyebrow">Brief</p>
+        <h1>Privacy policy</h1>
+        <p class="updated">Last updated: 29 July 2026</p>
+      </header>
 
-    <div class="card">
-      <p>
+      <article class="prose">
+      <div class="summary-box">      <p>
         Brief is a Wear OS &ldquo;at a glance&rdquo; app: a watch complication,
         a tile, and matching widgets (a phone home-screen widget and, on
         Wear OS 7, a watch widget) that show the single most relevant thing
@@ -54,6 +71,7 @@
         forecast. Everything else &mdash; including whatever is shown as a glance
         &mdash; only ever travels between your own phone and your paired watch.
       </p>
+      </div>
 
       <h2>Who is responsible</h2>
       <p>
@@ -63,7 +81,7 @@
       </p>
 
       <h2>What Brief accesses, and why</h2>
-      <div class="table-wrap">
+      <div class="table-wrap stack-sm">
         <table>
           <thead>
             <tr>
@@ -75,52 +93,52 @@
           </thead>
           <tbody>
             <tr>
-              <td><strong>Calendar events</strong> (title, time, location)</td>
-              <td>Your phone, read-only</td>
-              <td>To show your next event on the watch</td>
-              <td><code>READ_CALENDAR</code></td>
+              <td data-label="Data"><strong>Calendar events</strong> (title, time, location)</td>
+              <td data-label="Where it&rsquo;s read">Your phone, read-only</td>
+              <td data-label="Why">To show your next event on the watch</td>
+              <td data-label="Permission"><code>READ_CALENDAR</code></td>
             </tr>
             <tr>
-              <td><strong>Approximate location</strong> (rounded to ~1 km)</td>
-              <td>Your phone</td>
-              <td>To fetch your local weather forecast</td>
-              <td><code>ACCESS_COARSE_LOCATION</code>, <code>ACCESS_BACKGROUND_LOCATION</code></td>
+              <td data-label="Data"><strong>Approximate location</strong> (rounded to ~1 km)</td>
+              <td data-label="Where it&rsquo;s read">Your phone</td>
+              <td data-label="Why">To fetch your local weather forecast</td>
+              <td data-label="Permission"><code>ACCESS_COARSE_LOCATION</code>, <code>ACCESS_BACKGROUND_LOCATION</code></td>
             </tr>
             <tr>
-              <td><strong>Active media session</strong> (track title, artist, play/pause state, app)</td>
-              <td>Your phone</td>
-              <td>To show what&rsquo;s playing and let you play/pause from the watch</td>
-              <td>Notification access (<code>BIND_NOTIFICATION_LISTENER_SERVICE</code>)</td>
+              <td data-label="Data"><strong>Active media session</strong> (track title, artist, play/pause state, app)</td>
+              <td data-label="Where it&rsquo;s read">Your phone</td>
+              <td data-label="Why">To show what&rsquo;s playing and let you play/pause from the watch</td>
+              <td data-label="Permission">Notification access (<code>BIND_NOTIFICATION_LISTENER_SERVICE</code>)</td>
             </tr>
             <tr>
-              <td><strong>Notifications from apps you pick</strong> (app name, title, text)</td>
-              <td>Your phone, read-only</td>
-              <td>To mirror a chosen app&rsquo;s alert as a glance on your watch</td>
-              <td>Notification access (<code>BIND_NOTIFICATION_LISTENER_SERVICE</code>)</td>
+              <td data-label="Data"><strong>Notifications from apps you pick</strong> (app name, title, text)</td>
+              <td data-label="Where it&rsquo;s read">Your phone, read-only</td>
+              <td data-label="Why">To mirror a chosen app&rsquo;s alert as a glance on your watch</td>
+              <td data-label="Permission">Notification access (<code>BIND_NOTIFICATION_LISTENER_SERVICE</code>)</td>
             </tr>
             <tr>
-              <td><strong>Phone battery level</strong></td>
-              <td>Your phone</td>
-              <td>To warn you when your phone&rsquo;s battery is running low</td>
-              <td>&mdash; (local read, no permission)</td>
+              <td data-label="Data"><strong>Phone battery level</strong></td>
+              <td data-label="Where it&rsquo;s read">Your phone</td>
+              <td data-label="Why">To warn you when your phone&rsquo;s battery is running low</td>
+              <td data-label="Permission">&mdash; (local read, no permission)</td>
             </tr>
             <tr>
-              <td><strong>Do Not Disturb state</strong></td>
-              <td>Your phone, read-only</td>
-              <td>To mute glances while your phone is in Do Not Disturb</td>
-              <td>&mdash; (local read, no permission)</td>
+              <td data-label="Data"><strong>Do Not Disturb state</strong></td>
+              <td data-label="Where it&rsquo;s read">Your phone, read-only</td>
+              <td data-label="Why">To mute glances while your phone is in Do Not Disturb</td>
+              <td data-label="Permission">&mdash; (local read, no permission)</td>
             </tr>
             <tr>
-              <td><strong>Reminders you create</strong> (text, time, icon)</td>
-              <td>Authored by you in the app</td>
-              <td>To show your own scheduled nudges</td>
-              <td>&mdash;</td>
+              <td data-label="Data"><strong>Reminders you create</strong> (text, time, icon)</td>
+              <td data-label="Where it&rsquo;s read">Authored by you in the app</td>
+              <td data-label="Why">To show your own scheduled nudges</td>
+              <td data-label="Permission">&mdash;</td>
             </tr>
             <tr>
-              <td><strong>Your settings</strong> (priority order, units, masking, etc.)</td>
-              <td>Authored by you in the app</td>
-              <td>To configure what shows and how</td>
-              <td>&mdash;</td>
+              <td data-label="Data"><strong>Your settings</strong> (priority order, units, masking, etc.)</td>
+              <td data-label="Where it&rsquo;s read">Authored by you in the app</td>
+              <td data-label="Why">To configure what shows and how</td>
+              <td data-label="Permission">&mdash;</td>
             </tr>
           </tbody>
         </table>
@@ -315,12 +333,20 @@
         For any privacy question or request, contact
         <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>.
       </p>
+      </article>
     </div>
   </main>
 
-  <footer>
-    &copy; <span id="year"></span> dfamaya
+  <footer class="site-foot">
+    <div class="wrap">
+      <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
+      <nav aria-label="Footer">
+        <a href="./">About Brief</a>
+        <a href="../">More apps</a>
+        <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>
+      </nav>
+    </div>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>document.querySelectorAll('[data-year]').forEach(function (n) { n.textContent = new Date().getFullYear(); });</script>
 </body>
 </html>
