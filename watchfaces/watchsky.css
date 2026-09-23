@@ -1,0 +1,577 @@
+/* ============================================================================
+   WatchSky — landing page + the face (the face is also on the home page).
+   The watch hardware (.watch, .watch-case, .dial…) comes from ../style.css.
+============================================================================ */
+
+@property --ws-glow {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #4d7aa8;
+}
+
+/* ----------------------------------------------------------------------------
+   The face, drawn by watchsky.js into a 450×450 SVG (the watch's own canvas)
+---------------------------------------------------------------------------- */
+.ws-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Before the script runs (or without it): the face's own preview image */
+.ws-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ws-text {
+  font-family: var(--font);
+  fill: #fff;
+  fill-opacity: 0.85;
+  text-anchor: middle;
+}
+
+.ws-clock {
+  font-family: "Inter Tight", var(--font);
+  font-size: 97px;
+  font-weight: 300;
+  fill: #fff;
+  text-anchor: middle;
+}
+.ws-clock-aod { font-weight: 100; opacity: 0; }
+
+.ws-day,
+.ws-clock,
+.ws-cx,
+.ws-bar,
+.ws-edge { transition: opacity 0.5s var(--ease); }
+
+.is-aod .ws-day,
+.is-aod .ws-clock,
+.ws-cx.is-hidden,
+.ws-bar.is-hidden { opacity: 0; }
+.is-aod .ws-clock-aod { opacity: 1; }
+
+.ws-bar {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+}
+/* The moon's halo screens over the sky (blendMode SCREEN) */
+.ws-screen { mix-blend-mode: screen; }
+
+/* The glow behind the watch follows the sky */
+:where([data-ws-glow], .ws-stage) { transition: --ws-glow 0.8s var(--ease); }
+.app-visual[data-ws-glow] { --src-bg: var(--ws-glow); }
+
+/* Morphs between the home page card and this page (the Brief watch has its own) */
+.app-visual .watch.ws-watch,
+.ws-visual .watch { view-transition-name: watchsky-watch; }
+.app-title img.ws-mark,
+.ws-badge img { view-transition-name: watchsky-mark; }
+
+.app-title img.ws-mark { border-radius: 14px; }
+
+/* ----------------------------------------------------------------------------
+   Hero + playground. The watch stays pinned while the settings scroll by:
+   under the header on phones, in the right-hand column on desktop.
+---------------------------------------------------------------------------- */
+.ws-hero {
+  position: relative;
+  overflow-x: clip; /* clip, not hidden: it keeps the pinned watch sticky */
+}
+
+.ws-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ws-intro { padding-block: 36px 20px; }
+
+.ws-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 5px 14px 5px 5px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+.ws-badge img { width: 26px; height: 26px; border-radius: 8px; }
+
+.ws-intro h1 {
+  font-size: clamp(2.5rem, 9vw, 4.4rem);
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+/* Dusk in type: gold into rose into night blue */
+.ws-intro .hl {
+  background: linear-gradient(100deg, light-dark(#b45309, #f2c460), light-dark(#be3a5a, #ff8a6b) 45%, light-dark(#4f46a5, #a9b4ff));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ws-intro .lede {
+  margin: 20px 0 0;
+  max-width: 32em;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+}
+.ws-intro .btn-row { margin-top: 28px; }
+
+.fine { margin: 16px 0 0; color: var(--faint); font-size: 0.9rem; }
+
+.ws-visual {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 5;
+  margin-inline: calc(-1 * var(--gutter));
+  padding: 12px var(--gutter) 30px;
+  background: linear-gradient(to bottom, var(--bg) calc(100% - 22px), transparent);
+  container-type: scroll-state;
+}
+
+.ws-stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  transition: scale 0.4s var(--ease);
+}
+
+.ws-visual .watch { --size: min(50vw, 230px, 29svh); }
+
+/* Sky-coloured glow + dot grid behind the watch */
+.ws-stage::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: min(150%, 720px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--ws-glow) 42%, transparent), transparent 72%);
+  z-index: -1;
+  pointer-events: none;
+}
+.ws-stage::after {
+  content: "";
+  position: absolute;
+  inset: -10% -30%;
+  background-image: radial-gradient(circle at 1px 1px, light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.09)) 1px, transparent 0);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent);
+  mask-image: radial-gradient(closest-side, #000 30%, transparent);
+  z-index: -2;
+  pointer-events: none;
+}
+
+@container scroll-state(stuck: top) {
+  .ws-stage { scale: 0.95; transform-origin: 50% 0; }
+}
+
+/* Time of day: play, a slider whose track is the day's sky, and "now" */
+.ws-scrub {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 440px);
+}
+
+.ws-round {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.ws-round:hover { background: var(--surface-2); }
+.ws-round svg { width: 20px; height: 20px; fill: currentColor; }
+.ws-round .i-pause,
+.ws-round[aria-pressed="true"] .i-play { display: none; }
+.ws-round[aria-pressed="true"] .i-pause { display: block; }
+
+.ws-now {
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.ws-now:hover { background: var(--surface-2); }
+.ws-now[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.ws-range {
+  --track: linear-gradient(90deg, #0d0548, #54aad1, #0d0548);
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ws-range::-webkit-slider-runnable-track {
+  height: 14px;
+  border-radius: 999px;
+  background: var(--track);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+.ws-range::-moz-range-track {
+  height: 14px;
+  border-radius: 999px;
+  background: var(--track);
+}
+.ws-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -5px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.45), inset 0 0 0 1px rgb(0 0 0 / 0.15);
+}
+.ws-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.45);
+}
+.ws-range:focus-visible { outline: none; }
+.ws-range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ws-range:focus-visible::-moz-range-thumb { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ws-caption {
+  display: none;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.ws-caption strong { color: var(--text); font-weight: 600; }
+
+/* ----------------------------------------------------------------------------
+   Settings — the same options, icons and order as the watch's editor
+---------------------------------------------------------------------------- */
+.ws-panel { padding-bottom: 40px; }
+
+.ws-panel-head h2 {
+  font-size: clamp(1.8rem, 5.4vw, 2.6rem);
+  letter-spacing: -0.03em;
+}
+.ws-panel-head .lede {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: clamp(1.02rem, 2.2vw, 1.12rem);
+}
+
+.ws-groups {
+  display: grid;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.ws-group {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.ws-group-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.ws-group h3 { font-size: 1.15rem; letter-spacing: -0.015em; }
+.ws-val { color: var(--accent); font-size: 0.92rem; font-weight: 600; }
+.ws-group > p { margin: 6px 0 0; color: var(--muted); font-size: 0.97rem; line-height: 1.55; }
+
+.ws-sub {
+  margin: 16px 0 0;
+  color: var(--faint);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ws-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.ws-sub + .ws-chips { margin-top: 8px; }
+
+/* A chip is a real radio: the input covers the chip, the face is drawn after it */
+.ws-chip {
+  position: relative;
+  display: grid;
+  width: 44px;
+  height: 44px;
+}
+.ws-chip input,
+.ws-switch input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.ws-chip-face {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--muted);
+  transition: color 0.18s var(--ease), background-color 0.18s var(--ease), box-shadow 0.18s var(--ease),
+    scale 0.18s var(--ease);
+}
+.ws-chip:hover .ws-chip-face { color: var(--text); }
+.ws-chip input:checked + .ws-chip-face {
+  color: var(--text);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+.ws-chip input:focus-visible + .ws-chip-face,
+.ws-switch input:focus-visible + .ws-switch-face {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+.ws-chip input:active + .ws-chip-face { scale: 0.94; }
+
+/* Editor icons from the watch, tinted with currentColor */
+.ws-ico {
+  width: 24px;
+  height: 24px;
+  background: currentColor;
+  -webkit-mask: var(--i) center / contain no-repeat;
+  mask: var(--i) center / contain no-repeat;
+}
+.ws-chip-face.num .ws-ico { width: 28px; height: 28px; }
+
+/* Weather chips wear their own midday sky */
+.ws-chip-face.sky {
+  border-color: transparent;
+  background: linear-gradient(to bottom, var(--a), var(--b));
+  color: #fff;
+}
+.ws-chip-face.sky img { width: 32px; height: 32px; }
+.ws-chip-face .sun {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff5d8;
+  box-shadow: 0 0 10px 4px rgb(255 231 176 / 0.55);
+}
+
+/* Moments of the day */
+.ws-moments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.ws-moment {
+  height: 34px;
+  padding: 0 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.18s var(--ease);
+}
+.ws-moment:hover { background: var(--surface-2); }
+
+/* On/off settings */
+.ws-switches {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+@media (min-width: 560px) {
+  .ws-switches { grid-template-columns: 1fr 1fr; }
+}
+
+.ws-switch { position: relative; }
+.ws-switch-face {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.3;
+  transition: color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.ws-switch-face .ws-ico { flex: none; }
+.ws-switch-face .label { flex: 1; }
+.ws-switch-face .track {
+  flex: none;
+  position: relative;
+  width: 36px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--border-strong);
+  transition: background-color 0.2s var(--ease);
+}
+.ws-switch-face .track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+  transition: translate 0.2s var(--ease);
+}
+.ws-switch input:checked + .ws-switch-face { color: var(--text); }
+.ws-switch input:checked + .ws-switch-face .track { background: var(--brand-b); }
+.ws-switch input:checked + .ws-switch-face .track::after { translate: 14px 0; }
+
+@media (min-width: 900px) {
+  .ws-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 64px;
+  }
+
+  .ws-intro {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: calc(100svh - var(--header-h));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-block: 40px 64px;
+  }
+
+  .ws-panel { grid-column: 1; grid-row: 2; padding-bottom: 96px; }
+
+  .ws-visual {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+    height: calc(100svh - var(--header-h));
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 0;
+    background: none;
+  }
+
+  .ws-visual .watch { --size: min(34vw, 400px, 52svh); }
+  .ws-stage { gap: 30px; }
+  .ws-caption { display: block; }
+
+  @container scroll-state(stuck: top) {
+    .ws-stage { scale: 1; }
+  }
+
+  .ws-group { padding: 24px 26px; }
+}
+
+/* ----------------------------------------------------------------------------
+   Sections below the playground
+---------------------------------------------------------------------------- */
+.ws-section {
+  padding-block: 64px;
+  border-top: 1px solid var(--border);
+}
+@media (min-width: 960px) {
+  .ws-section { padding-block: 104px; }
+}
+
+.ws-section .section-head h2 {
+  font-size: clamp(1.8rem, 5.4vw, 2.6rem);
+  letter-spacing: -0.03em;
+}
+.ws-section .section-head .lede {
+  margin: 14px 0 0;
+  max-width: 36em;
+  color: var(--muted);
+  font-size: clamp(1.02rem, 2.2vw, 1.12rem);
+}
+
+.ws-cards {
+  display: grid;
+  gap: 14px;
+  margin-top: 32px;
+}
+@media (min-width: 820px) {
+  .ws-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.ws-card {
+  border-radius: var(--radius-lg);
+}
+.ws-card .num {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.ws-card h3 { font-size: 1.2rem; letter-spacing: -0.015em; }
+.ws-card p,
+.ws-card li { color: var(--muted); }
+.ws-card p { margin: 8px 0 0; }
+.ws-card ol { margin: 10px 0 0; padding-left: 1.2em; }
+.ws-card li { margin-bottom: 4px; }
+.ws-card li::marker { color: var(--faint); }
+.ws-card strong { color: var(--text); font-weight: 600; }
+
+.ws-more .prose { padding-block: 0; }

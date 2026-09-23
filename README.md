@@ -1,15 +1,16 @@
 # dfamaya.github.io
 
-Static site for dfamaya's Wear OS apps: a home page, a landing page for Brief,
-and per-app privacy policies and support. Plain HTML, CSS and a little vanilla
-JS. No build step.
+Static site for dfamaya's Wear OS apps: a home page, landing pages for Brief
+and the WatchSky watch face, and per-app privacy policies and support. Plain
+HTML, CSS and a little vanilla JS. No build step.
 
 Published at: <https://enriquedfa.github.io/dfamaya/>
 
 ## Pages
 
 - `index.html` — home page (lists all apps)
-- `style.css` — shared styles (header, buttons, text pages, footer)
+- `style.css` — shared styles (header, buttons, text pages, footer, and the
+  watch itself: case, strap, crown and dial, used by both apps)
 - `assets/favicon.svg` — site icon
 
 ### Brief
@@ -17,7 +18,7 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
 - `brief/index.html` — landing page with the live watch demo
 - `brief/privacy.html` — privacy policy (text mirrors `docs/PRIVACY_POLICY.md`
   in the Brief repo; only the layout lives here)
-- `brief/brief.css` — landing page + watch demo styles (also used on the home page)
+- `brief/brief.css` — landing page + Brief's face styles (also used on the home page)
 - `brief/demo.js` — the demo: one glance state drawn on every surface
 - `brief/icon.svg`, `brief/icon-180.png` — Brief's icon, redrawn from the app's
   launcher vectors
@@ -25,11 +26,19 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
 - `brief/img/` — phone app screenshots (dark and light; the watch's Bluetooth
   name is painted out)
 
-### Wear OS Watch Faces
+### Wear OS Watch Faces (WatchSky)
 
-- `watchfaces/index.html` — app overview
+- `watchfaces/index.html` — WatchSky landing page with a live copy of the face
+  and its settings
 - `watchfaces/privacy.html` — privacy policy (covers all watch faces by dfamaya)
 - `watchfaces/support.html` — support / contact info
+- `watchfaces/watchsky.js` — draws the face (also on the home page) and wires
+  up the page's controls
+- `watchfaces/watchsky.css` — landing page + face styles
+- `watchfaces/img/` — assets from the WatchSky repo: the Play Store icon, the
+  face's `preview.png` (shown until the script runs), the weather glyphs and
+  the editor icons, under their drawable names
+- `watchfaces/og.png` — link preview image (1200×630)
 
 ### Redirect stubs
 
@@ -71,6 +80,28 @@ phone widget. The clock, the event countdown and the song position are live.
 To change the sample content, edit the `SOURCES` array at the top of
 `demo.js`.
 
+## The WatchSky page
+
+`watchfaces/watchsky.js` redraws the watch face from the WatchSky repo's
+`watchface/src/main/res/raw/watchface.xml` into an SVG with the watch's own
+450×450 canvas. Coordinates, colours and timings are copied as they are, so
+the two read side by side:
+
+- **The sky** is the XML's base gradient plus ten layers, each fading in over
+  its slice of the day, anchored to the sunrise or sunset hour. Layers 4–8
+  swap palette by weather (clear, partly cloudy, overcast, stormy). The
+  slider's track is the same sky, sampled across 24 hours.
+- **The sun or moon** rides the dashed arc with the XML's orbit maths. Live
+  moon phase is worked out from the date.
+- **The settings** (weather, moon phase, middle bar, sunrise, sunset, date,
+  border shadow, always-on) are real radios and checkboxes, drawn with the
+  watch editor's own icons.
+- The bottom complication shows a made-up calendar (`EVENTS` in the script).
+
+If the face changes in the WatchSky repo (a new palette, a new setting), make
+the same change here: the constants at the top of `watchsky.js` mirror the
+XML. The face stops ticking while it's off screen or the tab is hidden.
+
 ### Newer web platform features in use
 
 Most are progressive: a browser without one just skips the effect. The
@@ -78,8 +109,8 @@ exception is `light-dark()`, which the colour tokens depend on; it needs Chrome
 or Edge 123, Safari 17.5 or Firefox 120 (all from 2024).
 
 - Cross-document **view transitions** (`@view-transition`): the header stays
-  put between pages, and the Brief watch and icon morph from the home page
-  into the Brief page.
+  put between pages, and the Brief and WatchSky watches and icons morph from
+  the home page into their pages.
 - **Scroll-driven animations**: the header's bottom border, sections fading
   in, and the watch crown turning as you scroll.
 - **`scroll-state()` container queries**: the pinned watch tucks in slightly

@@ -597,6 +597,124 @@ code {
 }
 
 /* ----------------------------------------------------------------------------
+   Watch — the hardware, shared by every app. Each app draws its own face
+   inside .dial.
+---------------------------------------------------------------------------- */
+.watch {
+  --size: min(78vw, 360px);
+  --rx: 0deg;
+  --ry: 0deg;
+  position: relative;
+  width: var(--size);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  isolation: isolate;
+  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.6s var(--ease);
+}
+.watch.is-tilting { transition-duration: 0.12s; }
+
+.watch-case {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 5.5%;
+  background: radial-gradient(120% 120% at 30% 15%, #4a4e57 0%, #23262c 38%, #0d0e11 70%, #2b2e35 100%);
+  box-shadow:
+    0 34px 70px -24px rgb(0 0 0 / 0.7),
+    0 12px 24px -12px rgb(0 0 0 / 0.5),
+    inset 0 1px 1px rgb(255 255 255 / 0.25),
+    inset 0 -2px 3px rgb(0 0 0 / 0.6);
+}
+
+.watch-case::before {
+  content: "";
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: #050506;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06), 0 0 0 1px rgb(0 0 0 / 0.8);
+}
+
+/* The crown turns as the page scrolls */
+.watch-crown {
+  position: absolute;
+  right: -2.6%;
+  top: 44%;
+  width: 4.5%;
+  height: 12%;
+  border-radius: 40% 60% 60% 40% / 20%;
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.35) 0 1px, transparent 1px 3px),
+    linear-gradient(90deg, #1c1e23, #50545d 60%, #2a2d33);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.4);
+  z-index: -1;
+}
+@supports (animation-timeline: scroll()) {
+  .watch-crown {
+    animation: crown-turn linear both;
+    animation-timeline: scroll(root block);
+  }
+  @keyframes crown-turn {
+    to { background-position: 0 240px, 0 0; }
+  }
+}
+
+.watch-strap {
+  position: absolute;
+  left: 50%;
+  width: 52%;
+  height: 22%;
+  translate: -50% 0;
+  background:
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.018) 0 2px, transparent 2px 5px),
+    linear-gradient(90deg, #0e0f12, #1c1d22 22%, #1c1d22 78%, #0e0f12);
+  z-index: -2;
+}
+.watch-strap.top {
+  bottom: 90%;
+  border-radius: 18% 18% 0 0 / 22% 22% 0 0;
+  -webkit-mask-image: linear-gradient(to top, #000 25%, transparent 92%);
+  mask-image: linear-gradient(to top, #000 25%, transparent 92%);
+}
+.watch-strap.bottom {
+  top: 90%;
+  border-radius: 0 0 18% 18% / 0 0 22% 22%;
+  -webkit-mask-image: linear-gradient(to bottom, #000 25%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 25%, transparent 92%);
+}
+
+@media (prefers-color-scheme: light) {
+  .watch-strap { opacity: 0.5; }
+}
+
+.dial {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #000;
+  container-type: inline-size;
+  color: #fff;
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* Glass highlight, nudged by the tilt */
+.dial::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: linear-gradient(155deg, rgb(255 255 255 / 0.08), transparent 36%);
+  translate: var(--gx, 0px) var(--gy, 0px);
+  transition: translate 0.6s var(--ease);
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------------------------
    Footer
 ---------------------------------------------------------------------------- */
 .site-foot {
