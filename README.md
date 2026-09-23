@@ -90,11 +90,11 @@ phone widget. The clock, the event countdown and the song position are live.
   that tap, which is what browsers want before a page may play sound, so it
   works everywhere. The watch holds on music while it plays, as Brief does,
   and the demo moves on the moment it ends; ⏸ pauses both. Tapping the
-  watch, or the small button at its lower right (there during the music
-  turn, once the demo has started), plays or pauses too. If someone skips ▶
+  watch during the music turn plays or pauses too, like tapping the
+  complication on a real one. If someone skips ▶
   and reaches music another way (scrolling to it, say), the song tries to
   start by itself, which browsers allow only after an earlier tap; without
-  one the turn runs silently and the small button pulses. It starts by
+  one the turn runs silently. It starts by
   itself at most once per visit, and never with Data Saver on. It plays at
   a low volume (`SONG_VOLUME`; iOS ignores page volume). The sound belongs
   to the music glance: it fades out when another glance takes over and

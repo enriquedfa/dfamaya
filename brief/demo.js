@@ -732,17 +732,10 @@
     songToggles.forEach((b) => {
       b.setAttribute("aria-pressed", String(on));
       b.setAttribute("aria-label", on ? `Pause ${SONG.title} by ${SONG.artist}` : `Play ${SONG.title} by ${SONG.artist}`);
-      b.title = on ? "Pause" : "Play";
-      b.querySelector("use")?.setAttribute("href", on ? "#i-pause" : "#i-play");
+      b.title = on ? "Tap to pause" : "Tap to play";
     });
     if ("mediaSession" in navigator) navigator.mediaSession.playbackState = on ? "playing" : audio ? "paused" : "none";
     patchMusic();
-  };
-
-  // The play button's ring follows the song
-  const setSongProgress = () => {
-    const p = songLive() && audio.duration ? audio.currentTime / audio.duration : 0;
-    songToggles.forEach((b) => b.style.setProperty("--song-p", p.toFixed(4)));
   };
 
   const ensureAudio = () => {
@@ -766,7 +759,6 @@
         paused = false;
         syncToggles();
       }
-      root.classList.remove("song-blocked");
     });
     audio.addEventListener("ended", () => {
       wantSound = false;
@@ -776,12 +768,10 @@
       if (advance) show(index + 1);
       audio.currentTime = 0;
       refreshSongUi();
-      setSongProgress();
       if (!advance) schedule();
     });
     audio.addEventListener("timeupdate", () => {
       patchMusic();
-      setSongProgress();
       if ("mediaSession" in navigator && audio.duration) {
         try {
           navigator.mediaSession.setPositionState({ duration: audio.duration, position: audio.currentTime, playbackRate: 1 });
@@ -827,7 +817,6 @@
         // started. Anything else: blocked or failed, so wait for a tap.
         if (err?.name === "AbortError") return refreshSongUi();
         wantSound = false;
-        if (auto) root.classList.add("song-blocked"); // the play button invites a tap
         refreshSongUi();
         if (!auto) schedule();
       }
