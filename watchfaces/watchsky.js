@@ -24,7 +24,8 @@
        [data-ws-moment]    buttons that jump to a moment (data-ws-moment="S+1")
        input[name=ws-*]    the settings (radios and checkboxes)
        [data-ws-value=…]   shows the chosen option's name
-   The glow behind each watch follows the sky through --ws-glow.
+   The glow behind each watch follows the sky through --ws-glow, and the
+   landing page's headline through --ws-horizon / --ws-zenith.
 ============================================================================ */
 (() => {
   "use strict";
@@ -436,6 +437,9 @@
 
   function updatePage(date, r) {
     if (!page) return;
+    // The headline's highlight follows this sky (see watchsky.css)
+    page.style.setProperty("--ws-horizon", rgb(r.bottom));
+    page.style.setProperty("--ws-zenith", rgb(r.top));
     const mins = date.getHours() * 60 + date.getMinutes();
     const spoken = spokenTime(date.getHours(), date.getMinutes());
     if (range) {

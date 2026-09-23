@@ -120,6 +120,36 @@
   color: transparent;
 }
 
+/* Where the browser can, the highlight follows the sky on the watch instead:
+   its horizon colour into its zenith colour, ending on the brand periwinkle.
+   watchsky.js sets the two sky colours; the lightness is pinned per theme so
+   the words stay readable when the sky is nearly black, and only the hue and
+   a little of the chroma travel with the day. */
+@property --ws-horizon {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #e5793f;
+}
+@property --ws-zenith {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #4e518b;
+}
+
+[data-ws-page] { transition: --ws-horizon 1.2s var(--ease), --ws-zenith 1.2s var(--ease); }
+
+@supports (color: oklch(from red l c h)) {
+  .ws-intro .hl {
+    --hl-a: light-dark(
+      oklch(from var(--ws-horizon) 0.56 min(calc(c * 1.15 + 0.03), 0.17) h),
+      oklch(from var(--ws-horizon) 0.85 min(calc(c * 1.15 + 0.03), 0.16) h));
+    --hl-b: light-dark(
+      oklch(from var(--ws-zenith) 0.5 min(calc(c * 1.15 + 0.03), 0.17) h),
+      oklch(from var(--ws-zenith) 0.8 min(calc(c * 1.15 + 0.03), 0.16) h));
+    background-image: linear-gradient(100deg, var(--hl-a), var(--hl-b) 55%, light-dark(#4f46a5, #a9b4ff));
+  }
+}
+
 .ws-intro .lede {
   margin: 20px 0 0;
   max-width: 32em;
