@@ -81,12 +81,16 @@ phone widget. The clock, the event countdown and the song position are live.
 - **Running order.** The demo follows the app's priority order, the same
   order as the numbered list and the source buttons. On the Brief page
   (`data-demo-wait`) it opens on Now playing (`data-demo-start`) and waits
-  for ▶, which gives off a soft wave until someone presses it. The home
-  page's small watch rolls on its own.
-- **The song.** Pressing ▶ plays Apple's official 30-second preview of
-  Night Tapes · storm, streamed straight from Apple's servers (it is never
-  hosted in this repo) and credited with a link to Apple Music in the Now
-  playing step, the same approach as tryalcove.com. The song starts inside
+  for a first tap: a ▶ in the middle of the watch gives off a soft wave
+  until someone taps the watch or ▶/⏸, the button at the start of the row
+  that runs the demo from then on. (Where the song can't play there's no ▶
+  on the watch, and ▶/⏸ gives off the wave instead.) The home page's small
+  watch rolls on its own.
+- **The song.** The first tap (the watch or ▶) plays Apple's official
+  30-second preview of Night Tapes · storm, streamed straight from Apple's
+  servers (it is never hosted in this repo) and credited with a link to
+  Apple Music in the Now playing step, the same approach as tryalcove.com.
+  The song starts inside
   that tap, which is what browsers want before a page may play sound, so it
   works everywhere. The watch holds on music while it plays, as Brief does,
   and the demo moves on the moment it ends; ⏸ pauses both. Tapping the

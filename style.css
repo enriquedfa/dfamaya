@@ -14,7 +14,9 @@
   --surface-2: light-dark(#eef0f5, #1c1f27);
   --text: light-dark(#101217, #eceef3);
   --muted: light-dark(#5a6070, #9aa1ae);
-  --faint: light-dark(#8a90a0, #6b7280);
+  /* Quieter than muted, but still 4.5:1 on the page and on cards (WCAG AA):
+     it carries fine print like what a watch needs, not just decoration */
+  --faint: light-dark(#666c7e, #808796);
   --border: light-dark(#e3e5ec, rgb(255 255 255 / 0.08));
   --border-strong: light-dark(#d3d6df, rgb(255 255 255 / 0.14));
   --accent: light-dark(#4f46a5, #a9b4ff);
@@ -684,8 +686,14 @@ code {
   mask-image: linear-gradient(to bottom, #000 25%, transparent 92%);
 }
 
+/* On a light page the black strap at half opacity read as a flat grey
+   block; a light grey band reads as a real strap */
 @media (prefers-color-scheme: light) {
-  .watch-strap { opacity: 0.5; }
+  .watch-strap {
+    background:
+      repeating-linear-gradient(0deg, rgb(0 0 0 / 0.03) 0 2px, transparent 2px 5px),
+      linear-gradient(90deg, #b9bdc6, #d6d9df 22%, #d6d9df 78%, #b9bdc6);
+  }
 }
 
 .dial {
