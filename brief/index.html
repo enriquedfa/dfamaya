@@ -85,7 +85,7 @@
 
   <main id="main">
     <!-- Hero + the sources. The watch stays pinned while the list scrolls. -->
-    <section class="story" data-demo-start="event">
+    <section class="story" data-demo-start="weather" data-demo-wait>
       <div class="wrap story-grid">
         <div class="story-intro">
           <p class="app-badge rise" style="--d:0">
@@ -148,16 +148,16 @@
             </div>
 
             <div class="chips" role="group" aria-label="Show a source on the watch">
-              <button type="button" class="chip is-active" data-chip="event" style="--c-bg:#50378A;--c-fg:#E9DDFF" aria-pressed="true" aria-label="Calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg></button>
-              <button type="button" class="chip" data-chip="notification" style="--c-bg:#00504B;--c-fg:#BCECE5" aria-pressed="false" aria-label="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-notification"></use></svg></button>
-              <button type="button" class="chip" data-chip="weather" style="--c-bg:#004D64;--c-fg:#C2E8FC" aria-pressed="false" aria-label="Weather"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"></use></svg></button>
               <button type="button" class="chip" data-chip="music" style="--c-bg:#7B2949;--c-fg:#FFD9E2" aria-pressed="false" aria-label="Now playing"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-music"></use></svg></button>
+              <button type="button" class="chip" data-chip="notification" style="--c-bg:#00504B;--c-fg:#BCECE5" aria-pressed="false" aria-label="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-notification"></use></svg></button>
+              <button type="button" class="chip" data-chip="event" style="--c-bg:#50378A;--c-fg:#E9DDFF" aria-pressed="false" aria-label="Calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg></button>
               <button type="button" class="chip" data-chip="battery" style="--c-bg:#00531D;--c-fg:#CAEBC7" aria-pressed="false" aria-label="Phone battery"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone-battery"></use></svg></button>
+              <button type="button" class="chip is-active" data-chip="weather" style="--c-bg:#004D64;--c-fg:#C2E8FC" aria-pressed="true" aria-label="Weather"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"></use></svg></button>
               <button type="button" class="chip" data-chip="reminder" style="--c-bg:#604100;--c-fg:#FFDEAE" aria-pressed="false" aria-label="Reminders"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-reminder"></use></svg></button>
               <button type="button" class="chip" data-chip="date" style="--c-bg:#3B494F;--c-fg:#DCE4E8" aria-pressed="false" aria-label="Default"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></button>
-              <button type="button" class="demo-toggle" data-demo-toggle aria-pressed="false" aria-label="Pause the demo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pause"></use></svg></button>
+              <button type="button" class="demo-toggle" data-demo-toggle aria-pressed="true" aria-label="Play the demo" title="Play the demo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg></button>
             </div>
-            <p class="demo-caption" data-caption><strong data-k="name">Calendar</strong> · <span data-k="blurb">Your next event, counting down.</span></p>
+            <p class="demo-caption" data-caption><strong data-k="name">Weather</strong> · <span data-k="blurb">What it's doing outside, and a heads-up before rain.</span></p>
           </div>
         </div>
 

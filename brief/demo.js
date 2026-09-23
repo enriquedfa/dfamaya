@@ -96,8 +96,9 @@
       return false;
     }
   })();
-  const songLive = () => !!audio && !songFailed && (!audio.paused || audio.currentTime > 0);
-  const songPlaying = () => !!audio && !songFailed && !audio.paused && !audio.ended;
+  let priming = false; // see primeSong()
+  const songLive = () => !!audio && !songFailed && !priming && (!audio.paused || audio.currentTime > 0);
+  const songPlaying = () => !!audio && !songFailed && !priming && !audio.paused && !audio.ended;
 
   const temps = fahrenheit ? { now: 68, lo: 57, hi: 77, unit: "F" } : { now: 18, lo: 14, hi: 25, unit: "C" };
 
@@ -284,12 +285,6 @@
       },
     },
   ];
-
-  // The order the demo runs in. It isn't the app's priority order (that's the
-  // numbered list on the page): music comes fourth, so a few glances go by
-  // before the song kicks in.
-  const RUN_ORDER = ["event", "notification", "weather", "music", "battery", "reminder", "date"];
-  SOURCES.sort((a, b) => RUN_ORDER.indexOf(a.id) - RUN_ORDER.indexOf(b.id));
 
   const indexOf = (id) => SOURCES.findIndex((s) => s.id === id);
 
@@ -593,7 +588,11 @@
   let index = Math.max(0, indexOf(startId));
   let current = null;
   let timer = 0;
-  let paused = false; // by the pause button
+  // The Brief page waits for a tap on ▶ before the demo rolls. That tap also
+  // counts as the click browsers want before a page may play sound, so the
+  // song can start by itself when music comes round.
+  const waitForTap = toggles.length > 0 && !!document.querySelector("[data-demo-wait]");
+  let paused = waitForTap; // by the play/pause button
   let pinned = null; // source held by the scroll story
   let visible = true; // some surface is on screen
   const root = document.documentElement;
@@ -643,14 +642,19 @@
     timer = setTimeout(() => show(index + 1), hold);
   }
 
+  function syncToggles() {
+    root.classList.toggle("demo-paused", paused);
+    toggles.forEach((t) => {
+      t.setAttribute("aria-pressed", String(paused));
+      t.setAttribute("aria-label", paused ? "Play the demo" : "Pause the demo");
+      t.title = paused ? "Play the demo" : "Pause the demo";
+      t.querySelector("use")?.setAttribute("href", paused ? "#i-play" : "#i-pause");
+    });
+  }
+
   function setPaused(p) {
     paused = p;
-    root.classList.toggle("demo-paused", p);
-    toggles.forEach((t) => {
-      t.setAttribute("aria-pressed", String(p));
-      t.setAttribute("aria-label", p ? "Play the demo" : "Pause the demo");
-      t.querySelector("use")?.setAttribute("href", p ? "#i-play" : "#i-pause");
-    });
+    syncToggles();
     if (p) clearTimeout(timer);
     else show(index + 1);
   }
@@ -659,9 +663,18 @@
     c.addEventListener("click", () => {
       const i = indexOf(c.dataset.chip);
       if (i >= 0) show(i, { hold: PICKED_HOLD_MS });
+      primeSong();
     })
   );
-  toggles.forEach((t) => t.addEventListener("click", () => setPaused(!paused)));
+  toggles.forEach((t) =>
+    t.addEventListener("click", () => {
+      root.classList.remove("demo-waiting"); // the wave is only for the first tap
+      setPaused(!paused);
+      primeSong();
+    })
+  );
+  if (waitForTap) root.classList.add("demo-waiting");
+  syncToggles();
 
   // ---------------------------------------------------------------------------
   // The song preview: starts on the first music turn (when the browser lets
@@ -732,6 +745,7 @@
       if (current?.id === "music" && !audio.ended) schedule();
     });
     audio.addEventListener("playing", () => {
+      if (priming) return;
       autoplayArmed = false;
       root.classList.remove("song-blocked");
     });
@@ -782,9 +796,14 @@
   // a blocked start is expected and the demo just carries on.
   function startAudio({ auto = false } = {}) {
     if (!canPlaySong || songFailed) return;
+    wantSound = true;
+    if (priming) {
+      // The muted Safari warm-up is still going: turn it into the real thing.
+      priming = false;
+      audio.muted = false;
+    }
     if (songPlaying()) return void fadeTo(SONG_VOLUME, 300); // cancel a fade-out
     const a = ensureAudio();
-    wantSound = true;
     a.volume = 0;
     a.play().then(
       // The glance may have moved on while the stream was loading.
@@ -812,6 +831,31 @@
   async function pauseSong() {
     if (!songPlaying()) return;
     if (await fadeTo(0, 220)) audio.pause();
+  }
+
+  // Safari only lets an element play without a tap once it has played from
+  // one, so a tap on the demo plays the song muted for an instant and stops
+  // it. Chrome and Firefox remember any tap for the whole page and skip this.
+  // (Every browser on iOS is Safari underneath, hence the vendor check.)
+  const needsPrime = /^Apple/.test(navigator.vendor || "");
+  let primed = false;
+  function primeSong() {
+    if (!needsPrime || primed || !canPlaySong || songFailed || (audio && !audio.paused)) return;
+    primed = true;
+    const a = ensureAudio();
+    priming = true;
+    a.muted = true;
+    const done = () => {
+      if (!priming) return; // the song itself took over meanwhile
+      priming = false;
+      a.muted = false;
+    };
+    a.play().then(() => {
+      if (!priming) return;
+      a.pause();
+      a.currentTime = 0;
+      done();
+    }, done);
   }
 
   // Someone paused it themselves: stop following the glance.

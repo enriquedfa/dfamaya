@@ -241,6 +241,35 @@
   box-shadow: inset 0 0 0 1px var(--border-strong);
 }
 
+/* Before the first tap the demo waits, and ▶ gives off a soft wave in the
+   current source's colour */
+.demo-waiting .demo-toggle {
+  --wave: light-dark(var(--src-bg), var(--src-fg));
+  background: var(--wave);
+  color: light-dark(#fff, var(--src-bg));
+  box-shadow: none;
+}
+.demo-waiting .demo-toggle::before,
+.demo-waiting .demo-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--wave);
+  opacity: 0;
+  animation: demo-wave 2.6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+  pointer-events: none;
+}
+.demo-waiting .demo-toggle::after { animation-delay: 1.3s; }
+@keyframes demo-wave {
+  0% { scale: 1; opacity: 0.6; }
+  100% { scale: 1.9; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-waiting .demo-toggle::before { animation: none; opacity: 0.5; scale: 1.25; }
+  .demo-waiting .demo-toggle::after { animation: none; }
+}
+
 /* Progress ring round the active chip while the demo runs by itself */
 .chip::after {
   content: "";
