@@ -397,6 +397,84 @@
 .demo-caption strong { color: var(--text); font-weight: 600; }
 
 /* ----------------------------------------------------------------------------
+   Song preview button (Apple Music preview, plays on request)
+---------------------------------------------------------------------------- */
+.listen {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.listen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: min(100%, 290px);
+  padding: 6px 6px 6px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.25s var(--ease), background-color 0.25s var(--ease), scale 0.2s var(--ease);
+}
+.listen-btn:hover { border-color: color-mix(in srgb, #ffd9e2 45%, var(--border-strong)); }
+.listen-btn:active { scale: 0.98; }
+.listen-btn:disabled { opacity: 0.55; cursor: default; }
+
+.listen-art {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.listen-text { flex: 1; display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.listen-title { font-size: 0.95rem; font-weight: 600; }
+.listen-sub { color: var(--muted); font-size: 0.85rem; }
+
+.listen-icon {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffd9e2;
+  color: #7b2949;
+}
+.listen-icon svg { width: 20px; height: 20px; fill: currentColor; }
+
+.listen-credit {
+  padding-left: 6px;
+  color: var(--faint);
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+.listen-credit:hover { color: var(--muted); text-decoration: underline; }
+
+/* The record turns while it plays */
+.song-playing .listen-art { animation: record 6s linear infinite; }
+@keyframes record { to { rotate: 1turn; } }
+
+.song-playing .chip.is-active::after { opacity: 0; animation: none; }
+.no-song .listen { display: none !important; }
+
+/* One button per layout: under the intro on phones (the pinned watch stays
+   compact), inside the watch stage on desktop */
+.listen-intro { margin-top: 22px; }
+.listen-stage { display: none; }
+
+@media (min-width: 900px) {
+  .listen-intro { display: none; }
+  .listen-stage { display: flex; align-items: center; }
+}
+
+/* ----------------------------------------------------------------------------
    Story: hero + the sources, with the watch pinned while you scroll
 ---------------------------------------------------------------------------- */
 .story {

@@ -67,6 +67,16 @@ phone widget. The clock, the event countdown and the song position are live.
   `res/drawable` Material Symbols, plus a few rounded symbols for the page.
 - It pauses when it's off screen or the tab is hidden, has a pause button, and
   uses a plain crossfade for people who prefer reduced motion.
+- **The song.** "Play a song" streams Apple's official 30-second preview of
+  M83 · Midnight City straight from Apple's servers (it is never hosted in
+  this repo) and credits it with a link to Apple Music, the same approach as
+  tryalcove.com. It only starts when someone presses play. While it plays,
+  the watch, tile and widget follow the real position, the widget's button
+  flips between play and pause, and the Media Session API puts the track in
+  the phone's own media controls. Browsers that can't play AAC never see the
+  button. The track details are the `SONG` object in `demo.js`; a preview URL
+  can change, so if it ever 404s, look the song up again with the iTunes
+  Search API (`https://itunes.apple.com/search?term=m83+midnight+city&entity=song`).
 
 To change the sample content, edit the `SOURCES` array at the top of
 `demo.js`.
