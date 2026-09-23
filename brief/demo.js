@@ -727,8 +727,9 @@
     audio.addEventListener("pause", () => {
       refreshSongUi();
       // Paused on the music glance: let the demo move on. (Paused because the
-      // glance changed: show() already set the timer.)
-      if (current?.id === "music") schedule();
+      // glance changed: show() already set the timer. Paused because it
+      // ended: "ended" handles it.)
+      if (current?.id === "music" && !audio.ended) schedule();
     });
     audio.addEventListener("playing", () => {
       autoplayArmed = false;
@@ -736,10 +737,14 @@
     });
     audio.addEventListener("ended", () => {
       wantSound = false;
+      // The song was the hold: go straight to the next glance, unless the
+      // scroll story or the pause button is holding the watch here.
+      const advance = current?.id === "music" && !paused && !pinned && visible && !document.hidden;
+      if (advance) show(index + 1);
       audio.currentTime = 0;
       refreshSongUi();
       setSongProgress();
-      schedule();
+      if (!advance) schedule();
     });
     audio.addEventListener("timeupdate", () => {
       patchMusic();
