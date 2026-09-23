@@ -207,7 +207,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .chip,
@@ -236,21 +236,34 @@
 .chip.is-active { background: var(--c-bg); color: var(--c-fg); }
 
 .demo-toggle {
-  margin-left: 6px;
   background: transparent;
   box-shadow: inset 0 0 0 1px var(--border-strong);
 }
 
-/* Before the first tap the demo waits, and ▶ gives off a soft wave in the
-   current source's colour */
-.demo-waiting .demo-toggle {
+/* ▶/⏸ runs the demo, so it goes first, set apart from the sources it runs
+   through: a carousel's pause button comes before its slides, and keyboard
+   and screen reader users reach it first too. */
+.chips-sep {
+  flex: none;
+  width: 1px;
+  height: 20px;
+  background: var(--border-strong);
+}
+
+/* Before the first tap the demo waits, and ▶ in the middle of the watch
+   (.watch-play, below) gives off a soft wave in the current source's colour.
+   Browsers that can't play the song have no ▶ on the watch, so there this
+   one gives off the wave instead. */
+.no-song.demo-waiting .demo-toggle {
   --wave: light-dark(var(--src-bg), var(--src-fg));
   background: var(--wave);
   color: light-dark(#fff, var(--src-bg));
   box-shadow: none;
 }
-.demo-waiting .demo-toggle::before,
-.demo-waiting .demo-toggle::after {
+.demo-waiting .watch-play::before,
+.demo-waiting .watch-play::after,
+.no-song.demo-waiting .demo-toggle::before,
+.no-song.demo-waiting .demo-toggle::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -260,14 +273,17 @@
   animation: demo-wave 2.6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
   pointer-events: none;
 }
-.demo-waiting .demo-toggle::after { animation-delay: 1.3s; }
+.demo-waiting .watch-play::after,
+.no-song.demo-waiting .demo-toggle::after { animation-delay: 1.3s; }
 @keyframes demo-wave {
   0% { scale: 1; opacity: 0.6; }
-  100% { scale: 1.9; opacity: 0; }
+  100% { scale: var(--wave-to, 1.9); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .demo-waiting .demo-toggle::before { animation: none; opacity: 0.5; scale: 1.25; }
-  .demo-waiting .demo-toggle::after { animation: none; }
+  .demo-waiting .watch-play::before,
+  .no-song.demo-waiting .demo-toggle::before { animation: none; opacity: 0.5; scale: 1.25; }
+  .demo-waiting .watch-play::after,
+  .no-song.demo-waiting .demo-toggle::after { animation: none; }
 }
 
 /* Progress ring round the active chip while the demo runs by itself */
@@ -293,10 +309,15 @@
   to { --p: 1; }
 }
 
+@media (max-width: 359px) {
+  .chip,
+  .demo-toggle { width: 32px; height: 32px; }
+  .chips { gap: 4px; }
+}
 @media (min-width: 400px) {
   .chip,
   .demo-toggle { width: 40px; height: 40px; }
-  .chips { gap: 7px; }
+  .chips { gap: 6px; }
 }
 
 .demo-caption {
@@ -344,6 +365,43 @@
   pointer-events: none;
 }
 .watch-tap:active::after { opacity: 1; transition-duration: 0s; }
+
+/* Before the first tap: ▶ in the middle of the dial, level with the side
+   complications, like the play button on a video. The whole watch takes the
+   tap; this just shows where. It shrinks away once the demo starts. */
+.watch-play {
+  --wave: var(--face-accent);
+  --wave-to: 2.4;
+  position: absolute;
+  left: 50%;
+  top: 43.4%;
+  width: 22%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--wave);
+  color: var(--src-bg);
+  box-shadow: 0 0 0 5px rgb(0 0 0 / 0.6), 0 10px 32px -6px var(--wave);
+  translate: -50% -50%;
+  opacity: 0;
+  scale: 0.5;
+  visibility: hidden;
+  transition: opacity 0.25s var(--ease), scale 0.4s var(--ease), visibility 0s linear 0.4s;
+  pointer-events: none;
+}
+.watch-play svg { width: 50%; height: 50%; fill: currentColor; }
+.demo-waiting .watch-play::before,
+.demo-waiting .watch-play::after { border-width: 2px; }
+.demo-waiting .watch-play {
+  opacity: 1;
+  scale: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+@media (hover: hover) {
+  .demo-waiting .watch-tap:hover .watch-play { scale: 1.08; }
+}
 
 .step .step-credit {
   grid-column: 2;
@@ -427,7 +485,9 @@
   z-index: 5;
   margin-inline: calc(-1 * var(--gutter));
   padding: 14px var(--gutter) 26px;
-  background: linear-gradient(to bottom, var(--bg) 82%, transparent);
+  /* Solid down past the buttons, so the list scrolling under them doesn't
+     show through; only the padding below fades */
+  background: linear-gradient(to bottom, var(--bg) calc(100% - 22px), transparent);
   container-type: scroll-state;
 }
 

@@ -752,13 +752,6 @@
     });
     audio.addEventListener("playing", () => {
       autoplayArmed = false;
-      // Started from the watch or a source button before ▶: that counts as
-      // starting the demo too.
-      if (root.classList.contains("demo-waiting")) {
-        root.classList.remove("demo-waiting");
-        paused = false;
-        syncToggles();
-      }
     });
     audio.addEventListener("ended", () => {
       wantSound = false;
@@ -844,7 +837,17 @@
   }
 
   songToggles.forEach((b) =>
-    b.addEventListener("click", () => (songPlaying() ? stopFollowing() : playSong()))
+    b.addEventListener("click", () => {
+      if (songPlaying()) return stopFollowing();
+      // The first tap on the watch (its ▶) starts the demo too, straight
+      // away, so the ▶ goes before the stream has loaded.
+      if (root.classList.contains("demo-waiting")) {
+        root.classList.remove("demo-waiting");
+        paused = false;
+        syncToggles();
+      }
+      playSong();
+    })
   );
 
   // ---------------------------------------------------------------------------
