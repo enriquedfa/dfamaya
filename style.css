@@ -28,14 +28,67 @@
   --brand-glow: #8fc1ed;
   --brand-gradient: linear-gradient(135deg, var(--brand-a), var(--brand-b));
 
+  /* Spacing: --space-N is N × 4px. Page layout (padding, gaps, margins
+     between blocks) uses these; the watch faces are drawn in cqw instead,
+     and a few 1–3px optical nudges stay as they are. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-18: 72px;
+  --space-22: 88px;
+  --space-24: 96px;
+  --space-28: 112px;
+
+  /* Layout roles, built on the scale */
+  --section-y: var(--space-16);   /* top and bottom of a page section */
+  --card-pad: var(--space-5);     /* inside a card */
+  --gutter: var(--space-4);
+
+  /* Type. Fixed steps for UI and body copy, fluid ones for headings. */
+  --text-2xs: 0.8rem;    /* eyebrows, labels, tooltips */
+  --text-xs: 0.875rem;   /* fine print, badges, small buttons */
+  --text-sm: 0.95rem;    /* secondary copy: card text, captions, nav */
+  --text-base: 1rem;
+  --text-lg: 1.125rem;   /* card titles, FAQ questions */
+  --text-xl: 1.35rem;
+  --text-2xl: 1.6rem;
+  --text-3xl: clamp(1.8rem, 5.4vw, 2.75rem);  /* section headings */
+  --text-4xl: clamp(2rem, 6vw, 3rem);         /* page titles, closing CTA */
+  --text-5xl: clamp(2.4rem, 9vw, 4.5rem);     /* hero headlines */
+  --text-lede: clamp(1.05rem, 2.4vw, 1.25rem);     /* intro under a hero or page title */
+  --text-lede-sm: clamp(1rem, 2.2vw, 1.125rem);    /* intro under a section heading */
+
   --radius-sm: 10px;
   --radius: 18px;
   --radius-lg: 28px;
+  --radius-full: 999px;
   --wrap: 1180px;
   --prose: 740px;
-  --gutter: 16px;
   --header-h: 60px;
+
+  /* Motion. --ease settles quickly with no overshoot; --ease-spring is a
+     damped spring (about 5% overshoot) for things that move under the
+     pointer: lifts, presses, nudges. It needs a longer duration to play out. */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: linear(0, 0.044 3.3%, 0.151 6.7%, 0.29 10%, 0.439 13.3%, 0.581 16.7%,
+    0.708 20%, 0.814 23.3%, 0.897 26.7%, 0.96 30%, 1.004 33.3%, 1.032 36.7%, 1.048 40%,
+    1.054 43.3%, 1.053 46.7%, 1.049 50%, 1.042 53.3%, 1.034 56.7%, 1.026 60%, 1.018 63.3%,
+    1.012 66.7%, 1.007 70%, 1.003 73.3%, 1.001 76.7%, 0.999 80%, 0.998 83.3%, 0.997 86.7%,
+    0.997 90%, 0.997 93.3%, 0.998 96.7%, 1);
+  --dur-fast: 0.18s;     /* hover colours, presses */
+  --dur-base: 0.3s;      /* toggles, small state changes */
+  --dur-slow: 0.45s;     /* cards, panels */
+  --dur-slower: 0.8s;    /* colour washes */
+  --dur-spring: 0.6s;
 
   --font: "Google Sans Flex", "Google Sans", system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -45,14 +98,22 @@
 }
 
 @media (min-width: 640px) {
-  :root { --gutter: 24px; }
+  :root { --gutter: var(--space-6); }
+}
+
+@media (min-width: 720px) {
+  :root { --card-pad: var(--space-7); }
+}
+
+@media (min-width: 960px) {
+  :root { --section-y: var(--space-28); }
 }
 
 /* Page-to-page transitions: the header stays put, shared elements morph */
 @view-transition { navigation: auto; }
 
 ::view-transition-old(root),
-::view-transition-new(root) { animation-duration: 0.35s; }
+::view-transition-new(root) { animation-duration: var(--dur-base); }
 
 @media (prefers-reduced-motion: reduce) {
   @view-transition { navigation: none; }
@@ -64,7 +125,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-top: calc(var(--header-h) + var(--space-4));
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -74,7 +135,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  font-size: 1rem;
+  font-size: var(--text-base);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -112,14 +173,14 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   left: var(--gutter);
   top: -100px;
   z-index: 100;
-  padding: 8px 14px;
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   background: var(--text);
   color: var(--bg);
   font-weight: 600;
   text-decoration: none;
 }
-.skip-link:focus { top: 10px; }
+.skip-link:focus { top: var(--space-3); }
 
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -148,14 +209,14 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
   backdrop-filter: blur(16px) saturate(1.4);
   border-bottom: 1px solid transparent;
-  transition: border-color 0.25s var(--ease);
+  transition: border-color var(--dur-base) var(--ease);
 }
 
 @supports (animation-timeline: scroll()) {
   .site-head {
     animation: head-line linear both;
     animation-timeline: scroll(root block);
-    animation-range: 0 24px;
+    animation-range: 0 var(--space-6);
   }
   @keyframes head-line { to { border-bottom-color: var(--border); } }
 }
@@ -167,19 +228,19 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   height: var(--header-h);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
   min-width: 0;
   margin-right: auto;
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: var(--text-base);
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
@@ -203,7 +264,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .crumbs {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
   min-width: 0;
   margin-right: auto;
 }
@@ -214,7 +275,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   text-decoration: none;
   font-weight: 500;
   white-space: nowrap;
-  transition: color 0.18s var(--ease);
+  transition: color var(--dur-fast) var(--ease);
 }
 .crumbs .parent:hover { color: var(--text); }
 .crumbs .sep { display: none; color: var(--faint); user-select: none; }
@@ -233,31 +294,30 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .nav-links a {
   color: var(--muted);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
   font-weight: 500;
-  padding: 7px 10px;
-  border-radius: 999px;
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-full);
   white-space: nowrap;
-  transition: color 0.18s var(--ease), background-color 0.18s var(--ease);
+  transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
 }
 
 .nav-links a:hover { color: var(--text); background: var(--surface-2); }
 .nav-links a[aria-current="page"] { color: var(--text); background: var(--surface-2); }
 
 @media (min-width: 640px) {
-  .nav-links a { padding: 7px 12px; }
-  .site-head .bar { gap: 8px; }
+  .site-head .bar { gap: var(--space-2); }
 }
 
 /* Store button in the header: "Get" on phones, "Google Play" from tablet up */
-.head-cta { margin-left: 4px; }
+.head-cta { margin-left: var(--space-1); }
 .nav-links,
 .head-cta { flex: none; }
 .logo-text { overflow: hidden; text-overflow: ellipsis; }
 
 @media (max-width: 420px) {
-  .nav-links a { padding: 7px 8px; font-size: 0.9rem; }
-  .btn.head-cta { padding: 0 12px; margin-left: 2px; }
+  .nav-links a { padding: 6px var(--space-2); font-size: var(--text-xs); }
+  .btn.head-cta { --btn-px: var(--space-3); margin-left: 2px; }
 }
 
 /* A long app name gives way to its icon on phones, rather than truncating */
@@ -271,37 +331,86 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 
 /* ----------------------------------------------------------------------------
-   Buttons
+   Buttons — one base, a few variants. Every pill or round button on the site
+   is a .btn; page-specific looks (Brief's source chips, WatchSky's "Now")
+   build on it rather than starting over.
+
+     .btn-primary        brand gradient: the main action in a block
+     .btn-ghost          outlined: second actions, toggles, controls
+     .btn-sm, .btn-md    36px and 40px tall (the default is 48px)
+     .btn-icon           a circle holding only an icon (give it an aria-label)
+     .nudge-x, .nudge-y  on a trailing arrow: it steps forward on hover
+
+   A press shrinks the button quickly; letting go springs it back.
 ---------------------------------------------------------------------------- */
 .btn {
+  --btn-h: 48px;
+  --btn-px: var(--space-6);
+  --btn-icon: 18px;
+  --btn-dur: var(--dur-fast);
+  --press-dur: var(--dur-spring);
+  --press-ease: var(--ease-spring);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 48px;
-  padding: 0 22px;
-  border-radius: 999px;
+  gap: var(--space-2);
+  height: var(--btn-h);
+  padding: 0 var(--btn-px);
+  border-radius: var(--radius-full);
   border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
   font: inherit;
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   letter-spacing: -0.005em;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease),
-    background-color 0.18s var(--ease), border-color 0.18s var(--ease),
-    filter 0.18s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--btn-dur) var(--ease),
+    border-color var(--btn-dur) var(--ease),
+    color var(--btn-dur) var(--ease),
+    box-shadow var(--btn-dur) var(--ease),
+    filter var(--btn-dur) var(--ease),
+    translate var(--dur-spring) var(--ease-spring),
+    scale var(--press-dur) var(--press-ease);
 }
 
-.btn:active { transform: translateY(1px) scale(0.99); }
+.btn:active {
+  --press-dur: 0.1s;
+  --press-ease: var(--ease);
+  scale: 0.96;
+}
+
+.btn svg {
+  width: var(--btn-icon);
+  height: var(--btn-icon);
+  fill: currentColor;
+  flex: none;
+}
+
+.btn-md {
+  --btn-h: 40px;
+  --btn-px: var(--space-4);
+  font-size: var(--text-xs);
+}
 
 .btn-sm {
-  height: 36px;
-  padding: 0 14px;
-  font-size: 0.92rem;
-  gap: 6px;
+  --btn-h: 36px;
+  --btn-px: var(--space-4);
+  --btn-icon: 14px;
+  font-size: var(--text-xs);
 }
+
+.btn-icon {
+  --btn-icon: 18px;
+  width: var(--btn-h);
+  padding: 0;
+  border-radius: 50%;
+}
+.btn-icon:active { scale: 0.9; }
 
 .btn-primary {
   background: var(--brand-gradient);
@@ -323,8 +432,15 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 .btn-ghost:hover { background: var(--surface-2); color: var(--text); }
 
-.btn .icon { width: 18px; height: 18px; }
-.btn-sm .icon { width: 14px; height: 14px; }
+.nudge-x,
+.nudge-y { transition: translate var(--dur-spring) var(--ease-spring); }
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .btn-primary:hover { translate: 0 -2px; }
+  .btn-primary:active { translate: 0; }
+  .btn:hover .nudge-x { translate: 3px 0; }
+  .btn:hover .nudge-y { translate: 0 3px; }
+}
 
 .icon {
   width: 16px;
@@ -336,7 +452,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .btn-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 @media (max-width: 420px) {
@@ -348,47 +464,45 @@ p { margin: 0 0 1em; text-wrap: pretty; }
    Page heading + prose (privacy, support, overview pages)
 ---------------------------------------------------------------------------- */
 .page-head {
-  padding-block: 40px 8px;
+  padding-block: var(--space-10) var(--space-2);
 }
 
 @media (min-width: 720px) {
-  .page-head { padding-block: 72px 16px; }
+  .page-head { padding-block: var(--space-18) var(--space-4); }
 }
 
 .eyebrow {
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.page-head h1 { font-size: clamp(2rem, 6vw, 3rem); }
+.page-head h1 { font-size: var(--text-4xl); }
 
 .page-head .lede {
-  margin-top: 14px;
-  color: var(--muted);
-  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+  margin-top: var(--space-4);
   max-width: 38em;
 }
 
-.page-head .btn-row { margin-top: 24px; }
+.page-head .btn-row { margin-top: var(--space-6); }
 
-.updated { color: var(--muted); font-size: 0.95rem; margin-top: 10px; }
+.updated { color: var(--muted); font-size: var(--text-sm); margin-top: var(--space-3); }
 
 .prose {
-  padding-block: 16px 72px;
+  padding-block: var(--space-4) var(--space-18);
 }
 
 .prose h2 {
-  font-size: 1.3rem;
+  font-size: var(--text-xl);
   margin: 2.2em 0 0.6em;
 }
 
 .prose h3 {
-  font-size: 1.05rem;
+  font-size: var(--text-lg);
   margin: 1.6em 0 0.5em;
 }
 
@@ -417,32 +531,24 @@ code {
 /* A long policy reads better without a card around every paragraph; the
    summary box is the one highlighted block. */
 .summary-box {
-  margin: 8px 0 8px;
-  padding: 20px;
+  margin-block: var(--space-2);
+  padding: var(--card-pad);
   border-radius: var(--radius);
   background: var(--surface);
   border: 1px solid var(--border);
 }
 .summary-box p:last-child { margin-bottom: 0; }
 
-@media (min-width: 640px) {
-  .summary-box { padding: 24px 28px; }
-}
-
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
-}
-
-@media (min-width: 640px) {
-  .card { padding: 28px; }
+  padding: var(--card-pad);
 }
 
 /* Tables: scroll sideways inside their own box on phones, never the page */
 .table-wrap {
-  margin: 18px 0;
+  margin: var(--space-5) 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border: 1px solid var(--border);
@@ -453,14 +559,14 @@ code {
   width: 100%;
   min-width: 620px;
   border-collapse: collapse;
-  font-size: 0.93rem;
+  font-size: var(--text-sm);
 }
 
 .table-wrap th,
 .table-wrap td {
   text-align: left;
   vertical-align: top;
-  padding: 12px 14px;
+  padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--border);
 }
 
@@ -481,17 +587,17 @@ code {
   }
   .table-wrap.stack-sm table { min-width: 0; }
   .table-wrap.stack-sm thead { display: none; }
-  .table-wrap.stack-sm tbody { display: grid; gap: 10px; }
+  .table-wrap.stack-sm tbody { display: grid; gap: var(--space-3); }
   .table-wrap.stack-sm tr {
     display: block;
-    padding: 6px 16px;
+    padding: var(--space-1) var(--space-4);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     background: var(--surface);
   }
   .table-wrap.stack-sm td {
     display: block;
-    padding: 8px 0;
+    padding: var(--space-2) 0;
     border-bottom: 1px solid var(--border);
   }
   .table-wrap.stack-sm td:last-child { border-bottom: 0; }
@@ -500,13 +606,13 @@ code {
     display: block;
     margin-bottom: 2px;
     color: var(--faint);
-    font-size: 0.75rem;
+    font-size: var(--text-2xs);
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
   .table-wrap.stack-sm td:first-child::before { display: none; }
-  .table-wrap.stack-sm td:first-child { font-size: 1rem; }
+  .table-wrap.stack-sm td:first-child { font-size: var(--text-base); }
 }
 
 /* Q&A lists on support pages */
@@ -515,29 +621,77 @@ code {
 .qa dd { margin: 0.35em 0 0; color: var(--muted); }
 
 /* ----------------------------------------------------------------------------
+   Sections and the text blocks every app page shares
+---------------------------------------------------------------------------- */
+.section {
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--border);
+}
+
+/* The paragraph under a headline */
+.lede {
+  color: var(--muted);
+  font-size: var(--text-lede);
+  max-width: 32em;
+}
+
+.section-head h2 {
+  font-size: var(--text-3xl);
+  letter-spacing: -0.03em;
+}
+
+.section-head .lede {
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-lede-sm);
+  max-width: 36em;
+}
+
+.section-head.center { text-align: center; }
+.section-head.center .lede { margin-inline: auto; }
+
+/* The app's icon and name in a pill, above a hero headline */
+.app-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  padding: 5px var(--space-4) 5px 5px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+.app-badge img { width: 26px; height: 26px; border-radius: 8px; }
+
+/* Small print under a hero's buttons */
+.fine {
+  margin: var(--space-4) 0 0;
+  color: var(--faint);
+  font-size: var(--text-xs);
+}
+
+/* ----------------------------------------------------------------------------
    Home
 ---------------------------------------------------------------------------- */
-.home-hero { padding-block: 40px 28px; }
+.home-hero { padding-block: var(--space-10) var(--space-7); }
 
 @media (min-width: 720px) {
-  .home-hero { padding-block: 88px 48px; }
+  .home-hero { padding-block: var(--space-22) var(--space-12); }
 }
 
 .home-hero h1 {
-  font-size: clamp(2.4rem, 9vw, 4.4rem);
+  font-size: var(--text-5xl);
   letter-spacing: -0.04em;
   line-height: 1;
 }
 
-.home-hero .lede {
-  margin: 18px 0 0;
-  max-width: 32em;
-  color: var(--muted);
-  font-size: clamp(1.08rem, 2.6vw, 1.25rem);
-}
+.home-hero .lede { margin: var(--space-5) 0 0; }
 
-.home-apps { padding-bottom: 72px; }
-.home-apps .wrap { display: grid; gap: 16px; }
+.home-apps { padding-bottom: var(--space-18); }
+.home-apps .wrap { display: grid; gap: var(--space-4); }
 
 .app-card {
   display: grid;
@@ -547,21 +701,21 @@ code {
   overflow: hidden;
 }
 
-.app-copy { padding: 24px 20px 26px; }
+.app-copy { padding: var(--space-6) var(--card-pad); }
 
 @media (min-width: 640px) {
-  .app-copy { padding: 36px; }
+  .app-copy { padding: var(--space-10); }
 }
 
 .app-title {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
 }
 .app-title img { width: 48px; height: 48px; border-radius: 14px; }
-.app-title h2 { font-size: 1.6rem; letter-spacing: -0.025em; }
-.app-kind { margin: 2px 0 0; color: var(--muted); font-size: 0.92rem; }
+.app-title h2 { font-size: var(--text-2xl); letter-spacing: -0.025em; }
+.app-kind { margin: 2px 0 0; color: var(--muted); font-size: var(--text-sm); }
 
 .app-glyph {
   width: 48px;
@@ -575,13 +729,13 @@ code {
 .app-glyph svg { width: 26px; height: 26px; fill: currentColor; }
 
 .app-copy > p { color: var(--muted); max-width: 34em; }
-.app-copy .btn-row { margin-top: 22px; }
+.app-copy .btn-row { margin-top: var(--space-6); }
 
 .app-visual {
   position: relative;
   display: grid;
   place-items: center;
-  padding: 72px 0;
+  padding: var(--space-18) 0;
   order: -1;
   overflow: hidden;
   background:
@@ -593,8 +747,8 @@ code {
 
 @media (min-width: 860px) {
   .app-card-feature { grid-template-columns: 1.1fr 1fr; align-items: stretch; }
-  .app-card-feature .app-copy { align-self: center; padding: 48px; }
-  .app-visual { order: 0; border-bottom: 0; border-left: 1px solid var(--border); padding: 96px 0; }
+  .app-card-feature .app-copy { align-self: center; padding: var(--space-12); }
+  .app-visual { order: 0; border-bottom: 0; border-left: 1px solid var(--border); padding: var(--space-24) 0; }
   .app-visual .watch { --size: 270px; }
 }
 
@@ -612,9 +766,10 @@ code {
   margin-inline: auto;
   isolation: isolate;
   transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
-  transition: transform 0.6s var(--ease);
+  /* Springs back level when the pointer leaves */
+  transition: transform var(--dur-spring) var(--ease-spring);
 }
-.watch.is-tilting { transition-duration: 0.12s; }
+.watch.is-tilting { transition: transform 0.12s var(--ease); }
 
 .watch-case {
   position: absolute;
@@ -718,7 +873,7 @@ code {
   border-radius: 50%;
   background: linear-gradient(155deg, rgb(255 255 255 / 0.08), transparent 36%);
   translate: var(--gx, 0px) var(--gy, 0px);
-  transition: translate 0.6s var(--ease);
+  transition: translate var(--dur-spring) var(--ease);
   pointer-events: none;
 }
 
@@ -728,25 +883,26 @@ code {
 .site-foot {
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: var(--text-sm);
 }
 
 .site-foot .wrap {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding-block: 28px 36px;
+  gap: var(--space-4);
+  padding-block: var(--space-7) var(--space-10);
 }
 
 .site-foot nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 20px;
+  gap: var(--space-2) var(--space-5);
 }
 
 .site-foot a {
   color: var(--muted);
   text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
 }
 .site-foot a:hover { color: var(--text); }
 
@@ -759,11 +915,23 @@ code {
 }
 
 /* ----------------------------------------------------------------------------
-   Motion — content eases in once, never on reduced motion
+   Motion — none of it runs for people who prefer reduced motion. Utilities:
+
+     .rise        eases in once on load; stagger with style="--d:1", "--d:2"…
+     .reveal      fades up as it scrolls into view
+     .stagger     on a grid of .reveal cards: each card in a row arrives a
+                  beat after the one before it
+     .lift        a card rises toward the pointer on hover
+     .hero-exit   a hero drifts up and fades as it scrolls away
 ---------------------------------------------------------------------------- */
+:root {
+  --shadow-color: light-dark(rgb(16 18 23 / 0.16), rgb(0 0 0 / 0.55));
+  --shadow-lift: 0 22px 44px -22px var(--shadow-color);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .rise {
-    animation: rise 0.7s var(--ease) both;
+    animation: rise var(--dur-slower) var(--ease) both;
     animation-delay: calc(var(--d, 0) * 70ms);
   }
 
@@ -772,12 +940,69 @@ code {
     to { opacity: 1; transform: none; }
   }
 
-  /* Sections fade up as they scroll into view, where the browser supports it */
+  /* translate, not transform: it stacks with .rise and .reveal, which
+     animate transform */
+  @media (hover: hover) {
+    .lift {
+      transition: translate var(--dur-spring) var(--ease-spring),
+        box-shadow var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
+    }
+    .lift:hover {
+      translate: 0 -4px;
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-lift);
+    }
+  }
+
+  /* Scroll-linked, where the browser supports it. Elsewhere everything
+     just sits still, fully visible. */
   @supports (animation-timeline: view()) {
     .reveal {
       animation: rise linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 40%;
+    }
+
+    /* Cards side by side enter the view together; starting each one a
+       little further into its entry makes them arrive in turn */
+    .stagger > .reveal:nth-child(3n + 2) { animation-range: entry 8% entry 48%; }
+    .stagger > .reveal:nth-child(3n + 3) { animation-range: entry 16% entry 56%; }
+
+    .hero-exit {
+      animation: hero-exit linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+    @keyframes hero-exit {
+      to { opacity: 0; translate: 0 -48px; scale: 0.98; }
+    }
+
+    /* The watches on the home page drift against the scroll, for depth */
+    .app-visual .watch {
+      animation: drift linear both;
+      animation-timeline: view();
+    }
+    @keyframes drift {
+      from { translate: 0 20px; }
+      to { translate: 0 -20px; }
+    }
+
+    /* Reading progress under the header on the long text pages */
+    body:has(.page-head) .site-head::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: var(--brand-gradient);
+      transform-origin: 0 50%;
+      scale: 0 1;
+      animation: read-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+    @keyframes read-progress {
+      to { scale: 1 1; }
     }
   }
 }
