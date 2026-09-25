@@ -61,7 +61,7 @@
   let eventStart = Date.now() + 12 * MIN;
 
   const TRACK_LEN_S = 248; // 4:08
-  const trackStartedAt = Date.now() - 62_000;
+  let trackStartedAt = Date.now(); // restarts each time music comes on the watch
 
   // The one real song: Apple's official 30 s preview, streamed from Apple
   // (never hosted here), credited with a link back to Apple Music. It only
@@ -119,15 +119,16 @@
       glance(now) {
         // While the preview is loaded, everything follows the audio itself.
         const live = songLive();
-        const progress = live
-          ? audio.currentTime / (audio.duration || 30)
-          : (((now - trackStartedAt) / 1000) % TRACK_LEN_S) / TRACK_LEN_S;
+        const elapsed = live ? audio.currentTime : ((now - trackStartedAt) / 1000) % TRACK_LEN_S;
+        const progress = live ? audio.currentTime / (audio.duration || 30) : elapsed / TRACK_LEN_S;
         const paused = live && !songPlaying();
+        const s = Math.floor(elapsed);
         return {
           // Like the watch: ▶ while playing, ⏸ while paused (a status glyph)
           face: paused ? "pause" : "play",
           long: { title: SONG.artist, text: SONG.title },
-          ranged: { lines: [SONG.title], value: progress },
+          // The ring counts up the song's position, 00:00 onwards
+          ranged: { lines: [`${pad(Math.floor(s / 60))}:${pad(s % 60)}`], value: progress },
           short: { lines: [SONG.title] },
           tile: {
             title: paused ? "Paused" : "Now playing",
@@ -137,6 +138,12 @@
           },
           widget: { title: SONG.title, text: SONG.artist, bar: progress, button: paused ? "play" : "pause" },
         };
+      },
+      onShow(now) {
+        // Without the preview, the made-up track starts over, so the timer
+        // counts up from 00:00 every time music comes on. It starts on the
+        // second, like the once-a-second tick, so each tick adds one.
+        trackStartedAt = now - (now % 1000);
       },
     },
     {

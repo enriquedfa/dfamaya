@@ -125,7 +125,8 @@ the header, and FAQ answers fade in as they open.
 
 `brief/demo.js` runs one glance state and draws it on every surface on the
 page at once: the three complication slots on the watch face, the tile and the
-phone widget. The clock, the event countdown and the song position are live.
+phone widget. The clock, the event countdown and the song position are live;
+on Now playing the ring slot counts the song up from 00:00.
 
 - **The story.** The hero and the list of sources share one section. The watch
   is `position: sticky` (beside the list on desktop, pinned under the header
