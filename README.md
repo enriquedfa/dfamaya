@@ -9,8 +9,9 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
 ## Pages
 
 - `index.html` — home page (lists all apps)
-- `style.css` — shared styles (header, buttons, text pages, footer, and the
-  watch itself: case, strap, crown and dial, used by both apps)
+- `style.css` — shared styles: the design tokens, buttons, sections, text
+  pages, header and footer, the motion utilities, and the watch itself (case,
+  strap, crown and dial, used by both apps). See [Design system](#design-system).
 - `assets/favicon.svg` — site icon
 
 ### Brief
@@ -48,11 +49,84 @@ submitted to Google Play working, the old paths now redirect to their new home:
 - `privacy.html` → `watchfaces/privacy.html`
 - `support.html` → `watchfaces/support.html`
 
+## Design system
+
+No framework and no build step: `style.css` opens with a set of tokens
+(CSS custom properties) and a few shared components, and every page builds on
+them. When you add or change something, reach for a token before typing a
+raw value.
+
+- **Spacing.** `--space-N` is N × 4px (`--space-4` is 16px). The scale has
+  1–8, 10, 12, 14, 16, 18, 22, 24 and 28. Three roles sit on top of it:
+  `--gutter` (page edges), `--card-pad` (inside a card, 20px, 28px from
+  720px wide) and `--section-y` (top and bottom of a `.section`, 64px, 112px
+  from 960px).
+- **Type.** Fixed steps for UI and body copy (`--text-2xs` 0.8rem up to
+  `--text-2xl` 1.6rem) and fluid ones for headings: `--text-3xl` (section
+  headings), `--text-4xl` (page titles), `--text-5xl` (hero headlines), plus
+  `--text-lede` and `--text-lede-sm` for the paragraph under a headline.
+- **Motion.** `--dur-fast` (0.18s, hovers and presses), `--dur-base` (0.3s,
+  toggles), `--dur-slow` (0.45s, cards) and `--dur-slower` (0.8s, colour
+  washes). `--ease` settles quickly with no overshoot; `--ease-spring` is a
+  damped spring (about 5% overshoot) written with CSS `linear()`, used with
+  `--dur-spring` for things that move under the pointer.
+- **Radius.** `--radius-sm`, `--radius`, `--radius-lg` and `--radius-full`
+  (pills).
+
+The watch faces, the tile and the phone widget are drawings of real
+hardware, sized in `cqw` from the dial or copied from the apps' own values,
+so they keep their literal numbers.
+
+### Buttons
+
+Every pill or round button is a `.btn`, with a variant and an optional size:
+
+| Class | What it is |
+| --- | --- |
+| `.btn-primary` | Brand gradient: the main action in a block |
+| `.btn-ghost` | Outlined: second actions, toggles, controls |
+| `.btn-md`, `.btn-sm` | 40px and 36px tall (the default is 48px) |
+| `.btn-icon` | A circle holding only an icon (give it an `aria-label`) |
+| `.nudge-x`, `.nudge-y` | On a trailing arrow icon: it steps forward on hover |
+
+A press shrinks the button quickly and letting go springs it back. Page
+looks build on the base rather than starting over: Brief's source chips are
+`.btn .btn-icon .chip`, WatchSky's play button is `.btn .btn-ghost .btn-md
+.btn-icon`. A size can be changed from a page's CSS by setting `--btn-h` (and
+`--btn-px`, `--btn-icon`) on the button.
+
+WatchSky's settings chips and switches are real radios and checkboxes, not
+buttons, but they press and spring the same way.
+
+### Shared blocks
+
+`.section` (a page section with a top border), `.section-head` (eyebrow,
+`h2` and `.lede`; add `.center` to centre it), `.lede`, `.app-badge` (the
+app's icon and name above a hero headline), `.fine` (small print under the
+hero buttons) and `.card`.
+
+### Motion utilities
+
+None of these run for people who prefer reduced motion; there everything
+simply sits still, fully visible.
+
+- `.rise`: eases in once on load. Stagger with `style="--d:1"`, `--d:2`…
+- `.reveal`: fades up as it scrolls into view.
+- `.stagger`: on a grid of `.reveal` cards, each card in a row arrives a beat
+  after the one before it.
+- `.lift`: a card rises toward the pointer on hover, on a spring.
+- `.hero-exit`: a hero drifts up and fades as it scrolls away.
+
+Also built in: the watches on the home page drift against the scroll, long
+text pages (any page with a `.page-head`) get a reading-progress line under
+the header, and FAQ answers fade in as they open.
+
 ## The Brief page
 
 `brief/demo.js` runs one glance state and draws it on every surface on the
 page at once: the three complication slots on the watch face, the tile and the
-phone widget. The clock, the event countdown and the song position are live.
+phone widget. The clock, the event countdown and the song position are live;
+on Now playing the ring slot counts the song up from 00:00.
 
 - **The story.** The hero and the list of sources share one section. The watch
   is `position: sticky` (beside the list on desktop, pinned under the header
@@ -148,7 +222,11 @@ or Edge 123, Safari 17.5 or Firefox 120 (all from 2024).
   put between pages, and the Brief and WatchSky watches and icons morph from
   the home page into their pages.
 - **Scroll-driven animations**: the header's bottom border, sections fading
-  in, and the watch crown turning as you scroll.
+  in (`.reveal`, `.stagger`), heroes fading out (`.hero-exit`), the home
+  page's watches drifting, the reading-progress line on text pages, and the
+  watch crown turning as you scroll.
+- **`linear()` easing** for the spring (`--ease-spring`): a sampled damped
+  spring, so buttons, cards and switches bounce slightly with no JavaScript.
 - **`scroll-state()` container queries**: the pinned watch tucks in slightly
   once it's stuck on a phone.
 - **`light-dark()`** colour tokens with `color-scheme`, **relative colour
@@ -188,5 +266,7 @@ When submitting an app on Google Play, use:
    Copy the header from `watchfaces/index.html`: the `crumbs` block, two or
    three `nav-links`, and the `head-cta` store button. Keep the header to one
    row: check it at 360px wide.
-3. Add an `app-card` for it in the Apps section of `index.html`.
+   Build the page from the shared pieces (`.section`, `.section-head`,
+   `.btn`, the tokens) so it matches the others.
+3. Add an `app-card rise lift` for it in the Apps section of `index.html`.
 4. List its Play Store link above.

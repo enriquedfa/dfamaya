@@ -20,7 +20,7 @@
 }
 
 :root {
-  transition: --src-bg 0.8s var(--ease), --src-fg 0.8s var(--ease);
+  transition: --src-bg var(--dur-slower) var(--ease), --src-fg var(--dur-slower) var(--ease);
 
   /* The watch face takes on the colour of whichever source is showing;
      the time stays a quiet, constant white. */
@@ -122,6 +122,7 @@
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: 1.05;
+  font-variant-numeric: tabular-nums; /* the song timer doesn't jitter */
 }
 .cx-ranged-item .cx-lines {
   display: flex;
@@ -207,32 +208,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: var(--space-1);
 }
 
+/* The chips and ▶/⏸ are .btn .btn-icon (../style.css). Here they're sized to
+   fit the row on a phone, and the chips take their source's colours, easing
+   a little slower as the demo moves from one to the next. */
 .chip,
 .demo-toggle {
+  --btn-h: 36px;
+  --btn-dur: var(--dur-base);
   position: relative;
   flex: none;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  display: grid;
-  place-items: center;
+}
+
+.chip {
   border: 0;
-  border-radius: 50%;
   background: var(--surface-2);
   color: var(--muted);
-  cursor: pointer;
-  transition: background-color 0.3s var(--ease), color 0.3s var(--ease), scale 0.2s var(--ease);
 }
-.chip svg,
-.demo-toggle svg { width: 18px; height: 18px; fill: currentColor; }
-.chip:hover,
-.demo-toggle:hover { color: var(--text); }
-.chip:active,
-.demo-toggle:active { scale: 0.92; }
-
+.chip:hover { color: var(--text); }
 .chip.is-active { background: var(--c-bg); color: var(--c-fg); }
 
 /* Each source's name on hover or keyboard focus: not every icon explains
@@ -241,27 +236,22 @@
   content: attr(aria-label);
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + var(--space-3));
   z-index: 3;
-  padding: 4px 10px;
+  padding: var(--space-1) var(--space-3);
   border-radius: 8px;
   background: var(--text);
   color: var(--bg);
-  font: 600 0.8rem/1.3 var(--font);
+  font: 600 var(--text-2xs)/1.3 var(--font);
   white-space: nowrap;
   translate: -50% 4px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s var(--ease), translate 0.15s var(--ease);
+  transition: opacity var(--dur-fast) var(--ease), translate var(--dur-fast) var(--ease);
 }
 .chip:focus-visible::before { opacity: 1; translate: -50% 0; }
 @media (hover: hover) {
-  .chip:hover::before { opacity: 1; translate: -50% 0; transition-delay: 0.15s; }
-}
-
-.demo-toggle {
-  background: transparent;
-  box-shadow: inset 0 0 0 1px var(--border-strong);
+  .chip:hover::before { opacity: 1; translate: -50% 0; transition-delay: var(--dur-fast); }
 }
 
 /* ▶/⏸ runs the demo, so it goes first, set apart from the sources it runs
@@ -280,9 +270,9 @@
    one gives off the wave instead. */
 .no-song.demo-waiting .demo-toggle {
   --wave: light-dark(var(--src-bg), var(--src-fg));
+  border-color: transparent;
   background: var(--wave);
   color: light-dark(#fff, var(--src-bg));
-  box-shadow: none;
 }
 .demo-waiting .watch-play::before,
 .demo-waiting .watch-play::after,
@@ -333,14 +323,14 @@
   to { --p: 1; }
 }
 
+/* The row has to fit a 360px phone: nine buttons and the divider */
 @media (max-width: 359px) {
   .chip,
-  .demo-toggle { width: 32px; height: 32px; }
-  .chips { gap: 4px; }
+  .demo-toggle { --btn-h: 32px; }
 }
 @media (min-width: 400px) {
   .chip,
-  .demo-toggle { width: 40px; height: 40px; }
+  .demo-toggle { --btn-h: 40px; }
   .chips { gap: 6px; }
 }
 
@@ -349,7 +339,7 @@
   margin: 0 auto;
   max-width: 30ch;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
   line-height: 1.4;
   text-align: center;
 }
@@ -385,7 +375,7 @@
   border-radius: inherit;
   background: radial-gradient(circle, oklch(from var(--src-fg) l c h / 0.22), transparent 62%);
   opacity: 0;
-  transition: opacity 0.5s var(--ease);
+  transition: opacity var(--dur-slow) var(--ease);
   pointer-events: none;
 }
 .watch-tap:active::after { opacity: 1; transition-duration: 0s; }
@@ -411,17 +401,20 @@
   opacity: 0;
   scale: 0.5;
   visibility: hidden;
-  transition: opacity 0.25s var(--ease), scale 0.4s var(--ease), visibility 0s linear 0.4s;
+  transition: opacity var(--dur-base) var(--ease), scale var(--dur-slow) var(--ease),
+    visibility 0s linear var(--dur-slow);
   pointer-events: none;
 }
 .watch-play svg { width: 50%; height: 50%; fill: currentColor; }
 .demo-waiting .watch-play::before,
 .demo-waiting .watch-play::after { border-width: 2px; }
+/* It pops in on a spring */
 .demo-waiting .watch-play {
   opacity: 1;
   scale: 1;
   visibility: visible;
-  transition-delay: 0s;
+  transition: opacity var(--dur-base) var(--ease), scale var(--dur-spring) var(--ease-spring),
+    visibility 0s;
 }
 @media (hover: hover) {
   .demo-waiting .watch-tap:hover .watch-play { scale: 1.08; }
@@ -429,9 +422,9 @@
 
 .step .step-credit {
   grid-column: 2;
-  margin-top: 8px;
+  margin-top: var(--space-2);
   color: var(--faint);
-  font-size: 0.82rem;
+  font-size: var(--text-2xs);
 }
 .step-credit a { color: inherit; }
 .step-credit a:hover { color: var(--muted); }
@@ -451,10 +444,10 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.story-intro { padding-block: 28px 8px; }
+.story-intro { padding-block: var(--space-7) var(--space-2); }
 
 .story h1 {
-  font-size: clamp(2.3rem, 8.6vw, 4.6rem);
+  font-size: var(--text-5xl);
   letter-spacing: -0.04em;
   line-height: 1.02;
 }
@@ -474,16 +467,9 @@
   color: transparent;
 }
 
-.story .lede {
-  margin: 20px 0 0;
-  color: var(--muted);
-  font-size: clamp(1.06rem, 2.4vw, 1.25rem);
-  line-height: 1.55;
-  max-width: 32em;
-}
+.story-intro .lede { margin: var(--space-5) 0 0; line-height: 1.55; }
 
-.story .btn-row { margin-top: 28px; }
-.story .fine { margin: 16px 0 0; color: var(--faint); font-size: 0.9rem; }
+.story .btn-row { margin-top: var(--space-7); }
 
 /* On phones the watch is the best pitch, so it gets onto the first screen:
    the lede's last line (the Default step says it) and "How it works" (the
@@ -493,22 +479,6 @@
   .story-intro .btn-ghost { display: none; }
 }
 
-.app-badge {
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 5px 14px 5px 5px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--muted);
-  font-size: 0.88rem;
-  font-weight: 500;
-}
-.app-badge img { width: 26px; height: 26px; border-radius: 8px; }
-
 /* Sticky stage. On phones it pins under the header with the steps
    scrolling beneath it; on desktop it holds the right-hand column. */
 .story-visual {
@@ -516,10 +486,10 @@
   top: var(--header-h);
   z-index: 5;
   margin-inline: calc(-1 * var(--gutter));
-  padding: 14px var(--gutter) 26px;
+  padding: var(--space-3) var(--gutter) var(--space-6);
   /* Solid down past the buttons, so the list scrolling under them doesn't
      show through; only the padding below fades */
-  background: linear-gradient(to bottom, var(--bg) calc(100% - 22px), transparent);
+  background: linear-gradient(to bottom, var(--bg) calc(100% - var(--space-5)), transparent);
   container-type: scroll-state;
 }
 
@@ -527,8 +497,8 @@
   position: relative;
   display: grid;
   justify-items: center;
-  gap: 18px;
-  transition: scale 0.4s var(--ease);
+  gap: var(--space-4);
+  transition: scale var(--dur-slow) var(--ease);
 }
 
 .story-visual .watch { --size: min(56vw, 320px, 33svh); }
@@ -565,17 +535,11 @@
   .story-stage { scale: 0.94; transform-origin: 50% 0; }
 }
 
-.story-steps { padding-top: 24px; }
-
-.story-steps .section-head h2 {
-  font-size: clamp(1.8rem, 5.4vw, 2.75rem);
-  letter-spacing: -0.03em;
-}
-.story-steps .section-head .lede { margin-top: 14px; font-size: clamp(1.02rem, 2.2vw, 1.12rem); }
+.story-steps { padding-top: var(--space-6); }
 
 .steps {
   list-style: none;
-  margin: 32px 0 0;
+  margin: var(--space-8) 0 0;
   padding: 0 0 24svh;
   display: grid;
   gap: 12svh;
@@ -585,15 +549,18 @@
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 16px;
+  column-gap: var(--space-4);
   align-items: center;
-  padding: 20px;
+  padding: var(--card-pad);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
   cursor: pointer;
-  transition: background-color 0.45s var(--ease), border-color 0.45s var(--ease), box-shadow 0.45s var(--ease),
-    translate 0.45s var(--ease);
+  transition: background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease),
+    box-shadow var(--dur-slow) var(--ease), translate var(--dur-spring) var(--ease-spring);
+}
+@media (hover: hover) {
+  .step:hover { border-color: var(--border-strong); }
 }
 
 .step .badge {
@@ -608,15 +575,15 @@
 }
 .step .badge svg { width: 24px; height: 24px; fill: currentColor; }
 
-.step h3 { font-size: 1.15rem; letter-spacing: -0.015em; padding-right: 2.5em; }
-.step p { margin: 4px 0 0; color: var(--muted); font-size: 0.97rem; line-height: 1.5; }
+.step h3 { font-size: var(--text-lg); letter-spacing: -0.015em; padding-right: 2.5em; }
+.step p { margin: var(--space-1) 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.5; }
 
 .step .rank {
   position: absolute;
-  top: 18px;
-  right: 20px;
+  top: var(--space-5);
+  right: var(--card-pad);
   color: var(--faint);
-  font-size: 0.8rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
@@ -629,7 +596,7 @@
    4.5:1 for anyone skimming ahead. */
 .step .badge,
 .step h3,
-.step p { transition: opacity 0.45s var(--ease), color 0.45s var(--ease); }
+.step p { transition: opacity var(--dur-slow) var(--ease), color var(--dur-slow) var(--ease); }
 .steps.has-active .step:not(.is-active) { background: transparent; }
 .steps.has-active .step:not(.is-active) .badge { opacity: 0.45; }
 .steps.has-active .step:not(.is-active) h3 { color: var(--muted); }
@@ -642,7 +609,7 @@
 @media (min-width: 900px) {
   .story-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: 64px;
+    column-gap: var(--space-16);
   }
 
   .story-intro {
@@ -652,7 +619,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-block: 40px 64px;
+    padding-block: var(--space-10) var(--space-16);
   }
 
   .story-steps { grid-column: 1; grid-row: 2; padding-top: 0; }
@@ -671,53 +638,28 @@
 
   .story-visual .watch { --size: min(34vw, 400px, 56svh); }
   .story-visual .demo-caption { display: block; }
-  .story-stage { gap: 26px; }
+  .story-stage { gap: var(--space-7); }
 
   @container scroll-state(stuck: top) {
     .story-stage { scale: 1; }
   }
 
-  .steps { gap: 15svh; padding-bottom: 34svh; margin-top: 40px; }
-  .step { padding: 26px 28px; column-gap: 20px; }
-  .step h3 { font-size: 1.35rem; }
-  .step p { font-size: 1.02rem; }
+  .steps { gap: 15svh; padding-bottom: 34svh; margin-top: var(--space-10); }
+  .step { column-gap: var(--space-5); }
+  .step h3 { font-size: var(--text-xl); }
+  .step p { font-size: var(--text-base); }
   .step.is-active { translate: 8px 0; }
 }
 
-/* ----------------------------------------------------------------------------
-   Sections
----------------------------------------------------------------------------- */
-.section {
-  padding-block: 64px;
-  border-top: 1px solid var(--border);
-}
-
-@media (min-width: 960px) {
-  .section { padding-block: 112px; }
-}
-
-.section-head h2 {
-  font-size: clamp(1.8rem, 5.4vw, 2.75rem);
-  letter-spacing: -0.03em;
-}
-
-.section-head .lede {
-  margin: 16px 0 0;
-  color: var(--muted);
-  font-size: clamp(1.02rem, 2.3vw, 1.15rem);
-  max-width: 36em;
-}
-
-.section-head.center { text-align: center; }
-.section-head.center .lede { margin-inline: auto; }
+/* Sections and their headings are shared: see ../style.css */
 
 /* ----------------------------------------------------------------------------
    Bento
 ---------------------------------------------------------------------------- */
 .bento {
   display: grid;
-  gap: 12px;
-  margin-top: 40px;
+  gap: var(--space-3);
+  margin-top: var(--space-10);
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-areas:
     "tile   tile"
@@ -731,8 +673,8 @@
 
 @media (min-width: 720px) {
   .bento {
-    gap: 16px;
-    margin-top: 56px;
+    gap: var(--space-4);
+    margin-top: var(--space-14);
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-areas:
       "tile tile widget widget"
@@ -764,13 +706,9 @@
   overflow: hidden;
 }
 
-.cell-body { padding: 20px; }
-.cell h3 { font-size: 1.12rem; letter-spacing: -0.015em; }
-.cell p { margin: 6px 0 0; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
-
-@media (min-width: 720px) {
-  .cell-body { padding: 24px; }
-}
+.cell-body { padding: var(--card-pad); }
+.cell h3 { font-size: var(--text-lg); letter-spacing: -0.015em; }
+.cell p { margin: var(--space-2) 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.5; }
 
 .cell-tile { grid-area: tile; }
 .cell-widget { grid-area: widget; }
@@ -797,26 +735,25 @@
 
 .cell-widget .cell-stage { min-height: 200px; }
 
-/* Small fact cells */
-.cell-sm .cell-body { padding: 18px; }
+/* Small fact cells, a little tighter than the rest */
+.cell-sm .cell-body { padding: var(--space-5); }
 .cell-sm .f-icon {
   width: 38px;
   height: 38px;
   display: grid;
   place-items: center;
-  margin-bottom: 14px;
+  margin-bottom: var(--space-4);
   border-radius: 12px;
   background: color-mix(in srgb, var(--brand-b) 20%, transparent);
   color: var(--accent);
 }
 .cell-sm .f-icon svg { width: 20px; height: 20px; fill: currentColor; }
-.cell-sm h3 { font-size: 1rem; }
-.cell-sm p { font-size: 0.9rem; }
+.cell-sm h3 { font-size: var(--text-base); }
+.cell-sm p { font-size: var(--text-xs); }
 
 @media (min-width: 720px) {
-  .cell-sm .cell-body { padding: 22px; }
-  .cell-sm h3 { font-size: 1.05rem; }
-  .cell-sm p { font-size: 0.94rem; }
+  .cell-sm .cell-body { padding: var(--space-6); }
+  .cell-sm p { font-size: var(--text-sm); }
 }
 
 /* Phone app screenshot */
@@ -825,7 +762,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 4px 20px 0;
+  padding: var(--space-1) var(--space-5) 0;
   overflow: hidden;
   min-height: 360px;
 }
@@ -852,9 +789,9 @@
     radial-gradient(70% 140% at 0% 0%, color-mix(in srgb, var(--brand-a) 28%, transparent), transparent 60%),
     var(--surface);
 }
-.cell-priv .cell-body { display: grid; gap: 22px; }
-.cell-priv h3 { font-size: clamp(1.4rem, 3.4vw, 1.8rem); letter-spacing: -0.025em; }
-.cell-priv .more { margin: 12px 0 0; }
+.cell-priv .cell-body { display: grid; gap: var(--space-6); }
+.cell-priv h3 { font-size: var(--text-2xl); letter-spacing: -0.025em; }
+.cell-priv .more { margin: var(--space-3) 0 0; }
 .cell-priv .more a { font-weight: 600; text-decoration: none; }
 .cell-priv .more a:hover { text-decoration: underline; }
 
@@ -863,18 +800,18 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 10px;
+  gap: var(--space-3);
 }
 .facts li {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 12px;
+  gap: var(--space-3);
   align-items: start;
-  padding: 14px;
+  padding: var(--space-4);
   border-radius: var(--radius);
   background: var(--bg-raised);
   border: 1px solid var(--border);
-  font-size: 0.92rem;
+  font-size: var(--text-sm);
   line-height: 1.45;
   color: var(--muted);
 }
@@ -884,7 +821,7 @@
 /* A list beside the text, not three cards: side by side the cards were ~150px
    wide, wrapped to six lines and stretched to one height with gaps inside */
 @media (min-width: 720px) {
-  .cell-priv .cell-body { grid-template-columns: 0.9fr 1.6fr; align-items: center; gap: 28px; padding: 32px; }
+  .cell-priv .cell-body { grid-template-columns: 0.9fr 1.6fr; align-items: center; gap: var(--space-7); padding: var(--space-8); }
 }
 
 /* Tile — after the watch's BriefTileRenderer (Material 3 primaryLayout) and
@@ -1168,16 +1105,16 @@
 /* ----------------------------------------------------------------------------
    FAQ — answers open smoothly where ::details-content is supported
 ---------------------------------------------------------------------------- */
-.faq { margin-top: 32px; border-top: 1px solid var(--border); }
+.faq { margin-top: var(--space-8); border-top: 1px solid var(--border); }
 .faq details { border-bottom: 1px solid var(--border); }
 
 .faq summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 20px 2px;
-  font-size: 1.05rem;
+  gap: var(--space-4);
+  padding: var(--space-5) 2px;
+  font-size: var(--text-lg);
   font-weight: 600;
   cursor: pointer;
   list-style: none;
@@ -1192,22 +1129,36 @@
   border-bottom: 2px solid var(--muted);
   rotate: 45deg;
   translate: 0 -3px;
-  transition: rotate 0.3s var(--ease), translate 0.3s var(--ease);
+  transition: rotate var(--dur-base) var(--ease), translate var(--dur-base) var(--ease);
 }
 .faq details[open] summary::after { rotate: -135deg; translate: 0 3px; }
 /* Padding, not margin: a margin collapses out of the animated
    ::details-content box and pops in after the height transition ends */
-.faq details p { margin: 0; padding-bottom: 20px; color: var(--muted); max-width: 42em; }
+.faq details p { margin: 0; padding-bottom: var(--space-5); color: var(--muted); max-width: 42em; }
 
 .faq details::details-content {
   block-size: 0;
   overflow-y: clip;
-  transition: block-size 0.35s var(--ease), content-visibility 0.35s allow-discrete;
+  transition: block-size var(--dur-base) var(--ease), content-visibility var(--dur-base) allow-discrete;
 }
 .faq details[open]::details-content { block-size: auto; }
 
+/* The answer fades in as it slides open, a beat behind the height */
+@media (prefers-reduced-motion: no-preference) {
+  .faq details p {
+    opacity: 0;
+    translate: 0 -6px;
+    transition: opacity var(--dur-base) var(--ease), translate var(--dur-slow) var(--ease);
+  }
+  .faq details[open] p {
+    opacity: 1;
+    translate: 0;
+    transition-delay: 0.08s;
+  }
+}
+
 @media (min-width: 960px) {
-  .faq-wrap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 72px; }
+  .faq-wrap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: var(--space-18); }
   .faq { margin-top: 0; }
 }
 
@@ -1230,13 +1181,13 @@
 .cta img {
   width: 72px;
   height: 72px;
-  margin: 0 auto 24px;
+  margin: 0 auto var(--space-6);
   border-radius: 20px;
   box-shadow: 0 16px 40px -12px color-mix(in srgb, var(--brand-b) 70%, transparent);
 }
-.cta h2 { font-size: clamp(2rem, 6vw, 3rem); letter-spacing: -0.035em; }
-.cta p { margin: 14px auto 0; color: var(--muted); max-width: 30em; }
-.cta .btn-row { justify-content: center; margin-top: 28px; }
+.cta h2 { font-size: var(--text-4xl); letter-spacing: -0.035em; }
+.cta p { margin: var(--space-4) auto 0; color: var(--muted); max-width: 30em; }
+.cta .btn-row { justify-content: center; margin-top: var(--space-7); }
 
 /* ----------------------------------------------------------------------------
    Shared elements that morph between pages

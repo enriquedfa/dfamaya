@@ -64,14 +64,14 @@
 .ws-screen { mix-blend-mode: screen; }
 
 /* The glow behind the watch follows the sky */
-:where([data-ws-glow], .ws-stage) { transition: --ws-glow 0.8s var(--ease); }
+:where([data-ws-glow], .ws-stage) { transition: --ws-glow var(--dur-slower) var(--ease); }
 .app-visual[data-ws-glow] { --src-bg: var(--ws-glow); }
 
 /* Morphs between the home page card and this page (the Brief watch has its own) */
 .app-visual .watch.ws-watch,
 .ws-visual .watch { view-transition-name: watchsky-watch; }
 .app-title img.ws-mark,
-.ws-badge img { view-transition-name: watchsky-mark; }
+.ws-intro .app-badge img { view-transition-name: watchsky-mark; }
 
 .app-title img.ws-mark { border-radius: 14px; }
 
@@ -89,26 +89,11 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.ws-intro { padding-block: 36px 20px; }
-
-.ws-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 5px 14px 5px 5px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--muted);
-  font-size: 0.88rem;
-  font-weight: 500;
-}
-.ws-badge img { width: 26px; height: 26px; border-radius: 8px; }
+.ws-intro { padding-block: var(--space-8) var(--space-5); }
 
 .ws-intro h1 {
-  font-size: clamp(2.5rem, 9vw, 4.4rem);
-  letter-spacing: -0.045em;
+  font-size: var(--text-5xl);
+  letter-spacing: -0.04em;
   line-height: 1;
 }
 
@@ -150,23 +135,16 @@
   }
 }
 
-.ws-intro .lede {
-  margin: 20px 0 0;
-  max-width: 32em;
-  color: var(--muted);
-  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
-}
-.ws-intro .btn-row { margin-top: 28px; }
-
-.fine { margin: 16px 0 0; color: var(--faint); font-size: 0.9rem; }
+.ws-intro .lede { margin: var(--space-5) 0 0; }
+.ws-intro .btn-row { margin-top: var(--space-7); }
 
 .ws-visual {
   position: sticky;
   top: var(--header-h);
   z-index: 5;
   margin-inline: calc(-1 * var(--gutter));
-  padding: 12px var(--gutter) 30px;
-  background: linear-gradient(to bottom, var(--bg) calc(100% - 22px), transparent);
+  padding: var(--space-3) var(--gutter) var(--space-7);
+  background: linear-gradient(to bottom, var(--bg) calc(100% - var(--space-5)), transparent);
   container-type: scroll-state;
 }
 
@@ -174,8 +152,8 @@
   position: relative;
   display: grid;
   justify-items: center;
-  gap: 16px;
-  transition: scale 0.4s var(--ease);
+  gap: var(--space-4);
+  transition: scale var(--dur-slow) var(--ease);
 }
 
 .ws-visual .watch { --size: min(50vw, 230px, 29svh); }
@@ -215,43 +193,16 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
   width: min(100%, 440px);
 }
 
-.ws-round {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 1px solid var(--border-strong);
-  border-radius: 50%;
-  background: var(--surface);
-  color: var(--text);
-  cursor: pointer;
-  transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease);
-}
-.ws-round:hover { background: var(--surface-2); }
-.ws-round svg { width: 20px; height: 20px; fill: currentColor; }
-.ws-round .i-pause,
-.ws-round[aria-pressed="true"] .i-play { display: none; }
-.ws-round[aria-pressed="true"] .i-pause { display: block; }
+/* Play and Now are .btn .btn-ghost .btn-md (../style.css) */
+.ws-play .i-pause,
+.ws-play[aria-pressed="true"] .i-play { display: none; }
+.ws-play[aria-pressed="true"] .i-pause { display: block; }
 
-.ws-now {
-  height: 40px;
-  padding: 0 14px;
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--text);
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease);
-}
-.ws-now:hover { background: var(--surface-2); }
+/* Pressed means it's already following the real time: nothing to do */
 .ws-now[aria-pressed="true"] {
   border-color: transparent;
   background: var(--surface-2);
@@ -270,13 +221,13 @@
 }
 .ws-range::-webkit-slider-runnable-track {
   height: 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--track);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
 }
 .ws-range::-moz-range-track {
   height: 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--track);
 }
 .ws-range::-webkit-slider-thumb {
@@ -305,7 +256,7 @@
   display: none;
   margin: 0;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
@@ -314,26 +265,16 @@
 /* ----------------------------------------------------------------------------
    Settings — the same options, icons and order as the watch's editor
 ---------------------------------------------------------------------------- */
-.ws-panel { padding-bottom: 40px; }
-
-.ws-panel-head h2 {
-  font-size: clamp(1.8rem, 5.4vw, 2.6rem);
-  letter-spacing: -0.03em;
-}
-.ws-panel-head .lede {
-  margin: 14px 0 0;
-  color: var(--muted);
-  font-size: clamp(1.02rem, 2.2vw, 1.12rem);
-}
+.ws-panel { padding-bottom: var(--space-10); }
 
 .ws-groups {
   display: grid;
-  gap: 12px;
-  margin-top: 28px;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
 }
 
 .ws-group {
-  padding: 20px;
+  padding: var(--card-pad);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
@@ -343,16 +284,16 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 4px 12px;
+  gap: var(--space-1) var(--space-3);
 }
-.ws-group h3 { font-size: 1.15rem; letter-spacing: -0.015em; }
-.ws-val { color: var(--accent); font-size: 0.92rem; font-weight: 600; }
-.ws-group > p { margin: 6px 0 0; color: var(--muted); font-size: 0.97rem; line-height: 1.55; }
+.ws-group h3 { font-size: var(--text-lg); letter-spacing: -0.015em; }
+.ws-val { color: var(--accent); font-size: var(--text-sm); font-weight: 600; }
+.ws-group > p { margin: var(--space-2) 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.55; }
 
 .ws-sub {
-  margin: 16px 0 0;
+  margin: var(--space-4) 0 0;
   color: var(--faint);
-  font-size: 0.78rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -361,12 +302,13 @@
 .ws-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
 }
-.ws-sub + .ws-chips { margin-top: 8px; }
+.ws-sub + .ws-chips { margin-top: var(--space-2); }
 
-/* A chip is a real radio: the input covers the chip, the face is drawn after it */
+/* A chip is a real radio: the input covers the chip, the face is drawn after
+   it. It presses and springs back like a .btn-icon. */
 .ws-chip {
   position: relative;
   display: grid;
@@ -392,8 +334,9 @@
   border-radius: 50%;
   background: var(--surface-2);
   color: var(--muted);
-  transition: color 0.18s var(--ease), background-color 0.18s var(--ease), box-shadow 0.18s var(--ease),
-    scale 0.18s var(--ease);
+  transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease),
+    scale var(--press-dur, var(--dur-spring)) var(--press-ease, var(--ease-spring));
 }
 .ws-chip:hover .ws-chip-face { color: var(--text); }
 .ws-chip input:checked + .ws-chip-face {
@@ -405,7 +348,11 @@
   outline: 2px solid var(--accent);
   outline-offset: 6px;
 }
-.ws-chip input:active + .ws-chip-face { scale: 0.94; }
+.ws-chip input:active + .ws-chip-face {
+  --press-dur: 0.1s;
+  --press-ease: var(--ease);
+  scale: 0.9;
+}
 
 /* Editor icons from the watch, tinted with currentColor */
 .ws-ico {
@@ -432,33 +379,19 @@
   box-shadow: 0 0 10px 4px rgb(255 231 176 / 0.55);
 }
 
-/* Moments of the day */
+/* Moments of the day: .btn .btn-ghost .btn-sm */
 .ws-moments {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
 }
-.ws-moment {
-  height: 34px;
-  padding: 0 13px;
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  font-size: 0.88rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.18s var(--ease);
-}
-.ws-moment:hover { background: var(--surface-2); }
 
 /* On/off settings */
 .ws-switches {
   display: grid;
-  gap: 8px;
-  margin-top: 14px;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
 }
 @media (min-width: 560px) {
   .ws-switches { grid-template-columns: 1fr 1fr; }
@@ -468,17 +401,17 @@
 .ws-switch-face {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   height: 100%;
-  padding: 10px 14px;
+  padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-2);
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   line-height: 1.3;
-  transition: color 0.18s var(--ease), border-color 0.18s var(--ease);
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
 }
 .ws-switch-face .ws-ico { flex: none; }
 .ws-switch-face .label { flex: 1; }
@@ -487,9 +420,9 @@
   position: relative;
   width: 36px;
   height: 22px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--border-strong);
-  transition: background-color 0.2s var(--ease);
+  transition: background-color var(--dur-fast) var(--ease);
 }
 .ws-switch-face .track::after {
   content: "";
@@ -501,7 +434,8 @@
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
-  transition: translate 0.2s var(--ease);
+  /* The knob springs across */
+  transition: translate var(--dur-spring) var(--ease-spring);
 }
 .ws-switch input:checked + .ws-switch-face { color: var(--text); }
 .ws-switch input:checked + .ws-switch-face .track { background: var(--brand-b); }
@@ -510,7 +444,7 @@
 @media (min-width: 900px) {
   .ws-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: 64px;
+    column-gap: var(--space-16);
   }
 
   .ws-intro {
@@ -521,10 +455,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding-block: 40px 64px;
+    padding-block: var(--space-10) var(--space-16);
   }
 
-  .ws-panel { grid-column: 1; grid-row: 2; padding-bottom: 96px; }
+  .ws-panel { grid-column: 1; grid-row: 2; padding-bottom: var(--space-24); }
 
   .ws-visual {
     grid-column: 2;
@@ -539,42 +473,21 @@
   }
 
   .ws-visual .watch { --size: min(34vw, 400px, 52svh); }
-  .ws-stage { gap: 30px; }
+  .ws-stage { gap: var(--space-7); }
   .ws-caption { display: block; }
 
   @container scroll-state(stuck: top) {
     .ws-stage { scale: 1; }
   }
-
-  .ws-group { padding: 24px 26px; }
 }
 
 /* ----------------------------------------------------------------------------
-   Sections below the playground
+   Sections below the playground (.section and .section-head: ../style.css)
 ---------------------------------------------------------------------------- */
-.ws-section {
-  padding-block: 64px;
-  border-top: 1px solid var(--border);
-}
-@media (min-width: 960px) {
-  .ws-section { padding-block: 104px; }
-}
-
-.ws-section .section-head h2 {
-  font-size: clamp(1.8rem, 5.4vw, 2.6rem);
-  letter-spacing: -0.03em;
-}
-.ws-section .section-head .lede {
-  margin: 14px 0 0;
-  max-width: 36em;
-  color: var(--muted);
-  font-size: clamp(1.02rem, 2.2vw, 1.12rem);
-}
-
 .ws-cards {
   display: grid;
-  gap: 14px;
-  margin-top: 32px;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
 }
 @media (min-width: 820px) {
   .ws-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -588,19 +501,19 @@
   place-items: center;
   width: 34px;
   height: 34px;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
   border-radius: 50%;
   background: var(--brand-gradient);
   color: #fff;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
 }
-.ws-card h3 { font-size: 1.2rem; letter-spacing: -0.015em; }
+.ws-card h3 { font-size: var(--text-lg); letter-spacing: -0.015em; }
 .ws-card p,
 .ws-card li { color: var(--muted); }
-.ws-card p { margin: 8px 0 0; }
-.ws-card ol { margin: 10px 0 0; padding-left: 1.2em; }
-.ws-card li { margin-bottom: 4px; }
+.ws-card p { margin: var(--space-2) 0 0; }
+.ws-card ol { margin: var(--space-3) 0 0; padding-left: 1.2em; }
+.ws-card li { margin-bottom: var(--space-1); }
 .ws-card li::marker { color: var(--faint); }
 .ws-card strong { color: var(--text); font-weight: 600; }
 

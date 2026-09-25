@@ -59,8 +59,8 @@
     <!-- Hero + the settings. The watch stays pinned while the settings scroll. -->
     <section class="ws-hero" data-ws-page>
       <div class="wrap ws-grid">
-        <div class="ws-intro">
-          <p class="ws-badge rise" style="--d:0">
+        <div class="ws-intro hero-exit">
+          <p class="app-badge rise" style="--d:0">
             <img src="img/icon.webp" alt="" width="26" height="26" />
             WatchSky for Wear OS
           </p>
@@ -78,7 +78,7 @@
             </a>
             <a class="btn btn-ghost" href="#try">
               Try it here
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+              <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
             </a>
           </div>
           <p class="fine rise" style="--d:4">Free. For Wear OS 5.1 and newer. No ads, no accounts, no tracking.</p>
@@ -98,19 +98,19 @@
             </div>
 
             <div class="ws-scrub">
-              <button type="button" class="ws-round" data-ws-play aria-pressed="false" aria-label="Play a whole day">
+              <button type="button" class="btn btn-ghost btn-md btn-icon ws-play" data-ws-play aria-pressed="false" aria-label="Play a whole day">
                 <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>
                 <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pause"></use></svg>
               </button>
               <input class="ws-range" type="range" min="0" max="1439" step="1" value="720" aria-label="Time of day" data-ws-range />
-              <button type="button" class="ws-now" data-ws-now aria-pressed="true">Now</button>
+              <button type="button" class="btn btn-ghost btn-md ws-now" data-ws-now aria-pressed="true">Now</button>
             </div>
             <p class="ws-caption" data-ws-caption><strong data-k="phase">Daytime</strong> · <span data-k="time">now</span></p>
           </div>
         </div>
 
         <div class="ws-panel" id="try">
-          <div class="ws-panel-head">
+          <div class="section-head">
             <p class="eyebrow">Make it yours</p>
             <h2>The watch's settings, to try here first</h2>
             <p class="lede">
@@ -121,7 +121,7 @@
           </div>
 
           <div class="ws-groups">
-            <div class="ws-group">
+            <div class="ws-group reveal">
               <div class="ws-group-head"><h3>A sky that keeps time</h3></div>
               <p>
                 Eleven layers of sky blend into each other as the hours pass:
@@ -131,17 +131,17 @@
                 moment:
               </p>
               <div class="ws-moments">
-                <button type="button" class="ws-moment" data-ws-moment="S+0.25">Blue hour</button>
-                <button type="button" class="ws-moment" data-ws-moment="S+1">Sunrise</button>
-                <button type="button" class="ws-moment" data-ws-moment="S+2.25">Golden hour</button>
-                <button type="button" class="ws-moment" data-ws-moment="12.5">Midday</button>
-                <button type="button" class="ws-moment" data-ws-moment="E-1.5">Sunset</button>
-                <button type="button" class="ws-moment" data-ws-moment="E+1">Nightfall</button>
-                <button type="button" class="ws-moment" data-ws-moment="1.5">Night</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="S+0.25">Blue hour</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="S+1">Sunrise</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="S+2.25">Golden hour</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="12.5">Midday</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="E-1.5">Sunset</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="E+1">Nightfall</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="1.5">Night</button>
               </div>
             </div>
 
-            <div class="ws-group" role="radiogroup" aria-labelledby="g-weather">
+            <div class="ws-group reveal" role="radiogroup" aria-labelledby="g-weather">
               <div class="ws-group-head"><h3 id="g-weather">Weather</h3><span class="ws-val" data-ws-value="weather" aria-hidden="true">Partly cloudy</span></div>
               <p>
                 With <strong>Show weather</strong> on, an icon and the
@@ -160,7 +160,7 @@
               </div>
             </div>
 
-            <div class="ws-group" role="radiogroup" aria-labelledby="g-moon">
+            <div class="ws-group reveal" role="radiogroup" aria-labelledby="g-moon">
               <div class="ws-group-head"><h3 id="g-moon">Moon phase</h3><span class="ws-val" data-ws-value="moon" aria-hidden="true">Live</span></div>
               <p>
                 At night the moon takes the sun's place on the arc. Live
@@ -179,7 +179,7 @@
               </div>
             </div>
 
-            <div class="ws-group" role="radiogroup" aria-labelledby="g-bar">
+            <div class="ws-group reveal" role="radiogroup" aria-labelledby="g-bar">
               <div class="ws-group-head"><h3 id="g-bar">Middle bar</h3><span class="ws-val" data-ws-value="bar" aria-hidden="true">Seconds</span></div>
               <p>
                 The thin line along the horizon fills up. Pick what it counts:
@@ -194,7 +194,7 @@
               </div>
             </div>
 
-            <div class="ws-group">
+            <div class="ws-group reveal">
               <div class="ws-group-head"><h3>Sunrise and sunset</h3><span class="ws-val" data-ws-value="hours" aria-hidden="true">5 AM · 7 PM</span></div>
               <p>
                 Set the hours to match where you live and the time of year,
@@ -217,7 +217,7 @@
               </div>
             </div>
 
-            <div class="ws-group">
+            <div class="ws-group reveal">
               <div class="ws-group-head"><h3>And the rest</h3></div>
               <p>
                 The slot under the date shows your next event by default. You
@@ -236,7 +236,7 @@
       </div>
     </section>
 
-    <section class="ws-section" id="install">
+    <section class="section" id="install">
       <div class="wrap">
         <div class="section-head reveal">
           <p class="eyebrow">Install</p>
@@ -246,8 +246,8 @@
             newer. It runs entirely on the watch.
           </p>
         </div>
-        <div class="ws-cards">
-          <article class="card ws-card reveal">
+        <div class="ws-cards stagger">
+          <article class="card ws-card reveal lift">
             <span class="num" aria-hidden="true">1</span>
             <h3>Get it from Google Play</h3>
             <p>
@@ -256,7 +256,7 @@
               watch.
             </p>
           </article>
-          <article class="card ws-card reveal">
+          <article class="card ws-card reveal lift">
             <span class="num" aria-hidden="true">2</span>
             <h3>Phone won't offer it?</h3>
             <p>
@@ -266,7 +266,7 @@
               on your paired watch.
             </p>
           </article>
-          <article class="card ws-card reveal">
+          <article class="card ws-card reveal lift">
             <span class="num" aria-hidden="true">3</span>
             <h3>Set it as your face</h3>
             <ol>
@@ -279,7 +279,7 @@
       </div>
     </section>
 
-    <section class="ws-section ws-more">
+    <section class="section ws-more">
       <div class="wrap wrap-prose">
         <article class="prose reveal">
           <h2>Privacy</h2>

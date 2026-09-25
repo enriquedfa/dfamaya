@@ -87,7 +87,7 @@
     <!-- Hero + the sources. The watch stays pinned while the list scrolls. -->
     <section class="story" data-demo-start="music" data-demo-wait>
       <div class="wrap story-grid">
-        <div class="story-intro">
+        <div class="story-intro hero-exit">
           <p class="app-badge rise" style="--d:0">
             <img src="icon.svg" alt="" width="26" height="26" />
             Brief for Wear OS
@@ -106,7 +106,7 @@
             </a>
             <a class="btn btn-ghost" href="#how">
               How it works
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+              <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
             </a>
           </div>
           <p class="fine rise" style="--d:4">Free. Needs an Android phone and a Wear&nbsp;OS&nbsp;4+ watch, like a Pixel&nbsp;Watch or a Galaxy&nbsp;Watch4 or newer.</p>
@@ -149,15 +149,15 @@
             </div>
 
             <div class="chips" role="group" aria-label="Show a source on the watch">
-              <button type="button" class="demo-toggle" data-demo-toggle aria-pressed="true" aria-label="Play the demo" title="Play the demo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg></button>
+              <button type="button" class="btn btn-ghost btn-icon demo-toggle" data-demo-toggle aria-pressed="true" aria-label="Play the demo" title="Play the demo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg></button>
               <span class="chips-sep" aria-hidden="true"></span>
-              <button type="button" class="chip is-active" data-chip="music" style="--c-bg:#7B2949;--c-fg:#FFD9E2" aria-pressed="true" aria-label="Now playing"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-music"></use></svg></button>
-              <button type="button" class="chip" data-chip="notification" style="--c-bg:#00504B;--c-fg:#BCECE5" aria-pressed="false" aria-label="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-notification"></use></svg></button>
-              <button type="button" class="chip" data-chip="event" style="--c-bg:#50378A;--c-fg:#E9DDFF" aria-pressed="false" aria-label="Calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg></button>
-              <button type="button" class="chip" data-chip="battery" style="--c-bg:#00531D;--c-fg:#CAEBC7" aria-pressed="false" aria-label="Phone battery"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone-battery"></use></svg></button>
-              <button type="button" class="chip" data-chip="weather" style="--c-bg:#004D64;--c-fg:#C2E8FC" aria-pressed="false" aria-label="Weather"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"></use></svg></button>
-              <button type="button" class="chip" data-chip="reminder" style="--c-bg:#604100;--c-fg:#FFDEAE" aria-pressed="false" aria-label="Reminders"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-reminder"></use></svg></button>
-              <button type="button" class="chip" data-chip="date" style="--c-bg:#3B494F;--c-fg:#DCE4E8" aria-pressed="false" aria-label="Default"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></button>
+              <button type="button" class="btn btn-icon chip is-active" data-chip="music" style="--c-bg:#7B2949;--c-fg:#FFD9E2" aria-pressed="true" aria-label="Now playing"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-music"></use></svg></button>
+              <button type="button" class="btn btn-icon chip" data-chip="notification" style="--c-bg:#00504B;--c-fg:#BCECE5" aria-pressed="false" aria-label="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-notification"></use></svg></button>
+              <button type="button" class="btn btn-icon chip" data-chip="event" style="--c-bg:#50378A;--c-fg:#E9DDFF" aria-pressed="false" aria-label="Calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg></button>
+              <button type="button" class="btn btn-icon chip" data-chip="battery" style="--c-bg:#00531D;--c-fg:#CAEBC7" aria-pressed="false" aria-label="Phone battery"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone-battery"></use></svg></button>
+              <button type="button" class="btn btn-icon chip" data-chip="weather" style="--c-bg:#004D64;--c-fg:#C2E8FC" aria-pressed="false" aria-label="Weather"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"></use></svg></button>
+              <button type="button" class="btn btn-icon chip" data-chip="reminder" style="--c-bg:#604100;--c-fg:#FFDEAE" aria-pressed="false" aria-label="Reminders"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-reminder"></use></svg></button>
+              <button type="button" class="btn btn-icon chip" data-chip="date" style="--c-bg:#3B494F;--c-fg:#DCE4E8" aria-pressed="false" aria-label="Default"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></button>
             </div>
             <p class="demo-caption" data-caption><strong data-k="name">Now playing</strong> · <span data-k="blurb">Tap the watch to play or pause.</span></p>
           </div>
@@ -175,44 +175,44 @@
           </div>
 
           <ol class="steps">
-            <li class="step" data-step="music" style="--c-bg:#7B2949;--c-fg:#FFD9E2">
+            <li class="step reveal" data-step="music" style="--c-bg:#7B2949;--c-fg:#FFD9E2">
               <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-music"></use></svg></span>
               <h3>Now playing</h3>
               <p>Track and artist, with a ring that follows the song. Play and pause from your wrist.</p>
               <p class="step-credit">On this page: storm by Night Tapes, a 30-second preview from <a href="https://music.apple.com/us/album/storm/1808825202?i=1808826278" target="_blank" rel="noopener noreferrer">Apple Music</a>.</p>
               <span class="rank" aria-hidden="true">01</span>
             </li>
-            <li class="step" data-step="notification" style="--c-bg:#00504B;--c-fg:#BCECE5">
+            <li class="step reveal" data-step="notification" style="--c-bg:#00504B;--c-fg:#BCECE5">
               <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-notification"></use></svg></span>
               <h3>Notifications</h3>
               <p>Alerts from the apps you pick, and only those. Tap one to open it.</p>
               <span class="rank" aria-hidden="true">02</span>
             </li>
-            <li class="step" data-step="event" style="--c-bg:#50378A;--c-fg:#E9DDFF">
+            <li class="step reveal" data-step="event" style="--c-bg:#50378A;--c-fg:#E9DDFF">
               <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-event"></use></svg></span>
               <h3>Calendar</h3>
               <p>Your next event, with a countdown that updates by itself.</p>
               <span class="rank" aria-hidden="true">03</span>
             </li>
-            <li class="step" data-step="battery" style="--c-bg:#00531D;--c-fg:#CAEBC7">
+            <li class="step reveal" data-step="battery" style="--c-bg:#00531D;--c-fg:#CAEBC7">
               <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone-battery"></use></svg></span>
               <h3>Phone battery</h3>
               <p>Your watch tells you when your phone drops below the level you set.</p>
               <span class="rank" aria-hidden="true">04</span>
             </li>
-            <li class="step" data-step="weather" style="--c-bg:#004D64;--c-fg:#C2E8FC">
+            <li class="step reveal" data-step="weather" style="--c-bg:#004D64;--c-fg:#C2E8FC">
               <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"></use></svg></span>
               <h3>Weather</h3>
               <p>Current conditions, plus a heads-up before it rains.</p>
               <span class="rank" aria-hidden="true">05</span>
             </li>
-            <li class="step" data-step="reminder" style="--c-bg:#604100;--c-fg:#FFDEAE">
+            <li class="step reveal" data-step="reminder" style="--c-bg:#604100;--c-fg:#FFDEAE">
               <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-reminder"></use></svg></span>
               <h3>Reminders</h3>
               <p>Your own nudges, like &ldquo;Meds&rdquo; or &ldquo;Stand up&rdquo;, on your schedule. Mark them done from the watch.</p>
               <span class="rank" aria-hidden="true">06</span>
             </li>
-            <li class="step floor" data-step="date" style="--c-bg:#3B494F;--c-fg:#DCE4E8">
+            <li class="step floor reveal" data-step="date" style="--c-bg:#3B494F;--c-fg:#DCE4E8">
               <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg></span>
               <h3>Default</h3>
               <p>Always last. The date, your own text, your phone's battery level, or nothing at all.</p>
@@ -235,8 +235,8 @@
           </p>
         </div>
 
-        <div class="bento">
-          <article class="cell cell-tile reveal">
+        <div class="bento stagger">
+          <article class="cell cell-tile reveal lift">
             <div class="cell-stage" aria-hidden="true">
               <div class="tile" data-surface="tile">
                 <svg class="tile-ring on" viewBox="0 0 100 100">
@@ -258,7 +258,7 @@
             </div>
           </article>
 
-          <article class="cell cell-widget reveal">
+          <article class="cell cell-widget reveal lift">
             <div class="cell-stage" aria-hidden="true">
               <div class="widget" data-surface="widget">
                 <div class="swap-stack">
@@ -272,7 +272,7 @@
             </div>
           </article>
 
-          <article class="cell cell-sm cell-batt reveal">
+          <article class="cell cell-sm cell-batt reveal lift">
             <div class="cell-body">
               <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"></use></svg></span>
               <h3>Easy on battery</h3>
@@ -280,7 +280,7 @@
             </div>
           </article>
 
-          <article class="cell cell-sm cell-tick reveal">
+          <article class="cell cell-sm cell-tick reveal lift">
             <div class="cell-body">
               <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-schedule"></use></svg></span>
               <h3>Live countdowns</h3>
@@ -288,7 +288,7 @@
             </div>
           </article>
 
-          <article class="cell cell-app reveal">
+          <article class="cell cell-app reveal lift">
             <div class="cell-body">
               <h3>Set up on your phone</h3>
               <p>Your phone reads your calendar, music and notifications, picks what to show, and sends only that to your watch. Drag sources into order and switch off what you don't need.</p>
@@ -304,7 +304,7 @@
             </div>
           </article>
 
-          <article class="cell cell-priv reveal">
+          <article class="cell cell-priv reveal lift">
             <div class="cell-body">
               <div>
                 <h3>Nothing to sign up for</h3>
@@ -328,7 +328,7 @@
             </div>
           </article>
 
-          <article class="cell cell-sm cell-taps reveal">
+          <article class="cell cell-sm cell-taps reveal lift">
             <div class="cell-body">
               <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-touch"></use></svg></span>
               <h3>Tap to act</h3>
@@ -336,7 +336,7 @@
             </div>
           </article>
 
-          <article class="cell cell-sm cell-auto reveal">
+          <article class="cell cell-sm cell-auto reveal lift">
             <div class="cell-body">
               <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-automation"></use></svg></span>
               <h3>Works with Tasker</h3>
@@ -344,7 +344,7 @@
             </div>
           </article>
 
-          <article class="cell cell-sm cell-free reveal">
+          <article class="cell cell-sm cell-free reveal lift">
             <div class="cell-body">
               <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-heart"></use></svg></span>
               <h3>Free, no ads</h3>
@@ -352,7 +352,7 @@
             </div>
           </article>
 
-          <article class="cell cell-sm cell-quiet reveal">
+          <article class="cell cell-sm cell-quiet reveal lift">
             <div class="cell-body">
               <span class="f-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bedtime"></use></svg></span>
               <h3>Quiet when you want</h3>
