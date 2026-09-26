@@ -257,9 +257,12 @@ face's `watchface.xml` follows, so the numbers read 1:1 against both:
   hour, with the numerals slid along them. The current line lights up in
   the palette's tertiary colour, or, with Minutes set to Hour line fill,
   fills from its outer end over the hour, as the XML does.
-- **The complications** are the defaults: time and date (left ring), date
-  (right ring), watch battery (top arc, from the Battery API where the
-  browser has it) and heart rate (bottom arc). The spiral is masked in a
+- **The complications** are the ones in the Play Store captures (and in the
+  later design iteration, `reference/claude-design/spiralis-face/` in the
+  Spiralis repo): the weather as a ranged value with a marker (left ring),
+  time and date (right ring), watch battery (top arc, from the Battery API
+  where the browser has it) and a two-line weather text (bottom-left
+  edge). The weather is sample data (`WX` in the script). The spiral is masked in a
   tight halo around each filled slot. The presets fill the same slots as
   the XML's Flavors.
 - **The settings** (preset, colour, minutes, seconds hand, always-on,

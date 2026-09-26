@@ -104,6 +104,15 @@
 }
 .sp-ring-text { fill: var(--sp-pri); }
 .sp-ring-title { fill: #e6e0e9; font-size: 18px; letter-spacing: 0.5px; }
+.sp-ring-value { fill: #e6e0e9; }
+
+/* A custom range (min ≠ 0, like today's temperatures): the track stays in
+   the container colour and a dot marks the value */
+.sp-range { fill: none; stroke: var(--sp-con); stroke-width: 5; stroke-linecap: round; }
+.sp-marker { fill: var(--sp-pri); }
+
+/* Long text along the edge: two lines, a little smaller */
+.sp-long { fill: #e6e0e9; font-size: 18px; font-weight: 600; stroke-width: 7px; }
 
 .sp-index.is-off,
 .sp-sec.is-off,
@@ -128,6 +137,8 @@
 .is-aod .sp-disk,
 .is-aod .sp-notch { opacity: 0; }
 .is-aod .sp-ring-aod { opacity: 1; }
+.is-aod .sp-range { stroke: #2b2930; }
+.is-aod .sp-marker { fill: #938f99; }
 .is-aod .sp-ring-text,
 .is-aod .sp-ring-title { fill: #cac4d0; }
 

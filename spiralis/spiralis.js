@@ -147,12 +147,22 @@
   const ICON_TR = pol(205, 351);
   const ICON_BL = pol(205, 171);
 
+  // Sample weather for the left ring and the bottom-left text (°F where
+  // the browser's locale uses it). frac places the ring's marker in
+  // today's low–high range.
+  const fahrenheit = /-(US|LR|MM|BS|BZ|KY|PW)\b/i.test(navigator.language || "");
+  const WX = fahrenheit
+    ? { now: 86, lo: 77, hi: 99, unit: "°F" }
+    : { now: 30, lo: 25, hi: 37, unit: "°C" };
+  WX.frac = (WX.now - WX.lo) / (WX.hi - WX.lo);
+
   // Filled Material Symbols, 24 px, drawn in the palette's dim color
+  const SUN_RAYS = [0, 45, 90, 135, 180, 225, 270, 315]
+    .map((a) => `<rect x="11" y="1" width="2" height="4" rx="1" transform="rotate(${a} 12 12)"/>`).join("");
   const ICONS = {
+    sun: `<circle cx="12" cy="12" r="4.5"/>${SUN_RAYS}`,
     schedule: '<circle cx="12" cy="12" r="10"/><path d="M12 7v5.4l3.4 2" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
-    calendar: '<rect x="3" y="4" width="18" height="18" rx="2.5"/><rect x="6.5" y="1.5" width="2.5" height="5" rx="1.25"/><rect x="15" y="1.5" width="2.5" height="5" rx="1.25"/><rect x="5" y="9" width="14" height="1.6" fill="#000"/>',
     battery: '<rect x="10" y="1.5" width="4" height="2.5" rx="0.8"/><rect x="7" y="3.5" width="10" height="19" rx="1.8"/>',
-    heart: '<path d="M12 21l-1.45-1.3C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21z"/>',
   };
 
   const hour12 = (() => {
@@ -195,13 +205,16 @@
         l: [hole(RING_L.x, RING_L.y, 50), hole(RING_L.x, RING_L.y - 44, 17)],
         r: [hole(RING_R.x, RING_R.y, 50), hole(RING_R.x, RING_R.y - 44, 17)],
         tr: [band(285, 345), hole(ICON_TR.x, ICON_TR.y, 17)],
-        bl: [band(105, 165), hole(ICON_BL.x, ICON_BL.y, 17)],
+        bl: [hole(ICON_BL.x, ICON_BL.y, 17)], // its text carries its own black outline
       };
       el("path", { id: `${id}trl`, d: arcD(185, 285, 345) }, defs);
-      el("path", { id: `${id}bll`, d: arcD(195, 165, 105) }, defs);
+      el("path", { id: `${id}bl1`, d: arcD(184, 165, 95) }, defs); // inner line: the date
+      el("path", { id: `${id}bl2`, d: arcD(205, 165, 95) }, defs); // outer line: the temperatures
 
-      // Edge arcs: battery (a ranged value, filling from the icon end) top
-      // right; heart rate (short text: the track, icon and label) bottom left
+      // The complications of the Play Store captures (and the later design
+      // iteration in the Spiralis repo, reference/claude-design/spiralis-face/).
+      // Top right: battery, a ranged value filling from the icon end.
+      // Bottom left: the weather as long text, two lines along the edge.
       this.slots = {};
       const tr = (this.slots.tr = el("g", { class: "sp-slot" }, svg));
       el("path", { d: arcD(208, 285, 345), class: "sp-track" }, tr);
@@ -210,9 +223,10 @@
       this.icon(tr, "battery", ICON_TR);
 
       const bl = (this.slots.bl = el("g", { class: "sp-slot" }, svg));
-      el("path", { d: arcD(208, 105, 165), class: "sp-track" }, bl);
-      el("textPath", { href: `#${id}bll`, startOffset: "0%", "text-anchor": "start" }, el("text", { class: "sp-arc-label" }, bl)).textContent = "72";
-      this.icon(bl, "heart", ICON_BL);
+      this.wxDate = el("textPath", { href: `#${id}bl1`, startOffset: "0%", "text-anchor": "start" }, el("text", { class: "sp-arc-label sp-long" }, bl));
+      el("textPath", { href: `#${id}bl2`, startOffset: "0%", "text-anchor": "start" }, el("text", { class: "sp-arc-label sp-long" }, bl)).textContent =
+        `${WX.now}${WX.unit} · Today ${WX.lo}°/${WX.hi}°`;
+      this.icon(bl, "sun", ICON_BL);
 
       // Hour lines: the 12 dim ones, then the current hour over them
       const lines = el("g", {}, svg);
@@ -236,9 +250,26 @@
       this.sec = el("line", { x1: C, y1: C, x2: C, y2: C - 46, class: "sp-sec" }, svg);
       el("circle", { cx: C, cy: C, r: 3, class: "sp-dot" }, svg);
 
-      // Rings: short text sits on a dark disk, with a notch for the icon
+      // Left ring: the weather as a ranged value with a custom range (today's
+      // low to high), so the track stays in the container colour and a dot
+      // marks the temperature. The icon sits in a gap at the top.
+      const lr = (this.slots.l = el("g", { class: "sp-slot sp-ring" }, svg));
+      const ringArc = (c, a0, a1) => {
+        const p = (a) => ({ x: c.x + 44 * Math.sin(rad(a)), y: c.y - 44 * Math.cos(rad(a)) });
+        const [a, b] = [p(a0), p(a1)];
+        return `M${f1(a.x)} ${f1(a.y)} A44 44 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${f1(b.x)} ${f1(b.y)}`;
+      };
+      el("path", { d: ringArc(RING_L, 25, 335), class: "sp-range" }, lr);
+      const at = { x: RING_L.x + 44 * Math.sin(rad(25 + 310 * WX.frac)), y: RING_L.y - 44 * Math.cos(rad(25 + 310 * WX.frac)) };
+      el("circle", { cx: f1(at.x), cy: f1(at.y), r: 7.5, fill: "#000" }, lr);
+      el("circle", { cx: f1(at.x), cy: f1(at.y), r: 4.5, class: "sp-marker" }, lr);
+      this.icon(lr, "sun", { x: RING_L.x, y: RING_L.y - 44 });
+      el("text", { x: f1(RING_L.x), y: f1(RING_L.y + 1), class: "sp-ring-text sp-ring-value", "font-size": 28 }, lr).textContent = `${WX.now}°`;
+
+      // Right ring: time and date as short text on a dark disk, with a
+      // notch for the icon
       this.ringText = {};
-      for (const [key, c, icon] of [["l", RING_L, "schedule"], ["r", RING_R, "calendar"]]) {
+      for (const [key, c, icon] of [["r", RING_R, "schedule"]]) {
         const g = (this.slots[key] = el("g", { class: "sp-slot sp-ring" }, svg));
         el("circle", { cx: f1(c.x), cy: f1(c.y), r: 46.5, class: "sp-disk" }, g);
         const s = { x: c.x + 44 * Math.sin(rad(25)), y: c.y - 44 * Math.cos(rad(25)) };
@@ -332,20 +363,18 @@
         this.batteryText.textContent = b;
       }
 
-      // TIME_AND_DATE on the left ring, DATE on the right
+      // Time and date on the right ring, the date in the weather text
       const month = d.toLocaleDateString("en-US", { month: "short" });
       const time = hour12 ? `${h % 12 || 12}:${pad(m)}${h < 12 ? "AM" : "PM"}` : `${pad(h)}:${pad(m)}`;
       const rk = `${time}|${month}|${d.getDate()}`;
       if (rk !== this.last.rings) {
         this.last.rings = rk;
         const fit = (t) => Math.min(28, Math.floor(80 / (t.length * 0.6)));
-        const { l, r } = this.ringText;
-        l.text.textContent = time;
-        l.text.setAttribute("font-size", fit(time));
-        l.title.textContent = `${month} ${d.getDate()}`;
-        r.text.textContent = d.getDate();
-        r.text.setAttribute("font-size", 28);
-        r.title.textContent = month;
+        const { r } = this.ringText;
+        r.text.textContent = time;
+        r.text.setAttribute("font-size", fit(time));
+        r.title.textContent = `${month} ${d.getDate()}`;
+        this.wxDate.textContent = `${d.toLocaleDateString("en-US", { weekday: "short" })}, ${month} ${d.getDate()}`;
       }
 
       return { h, m, cur, egg };
