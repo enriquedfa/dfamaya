@@ -4,13 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>dfamaya · Apps for Wear OS</title>
-  <meta name="description" content="Brief and the WatchSky watch face for Wear OS, made by Enrique Amaya. No ads, no accounts, no tracking." />
+  <meta name="description" content="Brief and the WatchSky and Spiralis watch faces for Wear OS, made by Enrique Amaya. No ads, no accounts, no tracking." />
   <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="dfamaya · Apps for Wear OS" />
-  <meta property="og:description" content="Brief and the WatchSky watch face for Wear OS. No ads, no accounts, no tracking." />
+  <meta property="og:description" content="Brief and the WatchSky and Spiralis watch faces for Wear OS. No ads, no accounts, no tracking." />
   <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/brief/og.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,8 +19,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300&text=0123456789%3A&display=swap" />
   <link rel="stylesheet" href="brief/brief.css" />
   <link rel="stylesheet" href="watchfaces/watchsky.css" />
+  <link rel="stylesheet" href="spiralis/spiralis.css" />
   <script src="brief/demo.js" defer></script>
   <script src="watchfaces/watchsky.js" defer></script>
+  <script src="spiralis/spiralis.js" defer></script>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -81,8 +83,9 @@
       <div class="wrap hero-exit">
         <h1 class="rise" style="--d:0">Small apps for Wear&nbsp;OS</h1>
         <p class="lede rise" style="--d:1">
-          I'm Enrique Amaya. I make Brief and the WatchSky watch face. None
-          of them have ads or accounts, and none of them track you.
+          I'm Enrique Amaya. I make Brief and two watch faces,
+          WatchSky and Spiralis. None of them have ads or accounts, and
+          none of them track you.
         </p>
       </div>
     </section>
@@ -189,6 +192,46 @@
             </div>
           </a>
         </article>
+        <article class="app-card app-card-feature rise lift" style="--d:4">
+          <div class="app-copy">
+            <div class="app-title">
+              <img class="sp-mark" src="spiralis/img/icon.webp" alt="" width="48" height="48" />
+              <div>
+                <h2>Spiralis</h2>
+                <p class="app-kind">Watch face</p>
+              </div>
+            </div>
+            <p>
+              A golden spiral is the hour hand. It turns 30° an hour and lands
+              on that hour's line, with four complications, seven palettes
+              and a barely-lit always-on mode. It runs entirely on the watch
+              and collects nothing.
+            </p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="spiralis/">
+                Try it live
+                <svg class="icon nudge-x" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+              </a>
+              <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.dfamaya.spiralis" target="_blank" rel="noopener noreferrer">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+                Google Play
+              </a>
+            </div>
+          </div>
+
+          <a class="app-visual" href="spiralis/" tabindex="-1" aria-hidden="true" data-sp-glow data-tilt>
+            <div class="watch sp-watch">
+              <div class="watch-strap top"></div>
+              <div class="watch-strap bottom"></div>
+              <span class="watch-crown"></span>
+              <div class="watch-case">
+                <div class="dial" data-sp-face data-sp-preset="minimal" data-sp-palette="golden">
+                  <img class="sp-fallback" src="spiralis/img/face_golden.webp" alt="" width="454" height="454" />
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
       </div>
     </section>
   </main>
@@ -199,6 +242,7 @@
       <nav aria-label="Footer">
         <a href="brief/">Brief</a>
         <a href="watchfaces/">Watch Faces</a>
+        <a href="spiralis/">Spiralis</a>
         <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>
       </nav>
     </div>

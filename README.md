@@ -1,7 +1,8 @@
 # dfamaya.github.io
 
 Static site for dfamaya's Wear OS apps: a home page, landing pages for Brief
-and the WatchSky watch face, and per-app privacy policies and support. Plain
+and the WatchSky and Spiralis watch faces, and per-app privacy policies and
+support. Plain
 HTML, CSS and a little vanilla JS. No build step.
 
 Published at: <https://enriquedfa.github.io/dfamaya/>
@@ -40,6 +41,21 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
   face's `preview.png` (shown until the script runs), the weather glyphs and
   the editor icons, under their drawable names
 - `watchfaces/og.png` — link preview image (1200×630)
+
+### Spiralis
+
+- `spiralis/index.html` — Spiralis landing page with a live copy of the face
+  and its settings. Privacy and support are the shared watch-face pages in
+  `watchfaces/`.
+- `spiralis/spiralis.js` — draws the face (also on the home page) and wires
+  up the page's controls
+- `spiralis/spiralis.css` — landing page + face styles
+- `spiralis/img/` — assets from the Spiralis repo (`docs/assets/` and the
+  watch editor's `drawable-nodpi` icons): the Play Store icon, the watch
+  captures (`face_*.webp`, also the preset chips and the gallery), the phone
+  app screenshot and the editor icons
+- `spiralis/og.png` — link preview image (1200×630), cut from the Play
+  feature graphic
 
 ### Redirect stubs
 
@@ -91,11 +107,11 @@ Every pill or round button is a `.btn`, with a variant and an optional size:
 
 A press shrinks the button quickly and letting go springs it back. Page
 looks build on the base rather than starting over: Brief's source chips are
-`.btn .btn-icon .chip`, WatchSky's play button is `.btn .btn-ghost .btn-md
+`.btn .btn-icon .chip`, the watch faces' play button is `.btn .btn-ghost .btn-md
 .btn-icon`. A size can be changed from a page's CSS by setting `--btn-h` (and
 `--btn-px`, `--btn-icon`) on the button.
 
-WatchSky's settings chips and switches are real radios and checkboxes, not
+The playground's settings chips and switches are real radios and checkboxes, not
 buttons, but they press and spring the same way.
 
 ### Shared blocks
@@ -104,6 +120,23 @@ buttons, but they press and spring the same way.
 `h2` and `.lede`; add `.center` to centre it), `.lede`, `.app-badge` (the
 app's icon and name above a hero headline), `.fine` (small print under the
 hero buttons) and `.card`.
+
+### Playground
+
+The two watch-face pages share one layout, the `.pg-*` classes in
+`style.css`: a hero (`.pg-hero`, `.pg-grid`, `.pg-intro`), the live watch
+pinned beside the settings (`.pg-visual`, `.pg-stage`, with a glow in
+`--pg-glow`), the time slider row (`.pg-scrub`, `.pg-play`, `.pg-range`,
+`.pg-now`, `.pg-caption`), the settings cards (`.pg-panel`, `.pg-group`,
+`.pg-chips`, `.pg-chip`, `.pg-switches`, `.pg-switch`, `.pg-moments`) and the
+numbered steps below (`.pg-cards`, `.pg-card`). Each page draws its own
+face, sets `--pg-glow`, and adds its own touches (WatchSky's sky chips,
+Spiralis's palette swatches and preset captures).
+
+One catch: a `url()` inside a custom property resolves against the
+stylesheet that *uses* it. The editor icons pass their image as
+`style="--i:url(img/…)"`, so the `mask-image: var(--i)` line lives in each
+page's own stylesheet (next to its `img/`), not in `style.css`.
 
 ### Motion utilities
 
@@ -212,6 +245,35 @@ If the face changes in the WatchSky repo (a new palette, a new setting), make
 the same change here: the constants at the top of `watchsky.js` mirror the
 XML. The face stops ticking while it's off screen or the tab is hidden.
 
+## The Spiralis page
+
+`spiralis/spiralis.js` redraws the face into an SVG with the watch's 450×450
+canvas. The geometry is the design prototype's (Spiralis repo,
+`reference/claude-design/spiralis/`, the `renderVals()` logic), which the
+face's `watchface.xml` follows, so the numbers read 1:1 against both:
+
+- **The spiral** r = 5·φ^(2θ/π) is drawn once and turned 30° an hour. The
+  12 hour lines are pieces of the same curve at the rotation it has on each
+  hour, with the numerals slid along them. The current line lights up in
+  the palette's tertiary colour, or, with Minutes set to Hour line fill,
+  fills from its outer end over the hour, as the XML does.
+- **The complications** are the defaults: time and date (left ring), date
+  (right ring), watch battery (top arc, from the Battery API where the
+  browser has it) and heart rate (bottom arc). The spiral is masked in a
+  tight halo around each filled slot. The presets fill the same slots as
+  the XML's Flavors.
+- **The settings** (preset, colour, minutes, seconds hand, always-on,
+  complications in always-on) are real radios and checkboxes, with the
+  watch editor's own icons.
+- **Colour.** The palette's four roles are registered custom properties
+  (`--sp-pri`, `--sp-acc`, `--sp-con`, `--sp-ter`), so a palette change
+  eases across the face, the glow and the headline together.
+- During 11:23 the Fibonacci numerals light up, like on the watch.
+
+If the face changes in the Spiralis repo (a new palette, a new preset), make
+the same change here: the constants at the top of `spiralis.js` mirror the
+XML. The face stops ticking while it's off screen or the tab is hidden.
+
 ### Newer web platform features in use
 
 Most are progressive: a browser without one just skips the effect. The
@@ -219,7 +281,7 @@ exception is `light-dark()`, which the colour tokens depend on; it needs Chrome
 or Edge 123, Safari 17.5 or Firefox 120 (all from 2024).
 
 - Cross-document **view transitions** (`@view-transition`): the header stays
-  put between pages, and the Brief and WatchSky watches and icons morph from
+  put between pages, and the Brief, WatchSky and Spiralis watches and icons morph from
   the home page into their pages.
 - **Scroll-driven animations**: the header's bottom border, sections fading
   in (`.reveal`, `.stagger`), heroes fading out (`.hero-exit`), the home
@@ -246,6 +308,11 @@ When submitting an app on Google Play, use:
 - Privacy policy URL: `https://enriquedfa.github.io/dfamaya/watchfaces/privacy.html`
 - Support / website URL: `https://enriquedfa.github.io/dfamaya/watchfaces/support.html`
 
+**Spiralis** (privacy is the shared watch-face policy)
+
+- Privacy policy URL: `https://enriquedfa.github.io/dfamaya/watchfaces/privacy.html`
+- Website URL: `https://enriquedfa.github.io/dfamaya/spiralis/`
+
 **Brief**
 
 - Privacy policy URL: `https://enriquedfa.github.io/dfamaya/brief/privacy.html`
@@ -258,6 +325,7 @@ When submitting an app on Google Play, use:
 - Developer page (all apps): <https://play.google.com/store/apps/developer?id=Enrique+Amaya>
 - Brief: <https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication>
 - Wear OS Watch Faces: <https://play.google.com/store/apps/details?id=com.dfamaya.watchsky>
+- Spiralis: <https://play.google.com/store/apps/details?id=com.dfamaya.spiralis>
 
 ## Adding another app
 
@@ -267,6 +335,7 @@ When submitting an app on Google Play, use:
    three `nav-links`, and the `head-cta` store button. Keep the header to one
    row: check it at 360px wide.
    Build the page from the shared pieces (`.section`, `.section-head`,
-   `.btn`, the tokens) so it matches the others.
+   `.btn`, the tokens) so it matches the others. A watch face can reuse the
+   playground (`.pg-*`); `spiralis/` is the smallest example.
 3. Add an `app-card rise lift` for it in the Apps section of `index.html`.
 4. List its Play Store link above.

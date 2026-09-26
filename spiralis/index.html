@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Spiralis · A golden spiral tells the hour</title>
+  <meta name="description" content="Spiralis is a Wear OS watch face where a golden spiral is the hour hand. Twelve hour lines cut from the same curve, four complications, seven palettes and a low-power always-on mode. No accounts, no ads, no data collection." />
+  <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="img/icon-180.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Spiralis · A golden spiral tells the hour" />
+  <meta property="og:description" content="A Wear OS watch face where a golden spiral is the hour hand." />
+  <meta property="og:url" content="https://enriquedfa.github.io/dfamaya/spiralis/" />
+  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/spiralis/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="spiralis.css" />
+  <script src="spiralis.js" defer></script>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-gplay" viewBox="0 0 24 24"><path d="M6.5 3.6c-.6-.4-1.5 0-1.5.8v15.2c0 .8.9 1.2 1.5.8l12.3-7.6a1 1 0 0 0 0-1.7z"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M11,16.18V5q0-0.43 0.29-0.71T12,4t0.71,0.29T13,5V16.18l4.9-4.9q0.3-0.3 0.7-0.29t0.7,0.31q0.28,0.3 0.29,0.7T19.3,12.7l-6.6,6.6q-0.15,0.15-0.33,0.21T12,19.58t-0.38-0.06T11.3,19.3L4.7,12.7q-0.28-0.28-0.28-0.69T4.7,11.3Q5,11 5.41,11t0.71,0.3L11,16.18Z"/></symbol>
+    <symbol id="i-play" viewBox="0 -960 960 960"><path d="M320,-200v-560l440,280 -440,280Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 -960 960 960"><path d="M560,-200v-560h160v560H560Zm-320,0v-560h160v560H240Z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap bar">
+      <div class="crumbs">
+        <a class="parent" href="../">dfamaya</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a class="logo" href="./" aria-current="page">
+          <img class="logo-mark" src="img/icon.webp" alt="" width="28" height="28" />
+          <span class="logo-text">Spiralis</span>
+        </a>
+      </div>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="../watchfaces/privacy.html">Privacy</a>
+        <a href="../watchfaces/support.html">Support</a>
+      </nav>
+      <a class="btn btn-sm btn-primary head-cta" href="https://play.google.com/store/apps/details?id=com.dfamaya.spiralis" target="_blank" rel="noopener noreferrer" aria-label="Get Spiralis on Google Play">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+        <span class="short">Get</span><span class="long">Google Play</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero + the settings. The watch stays pinned while the settings scroll. -->
+    <section class="pg-hero" data-sp-page>
+      <div class="wrap pg-grid">
+        <div class="pg-intro hero-exit">
+          <p class="app-badge rise" style="--d:0">
+            <img src="img/icon.webp" alt="" width="26" height="26" />
+            Spiralis for Wear OS
+          </p>
+          <h1 class="rise" style="--d:1">A golden spiral <span class="hl">tells the hour</span></h1>
+          <p class="lede rise" style="--d:2">
+            The spiral is the hour hand. It turns 30° an hour, and on the hour
+            it lands exactly on that hour's line. All twelve lines are cut
+            from the same curve, the one behind nautilus shells and sunflower
+            heads.
+          </p>
+          <div class="btn-row stack-sm rise" style="--d:3">
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.dfamaya.spiralis" target="_blank" rel="noopener noreferrer">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+              Get it on Google Play
+            </a>
+            <a class="btn btn-ghost" href="#try">
+              Try it here
+              <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+            </a>
+          </div>
+          <p class="fine rise" style="--d:4">Free. For Wear OS 6 and newer. No ads, no accounts, no tracking.</p>
+        </div>
+
+        <div class="pg-visual" data-tilt>
+          <div class="pg-stage rise" style="--d:2">
+            <div class="watch" role="img" aria-label="The Spiralis watch face">
+              <div class="watch-strap top"></div>
+              <div class="watch-strap bottom"></div>
+              <span class="watch-crown"></span>
+              <div class="watch-case">
+                <div class="dial" data-sp-face data-sp-preset="full">
+                  <img class="sp-fallback" src="img/face_full.webp" alt="" width="454" height="454" />
+                </div>
+              </div>
+            </div>
+
+            <div class="pg-scrub">
+              <button type="button" class="btn btn-ghost btn-md btn-icon pg-play" data-sp-play aria-pressed="false" aria-label="Play a whole turn of the spiral">
+                <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>
+                <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pause"></use></svg>
+              </button>
+              <input class="pg-range" type="range" min="0" max="1439" step="1" value="683" aria-label="Time of day" data-sp-range />
+              <button type="button" class="btn btn-ghost btn-md pg-now" data-sp-now aria-pressed="true">Now</button>
+            </div>
+            <p class="pg-caption" data-sp-caption><strong data-k="hour">The spiral</strong> · <span data-k="time">now</span></p>
+          </div>
+        </div>
+
+        <div class="pg-panel" id="try">
+          <div class="section-head">
+            <p class="eyebrow">Make it yours</p>
+            <h2>The watch's settings, to try here first</h2>
+            <p class="lede">
+              On the watch, long-press Spiralis and tap
+              <strong>Customize</strong>. You get these same options. Try
+              them on the watch on this page.
+            </p>
+          </div>
+
+          <div class="pg-groups">
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3>Reading the time</h3></div>
+              <p>
+                Find the hour line the spiral is lying on, or about to reach.
+                That line glows, and its numeral brightens. The small dial in
+                the middle keeps the minutes. Drag the slider under the watch,
+                press play to watch a whole turn, or jump to a time:
+              </p>
+              <div class="pg-moments">
+                <button type="button" class="btn btn-ghost btn-sm" data-sp-moment="+1h">On the hour</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-sp-moment="3:00">3:00</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-sp-moment="7:30">7:30</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-sp-moment="10:08">10:08</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-sp-moment="11:23">11:23 · a surprise</button>
+              </div>
+            </div>
+
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-preset">
+              <div class="pg-group-head"><h3 id="g-preset">Presets</h3><span class="pg-val" data-sp-value="preset" aria-hidden="true">Full</span></div>
+              <p>
+                The phone app sets up the face in one tap: a palette and a
+                set of complications. Empty slots draw nothing, so the spiral
+                runs through their space.
+              </p>
+              <div class="sp-presets">
+                <label class="sp-preset"><input type="radio" name="sp-preset" value="full" aria-label="Full. Orange, with all four complications." checked /><img src="img/face_full.webp" alt="" width="96" height="96" loading="lazy" /><span>Full</span></label>
+                <label class="sp-preset"><input type="radio" name="sp-preset" value="rings" aria-label="Rings. Green, with the two ring complications." /><img src="img/face_rings.webp" alt="" width="96" height="96" loading="lazy" /><span>Rings</span></label>
+                <label class="sp-preset"><input type="radio" name="sp-preset" value="arcs" aria-label="Arcs. Blue, with the two arc complications." /><img src="img/face_arcs.webp" alt="" width="96" height="96" loading="lazy" /><span>Arcs</span></label>
+                <label class="sp-preset"><input type="radio" name="sp-preset" value="minimal" aria-label="Minimal. Monochrome, with no complications." /><img src="img/face_minimal.webp" alt="" width="96" height="96" loading="lazy" /><span>Minimal</span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-palette">
+              <div class="pg-group-head"><h3 id="g-palette">Color</h3><span class="pg-val" data-sp-value="palette" aria-hidden="true">Orange</span></div>
+              <p>
+                Seven Material&nbsp;3 Expressive palettes. Each one colors the
+                spiral and the center dot, the progress bars, and the current
+                hour line (the small dot).
+              </p>
+              <div class="pg-chips">
+                <label class="pg-chip" title="Violet"><input type="radio" name="sp-palette" value="violet" aria-label="Violet" /><span class="pg-chip-face swatch" style="--sw:#D0BCFF;--ter:#FFB77A"></span></label>
+                <label class="pg-chip" title="Purple"><input type="radio" name="sp-palette" value="purple" aria-label="Purple" /><span class="pg-chip-face swatch" style="--sw:#CE96FE;--ter:#FF959E"></span></label>
+                <label class="pg-chip" title="Blue"><input type="radio" name="sp-palette" value="blue" aria-label="Blue" /><span class="pg-chip-face swatch" style="--sw:#60C9FF;--ter:#9D9FFF"></span></label>
+                <label class="pg-chip" title="Orange"><input type="radio" name="sp-palette" value="orange" aria-label="Orange" checked /><span class="pg-chip-face swatch" style="--sw:#EEB98C;--ter:#DCD794"></span></label>
+                <label class="pg-chip" title="Golden"><input type="radio" name="sp-palette" value="golden" aria-label="Golden" /><span class="pg-chip-face swatch" style="--sw:#F3BF48;--ter:#FFB599"></span></label>
+                <label class="pg-chip" title="Green"><input type="radio" name="sp-palette" value="green" aria-label="Green" /><span class="pg-chip-face swatch" style="--sw:#A9DFD4;--ter:#A9DCF0"></span></label>
+                <label class="pg-chip" title="Monochrome"><input type="radio" name="sp-palette" value="monochrome" aria-label="Monochrome" /><span class="pg-chip-face swatch" style="--sw:#D4D4D4;--ter:#D4D4D5"></span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-minutes">
+              <div class="pg-group-head"><h3 id="g-minutes">Minutes</h3><span class="pg-val" data-sp-value="minutes" aria-hidden="true">Center dial</span></div>
+              <p>
+                Read the minutes on the small center dial, or let the current
+                hour line fill up over the hour, the way the spiral sweeps
+                it. Or both.
+              </p>
+              <div class="pg-chips">
+                <label class="pg-chip" title="Center dial"><input type="radio" name="sp-minutes" value="0" aria-label="Center dial" checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_minutes_dial.webp)"></span></span></label>
+                <label class="pg-chip" title="Hour line fill"><input type="radio" name="sp-minutes" value="1" aria-label="Hour line fill" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_minutes_line.webp)"></span></span></label>
+                <label class="pg-chip" title="Dial and fill"><input type="radio" name="sp-minutes" value="2" aria-label="Dial and fill" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_minutes_both.webp)"></span></span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3>And the rest</h3></div>
+              <p>
+                The rings default to the time and the date, the arcs to your
+                watch's battery and heart rate. Swap in any complication you
+                like: rings and arcs fill up for ranged values like steps or
+                battery.
+              </p>
+              <div class="pg-switches">
+                <label class="pg-switch"><input type="checkbox" name="sp-seconds" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_seconds.webp)"></span><span class="label">Seconds hand</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="sp-aod" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_aod.webp)"></span><span class="label">Preview always‑on</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="sp-cxAod" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_aod.webp)"></span><span class="label">Complications in always‑on</span><span class="track"></span></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Straight from the watch</p>
+          <h2>Four presets, seven palettes</h2>
+          <p class="lede">
+            Captures from a Wear OS 6 watch. Always-on lights only a few
+            percent of the screen and keeps the spiral readable.
+          </p>
+        </div>
+        <div class="sp-gallery" tabindex="0" aria-label="Screenshots">
+          <figure><img src="img/face_full.webp" alt="Spiralis Full preset in Orange, with the weather, the time, battery and the date around the spiral" width="454" height="454" loading="lazy" /><figcaption><strong>Full</strong>Orange, all four complications</figcaption></figure>
+          <figure><img src="img/face_rings.webp" alt="Spiralis Rings preset in Green, with two ring complications" width="454" height="454" loading="lazy" /><figcaption><strong>Rings</strong>Green, the two rings</figcaption></figure>
+          <figure><img src="img/face_arcs.webp" alt="Spiralis Arcs preset in Blue, with two arc complications along the edge" width="454" height="454" loading="lazy" /><figcaption><strong>Arcs</strong>Blue, the two edge arcs</figcaption></figure>
+          <figure><img src="img/face_minimal.webp" alt="Spiralis Minimal preset in Monochrome, just the spiral with a red seconds hand" width="454" height="454" loading="lazy" /><figcaption><strong>Minimal</strong>Monochrome, just the spiral</figcaption></figure>
+          <figure><img src="img/face_golden.webp" alt="Spiralis in Golden at 11:23, with the Fibonacci numerals 1, 2, 3, 5 and 8 lit" width="454" height="454" loading="lazy" /><figcaption><strong>11:23</strong>1 · 1 · 2 · 3 · 5 · 8</figcaption></figure>
+          <figure><img src="img/face_aod2.webp" alt="Spiralis in always-on mode with complications, all in dim grey" width="454" height="454" loading="lazy" /><figcaption><strong>Always-on</strong>With complications</figcaption></figure>
+          <figure><img src="img/face_aod.webp" alt="Spiralis in always-on mode, just the thin grey spiral and hour lines" width="454" height="454" loading="lazy" /><figcaption><strong>Always-on</strong>Just the spiral</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">How it works</p>
+          <h2>One curve, twelve hours</h2>
+        </div>
+        <div class="pg-cards stagger">
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">φ</span>
+            <h3>A golden spiral</h3>
+            <p>
+              Every quarter turn, the spiral grows by the golden ratio,
+              φ&nbsp;≈&nbsp;1.618.
+            </p>
+            <span class="sp-formula">r = 5 · φ<sup>2θ/π</sup></span>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">30°</span>
+            <h3>30° an hour</h3>
+            <p>
+              The spiral turns clockwise once every twelve hours. Each hour
+              line is the spiral itself, frozen where it lies on the hour, so
+              the hand and the line meet exactly.
+            </p>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">8</span>
+            <h3>A Fibonacci surprise</h3>
+            <p>
+              Look at your watch at 11:23. For that minute the numerals 1, 2,
+              3, 5 and 8 light up: 1&nbsp;·&nbsp;1&nbsp;·&nbsp;2&nbsp;·&nbsp;3&nbsp;·&nbsp;5&nbsp;·&nbsp;8.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Install</p>
+          <h2>On your wrist in a minute</h2>
+          <p class="lede">
+            Spiralis is free on Google Play for watches with Wear OS 6 or
+            newer. It runs entirely on the watch.
+          </p>
+        </div>
+        <div class="sp-install">
+          <div class="pg-cards stagger">
+            <article class="card pg-card reveal lift">
+              <span class="num" aria-hidden="true">1</span>
+              <h3>Get it from Google Play</h3>
+              <p>
+                Open the Play Store on your watch and search for Spiralis, or
+                use the Google Play button on this page and install it to
+                your watch.
+              </p>
+            </article>
+            <article class="card pg-card reveal lift">
+              <span class="num" aria-hidden="true">2</span>
+              <h3>Phone won't offer it?</h3>
+              <p>
+                Some phones don't list watch faces. The same listing then
+                installs the small Spiralis phone app. Tap
+                <strong>Install on watch</strong> and the listing opens on
+                your paired watch. It also has the four presets.
+              </p>
+            </article>
+            <article class="card pg-card reveal lift">
+              <span class="num" aria-hidden="true">3</span>
+              <h3>Set it as your face</h3>
+              <ol>
+                <li>Long-press your current watch face.</li>
+                <li>Swipe and tap <strong>Add watch face</strong> (+).</li>
+                <li>Pick <strong>Spiralis</strong> from the list.</li>
+              </ol>
+            </article>
+          </div>
+          <figure class="sp-phone reveal">
+            <img src="img/phone-app.webp" alt="The Spiralis phone app: the watch face on a watch, and an Install on watch button" width="600" height="1013" loading="lazy" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pg-more">
+      <div class="wrap wrap-prose">
+        <article class="prose reveal">
+          <h2>Privacy</h2>
+          <p>
+            Spiralis doesn't collect, store or send any personal data. It
+            asks for no permissions and runs no code of its own. There are
+            no accounts, ads or analytics.
+            <a href="../watchfaces/privacy.html">Read the privacy policy</a>.
+          </p>
+
+          <h2>Need help?</h2>
+          <p>
+            Have a look at the <a href="../watchfaces/support.html">support page</a>, or email
+            <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
+      <nav aria-label="Footer">
+        <a href="./">Spiralis</a>
+        <a href="../watchfaces/privacy.html">Privacy policy</a>
+        <a href="../watchfaces/support.html">Support</a>
+        <a href="../">More apps</a>
+      </nav>
+    </div>
+  </footer>
+  <script>document.querySelectorAll('[data-year]').forEach(function (n) { n.textContent = new Date().getFullYear(); });</script>
+</body>
+</html>

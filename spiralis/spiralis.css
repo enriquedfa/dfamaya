@@ -1,0 +1,296 @@
+/* ============================================================================
+   Spiralis — landing page + the face (the face is also on the home page).
+   The watch hardware (.watch, .watch-case, .dial…) and the playground layout
+   (.pg-*) come from ../style.css. This file keeps what is Spiralis's own.
+============================================================================ */
+
+/* The palette's four roles, set on each face by spiralis.js. Registered so
+   a palette change eases across the whole face, the glow and the headline. */
+@property --sp-pri { syntax: "<color>"; inherits: true; initial-value: #fdc799; }
+@property --sp-acc { syntax: "<color>"; inherits: true; initial-value: #eeb98c; }
+@property --sp-con { syntax: "<color>"; inherits: true; initial-value: #633f1c; }
+@property --sp-ter { syntax: "<color>"; inherits: true; initial-value: #dcd794; }
+@property --sp-glow { syntax: "<color>"; inherits: true; initial-value: #eeb98c; }
+
+[data-sp-face],
+[data-sp-page] {
+  transition: --sp-pri var(--dur-slower) var(--ease), --sp-acc var(--dur-slower) var(--ease),
+    --sp-con var(--dur-slower) var(--ease), --sp-ter var(--dur-slower) var(--ease);
+}
+:where([data-sp-glow], [data-sp-page] .pg-stage) { transition: --sp-glow var(--dur-slower) var(--ease); }
+.app-visual[data-sp-glow] { --src-bg: color-mix(in srgb, var(--sp-glow) 55%, #000); }
+[data-sp-page] .pg-stage { --pg-glow: var(--sp-glow); }
+
+/* Morphs between the home page card and this page */
+.app-visual .watch.sp-watch,
+[data-sp-page] .pg-visual .watch { view-transition-name: spiralis-watch; }
+.app-title img.sp-mark,
+[data-sp-page] .pg-intro .app-badge img { view-transition-name: spiralis-mark; }
+
+/* ----------------------------------------------------------------------------
+   The face, drawn by spiralis.js into a 450×450 SVG (the watch's own canvas).
+   Colours are the XML's: the palette roles for the accents, fixed Material 3
+   neutrals for the rest, and an always-on twin for each.
+---------------------------------------------------------------------------- */
+.sp-face {
+  --sp-ease: cubic-bezier(0.2, 0, 0, 1); /* the prototype's 400 ms state change */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.sp-face * {
+  transition: fill 0.4s var(--sp-ease), stroke 0.4s var(--sp-ease),
+    stroke-width 0.4s var(--sp-ease), opacity 0.4s var(--sp-ease);
+}
+
+.sp-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sp-line { fill: none; stroke: #49454f; stroke-width: 1.5; stroke-linecap: round; }
+.sp-cur { stroke: var(--sp-ter); stroke-width: 3; }
+.sp-spiral { fill: none; stroke: var(--sp-acc); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+.sp-num {
+  fill: #938f99;
+  font-family: var(--font);
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.sp-num.is-lit { fill: var(--sp-ter); }
+.sp-num.is-cur { fill: #e6e0e9; }
+
+.sp-dial { fill: none; stroke: #938f99; stroke-width: 1; stroke-linecap: round; }
+.sp-hand { stroke: #e6e0e9; stroke-width: 3; stroke-linecap: round; }
+.sp-sec { stroke: #ff5449; stroke-width: 1.5; stroke-linecap: round; }
+.sp-dot { fill: var(--sp-acc); }
+
+.sp-track,
+.sp-prog { fill: none; stroke-width: 5; stroke-linecap: round; }
+.sp-track { stroke: #49454f; }
+.sp-prog { stroke: var(--sp-acc); }
+.sp-icon { fill: var(--sp-acc); }
+
+.sp-arc-label {
+  fill: #cac4d0;
+  font-family: var(--font);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  paint-order: stroke;
+  stroke: #000;
+  stroke-width: 8px;
+  stroke-linejoin: round;
+}
+
+/* Ring: short text on a dark disk, the value large and the title small */
+.sp-disk { fill: #2b2930; }
+.sp-ring-aod { fill: none; stroke: #2b2930; stroke-width: 1.5; stroke-linecap: round; opacity: 0; }
+.sp-ring-text,
+.sp-ring-title {
+  font-family: var(--font);
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-variant-numeric: tabular-nums;
+}
+.sp-ring-text { fill: var(--sp-pri); }
+.sp-ring-title { fill: #e6e0e9; font-size: 18px; letter-spacing: 0.5px; }
+
+.sp-index.is-off,
+.sp-sec.is-off,
+.sp-slot.is-off { opacity: 0; }
+
+/* Always-on: no palette colour anywhere, a thin grey spiral, everything dim
+   but legible. The seconds hand goes. */
+.is-aod .sp-line { stroke: #2b2930; }
+.is-aod .sp-cur { stroke: #cac4d0; }
+.is-aod .sp-spiral { stroke: #938f99; stroke-width: 1.5; }
+.is-aod .sp-num { fill: #79747e; }
+.is-aod .sp-num.is-cur,
+.is-aod .sp-num.is-lit { fill: #cac4d0; }
+.is-aod .sp-dial { stroke: #49454f; }
+.is-aod .sp-hand { stroke: #cac4d0; }
+.is-aod .sp-sec { opacity: 0; }
+.is-aod .sp-dot { fill: #cac4d0; }
+.is-aod .sp-track { stroke: #2b2930; }
+.is-aod .sp-prog { stroke: #938f99; }
+.is-aod .sp-icon { fill: #938f99; }
+.is-aod .sp-arc-label { fill: #79747e; }
+.is-aod .sp-disk,
+.is-aod .sp-notch { opacity: 0; }
+.is-aod .sp-ring-aod { opacity: 1; }
+.is-aod .sp-ring-text,
+.is-aod .sp-ring-title { fill: #cac4d0; }
+
+/* ----------------------------------------------------------------------------
+   Landing page
+---------------------------------------------------------------------------- */
+/* The golden ratio in type: the palette's primary into its tertiary */
+[data-sp-page] .pg-intro .hl {
+  background: linear-gradient(100deg, light-dark(#a16207, #f3bf48), light-dark(#c2410c, #ffb599));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* Where the browser can, it follows the palette on the watch, with the
+   lightness pinned per theme so it stays readable on a light page. */
+@supports (color: oklch(from red l c h)) {
+  [data-sp-page] .pg-intro .hl {
+    background-image: linear-gradient(100deg,
+      light-dark(oklch(from var(--sp-pri) 0.52 max(c, 0.03) h), oklch(from var(--sp-pri) 0.86 c h)),
+      light-dark(oklch(from var(--sp-ter) 0.5 max(c, 0.03) h), oklch(from var(--sp-ter) 0.8 c h)));
+  }
+}
+
+/* The slider's track: one turn of the spiral is 12 hours, so the day is two
+   laps; the notches mark every hour. */
+[data-sp-page] .pg-range {
+  --track:
+    repeating-linear-gradient(90deg, transparent 0 calc(100% / 24 - 1px), rgb(255 255 255 / 0.18) 0 calc(100% / 24)),
+    linear-gradient(90deg, #1d1b20, color-mix(in srgb, var(--sp-acc) 55%, #1d1b20) 50%, #1d1b20);
+}
+
+/* Presets: a real capture of each one, from the Play listing */
+.sp-presets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+.sp-preset { position: relative; display: grid; justify-items: center; gap: var(--space-2); }
+.sp-preset input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.sp-preset img {
+  width: 100%;
+  max-width: 96px;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: 0 0 0 1px var(--border-strong);
+  transition: box-shadow var(--dur-fast) var(--ease),
+    scale var(--press-dur, var(--dur-spring)) var(--press-ease, var(--ease-spring));
+}
+.sp-preset span {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  transition: color var(--dur-fast) var(--ease);
+}
+.sp-preset:hover span,
+.sp-preset input:checked ~ span { color: var(--text); }
+.sp-preset input:checked ~ img { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+.sp-preset input:focus-visible ~ img { outline: 2px solid var(--accent); outline-offset: 6px; }
+.sp-preset input:active ~ img { --press-dur: 0.1s; --press-ease: var(--ease); scale: 0.94; }
+
+/* Palette chips: the spiral colour, with the hour-line colour as a dot */
+.pg-chip-face.swatch {
+  position: relative;
+  border-color: transparent;
+  background: var(--sw);
+}
+.pg-chip-face.swatch::after {
+  content: "";
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ter);
+  box-shadow: 0 0 0 2px var(--sw);
+}
+
+/* Straight from the watch: the Play Store captures */
+.sp-gallery {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(150px, 1fr);
+  gap: var(--space-4);
+  margin: var(--space-8) calc(-1 * var(--gutter)) 0;
+  padding: var(--space-2) var(--gutter) var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: thin;
+}
+.sp-gallery figure {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-3);
+  margin: 0;
+  scroll-snap-align: start;
+}
+.sp-gallery img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: 0 0 0 6px #17181c, 0 0 0 7px var(--border-strong), 0 18px 36px -18px var(--shadow-color, rgb(0 0 0 / 0.5));
+}
+.sp-gallery figcaption { color: var(--muted); font-size: var(--text-sm); text-align: center; }
+.sp-gallery figcaption strong { display: block; color: var(--text); font-weight: 600; }
+/* Wide enough for all seven in a row (the 8px keeps the watch rims in) */
+@media (min-width: 1180px) {
+  .sp-gallery { grid-auto-columns: minmax(0, 1fr); margin-inline: -8px; padding-inline: 8px; overflow: visible; }
+}
+
+/* How it works: the maths behind the face */
+.sp-formula {
+  display: inline-block;
+  margin-top: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Install: the steps beside the phone app */
+.sp-install {
+  display: grid;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+  align-items: center;
+}
+.sp-install .pg-cards { margin-top: 0; grid-template-columns: minmax(0, 1fr); }
+.sp-phone {
+  justify-self: center;
+  width: min(100%, 300px);
+  margin: 0;
+}
+.sp-phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent);
+}
+@media (min-width: 900px) {
+  .sp-install { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-16); }
+}
+
+/* The editor icons' images (.pg-ico, ../style.css): the url() in --i
+   resolves against this file, next to img/ */
+.pg-ico { -webkit-mask-image: var(--i); mask-image: var(--i); }

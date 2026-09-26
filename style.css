@@ -878,6 +878,403 @@ code {
 }
 
 /* ----------------------------------------------------------------------------
+   Playground — a watch-face landing page: the hero, a live face that stays
+   pinned while the settings scroll by (under the header on phones, in the
+   right-hand column on desktop), a time slider, and the watch editor's own
+   options as real radios and checkboxes. Used by WatchSky and Spiralis; each
+   draws its own face and sets --pg-glow (the glow behind the watch).
+---------------------------------------------------------------------------- */
+.pg-hero {
+  position: relative;
+  overflow-x: clip; /* clip, not hidden: it keeps the pinned watch sticky */
+}
+
+.pg-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pg-intro { padding-block: var(--space-8) var(--space-5); }
+
+.pg-intro h1 {
+  font-size: var(--text-5xl);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.pg-intro .lede { margin: var(--space-5) 0 0; }
+.pg-intro .btn-row { margin-top: var(--space-7); }
+
+.pg-visual {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 5;
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--space-3) var(--gutter) var(--space-7);
+  background: linear-gradient(to bottom, var(--bg) calc(100% - var(--space-5)), transparent);
+  container-type: scroll-state;
+}
+
+.pg-stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  transition: scale var(--dur-slow) var(--ease);
+}
+
+.pg-visual .watch { --size: min(50vw, 230px, 29svh); }
+
+/* Sky-coloured glow + dot grid behind the watch */
+.pg-stage::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: min(150%, 720px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--pg-glow, var(--brand-glow)) 42%, transparent), transparent 72%);
+  z-index: -1;
+  pointer-events: none;
+}
+.pg-stage::after {
+  content: "";
+  position: absolute;
+  inset: -10% -30%;
+  background-image: radial-gradient(circle at 1px 1px, light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.09)) 1px, transparent 0);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent);
+  mask-image: radial-gradient(closest-side, #000 30%, transparent);
+  z-index: -2;
+  pointer-events: none;
+}
+
+@container scroll-state(stuck: top) {
+  .pg-stage { scale: 0.95; transform-origin: 50% 0; }
+}
+
+/* Time of day: play, a slider whose track is the day's sky, and "now" */
+.pg-scrub {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(100%, 440px);
+}
+
+/* Play and Now are .btn .btn-ghost .btn-md */
+.pg-play .i-pause,
+.pg-play[aria-pressed="true"] .i-play { display: none; }
+.pg-play[aria-pressed="true"] .i-pause { display: block; }
+
+/* Pressed means it's already following the real time: nothing to do */
+.pg-now[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.pg-range {
+  --track: linear-gradient(90deg, #0d0548, #54aad1, #0d0548);
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.pg-range::-webkit-slider-runnable-track {
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--track);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+.pg-range::-moz-range-track {
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--track);
+}
+.pg-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -5px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.45), inset 0 0 0 1px rgb(0 0 0 / 0.15);
+}
+.pg-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.45);
+}
+.pg-range:focus-visible { outline: none; }
+.pg-range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pg-range:focus-visible::-moz-range-thumb { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pg-caption {
+  display: none;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.pg-caption strong { color: var(--text); font-weight: 600; }
+
+/* ----------------------------------------------------------------------------
+   Settings — the same options, icons and order as the watch's editor
+---------------------------------------------------------------------------- */
+.pg-panel { padding-bottom: var(--space-10); }
+
+.pg-groups {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.pg-group {
+  padding: var(--card-pad);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.pg-group-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+}
+.pg-group h3 { font-size: var(--text-lg); letter-spacing: -0.015em; }
+.pg-val { color: var(--accent); font-size: var(--text-sm); font-weight: 600; }
+.pg-group > p { margin: var(--space-2) 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.55; }
+
+.pg-sub {
+  margin: var(--space-4) 0 0;
+  color: var(--faint);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pg-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.pg-sub + .pg-chips { margin-top: var(--space-2); }
+
+/* A chip is a real radio: the input covers the chip, the face is drawn after
+   it. It presses and springs back like a .btn-icon. */
+.pg-chip {
+  position: relative;
+  display: grid;
+  width: 44px;
+  height: 44px;
+}
+.pg-chip input,
+.pg-switch input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pg-chip-face {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--muted);
+  transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease),
+    scale var(--press-dur, var(--dur-spring)) var(--press-ease, var(--ease-spring));
+}
+.pg-chip:hover .pg-chip-face { color: var(--text); }
+.pg-chip input:checked + .pg-chip-face {
+  color: var(--text);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+.pg-chip input:focus-visible + .pg-chip-face,
+.pg-switch input:focus-visible + .pg-switch-face {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+.pg-chip input:active + .pg-chip-face {
+  --press-dur: 0.1s;
+  --press-ease: var(--ease);
+  scale: 0.9;
+}
+
+/* Editor icons from the watch, tinted with currentColor. The image itself
+   (mask-image: var(--i)) is set in each page's stylesheet: a url() inside a
+   custom property resolves against the stylesheet that uses it, so from
+   here it would point at the site root. */
+.pg-ico {
+  width: 24px;
+  height: 24px;
+  background: currentColor;
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;
+}
+.pg-chip-face.num .pg-ico { width: 28px; height: 28px; }
+
+/* Moments to jump to: .btn .btn-ghost .btn-sm */
+.pg-moments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+/* On/off settings */
+.pg-switches {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+@media (min-width: 560px) {
+  .pg-switches { grid-template-columns: 1fr 1fr; }
+}
+
+.pg-switch { position: relative; }
+.pg-switch-face {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.3;
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.pg-switch-face .pg-ico { flex: none; }
+.pg-switch-face .label { flex: 1; }
+.pg-switch-face .track {
+  flex: none;
+  position: relative;
+  width: 36px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+  transition: background-color var(--dur-fast) var(--ease);
+}
+.pg-switch-face .track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+  /* The knob springs across */
+  transition: translate var(--dur-spring) var(--ease-spring);
+}
+.pg-switch input:checked + .pg-switch-face { color: var(--text); }
+.pg-switch input:checked + .pg-switch-face .track { background: var(--brand-b); }
+.pg-switch input:checked + .pg-switch-face .track::after { translate: 14px 0; }
+
+@media (min-width: 900px) {
+  .pg-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--space-16);
+  }
+
+  .pg-intro {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: calc(100svh - var(--header-h));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-block: var(--space-10) var(--space-16);
+  }
+
+  .pg-panel { grid-column: 1; grid-row: 2; padding-bottom: var(--space-24); }
+
+  .pg-visual {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+    height: calc(100svh - var(--header-h));
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 0;
+    background: none;
+  }
+
+  .pg-visual .watch { --size: min(34vw, 400px, 52svh); }
+  .pg-stage { gap: var(--space-7); }
+  .pg-caption { display: block; }
+
+  @container scroll-state(stuck: top) {
+    .pg-stage { scale: 1; }
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Sections below the playground: numbered steps (.pg-cards) and closing prose
+---------------------------------------------------------------------------- */
+.pg-cards {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+@media (min-width: 820px) {
+  .pg-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.pg-card {
+  border-radius: var(--radius-lg);
+}
+.pg-card .num {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: var(--space-4);
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--text-sm);
+}
+.pg-card h3 { font-size: var(--text-lg); letter-spacing: -0.015em; }
+.pg-card p,
+.pg-card li { color: var(--muted); }
+.pg-card p { margin: var(--space-2) 0 0; }
+.pg-card ol { margin: var(--space-3) 0 0; padding-left: 1.2em; }
+.pg-card li { margin-bottom: var(--space-1); }
+.pg-card li::marker { color: var(--faint); }
+.pg-card strong { color: var(--text); font-weight: 600; }
+
+.pg-more .prose { padding-block: 0; }
+
+/* ----------------------------------------------------------------------------
    Footer
 ---------------------------------------------------------------------------- */
 .site-foot {

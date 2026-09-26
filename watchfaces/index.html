@@ -57,9 +57,9 @@
 
   <main id="main">
     <!-- Hero + the settings. The watch stays pinned while the settings scroll. -->
-    <section class="ws-hero" data-ws-page>
-      <div class="wrap ws-grid">
-        <div class="ws-intro hero-exit">
+    <section class="pg-hero" data-ws-page>
+      <div class="wrap pg-grid">
+        <div class="pg-intro hero-exit">
           <p class="app-badge rise" style="--d:0">
             <img src="img/icon.webp" alt="" width="26" height="26" />
             WatchSky for Wear OS
@@ -84,8 +84,8 @@
           <p class="fine rise" style="--d:4">Free. For Wear OS 5.1 and newer. No ads, no accounts, no tracking.</p>
         </div>
 
-        <div class="ws-visual" data-tilt>
-          <div class="ws-stage rise" style="--d:2">
+        <div class="pg-visual" data-tilt>
+          <div class="pg-stage rise" style="--d:2">
             <div class="watch" role="img" aria-label="The WatchSky watch face">
               <div class="watch-strap top"></div>
               <div class="watch-strap bottom"></div>
@@ -97,19 +97,19 @@
               </div>
             </div>
 
-            <div class="ws-scrub">
-              <button type="button" class="btn btn-ghost btn-md btn-icon ws-play" data-ws-play aria-pressed="false" aria-label="Play a whole day">
+            <div class="pg-scrub">
+              <button type="button" class="btn btn-ghost btn-md btn-icon pg-play" data-ws-play aria-pressed="false" aria-label="Play a whole day">
                 <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>
                 <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pause"></use></svg>
               </button>
-              <input class="ws-range" type="range" min="0" max="1439" step="1" value="720" aria-label="Time of day" data-ws-range />
-              <button type="button" class="btn btn-ghost btn-md ws-now" data-ws-now aria-pressed="true">Now</button>
+              <input class="pg-range" type="range" min="0" max="1439" step="1" value="720" aria-label="Time of day" data-ws-range />
+              <button type="button" class="btn btn-ghost btn-md pg-now" data-ws-now aria-pressed="true">Now</button>
             </div>
-            <p class="ws-caption" data-ws-caption><strong data-k="phase">Daytime</strong> · <span data-k="time">now</span></p>
+            <p class="pg-caption" data-ws-caption><strong data-k="phase">Daytime</strong> · <span data-k="time">now</span></p>
           </div>
         </div>
 
-        <div class="ws-panel" id="try">
+        <div class="pg-panel" id="try">
           <div class="section-head">
             <p class="eyebrow">Make it yours</p>
             <h2>The watch's settings, to try here first</h2>
@@ -120,9 +120,9 @@
             </p>
           </div>
 
-          <div class="ws-groups">
-            <div class="ws-group reveal">
-              <div class="ws-group-head"><h3>A sky that keeps time</h3></div>
+          <div class="pg-groups">
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3>A sky that keeps time</h3></div>
               <p>
                 Eleven layers of sky blend into each other as the hours pass:
                 night, blue hour, sunrise, golden hour, a clear midday blue,
@@ -130,7 +130,7 @@
                 under the watch, press play to watch a whole day, or jump to a
                 moment:
               </p>
-              <div class="ws-moments">
+              <div class="pg-moments">
                 <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="S+0.25">Blue hour</button>
                 <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="S+1">Sunrise</button>
                 <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="S+2.25">Golden hour</button>
@@ -141,94 +141,94 @@
               </div>
             </div>
 
-            <div class="ws-group reveal" role="radiogroup" aria-labelledby="g-weather">
-              <div class="ws-group-head"><h3 id="g-weather">Weather</h3><span class="ws-val" data-ws-value="weather" aria-hidden="true">Partly cloudy</span></div>
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-weather">
+              <div class="pg-group-head"><h3 id="g-weather">Weather</h3><span class="pg-val" data-ws-value="weather" aria-hidden="true">Partly cloudy</span></div>
               <p>
                 With <strong>Show weather</strong> on, an icon and the
                 temperature sit above the time. The sky follows the conditions
                 too: grey under cloud and snow, darker in the rain.
               </p>
-              <div class="ws-chips">
-                <label class="ws-chip" title="Clear"><input type="radio" name="ws-weather" value="clear" aria-label="Clear" /><span class="ws-chip-face sky" style="--a:#2B5C8F;--b:#54AAD1"><span class="sun"></span></span></label>
-                <label class="ws-chip" title="Partly cloudy"><input type="radio" name="ws-weather" value="partly" aria-label="Partly cloudy" checked /><span class="ws-chip-face sky" style="--a:#4D7AA8;--b:#8FB6D8"><img src="img/weather_cloudy.webp" alt="" width="32" height="32" /></span></label>
-                <label class="ws-chip" title="Cloudy"><input type="radio" name="ws-weather" value="cloudy" aria-label="Cloudy" /><span class="ws-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_cloudy.webp" alt="" width="32" height="32" /></span></label>
-                <label class="ws-chip" title="Fog"><input type="radio" name="ws-weather" value="fog" aria-label="Fog" /><span class="ws-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_fog.webp" alt="" width="32" height="32" /></span></label>
-                <label class="ws-chip" title="Rain"><input type="radio" name="ws-weather" value="rain" aria-label="Rain" /><span class="ws-chip-face sky" style="--a:#353C45;--b:#52595E"><img src="img/weather_rain.webp" alt="" width="32" height="32" /></span></label>
-                <label class="ws-chip" title="Thunderstorm"><input type="radio" name="ws-weather" value="storm" aria-label="Thunderstorm" /><span class="ws-chip-face sky" style="--a:#353C45;--b:#52595E"><img src="img/weather_storm.webp" alt="" width="32" height="32" /></span></label>
-                <label class="ws-chip" title="Snow"><input type="radio" name="ws-weather" value="snow" aria-label="Snow" /><span class="ws-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_snow.webp" alt="" width="32" height="32" /></span></label>
-                <label class="ws-chip" title="Show weather off"><input type="radio" name="ws-weather" value="off" aria-label="Show weather off" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/weather_setting.webp)"></span></span></label>
+              <div class="pg-chips">
+                <label class="pg-chip" title="Clear"><input type="radio" name="ws-weather" value="clear" aria-label="Clear" /><span class="pg-chip-face sky" style="--a:#2B5C8F;--b:#54AAD1"><span class="sun"></span></span></label>
+                <label class="pg-chip" title="Partly cloudy"><input type="radio" name="ws-weather" value="partly" aria-label="Partly cloudy" checked /><span class="pg-chip-face sky" style="--a:#4D7AA8;--b:#8FB6D8"><img src="img/weather_cloudy.webp" alt="" width="32" height="32" /></span></label>
+                <label class="pg-chip" title="Cloudy"><input type="radio" name="ws-weather" value="cloudy" aria-label="Cloudy" /><span class="pg-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_cloudy.webp" alt="" width="32" height="32" /></span></label>
+                <label class="pg-chip" title="Fog"><input type="radio" name="ws-weather" value="fog" aria-label="Fog" /><span class="pg-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_fog.webp" alt="" width="32" height="32" /></span></label>
+                <label class="pg-chip" title="Rain"><input type="radio" name="ws-weather" value="rain" aria-label="Rain" /><span class="pg-chip-face sky" style="--a:#353C45;--b:#52595E"><img src="img/weather_rain.webp" alt="" width="32" height="32" /></span></label>
+                <label class="pg-chip" title="Thunderstorm"><input type="radio" name="ws-weather" value="storm" aria-label="Thunderstorm" /><span class="pg-chip-face sky" style="--a:#353C45;--b:#52595E"><img src="img/weather_storm.webp" alt="" width="32" height="32" /></span></label>
+                <label class="pg-chip" title="Snow"><input type="radio" name="ws-weather" value="snow" aria-label="Snow" /><span class="pg-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_snow.webp" alt="" width="32" height="32" /></span></label>
+                <label class="pg-chip" title="Show weather off"><input type="radio" name="ws-weather" value="off" aria-label="Show weather off" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/weather_setting.webp)"></span></span></label>
               </div>
             </div>
 
-            <div class="ws-group reveal" role="radiogroup" aria-labelledby="g-moon">
-              <div class="ws-group-head"><h3 id="g-moon">Moon phase</h3><span class="ws-val" data-ws-value="moon" aria-hidden="true">Live</span></div>
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-moon">
+              <div class="pg-group-head"><h3 id="g-moon">Moon phase</h3><span class="pg-val" data-ws-value="moon" aria-hidden="true">Live</span></div>
               <p>
                 At night the moon takes the sun's place on the arc. Live
                 follows the real phase, or you can keep your favourite.
               </p>
-              <div class="ws-chips">
-                <label class="ws-chip" title="Live"><input type="radio" name="ws-moon" value="live" aria-label="Live. Follows the real moon phase." checked /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_live.webp)"></span></span></label>
-                <label class="ws-chip" title="New moon"><input type="radio" name="ws-moon" value="0" aria-label="New moon" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_new.webp)"></span></span></label>
-                <label class="ws-chip" title="Waxing crescent"><input type="radio" name="ws-moon" value="125" aria-label="Waxing crescent" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_waxing_crescent.webp)"></span></span></label>
-                <label class="ws-chip" title="First quarter"><input type="radio" name="ws-moon" value="250" aria-label="First quarter" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_first_quarter.webp)"></span></span></label>
-                <label class="ws-chip" title="Waxing gibbous"><input type="radio" name="ws-moon" value="375" aria-label="Waxing gibbous" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_waxing_gibbous.webp)"></span></span></label>
-                <label class="ws-chip" title="Full moon"><input type="radio" name="ws-moon" value="500" aria-label="Full moon" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_full.webp)"></span></span></label>
-                <label class="ws-chip" title="Waning gibbous"><input type="radio" name="ws-moon" value="625" aria-label="Waning gibbous" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_waning_gibbous.webp)"></span></span></label>
-                <label class="ws-chip" title="Last quarter"><input type="radio" name="ws-moon" value="750" aria-label="Last quarter" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_last_quarter.webp)"></span></span></label>
-                <label class="ws-chip" title="Waning crescent"><input type="radio" name="ws-moon" value="875" aria-label="Waning crescent" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/moon_waning_crescent.webp)"></span></span></label>
+              <div class="pg-chips">
+                <label class="pg-chip" title="Live"><input type="radio" name="ws-moon" value="live" aria-label="Live. Follows the real moon phase." checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_live.webp)"></span></span></label>
+                <label class="pg-chip" title="New moon"><input type="radio" name="ws-moon" value="0" aria-label="New moon" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_new.webp)"></span></span></label>
+                <label class="pg-chip" title="Waxing crescent"><input type="radio" name="ws-moon" value="125" aria-label="Waxing crescent" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_waxing_crescent.webp)"></span></span></label>
+                <label class="pg-chip" title="First quarter"><input type="radio" name="ws-moon" value="250" aria-label="First quarter" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_first_quarter.webp)"></span></span></label>
+                <label class="pg-chip" title="Waxing gibbous"><input type="radio" name="ws-moon" value="375" aria-label="Waxing gibbous" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_waxing_gibbous.webp)"></span></span></label>
+                <label class="pg-chip" title="Full moon"><input type="radio" name="ws-moon" value="500" aria-label="Full moon" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_full.webp)"></span></span></label>
+                <label class="pg-chip" title="Waning gibbous"><input type="radio" name="ws-moon" value="625" aria-label="Waning gibbous" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_waning_gibbous.webp)"></span></span></label>
+                <label class="pg-chip" title="Last quarter"><input type="radio" name="ws-moon" value="750" aria-label="Last quarter" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_last_quarter.webp)"></span></span></label>
+                <label class="pg-chip" title="Waning crescent"><input type="radio" name="ws-moon" value="875" aria-label="Waning crescent" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_waning_crescent.webp)"></span></span></label>
               </div>
             </div>
 
-            <div class="ws-group reveal" role="radiogroup" aria-labelledby="g-bar">
-              <div class="ws-group-head"><h3 id="g-bar">Middle bar</h3><span class="ws-val" data-ws-value="bar" aria-hidden="true">Seconds</span></div>
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-bar">
+              <div class="pg-group-head"><h3 id="g-bar">Middle bar</h3><span class="pg-val" data-ws-value="bar" aria-hidden="true">Seconds</span></div>
               <p>
                 The thin line along the horizon fills up. Pick what it counts:
                 seconds, minutes or battery. You can also turn it off.
                 Minutes and battery stay on in always-on mode.
               </p>
-              <div class="ws-chips">
-                <label class="ws-chip" title="Seconds"><input type="radio" name="ws-bar" value="0" aria-label="Seconds. Fills once a minute." checked /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/middle_bar_seconds.webp)"></span></span></label>
-                <label class="ws-chip" title="Minutes"><input type="radio" name="ws-bar" value="1" aria-label="Minutes. Fills once an hour." /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/middle_bar_minutes.webp)"></span></span></label>
-                <label class="ws-chip" title="Battery"><input type="radio" name="ws-bar" value="2" aria-label="Battery. Shows the charge left." /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/middle_bar_battery.webp)"></span></span></label>
-                <label class="ws-chip" title="Off"><input type="radio" name="ws-bar" value="3" aria-label="Off" /><span class="ws-chip-face"><span class="ws-ico" style="--i:url(img/middle_bar_disabled.webp)"></span></span></label>
+              <div class="pg-chips">
+                <label class="pg-chip" title="Seconds"><input type="radio" name="ws-bar" value="0" aria-label="Seconds. Fills once a minute." checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/middle_bar_seconds.webp)"></span></span></label>
+                <label class="pg-chip" title="Minutes"><input type="radio" name="ws-bar" value="1" aria-label="Minutes. Fills once an hour." /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/middle_bar_minutes.webp)"></span></span></label>
+                <label class="pg-chip" title="Battery"><input type="radio" name="ws-bar" value="2" aria-label="Battery. Shows the charge left." /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/middle_bar_battery.webp)"></span></span></label>
+                <label class="pg-chip" title="Off"><input type="radio" name="ws-bar" value="3" aria-label="Off" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/middle_bar_disabled.webp)"></span></span></label>
               </div>
             </div>
 
-            <div class="ws-group reveal">
-              <div class="ws-group-head"><h3>Sunrise and sunset</h3><span class="ws-val" data-ws-value="hours" aria-hidden="true">5 AM · 7 PM</span></div>
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3>Sunrise and sunset</h3><span class="pg-val" data-ws-value="hours" aria-hidden="true">5 AM · 7 PM</span></div>
               <p>
                 Set the hours to match where you live and the time of year,
                 and the sky, the arc and the stars shift with them.
               </p>
-              <p class="ws-sub" id="g-sunrise">Sunrise</p>
-              <div class="ws-chips" role="radiogroup" aria-labelledby="g-sunrise">
-                <label class="ws-chip" title="4 AM"><input type="radio" name="ws-S" value="4" aria-label="4 AM" /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_4.webp)"></span></span></label>
-                <label class="ws-chip" title="5 AM"><input type="radio" name="ws-S" value="5" aria-label="5 AM" checked /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_5.webp)"></span></span></label>
-                <label class="ws-chip" title="6 AM"><input type="radio" name="ws-S" value="6" aria-label="6 AM" /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_6.webp)"></span></span></label>
-                <label class="ws-chip" title="7 AM"><input type="radio" name="ws-S" value="7" aria-label="7 AM" /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_7.webp)"></span></span></label>
+              <p class="pg-sub" id="g-sunrise">Sunrise</p>
+              <div class="pg-chips" role="radiogroup" aria-labelledby="g-sunrise">
+                <label class="pg-chip" title="4 AM"><input type="radio" name="ws-S" value="4" aria-label="4 AM" /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_4.webp)"></span></span></label>
+                <label class="pg-chip" title="5 AM"><input type="radio" name="ws-S" value="5" aria-label="5 AM" checked /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_5.webp)"></span></span></label>
+                <label class="pg-chip" title="6 AM"><input type="radio" name="ws-S" value="6" aria-label="6 AM" /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_6.webp)"></span></span></label>
+                <label class="pg-chip" title="7 AM"><input type="radio" name="ws-S" value="7" aria-label="7 AM" /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_7.webp)"></span></span></label>
               </div>
-              <p class="ws-sub" id="g-sunset">Sunset</p>
-              <div class="ws-chips" role="radiogroup" aria-labelledby="g-sunset">
-                <label class="ws-chip" title="5 PM"><input type="radio" name="ws-E" value="17" aria-label="5 PM" /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_5.webp)"></span></span></label>
-                <label class="ws-chip" title="6 PM"><input type="radio" name="ws-E" value="18" aria-label="6 PM" /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_6.webp)"></span></span></label>
-                <label class="ws-chip" title="7 PM"><input type="radio" name="ws-E" value="19" aria-label="7 PM" checked /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_7.webp)"></span></span></label>
-                <label class="ws-chip" title="8 PM"><input type="radio" name="ws-E" value="20" aria-label="8 PM" /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_8.webp)"></span></span></label>
-                <label class="ws-chip" title="9 PM"><input type="radio" name="ws-E" value="21" aria-label="9 PM" /><span class="ws-chip-face num"><span class="ws-ico" style="--i:url(img/setting_9.webp)"></span></span></label>
+              <p class="pg-sub" id="g-sunset">Sunset</p>
+              <div class="pg-chips" role="radiogroup" aria-labelledby="g-sunset">
+                <label class="pg-chip" title="5 PM"><input type="radio" name="ws-E" value="17" aria-label="5 PM" /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_5.webp)"></span></span></label>
+                <label class="pg-chip" title="6 PM"><input type="radio" name="ws-E" value="18" aria-label="6 PM" /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_6.webp)"></span></span></label>
+                <label class="pg-chip" title="7 PM"><input type="radio" name="ws-E" value="19" aria-label="7 PM" checked /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_7.webp)"></span></span></label>
+                <label class="pg-chip" title="8 PM"><input type="radio" name="ws-E" value="20" aria-label="8 PM" /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_8.webp)"></span></span></label>
+                <label class="pg-chip" title="9 PM"><input type="radio" name="ws-E" value="21" aria-label="9 PM" /><span class="pg-chip-face num"><span class="pg-ico" style="--i:url(img/setting_9.webp)"></span></span></label>
               </div>
             </div>
 
-            <div class="ws-group reveal">
-              <div class="ws-group-head"><h3>And the rest</h3></div>
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3>And the rest</h3></div>
               <p>
                 The slot under the date shows your next event by default. You
                 can swap in any long-text complication. Tap the date to open
                 your calendar.
               </p>
-              <div class="ws-switches">
-                <label class="ws-switch"><input type="checkbox" name="ws-showDate" checked /><span class="ws-switch-face"><span class="ws-ico" style="--i:url(img/date_setting.webp)"></span><span class="label">Show date</span><span class="track"></span></span></label>
-                <label class="ws-switch"><input type="checkbox" name="ws-shadow" /><span class="ws-switch-face"><span class="ws-ico" style="--i:url(img/border_shadow_setting.webp)"></span><span class="label">Border shadow</span><span class="track"></span></span></label>
-                <label class="ws-switch"><input type="checkbox" name="ws-aod" /><span class="ws-switch-face"><span class="ws-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Preview always‑on</span><span class="track"></span></span></label>
-                <label class="ws-switch"><input type="checkbox" name="ws-cxAod" checked /><span class="ws-switch-face"><span class="ws-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Complication in always‑on</span><span class="track"></span></span></label>
+              <div class="pg-switches">
+                <label class="pg-switch"><input type="checkbox" name="ws-showDate" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/date_setting.webp)"></span><span class="label">Show date</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="ws-shadow" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/border_shadow_setting.webp)"></span><span class="label">Border shadow</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="ws-aod" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Preview always‑on</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="ws-cxAod" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Complication in always‑on</span><span class="track"></span></span></label>
               </div>
             </div>
           </div>
@@ -246,8 +246,8 @@
             newer. It runs entirely on the watch.
           </p>
         </div>
-        <div class="ws-cards stagger">
-          <article class="card ws-card reveal lift">
+        <div class="pg-cards stagger">
+          <article class="card pg-card reveal lift">
             <span class="num" aria-hidden="true">1</span>
             <h3>Get it from Google Play</h3>
             <p>
@@ -256,7 +256,7 @@
               watch.
             </p>
           </article>
-          <article class="card ws-card reveal lift">
+          <article class="card pg-card reveal lift">
             <span class="num" aria-hidden="true">2</span>
             <h3>Phone won't offer it?</h3>
             <p>
@@ -266,7 +266,7 @@
               on your paired watch.
             </p>
           </article>
-          <article class="card ws-card reveal lift">
+          <article class="card pg-card reveal lift">
             <span class="num" aria-hidden="true">3</span>
             <h3>Set it as your face</h3>
             <ol>
@@ -279,7 +279,7 @@
       </div>
     </section>
 
-    <section class="section ws-more">
+    <section class="section pg-more">
       <div class="wrap wrap-prose">
         <article class="prose reveal">
           <h2>Privacy</h2>
