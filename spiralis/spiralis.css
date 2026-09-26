@@ -34,6 +34,13 @@
 ---------------------------------------------------------------------------- */
 .sp-face {
   --sp-ease: cubic-bezier(0.2, 0, 0, 1); /* the prototype's 400 ms state change */
+  /* The watch draws its text in the system font (SYNC_TO_DEVICE): Roboto.
+     No contextual alternates or ligatures: Google Sans Flex, the fallback,
+     turns "77°/99°" into a fraction, and on a curved path it falls apart. */
+  --sp-font: Roboto, var(--font);
+  font-feature-settings: "calt" 0, "liga" 0, "frac" 0;
+  font-kerning: none;
+  text-rendering: geometricPrecision;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -58,7 +65,7 @@
 
 .sp-num {
   fill: #938f99;
-  font-family: var(--font);
+  font-family: var(--sp-font);
   font-size: 21px;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -81,7 +88,7 @@
 
 .sp-arc-label {
   fill: #cac4d0;
-  font-family: var(--font);
+  font-family: var(--sp-font);
   font-size: 20px;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -96,7 +103,7 @@
 .sp-ring-aod { fill: none; stroke: #2b2930; stroke-width: 1.5; stroke-linecap: round; opacity: 0; }
 .sp-ring-text,
 .sp-ring-title {
-  font-family: var(--font);
+  font-family: var(--sp-font);
   font-weight: 500;
   text-anchor: middle;
   dominant-baseline: central;
@@ -111,8 +118,10 @@
 .sp-range { fill: none; stroke: var(--sp-con); stroke-width: 5; stroke-linecap: round; }
 .sp-marker { fill: var(--sp-pri); }
 
-/* Long text along the edge: two lines, a little smaller */
-.sp-long { fill: #e6e0e9; font-size: 18px; font-weight: 600; stroke-width: 7px; }
+/* Long text along the edge: two lines, a little smaller. Text on the inside
+   of a curve crowds together, so it gets extra tracking (the Wear OS type
+   tokens' arc-bottom tracking). */
+.sp-long { fill: #e6e0e9; font-size: 17px; letter-spacing: 1.2px; stroke-width: 6px; }
 
 .sp-index.is-off,
 .sp-sec.is-off,
@@ -211,22 +220,11 @@
 .sp-preset input:focus-visible ~ img { outline: 2px solid var(--accent); outline-offset: 6px; }
 .sp-preset input:active ~ img { --press-dur: 0.1s; --press-ease: var(--ease); scale: 0.94; }
 
-/* Palette chips: the spiral colour, with the hour-line colour as a dot */
+/* Palette chips, drawn like the watch editor's colour swatch: the primary
+   on top, the spiral colour bottom right, the container bottom left */
 .pg-chip-face.swatch {
-  position: relative;
-  border-color: transparent;
-  background: var(--sw);
-}
-.pg-chip-face.swatch::after {
-  content: "";
-  position: absolute;
-  right: 7px;
-  bottom: 7px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--ter);
-  box-shadow: 0 0 0 2px var(--sw);
+  border: 0; /* a transparent border would tile the gradient into it */
+  background: conic-gradient(from 90deg, var(--b) 0 90deg, var(--c) 0 180deg, var(--a) 0);
 }
 
 /* Straight from the watch: the Play Store captures */

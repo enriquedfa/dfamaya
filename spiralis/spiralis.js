@@ -208,8 +208,8 @@
         bl: [hole(ICON_BL.x, ICON_BL.y, 17)], // its text carries its own black outline
       };
       el("path", { id: `${id}trl`, d: arcD(185, 285, 345) }, defs);
-      el("path", { id: `${id}bl1`, d: arcD(184, 165, 95) }, defs); // inner line: the date
-      el("path", { id: `${id}bl2`, d: arcD(205, 165, 95) }, defs); // outer line: the temperatures
+      el("path", { id: `${id}bl1`, d: arcD(185, 165, 95) }, defs); // inner line: the date
+      el("path", { id: `${id}bl2`, d: arcD(207, 165, 95) }, defs); // outer line: the temperatures
 
       // The complications of the Play Store captures (and the later design
       // iteration in the Spiralis repo, reference/claude-design/spiralis-face/).

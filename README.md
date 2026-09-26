@@ -271,6 +271,11 @@ face's `watchface.xml` follows, so the numbers read 1:1 against both:
 - **Colour.** The palette's four roles are registered custom properties
   (`--sp-pri`, `--sp-acc`, `--sp-con`, `--sp-ter`), so a palette change
   eases across the face, the glow and the headline together.
+- **Type.** The face's text is Roboto, the watch's system font, with
+  contextual alternates and ligatures off: Google Sans Flex would turn
+  "77°/99°" into a fraction, which falls apart on a curved path.
+- **Palette chips** are drawn like the watch editor's swatch: the primary on
+  top, the spiral colour bottom right, the container bottom left.
 - During 11:23 the Fibonacci numerals light up, like on the watch.
 
 If the face changes in the Spiralis repo (a new palette, a new preset), make
