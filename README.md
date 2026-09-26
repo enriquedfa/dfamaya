@@ -303,15 +303,13 @@ or Edge 123, Safari 17.5 or Firefox 120 (all from 2024).
 
 When submitting an app on Google Play, use:
 
-**Wear OS Watch Faces**
+**Wear OS Watch Faces** (WatchSky, Spiralis and any later face: one shared
+policy, so these URLs never change)
 
 - Privacy policy URL: `https://enriquedfa.github.io/dfamaya/watchfaces/privacy.html`
-- Support / website URL: `https://enriquedfa.github.io/dfamaya/watchfaces/support.html`
-
-**Spiralis** (privacy is the shared watch-face policy)
-
-- Privacy policy URL: `https://enriquedfa.github.io/dfamaya/watchfaces/privacy.html`
-- Website URL: `https://enriquedfa.github.io/dfamaya/spiralis/`
+- Support URL: `https://enriquedfa.github.io/dfamaya/watchfaces/support.html`
+- Website URL: `https://enriquedfa.github.io/dfamaya/watchfaces/` (WatchSky) or
+  `https://enriquedfa.github.io/dfamaya/spiralis/` (Spiralis)
 
 **Brief**
 
