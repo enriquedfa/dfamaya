@@ -100,7 +100,7 @@
 
 /* Ring: short text on a dark disk, the value large and the title small */
 .sp-disk { fill: #2b2930; }
-.sp-ring-aod { fill: none; stroke: #2b2930; stroke-width: 1.5; stroke-linecap: round; opacity: 0; }
+.sp-ring-aod { fill: none; stroke: var(--sp-aod4, #2b2930); stroke-width: 1.5; stroke-linecap: round; opacity: 0; }
 .sp-ring-text,
 .sp-ring-title {
   font-family: var(--sp-font);
@@ -127,29 +127,31 @@
 .sp-sec.is-off,
 .sp-slot.is-off { opacity: 0; }
 
-/* Always-on: no palette colour anywhere, a thin grey spiral, everything dim
-   but legible. The seconds hand goes. */
-.is-aod .sp-line { stroke: #2b2930; }
-.is-aod .sp-cur { stroke: #cac4d0; }
-.is-aod .sp-spiral { stroke: #938f99; stroke-width: 1.5; }
-.is-aod .sp-num { fill: #79747e; }
+/* Always-on: no palette colour anywhere, a thin spiral, everything dim but
+   legible. The seconds hand goes. Colours come from the AOD color option's
+   five tones, bright to dim (--sp-aod0…4, set by spiralis.js); Neutral is
+   the grey scale in the fallbacks. */
+.is-aod .sp-line { stroke: var(--sp-aod4, #2b2930); }
+.is-aod .sp-cur { stroke: var(--sp-aod0, #cac4d0); }
+.is-aod .sp-spiral { stroke: var(--sp-aod1, #938f99); stroke-width: 1.5; }
+.is-aod .sp-num { fill: var(--sp-aod2, #79747e); }
 .is-aod .sp-num.is-cur,
-.is-aod .sp-num.is-lit { fill: #cac4d0; }
-.is-aod .sp-dial { stroke: #49454f; }
-.is-aod .sp-hand { stroke: #cac4d0; }
+.is-aod .sp-num.is-lit { fill: var(--sp-aod0, #cac4d0); }
+.is-aod .sp-dial { stroke: var(--sp-aod3, #49454f); }
+.is-aod .sp-hand { stroke: var(--sp-aod0, #cac4d0); }
 .is-aod .sp-sec { opacity: 0; }
-.is-aod .sp-dot { fill: #cac4d0; }
-.is-aod .sp-track { stroke: #2b2930; }
-.is-aod .sp-prog { stroke: #938f99; }
-.is-aod .sp-icon { fill: #938f99; }
-.is-aod .sp-arc-label { fill: #79747e; }
+.is-aod .sp-dot { fill: var(--sp-aod0, #cac4d0); }
+.is-aod .sp-track { stroke: var(--sp-aod4, #2b2930); }
+.is-aod .sp-prog { stroke: var(--sp-aod1, #938f99); }
+.is-aod .sp-icon { fill: var(--sp-aod1, #938f99); }
+.is-aod .sp-arc-label { fill: var(--sp-aod2, #79747e); }
 .is-aod .sp-disk,
 .is-aod .sp-notch { opacity: 0; }
 .is-aod .sp-ring-aod { opacity: 1; }
-.is-aod .sp-range { stroke: #2b2930; }
-.is-aod .sp-marker { fill: #938f99; }
+.is-aod .sp-range { stroke: var(--sp-aod4, #2b2930); }
+.is-aod .sp-marker { fill: var(--sp-aod1, #938f99); }
 .is-aod .sp-ring-text,
-.is-aod .sp-ring-title { fill: #cac4d0; }
+.is-aod .sp-ring-title { fill: var(--sp-aod0, #cac4d0); }
 
 /* ----------------------------------------------------------------------------
    Landing page

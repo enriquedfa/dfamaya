@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Spiralis · A golden spiral tells the hour</title>
-  <meta name="description" content="Spiralis is a Wear OS watch face where a golden spiral is the hour hand. Twelve hour lines cut from the same curve, four complications, seven palettes and a low-power always-on mode. No accounts, no ads, no data collection." />
+  <meta name="description" content="Spiralis is a Wear OS watch face where a golden spiral is the hour hand. Twelve hour lines cut from the same curve, four complications, seven palettes, 12- or 24-hour numerals and a low-power always-on mode in four colors. No accounts, no ads, no data collection." />
   <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
@@ -125,8 +125,9 @@
               <p>
                 Find the hour line the spiral is lying on, or about to reach.
                 That line glows, and its numeral brightens. The small dial in
-                the middle keeps the minutes. Drag the slider under the watch,
-                press play to watch a whole turn, or jump to a time:
+                the middle keeps the minutes; tap it to open your alarms. Drag
+                the slider under the watch, press play to watch a whole turn,
+                or jump to a time:
               </p>
               <div class="pg-moments">
                 <button type="button" class="btn btn-ghost btn-sm" data-sp-moment="+1h">On the hour</button>
@@ -185,6 +186,39 @@
             </div>
 
             <div class="pg-group reveal">
+              <div class="pg-group-head"><h3>24-hour</h3></div>
+              <p>
+                Each stack of numerals names the next time the spiral reaches
+                it: from 7:00 the top reads 13–18, from 13:00 the bottom reads
+                19–24, and they switch back at 19:00 and 1:00. Two-digit
+                numerals get wider gaps in their lines.
+              </p>
+              <div class="pg-switches">
+                <label class="pg-switch"><input type="checkbox" name="sp-h24" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_hours_24.webp)"></span><span class="label">24-hour numerals</span><span class="track"></span></span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3 id="g-aod">Always-on</h3><span class="pg-val" data-sp-value="aodPalette" aria-hidden="true">Neutral</span></div>
+              <p>
+                A thin spiral and dim lines, lighting only a few percent of
+                the screen. Keep it neutral grey or tint it red, blue or
+                green: each keeps the same brightness. Keep the complications,
+                or hide them for a spiral-only face.
+              </p>
+              <div class="pg-chips" role="radiogroup" aria-labelledby="g-aod">
+                <label class="pg-chip" title="Neutral"><input type="radio" name="sp-aodPalette" value="neutral" aria-label="Always-on color: Neutral" checked /><span class="pg-chip-face swatch" style="--a:#CAC4D0;--b:#938F99;--c:#49454F"></span></label>
+                <label class="pg-chip" title="Red"><input type="radio" name="sp-aodPalette" value="red" aria-label="Always-on color: Red" /><span class="pg-chip-face swatch" style="--a:#FEAFA8;--b:#C07D77;--c:#5F3C39"></span></label>
+                <label class="pg-chip" title="Blue"><input type="radio" name="sp-aodPalette" value="blue" aria-label="Always-on color: Blue" /><span class="pg-chip-face swatch" style="--a:#A1CAFF;--b:#6D94C5;--c:#354862"></span></label>
+                <label class="pg-chip" title="Green"><input type="radio" name="sp-aodPalette" value="green" aria-label="Always-on color: Green" /><span class="pg-chip-face swatch" style="--a:#92DBA1;--b:#6BA076;--c:#334F39"></span></label>
+              </div>
+              <div class="pg-switches">
+                <label class="pg-switch"><input type="checkbox" name="sp-aod" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_aod_palette.webp)"></span><span class="label">Preview always‑on</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="sp-cxAod" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_aod.webp)"></span><span class="label">Complications in always‑on</span><span class="track"></span></span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal">
               <div class="pg-group-head"><h3>And the rest</h3></div>
               <p>
                 Here the rings show the weather and the time, and the arcs
@@ -194,8 +228,6 @@
               </p>
               <div class="pg-switches">
                 <label class="pg-switch"><input type="checkbox" name="sp-seconds" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_seconds.webp)"></span><span class="label">Seconds hand</span><span class="track"></span></span></label>
-                <label class="pg-switch"><input type="checkbox" name="sp-aod" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_aod.webp)"></span><span class="label">Preview always‑on</span><span class="track"></span></span></label>
-                <label class="pg-switch"><input type="checkbox" name="sp-cxAod" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_aod.webp)"></span><span class="label">Complications in always‑on</span><span class="track"></span></span></label>
               </div>
             </div>
           </div>
@@ -270,7 +302,8 @@
           <h2>On your wrist in a minute</h2>
           <p class="lede">
             Spiralis is free on Google Play for watches with Wear OS 6 or
-            newer. It runs entirely on the watch.
+            newer. It runs entirely on the watch, in English, Spanish,
+            Portuguese, German, French and Japanese.
           </p>
         </div>
         <div class="sp-install">

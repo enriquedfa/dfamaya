@@ -12,7 +12,8 @@
    - the center minute index, the optional red seconds hand
    - the four complication slots (two rings, two edge arcs), with the spiral
      hidden in a tight halo around each one
-   - the seven palettes and the always-on look
+   - the seven palettes, 12- or 24-hour numerals, and the always-on look in
+     its four AOD colors
 
    Markup hooks:
      [data-sp-face]        a .dial to draw the face into. Optional
@@ -66,6 +67,17 @@
 
   const MINUTES = { 0: "Center dial", 1: "Hour line fill", 2: "Dial and fill" };
 
+  // AOD color: the always-on tones, bright to dim (the XML's aod_palette):
+  // current hour, hand, dot, text; spiral, icons, progress; numerals, labels;
+  // minute ring; hour lines, tracks. Red, blue and green keep each tone's
+  // lightness, so always-on brightness doesn't change.
+  const AOD_PALETTES = {
+    neutral: { name: "Neutral", c: ["#CAC4D0", "#938F99", "#79747E", "#49454F", "#2B2930"] },
+    red: { name: "Red", c: ["#FEAFA8", "#C07D77", "#9C6662", "#5F3C39", "#3A2321"] },
+    blue: { name: "Blue", c: ["#A1CAFF", "#6D94C5", "#5A789F", "#354862", "#1E2B3C"] },
+    green: { name: "Green", c: ["#92DBA1", "#6BA076", "#588261", "#334F39", "#1D2F21"] },
+  };
+
   const rad = (deg) => (deg * Math.PI) / 180;
   const pol = (r, deg) => ({ x: C + r * Math.cos(rad(deg)), y: C + r * Math.sin(rad(deg)) });
   const f1 = (n) => +n.toFixed(1);
@@ -100,28 +112,78 @@
   const SLIDE_STEP = 9.5;
   const MIN_PIECE = rad(5);
 
-  const LINES = [];
-  for (let k = 1; k <= 12; k++) {
-    const r = RAD[(k - 1) % 6];
-    const thK = thetaAt(r);
-    const rot = rotAt(k);
-    const thN = thK - rad(SLIDE_FIRST - ((k - 1) % 6) * SLIDE_STEP);
-    const g = Math.asin((k >= 10 ? 16.5 : 10.5) / rAt(thN)); // gap for the numeral
-    const pieces = [[thK - HALF, thN - g], [thN + g, Math.min(thK + HALF, TH_MAX)]].filter(([a, b]) => b - a >= MIN_PIECE);
-    const rn = rAt(thN);
-    LINES[k] = {
-      rot, pieces, outer: thK + HALF,
-      d: pieces.map(([a, b]) => seg(rot, a, b, 36)).join(" "),
-      num: { x: f1(C + rn * Math.cos(rot - thN)), y: f1(C + rn * Math.sin(rot - thN)) },
-    };
+  const numTh = (k) => thetaAt(RAD[(k - 1) % 6]) - rad(SLIDE_FIRST - ((k - 1) % 6) * SLIDE_STEP);
+  const ptAt = (k, th) => {
+    const r = rAt(th);
+    const a = rotAt(k) - th;
+    return [C + r * Math.cos(a), C + r * Math.sin(a)];
+  };
+  // Parts of line k's [a, b] that stay out of the boxes
+  function clearOf(k, a, b, boxes, n = 360) {
+    const out = [];
+    let start = null;
+    for (let i = 0; i <= n; i++) {
+      const th = a + ((b - a) * i) / n;
+      const [x, y] = ptAt(k, th);
+      const free = !boxes.some(([x0, y0, x1, y1]) => x >= x0 && x <= x1 && y >= y0 && y <= y1);
+      if (free && start === null) start = th;
+      if (!free && start !== null) { out.push([start, th]); start = null; }
+    }
+    if (start !== null) out.push([start, b]);
+    return out;
   }
+
+  // The lines for one set of numerals. label(k) is the number line k shows:
+  // k, or k + 12 on a 24-hour stack. Two-digit numerals get a wider gap, and
+  // the other lines of their stack keep out of a ±14 × ±10.5 px box around
+  // them.
+  function buildLines(label) {
+    const lines = [];
+    for (let k = 1; k <= 12; k++) {
+      const thK = thetaAt(RAD[(k - 1) % 6]);
+      const rot = rotAt(k);
+      const thN = numTh(k);
+      const g = Math.asin((label(k) >= 10 ? 16.5 : 10.5) / rAt(thN)); // gap for the numeral
+      const first = k <= 6 ? 1 : 7;
+      const boxes = [];
+      for (let j = first; j < first + 6; j++) {
+        if (label(j) < 10) continue;
+        const [x, y] = ptAt(j, numTh(j));
+        boxes.push([x - 14, y - 10.5, x + 14, y + 10.5]);
+      }
+      const pieces = [[thK - HALF, thN - g], [thN + g, Math.min(thK + HALF, TH_MAX)]]
+        .flatMap(([a, b]) => (boxes.length ? clearOf(k, a, b, boxes) : [[a, b]]))
+        .filter(([a, b]) => b - a >= MIN_PIECE);
+      const rn = rAt(thN);
+      lines[k] = {
+        rot, pieces, outer: thK + HALF,
+        d: pieces.map(([a, b]) => seg(rot, a, b, 36)).join(" "),
+        num: { x: f1(C + rn * Math.cos(rot - thN)), y: f1(C + rn * Math.sin(rot - thN)) },
+      };
+    }
+    return lines;
+  }
+
+  // 24-hour numerals: each stack names the next time the spiral reaches it.
+  // From 7:00 the top reads 13–18, from 13:00 the bottom reads 19–24; they
+  // switch back at 19:00 and 1:00. Four layouts in all, built as needed.
+  const LAYOUTS = {};
+  function layout(h24, h) {
+    const top = h24 && h >= 7 && h < 19;
+    const bottom = h24 && (h >= 13 || h === 0);
+    const key = `${+top}${+bottom}`;
+    const label = (k) => ((k <= 6 ? top : bottom) ? k + 12 : k);
+    LAYOUTS[key] ||= { key, label, lines: buildLines(label) };
+    return LAYOUTS[key];
+  }
+  const LINES = layout(false, 0).lines; // the numerals' positions never move
 
   // Minutes = line fill: the current line fills clockwise over the hour, the
   // way the spiral sweeps it, from its outer end to its inner end: 90° of
   // spiral angle in all (lines 6 and 12 are cut at the rim, so theirs shows
   // up a little later).
-  function lineFill(k, frac) {
-    const L = LINES[k];
+  function lineFill(lines, k, frac) {
+    const L = lines[k];
     const lo = L.outer - HALF * 2 * frac;
     return L.pieces
       .map(([a, b]) => [Math.max(a, lo), b])
@@ -230,7 +292,8 @@
 
       // Hour lines: the 12 dim ones, then the current hour over them
       const lines = el("g", {}, svg);
-      for (let k = 1; k <= 12; k++) el("path", { d: LINES[k].d, class: "sp-line" }, lines);
+      this.lines = [];
+      for (let k = 1; k <= 12; k++) this.lines[k] = el("path", { d: LINES[k].d, class: "sp-line" }, lines);
       this.cur = el("path", { class: "sp-line sp-cur" }, lines);
 
       // The spiral, drawn once at rotation 0 and turned with a transform
@@ -297,7 +360,7 @@
       g.innerHTML = ICONS[name];
     }
 
-    // s: { date, palette, slots, minutes, seconds, aod, cxAod, battery }
+    // s: { date, palette, slots, minutes, seconds, h24, aod, aodPalette, cxAod, battery }
     render(s) {
       const d = s.date;
       const h = d.getHours();
@@ -317,7 +380,20 @@
         host.style.setProperty("--sp-ter", ter);
         this.last.palette = s.palette;
       }
+      if (this.last.aodPalette !== s.aodPalette) {
+        (AOD_PALETTES[s.aodPalette] || AOD_PALETTES.neutral).c
+          .forEach((c, i) => host.style.setProperty(`--sp-aod${i}`, c));
+        this.last.aodPalette = s.aodPalette;
+      }
       host.classList.toggle("is-aod", !!s.aod);
+
+      // Numerals and hour lines: 12-hour, or 13–24 on the stacks that are next
+      const lay = layout(!!s.h24, h);
+      if (lay.key !== this.last.layout) {
+        this.last.layout = lay.key;
+        this.last.curD = null;
+        for (let k = 1; k <= 12; k++) this.lines[k].setAttribute("d", lay.lines[k].d);
+      }
 
       // The spiral: 30° an hour, landing on line k at k o'clock
       const rot = rotAt(1) + ((hourF - 1) * Math.PI) / 6;
@@ -325,18 +401,22 @@
 
       // Current hour: the whole line, or filling over the hour
       const fill = s.minutes !== "0";
-      const curD = fill ? lineFill(cur, minF) : LINES[cur].d;
+      const curD = fill ? lineFill(lay.lines, cur, minF) : lay.lines[cur].d;
       if (curD !== this.last.curD) this.cur.setAttribute("d", (this.last.curD = curD));
 
       // Numerals: the current hour brightens; during 11:23 the Fibonacci
-      // numerals 1, 2, 3, 5 and 8 light up too (11:23:58 reads 1 1 2 3 5 8)
-      const egg = h % 12 === 11 && m === 23;
-      const key = `${cur}|${egg}`;
+      // numerals 1, 2, 3, 5 and 8 light up too (11:23:58 reads 1 1 2 3 5 8).
+      // 23:23 doesn't read that way on the 24-hour face, so there only 11:23.
+      // Lit numerals read 1 2 3 5 8 even on a 24-hour stack.
+      const egg = m === 23 && (h === 11 || (h === 23 && !s.h24));
+      const key = `${cur}|${egg}|${lay.key}`;
       if (key !== this.last.nums) {
         this.last.nums = key;
         for (let k = 1; k <= 12; k++) {
+          const lit = egg && FIB.includes(k);
+          this.nums[k].textContent = lit ? k : lay.label(k);
           this.nums[k].classList.toggle("is-cur", k === cur);
-          this.nums[k].classList.toggle("is-lit", egg && k !== cur && FIB.includes(k));
+          this.nums[k].classList.toggle("is-lit", lit && k !== cur);
         }
       }
 
@@ -377,7 +457,7 @@
         this.wxDate.textContent = `${d.toLocaleDateString("en-US", { weekday: "short" })}, ${month} ${d.getDate()}`;
       }
 
-      return { h, m, cur, egg };
+      return { h, m, cur, egg, num: lay.label(cur) };
     }
   }
 
@@ -403,7 +483,9 @@
     slots: first.slots,
     minutesMode: "0",
     seconds: false,
+    h24: false,
     aod: false,
+    aodPalette: "neutral",
     cxAod: true,
     battery: 72,
   };
@@ -435,7 +517,9 @@
         slots: own ? (PRESETS[f.preset] || PRESETS.full).slots : state.slots,
         minutes: own ? "0" : state.minutesMode,
         seconds: own ? false : state.seconds,
+        h24: own ? false : state.h24,
         aod: own ? false : state.aod,
+        aodPalette: state.aodPalette,
         cxAod: state.cxAod,
         battery: state.battery,
       });
@@ -444,7 +528,7 @@
         const spoken = spokenTime(r.h, r.m);
         const label = state.aod && !own
           ? `Spiralis in always-on mode at ${spoken}`
-          : `Spiralis at ${spoken}: the spiral on ${r.cur}${r.egg ? ", with the Fibonacci numerals lit" : ""}`;
+          : `Spiralis at ${spoken}: the spiral on ${r.num}${r.egg ? ", with the Fibonacci numerals lit" : ""}`;
         if (label !== f.label) f.watch.setAttribute("aria-label", (f.label = label));
       }
       if (i === 0) updatePage(date, r);
@@ -467,13 +551,13 @@
     const spoken = spokenTime(r.h, r.m);
     if (range) {
       if (state.live || document.activeElement !== range) range.value = mins;
-      range.setAttribute("aria-valuetext", `${spoken}, the spiral on ${r.cur}`);
+      range.setAttribute("aria-valuetext", `${spoken}, the spiral on ${r.num}`);
     }
     if (caption) {
-      const label = `${r.cur}|${spoken}|${state.live}|${r.egg}`;
+      const label = `${r.num}|${spoken}|${state.live}|${r.egg}`;
       if (label !== lastLabel) {
         lastLabel = label;
-        caption.querySelector("[data-k=hour]").textContent = r.egg ? "1 · 1 · 2 · 3 · 5 · 8" : `The spiral on ${r.cur}`;
+        caption.querySelector("[data-k=hour]").textContent = r.egg ? "1 · 1 · 2 · 3 · 5 · 8" : `The spiral on ${r.num}`;
         caption.querySelector("[data-k=time]").textContent = state.live ? `${spoken}, now` : spoken;
       }
     }
@@ -487,6 +571,7 @@
     setValue("preset", PRESETS[state.preset]?.name || "Custom");
     setValue("palette", PALETTES[state.palette]?.name || "");
     setValue("minutes", MINUTES[state.minutesMode]);
+    setValue("aodPalette", AOD_PALETTES[state.aodPalette]?.name || "");
   }
   function check(name, value) {
     const n = page?.querySelector(`input[name="${name}"][value="${value}"]`);
@@ -559,6 +644,14 @@
         state.palette = n.value;
       } else if (key === "minutes") {
         state.minutesMode = n.value;
+      } else if (key === "aodPalette") {
+        state.aodPalette = n.value;
+        // Picking an always-on color shows it
+        if (!state.aod) {
+          state.aod = true;
+          const aod = page.querySelector('input[name="sp-aod"]');
+          if (aod) aod.checked = true;
+        }
       } else {
         state[key] = n.checked;
       }
@@ -575,6 +668,7 @@
     }
     state.palette = checked("sp-palette") || state.palette;
     state.minutesMode = checked("sp-minutes") || state.minutesMode;
+    state.aodPalette = checked("sp-aodPalette") || state.aodPalette;
     page.querySelectorAll("input[type=checkbox][name^='sp-']").forEach((n) => { state[n.name.slice(3)] = n.checked; });
     syncValues();
   }
