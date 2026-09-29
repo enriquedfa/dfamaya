@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Spiralis · A golden spiral tells the hour</title>
-  <meta name="description" content="Spiralis is a Wear OS watch face where a golden spiral is the hour hand. Twelve hour lines cut from the same curve, four complications, seven palettes, 12- or 24-hour numerals and a low-power always-on mode in four colors. No accounts, no ads, no data collection." />
+  <meta name="description" content="Spiralis is a Wear OS watch face where a golden spiral is the hour hand. Twelve hour lines cut from the same curve, four complications, twelve palettes, 12- or 24-hour numerals, hour lines that fade out or swirl into the center, and a low-power always-on mode in four colors. No accounts, no ads, no data collection." />
   <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
@@ -143,7 +143,8 @@
               <p>
                 The phone app sets up the face in one tap: a palette and a
                 set of complications. Empty slots draw nothing, so the spiral
-                runs through their space.
+                runs through their space. A fresh install starts in Golden,
+                with all four slots empty.
               </p>
               <div class="sp-presets">
                 <label class="sp-preset"><input type="radio" name="sp-preset" value="full" aria-label="Full. Orange, with all four complications." checked /><img src="img/face_full.webp" alt="" width="96" height="96" loading="lazy" /><span>Full</span></label>
@@ -156,7 +157,7 @@
             <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-palette">
               <div class="pg-group-head"><h3 id="g-palette">Color</h3><span class="pg-val" data-sp-value="palette" aria-hidden="true">Orange</span></div>
               <p>
-                Seven Material&nbsp;3 Expressive palettes, shown the way the
+                Twelve Material&nbsp;3 Expressive palettes, shown the way the
                 watch's editor shows them. Each one colors the spiral, the
                 progress bars and ranges, and the current hour line.
               </p>
@@ -167,6 +168,11 @@
                 <label class="pg-chip" title="Orange"><input type="radio" name="sp-palette" value="orange" aria-label="Orange" checked /><span class="pg-chip-face swatch" style="--a:#FDC799;--b:#EEB98C;--c:#633F1C"></span></label>
                 <label class="pg-chip" title="Golden"><input type="radio" name="sp-palette" value="golden" aria-label="Golden" /><span class="pg-chip-face swatch" style="--a:#FFDEA0;--b:#F3BF48;--c:#5C4300"></span></label>
                 <label class="pg-chip" title="Green"><input type="radio" name="sp-palette" value="green" aria-label="Green" /><span class="pg-chip-face swatch" style="--a:#B7EDE2;--b:#A9DFD4;--c:#194F47"></span></label>
+                <label class="pg-chip" title="Moonstone"><input type="radio" name="sp-palette" value="moonstone" aria-label="Moonstone" /><span class="pg-chip-face swatch" style="--a:#DCE3EE;--b:#B9C8DA;--c:#3C4855"></span></label>
+                <label class="pg-chip" title="Indigo"><input type="radio" name="sp-palette" value="indigo" aria-label="Indigo" /><span class="pg-chip-face swatch" style="--a:#D6E3FF;--b:#A9C7FF;--c:#00468B"></span></label>
+                <label class="pg-chip" title="Lemongrass"><input type="radio" name="sp-palette" value="lemongrass" aria-label="Lemongrass" /><span class="pg-chip-face swatch" style="--a:#E7E79F;--b:#CBCC58;--c:#48490C"></span></label>
+                <label class="pg-chip" title="Peony"><input type="radio" name="sp-palette" value="peony" aria-label="Peony" /><span class="pg-chip-face swatch" style="--a:#FFD9E5;--b:#FFB0CF;--c:#762D4F"></span></label>
+                <label class="pg-chip" title="Ember"><input type="radio" name="sp-palette" value="ember" aria-label="Ember" /><span class="pg-chip-face swatch" style="--a:#FFDAD5;--b:#FFB4A8;--c:#7F2A1F"></span></label>
                 <label class="pg-chip" title="Monochrome"><input type="radio" name="sp-palette" value="monochrome" aria-label="Monochrome" /><span class="pg-chip-face swatch" style="--a:#E2E2E2;--b:#D4D4D4;--c:#454747"></span></label>
               </div>
             </div>
@@ -185,13 +191,46 @@
               </div>
             </div>
 
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-numerals">
+              <div class="pg-group-head"><h3 id="g-numerals">Numerals</h3><span class="pg-val" data-sp-value="numerals" aria-hidden="true">All</span></div>
+              <p>
+                Show all twelve, only the current hour's, or none for a face
+                of just the spiral and its lines. A hidden numeral leaves no
+                gap in its line. Each one has a thin black outline, so it
+                stays readable where the spiral crosses it.
+              </p>
+              <div class="pg-chips">
+                <label class="pg-chip" title="All"><input type="radio" name="sp-numerals" value="all" aria-label="All numerals" checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_numerals_all.webp)"></span></span></label>
+                <label class="pg-chip" title="Current hour"><input type="radio" name="sp-numerals" value="current" aria-label="Current hour's numeral only" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_numerals_current.webp)"></span></span></label>
+                <label class="pg-chip" title="None"><input type="radio" name="sp-numerals" value="none" aria-label="No numerals" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_numerals_none.webp)"></span></span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-hourLines">
+              <div class="pg-group-head"><h3 id="g-hourLines">Hour lines</h3><span class="pg-val" data-sp-value="hourLines" aria-hidden="true">Short</span></div>
+              <p>
+                Keep each line a short piece of the spiral, or let it run on
+                along its own curve: <strong>Fading</strong> reaches from the
+                center dial out past the rim, fading both ways;
+                <strong>Vortex</strong> swirls all the way into the center.
+                They're one curve 30° apart, so they never cross. On the
+                center dial, the current hour lights up along its whole line.
+              </p>
+              <div class="pg-chips">
+                <label class="pg-chip" title="Short"><input type="radio" name="sp-hourLines" value="short" aria-label="Short hour lines" checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_hour_lines_short.webp)"></span></span></label>
+                <label class="pg-chip" title="Fading"><input type="radio" name="sp-hourLines" value="fading" aria-label="Fading hour lines" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_hour_lines_fading.webp)"></span></span></label>
+                <label class="pg-chip" title="Vortex"><input type="radio" name="sp-hourLines" value="vortex" aria-label="Vortex hour lines" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/ic_hour_lines_vortex.webp)"></span></span></label>
+              </div>
+            </div>
+
             <div class="pg-group reveal">
               <div class="pg-group-head"><h3>24-hour</h3></div>
               <p>
                 Each stack of numerals names the next time the spiral reaches
                 it: from 7:00 the top reads 13–18, from 13:00 the bottom reads
                 19–24, and they switch back at 19:00 and 1:00. Two-digit
-                numerals get wider gaps in their lines.
+                numerals get wider gaps in their lines. With no numerals,
+                it has nothing to change.
               </p>
               <div class="pg-switches">
                 <label class="pg-switch"><input type="checkbox" name="sp-h24" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/ic_hours_24.webp)"></span><span class="label">24-hour numerals</span><span class="track"></span></span></label>
@@ -239,7 +278,7 @@
       <div class="wrap">
         <div class="section-head reveal">
           <p class="eyebrow">Straight from the watch</p>
-          <h2>Four presets, seven palettes</h2>
+          <h2>Four presets, twelve palettes</h2>
           <p class="lede">
             Captures from a Wear OS 6 watch. Always-on lights only a few
             percent of the screen and keeps the spiral readable.

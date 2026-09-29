@@ -61,6 +61,8 @@
 
 .sp-line { fill: none; stroke: #49454f; stroke-width: 1.5; stroke-linecap: round; }
 .sp-cur { stroke: var(--sp-ter); stroke-width: 3; }
+/* Hour lines = Fading / Vortex: the lines run on, square-ended, under them */
+.sp-ext { stroke-linecap: butt; }
 .sp-spiral { fill: none; stroke: var(--sp-acc); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 
 .sp-num {
@@ -71,6 +73,12 @@
   letter-spacing: 0.5px;
   text-anchor: middle;
   dominant-baseline: central;
+  /* A thin black outline keeps it readable where the spiral or a line
+     crosses it */
+  paint-order: stroke;
+  stroke: #000;
+  stroke-width: 4px;
+  stroke-linejoin: round;
 }
 .sp-num.is-lit { fill: var(--sp-ter); }
 .sp-num.is-cur { fill: #e6e0e9; }
@@ -125,6 +133,7 @@
 
 .sp-index.is-off,
 .sp-sec.is-off,
+.sp-num.is-off,
 .sp-slot.is-off { opacity: 0; }
 
 /* Always-on: no palette colour anywhere, a thin spiral, everything dim but

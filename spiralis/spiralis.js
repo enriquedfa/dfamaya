@@ -12,8 +12,9 @@
    - the center minute index, the optional red seconds hand
    - the four complication slots (two rings, two edge arcs), with the spiral
      hidden in a tight halo around each one
-   - the seven palettes, 12- or 24-hour numerals, and the always-on look in
-     its four AOD colors
+   - the twelve palettes; numerals all, current hour or none, 12- or 24-hour;
+     hour lines short, fading or vortex; and the always-on look in its four
+     AOD colors
 
    Markup hooks:
      [data-sp-face]        a .dial to draw the face into. Optional
@@ -53,6 +54,11 @@
     orange: { name: "Orange", c: ["#FDC799", "#EEB98C", "#633F1C", "#DCD794"] },
     golden: { name: "Golden", c: ["#FFDEA0", "#F3BF48", "#5C4300", "#FFB599"] },
     green: { name: "Green", c: ["#B7EDE2", "#A9DFD4", "#194F47", "#A9DCF0"] },
+    moonstone: { name: "Moonstone", c: ["#DCE3EE", "#B9C8DA", "#3C4855", "#FDBF8B"] },
+    indigo: { name: "Indigo", c: ["#D6E3FF", "#A9C7FF", "#00468B", "#FFA7CA"] },
+    lemongrass: { name: "Lemongrass", c: ["#E7E79F", "#CBCC58", "#48490C", "#B5B6F6"] },
+    peony: { name: "Peony", c: ["#FFD9E5", "#FFB0CF", "#762D4F", "#D5BCF8"] },
+    ember: { name: "Ember", c: ["#FFDAD5", "#FFB4A8", "#7F2A1F", "#FFB86E"] },
     monochrome: { name: "Monochrome", c: ["#E2E2E2", "#D4D4D4", "#454747", "#D4D4D5"] },
   };
 
@@ -66,6 +72,8 @@
   };
 
   const MINUTES = { 0: "Center dial", 1: "Hour line fill", 2: "Dial and fill" };
+  const NUMERALS = { all: "All", current: "Current hour", none: "None" };
+  const HOUR_LINES = { short: "Short", fading: "Fading", vortex: "Vortex" };
 
   // AOD color: the always-on tones, bright to dim (the XML's aod_palette):
   // current hour, hand, dot, text; spiral, icons, progress; numerals, labels;
@@ -133,25 +141,26 @@
     return out;
   }
 
-  // The lines for one set of numerals. label(k) is the number line k shows:
-  // k, or k + 12 on a 24-hour stack. Two-digit numerals get a wider gap, and
-  // the other lines of their stack keep out of a ±14 × ±10.5 px box around
-  // them.
-  function buildLines(label) {
+  // The lines for one set of numerals. gaps[k] is the number line k's gap is
+  // cut for (k, or k + 12 on a 24-hour stack), or 0 when numeral k is hidden:
+  // then its line runs whole. Two-digit numerals get a wider gap, and the
+  // other lines of their stack keep out of a ±14 × ±10.5 px box around them.
+  function buildLines(gaps) {
     const lines = [];
     for (let k = 1; k <= 12; k++) {
       const thK = thetaAt(RAD[(k - 1) % 6]);
       const rot = rotAt(k);
       const thN = numTh(k);
-      const g = Math.asin((label(k) >= 10 ? 16.5 : 10.5) / rAt(thN)); // gap for the numeral
+      const thHi = Math.min(thK + HALF, TH_MAX);
+      const g = Math.asin((gaps[k] >= 10 ? 16.5 : 10.5) / rAt(thN)); // gap for the numeral
       const first = k <= 6 ? 1 : 7;
       const boxes = [];
       for (let j = first; j < first + 6; j++) {
-        if (label(j) < 10) continue;
+        if (gaps[j] < 10) continue;
         const [x, y] = ptAt(j, numTh(j));
         boxes.push([x - 14, y - 10.5, x + 14, y + 10.5]);
       }
-      const pieces = [[thK - HALF, thN - g], [thN + g, Math.min(thK + HALF, TH_MAX)]]
+      const pieces = (gaps[k] ? [[thK - HALF, thN - g], [thN + g, thHi]] : [[thK - HALF, thHi]])
         .flatMap(([a, b]) => (boxes.length ? clearOf(k, a, b, boxes) : [[a, b]]))
         .filter(([a, b]) => b - a >= MIN_PIECE);
       const rn = rAt(thN);
@@ -164,19 +173,92 @@
     return lines;
   }
 
+  // Hour lines = Fading / Vortex: each line runs on along its own spiral, under
+  // the lines (one curve 30° apart, so they never cross). Fading goes from the
+  // center dial (r 56) out past the rim (r 240), fading out both ways from the
+  // hour segment; Vortex runs inward all the way to the center, fading, and
+  // outward, whole, to the horizontal through the center (90° of spiral angle
+  // past the segment). Near the center they cross numerals 1 and 7, and keep
+  // out of a box around each while it shows (one or two digits wide).
+  const EXT_FADING_IN = thetaAt(56);
+  const EXT_FADING_OUT = thetaAt(240);
+  const EXT_VORTEX_IN = thetaAt(0.5);
+  function buildExts(gaps, style) {
+    const boxes = [1, 7].filter((j) => gaps[j]).map((j) => {
+      const [x, y] = ptAt(j, numTh(j));
+      const hw = gaps[j] >= 10 ? 14 : 9.5;
+      return [x - hw, y - 10.5, x + hw, y + 10.5];
+    });
+    const exts = [];
+    for (let k = 1; k <= 12; k++) {
+      const thK = thetaAt(RAD[(k - 1) % 6]);
+      const lo = thK - HALF;
+      const hi = Math.min(thK + HALF, TH_MAX);
+      const ends = style === "fading"
+        ? [[EXT_FADING_IN, lo], [hi, EXT_FADING_OUT]]
+        : [[EXT_VORTEX_IN, lo], [hi, thK + rad(90)]];
+      exts[k] = ends
+        .filter(([a, b]) => b > a)
+        .flatMap(([a, b]) => (boxes.length ? clearOf(k, a, b, boxes, 720) : [[a, b]]))
+        .filter(([a, b]) => b - a >= MIN_PIECE)
+        .map(([a, b]) => seg(rotAt(k), a, b, Math.max(4, Math.ceil((b - a) / rad(2)))))
+        .join(" ");
+    }
+    return exts;
+  }
+
+  // The fade, as a function of the radius: along one line the spiral angle
+  // grows with log r, so a fade along the line is a radial gradient. Returns
+  // [offset 0–1, opacity] stops for a gradient of radius r.
+  function fadeStops(style, k) {
+    const thK = thetaAt(RAD[(k - 1) % 6]);
+    const rs = rAt(thK - HALF);
+    const rh = rAt(Math.min(thK + HALF, TH_MAX));
+    const N = 12;
+    const stops = [];
+    if (style === "vortex") {
+      // Inward: (r / rs)^1.5, so the tight turns at the center nearly vanish
+      for (let i = 0; i <= N; i++) stops.push([i / N, (i / N) ** 1.5]);
+      return { r: rs, stops };
+    }
+    // Fading: (1 − distance from the segment / the extension's length)^1.6
+    const R = 240;
+    stops.push([0, 0]);
+    for (let i = 0; i <= N; i++) {
+      const r = 56 * (rs / 56) ** (i / N);
+      stops.push([r / R, (i / N) ** 1.6]);
+    }
+    for (let i = 0; i <= N; i++) {
+      const r = rh * (R / rh) ** (i / N);
+      stops.push([r / R, (1 - i / N) ** 1.6]);
+    }
+    return { r: R, stops };
+  }
+
+  // Which numerals show, what they read, and the lines that go with them.
   // 24-hour numerals: each stack names the next time the spiral reaches it.
   // From 7:00 the top reads 13–18, from 13:00 the bottom reads 19–24; they
-  // switch back at 19:00 and 1:00. Four layouts in all, built as needed.
+  // switch back at 19:00 and 1:00. Numerals: all, only the current hour's,
+  // or none; a hidden numeral cuts no gap. The Fibonacci numerals show during
+  // 11:23 in every mode, and outside All they cut 12-hour gaps (they read
+  // 1 2 3 5 8). Layouts are built as needed and kept.
   const LAYOUTS = {};
-  function layout(h24, h) {
+  function layout({ h24, h, numerals, egg, hourLines }) {
+    const cur = h % 12 || 12;
     const top = h24 && h >= 7 && h < 19;
     const bottom = h24 && (h >= 13 || h === 0);
-    const key = `${+top}${+bottom}`;
     const label = (k) => ((k <= 6 ? top : bottom) ? k + 12 : k);
-    LAYOUTS[key] ||= { key, label, lines: buildLines(label) };
-    return LAYOUTS[key];
+    const lit = (k) => egg && FIB.includes(k);
+    const shown = (k) => numerals === "all" || (numerals === "current" && k === cur) || lit(k);
+    const gaps = [0];
+    for (let k = 1; k <= 12; k++) gaps[k] = shown(k) ? (numerals !== "all" && lit(k) ? k : label(k)) : 0;
+    const key = `${hourLines}|${gaps.join(",")}`;
+    LAYOUTS[key] ||= { lines: buildLines(gaps), exts: hourLines === "short" ? null : buildExts(gaps, hourLines) };
+    return { key, label, shown, lit, ...LAYOUTS[key] };
   }
-  const LINES = layout(false, 0).lines; // the numerals' positions never move
+  const FIB = [1, 2, 3, 5, 8];
+  // The numerals' positions never move
+  const LINES = layout({ h24: false, h: 0, numerals: "all", egg: false, hourLines: "short" }).lines;
 
   // Minutes = line fill: the current line fills clockwise over the hour, the
   // way the spiral sweeps it, from its outer end to its inner end: 90° of
@@ -191,8 +273,6 @@
       .map(([a, b]) => seg(L.rot, a, b, Math.max(2, Math.ceil(((b - a) / (HALF * 2)) * 36))))
       .join(" ");
   }
-
-  const FIB = [1, 2, 3, 5, 8];
 
   // Edge arcs: r 208, 60° long, point-symmetric. Each starts at its outer end
   // (345° top right, 165° bottom left), next to its icon.
@@ -290,6 +370,24 @@
         `${WX.now}${WX.unit} · Today ${WX.lo}°/${WX.hi}°`;
       this.icon(bl, "sun", ICON_BL);
 
+      // Hour lines = Fading / Vortex: the rest of each line's spiral, under
+      // the lines, faded by a radial mask per line and cut around the
+      // complications like the spiral. The current hour's lights up over them.
+      this.fadeId = (style, k) => `${id}fade-${style}-${k}`;
+      for (const style of ["fading", "vortex"]) {
+        for (let k = 1; k <= 12; k++) {
+          const { r, stops } = fadeStops(style, k);
+          const grad = el("radialGradient", { id: `${this.fadeId(style, k)}g`, gradientUnits: "userSpaceOnUse", cx: C, cy: C, r: f1(r) }, defs);
+          for (const [o, a] of stops) el("stop", { offset: o.toFixed(4), "stop-color": "#fff", "stop-opacity": a.toFixed(3) }, grad);
+          const m = el("mask", { id: this.fadeId(style, k), maskUnits: "userSpaceOnUse", x: 0, y: 0, width: 450, height: 450 }, defs);
+          el("rect", { width: 450, height: 450, fill: `url(#${this.fadeId(style, k)}g)` }, m);
+        }
+      }
+      this.extG = el("g", { mask: `url(#${id}mask)` }, svg);
+      this.exts = [];
+      for (let k = 1; k <= 12; k++) this.exts[k] = el("path", { class: "sp-line sp-ext" }, this.extG);
+      this.curExt = el("path", { class: "sp-line sp-ext sp-cur" }, this.extG);
+
       // Hour lines: the 12 dim ones, then the current hour over them
       const lines = el("g", {}, svg);
       this.lines = [];
@@ -360,7 +458,8 @@
       g.innerHTML = ICONS[name];
     }
 
-    // s: { date, palette, slots, minutes, seconds, h24, aod, aodPalette, cxAod, battery }
+    // s: { date, palette, slots, minutes, seconds, h24, numerals, hourLines,
+    //      aod, aodPalette, cxAod, battery }
     render(s) {
       const d = s.date;
       const h = d.getHours();
@@ -387,12 +486,30 @@
       }
       host.classList.toggle("is-aod", !!s.aod);
 
-      // Numerals and hour lines: 12-hour, or 13–24 on the stacks that are next
-      const lay = layout(!!s.h24, h);
+      // Numerals and hour lines: which numerals show, 12-hour or 13–24 on the
+      // stacks that are next, and how far the lines run. During 11:23 the
+      // Fibonacci numerals 1, 2, 3, 5 and 8 light up (11:23:58 reads
+      // 1 1 2 3 5 8); 23:23 doesn't read that way on the 24-hour face.
+      const egg = m === 23 && (h === 11 || (h === 23 && !s.h24));
+      const hourLines = s.hourLines || "short";
+      const lay = layout({ h24: !!s.h24, h, numerals: s.numerals || "all", egg, hourLines });
       if (lay.key !== this.last.layout) {
         this.last.layout = lay.key;
         this.last.curD = null;
-        for (let k = 1; k <= 12; k++) this.lines[k].setAttribute("d", lay.lines[k].d);
+        this.last.curExt = null;
+        for (let k = 1; k <= 12; k++) {
+          this.lines[k].setAttribute("d", lay.lines[k].d);
+          this.exts[k].setAttribute("d", lay.exts ? lay.exts[k] : "M0 0");
+          if (lay.exts) this.exts[k].setAttribute("mask", `url(#${this.fadeId(hourLines, k)})`);
+        }
+      }
+      // With Minutes = Center dial the current hour lights up along its whole
+      // line; with the line fill its extensions stay dim, so the fill reads.
+      const extKey = lay.exts && s.minutes === "0" ? `${lay.key}|${cur}` : "";
+      if (extKey !== this.last.curExt) {
+        this.last.curExt = extKey;
+        this.curExt.setAttribute("d", extKey ? lay.exts[cur] : "M0 0");
+        if (extKey) this.curExt.setAttribute("mask", `url(#${this.fadeId(hourLines, cur)})`);
       }
 
       // The spiral: 30° an hour, landing on line k at k o'clock
@@ -404,19 +521,17 @@
       const curD = fill ? lineFill(lay.lines, cur, minF) : lay.lines[cur].d;
       if (curD !== this.last.curD) this.cur.setAttribute("d", (this.last.curD = curD));
 
-      // Numerals: the current hour brightens; during 11:23 the Fibonacci
-      // numerals 1, 2, 3, 5 and 8 light up too (11:23:58 reads 1 1 2 3 5 8).
-      // 23:23 doesn't read that way on the 24-hour face, so there only 11:23.
+      // Numerals: the current hour brightens, the Fibonacci ones light up.
       // Lit numerals read 1 2 3 5 8 even on a 24-hour stack.
-      const egg = m === 23 && (h === 11 || (h === 23 && !s.h24));
-      const key = `${cur}|${egg}|${lay.key}`;
+      const key = `${cur}|${lay.key}|${s.h24}`;
       if (key !== this.last.nums) {
         this.last.nums = key;
         for (let k = 1; k <= 12; k++) {
-          const lit = egg && FIB.includes(k);
+          const lit = lay.lit(k);
           this.nums[k].textContent = lit ? k : lay.label(k);
           this.nums[k].classList.toggle("is-cur", k === cur);
           this.nums[k].classList.toggle("is-lit", lit && k !== cur);
+          this.nums[k].classList.toggle("is-off", !lay.shown(k));
         }
       }
 
@@ -457,7 +572,8 @@
         this.wxDate.textContent = `${d.toLocaleDateString("en-US", { weekday: "short" })}, ${month} ${d.getDate()}`;
       }
 
-      return { h, m, cur, egg, num: lay.label(cur) };
+      // With Numerals = None, 24-hour has no effect
+      return { h, m, cur, egg, num: s.numerals === "none" ? cur : lay.label(cur) };
     }
   }
 
@@ -484,6 +600,8 @@
     minutesMode: "0",
     seconds: false,
     h24: false,
+    numerals: "all",
+    hourLines: "short",
     aod: false,
     aodPalette: "neutral",
     cxAod: true,
@@ -518,6 +636,8 @@
         minutes: own ? "0" : state.minutesMode,
         seconds: own ? false : state.seconds,
         h24: own ? false : state.h24,
+        numerals: own ? "all" : state.numerals,
+        hourLines: own ? "short" : state.hourLines,
         aod: own ? false : state.aod,
         aodPalette: state.aodPalette,
         cxAod: state.cxAod,
@@ -571,6 +691,8 @@
     setValue("preset", PRESETS[state.preset]?.name || "Custom");
     setValue("palette", PALETTES[state.palette]?.name || "");
     setValue("minutes", MINUTES[state.minutesMode]);
+    setValue("numerals", NUMERALS[state.numerals]);
+    setValue("hourLines", HOUR_LINES[state.hourLines]);
     setValue("aodPalette", AOD_PALETTES[state.aodPalette]?.name || "");
   }
   function check(name, value) {
@@ -644,6 +766,8 @@
         state.palette = n.value;
       } else if (key === "minutes") {
         state.minutesMode = n.value;
+      } else if (key === "numerals" || key === "hourLines") {
+        state[key] = n.value;
       } else if (key === "aodPalette") {
         state.aodPalette = n.value;
         // Picking an always-on color shows it
@@ -668,6 +792,8 @@
     }
     state.palette = checked("sp-palette") || state.palette;
     state.minutesMode = checked("sp-minutes") || state.minutesMode;
+    state.numerals = checked("sp-numerals") || state.numerals;
+    state.hourLines = checked("sp-hourLines") || state.hourLines;
     state.aodPalette = checked("sp-aodPalette") || state.aodPalette;
     page.querySelectorAll("input[type=checkbox][name^='sp-']").forEach((n) => { state[n.name.slice(3)] = n.checked; });
     syncValues();
