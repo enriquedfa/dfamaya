@@ -850,8 +850,10 @@
       case "event": {
         const startTime = phoneTime(eventStart);
         const range = `${startTime} - ${phoneTime(eventStart + EVENT_LEN)}`;
-        // In its last hour, a pill counts down to the start
-        const imminence = eventStart - now <= HOUR ? { countdownTo: eventStart } : null;
+        // In its last hour, a pill counts down to the start; once it has
+        // started, it says "Now"
+        const imminence =
+          now >= eventStart ? { text: "Now", accent: true } : eventStart - now <= HOUR ? { countdownTo: eventStart } : null;
         return { ...base, icon: "m-event", role: "secondary", cd: "Event",
           title: EVENT.title, subtitle: range, subtitleCompact: startTime,
           detail: imminence ? [imminence] : [], aux: imminence ? { type: "chip", chip: imminence } : null,
