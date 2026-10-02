@@ -779,7 +779,41 @@
   -webkit-mask-image: linear-gradient(to bottom, #000 76%, transparent);
   mask-image: linear-gradient(to bottom, #000 76%, transparent);
 }
-.app-shot img { width: 100%; height: auto; border-radius: 32px 32px 0 0; }
+.app-shot img { display: block; width: 100%; height: auto; }
+
+/* The screenshot starts at the app bar, so the status bar is drawn: the
+   live clock, the camera, wifi, signal and battery, on the app's own ground */
+.app-status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  padding: 2px 20px 0 24px;
+  border-radius: 32px 32px 0 0;
+  background: #0b0f10;
+  color: #e1e3e3;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.app-punch {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+.app-icons { display: flex; align-items: center; gap: 3px; }
+.app-icons svg { width: 13px; height: 13px; fill: currentColor; }
+@media (prefers-color-scheme: light) {
+  .app-status { background: #e9f0f0; color: #191c1d; }
+}
 
 @media (min-width: 1080px) {
   .app-shot { width: 100%; max-width: 270px; max-height: 620px; }
@@ -1120,7 +1154,9 @@ button.tile-edge:focus-visible { outline: 2px solid var(--t-on-primary); outline
 /* Ring, gauge or disc: 44 dp, a 5 dp stroke, a 22 dp glyph */
 .ww-vis { position: relative; flex: none; width: 44px; height: 44px; }
 .ww-vis.disc { border-radius: 50%; background: var(--track); }
-.ww-arc { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* Visible overflow: weather's marker (and the gap round it) reaches past the
+   44 dp canvas when it sits at the top of the arc */
+.ww-arc { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .ww-arc .tr,
 .ww-arc .in { fill: none; stroke-width: 5; stroke-linecap: round; }
 .ww-arc .tr { stroke: var(--track); }

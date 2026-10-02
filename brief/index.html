@@ -74,6 +74,10 @@
     <symbol id="m-skip-next" viewBox="0 0 24 24"><path d="M16.5,17V7q0-0.43 0.29-0.71T17.5,6t0.71,0.29T18.5,7V17q0,0.43-0.29,0.71T17.5,18t-0.71-0.29Q16.5,17.43 16.5,17Zm-11-0.88V7.88q0-0.45 0.3-0.73Q6.1,6.88 6.5,6.88q0.13,0 0.28,0.02Q6.93,6.93 7.05,7.02l6.2,4.15q0.23,0.15 0.34,0.36T13.7,12t-0.11,0.46q-0.11,0.21-0.34,0.36l-6.2,4.15q-0.13,0.1-0.28,0.13T6.5,17.13q-0.4,0-0.7-0.27T5.5,16.13Z"/></symbol>
     <symbol id="m-skip-prev" viewBox="0 0 24 24"><path d="M5.5,17V7q0-0.43 0.29-0.71T6.5,6T7.21,6.29T7.5,7V17q0,0.43-0.29,0.71T6.5,18q-0.42,0-0.71-0.29Q5.5,17.43 5.5,17Zm11.45-0.02l-6.2-4.15q-0.22-0.15-0.34-0.36T10.3,12t0.11-0.46t0.34-0.36l6.2-4.15q0.13-0.1 0.28-0.13q0.15-0.02 0.27-0.02q0.4,0 0.7,0.27q0.3,0.28 0.3,0.73v8.25q0,0.45-0.3,0.73t-0.7,0.27q-0.13,0-0.27-0.02t-0.28-0.13Z"/></symbol>
     <symbol id="m-check" viewBox="0 0 24 24"><path d="M9.55,15.15l8.48-8.48q0.3-0.3 0.7-0.3t0.7,0.3q0.3,0.3 0.3,0.71T19.43,8.1l-9.18,9.2q-0.3,0.3-0.7,0.3t-0.7-0.3L4.55,13q-0.3-0.3-0.29-0.71t0.31-0.71t0.71-0.3T6,11.58l3.55,3.58Z"/></symbol>
+    <!-- The phone screenshot's status bar -->
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M10.23,20.27Q9.5,19.55 9.5,18.5t0.73-1.77T12,16t1.78,0.73T14.5,18.5t-0.72,1.77T12,21t-1.77-0.73Zm5.34-9.67q1.69,0.6 3.06,1.65q0.5,0.38 0.51,0.99T18.7,14.3q-0.42,0.43-1.05,0.44T16.53,14.4q-0.95-0.65-2.1-1.02T12,13T9.58,13.38T7.48,14.4q-0.5,0.35-1.13,0.33T5.3,14.27q-0.43-0.45-0.43-1.06t0.5-0.99q1.38-1.05 3.06-1.64T12,10t3.56,0.6Zm2.32-5.58q2.76,1.03 4.96,2.9q0.5,0.42 0.52,1.05t-0.42,1.07q-0.43,0.43-1.05,0.44T20.78,10.1q-1.8-1.47-4.04-2.29T12,7T7.26,7.81T3.23,10.1q-0.5,0.4-1.13,0.39q-0.63-0.01-1.05-0.44Q0.6,9.6 0.63,8.98T1.15,7.93q2.2-1.88 4.96-2.9T12,4t5.89,1.02Z"/></symbol>
+    <symbol id="i-signal" viewBox="0 -960 960 960"><path d="M177-80q-18 0-29.5-12T136-120q0-8 3-15t9-13l664-664q6-6 13-9t15-3q16 0 28 11.5t12 29.5v643q0 25-17.5 42.5T820-80H177Z"/></symbol>
+    <symbol id="i-battery-full" viewBox="0 0 24 24"><path d="M8,22q-0.42,0-0.71-0.29Q7,21.43 7,21V5Q7,4.57 7.29,4.29T8,4h2V3q0-0.43 0.29-0.71T11,2h2q0.43,0 0.71,0.29T14,3V4h2q0.43,0 0.71,0.29T17,5V21q0,0.43-0.29,0.71T16,22H8Z"/></symbol>
     <symbol id="i-gplay" viewBox="0 0 24 24"><path d="M6.5 3.6c-.6-.4-1.5 0-1.5.8v15.2c0 .8.9 1.2 1.5.8l12.3-7.6a1 1 0 0 0 0-1.7z"/></symbol>
   </svg>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -285,7 +289,7 @@
 
           <article class="cell cell-widget reveal lift">
             <div class="cell-stage">
-              <div class="pw-wall" data-surface="phone" data-size="4x2">
+              <div class="pw-wall" data-surface="phone" data-size="4x1">
                 <div class="bw" role="group" aria-label="Brief's phone widget"><div class="swap-stack"></div></div>
               </div>
             </div>
@@ -295,10 +299,10 @@
               <div class="pw-sizes" role="group" aria-label="Widget size">
                 <button type="button" class="btn btn-ghost btn-sm pw-size" data-pw-size="2x1" aria-pressed="false" aria-label="2 by 1"></button>
                 <button type="button" class="btn btn-ghost btn-sm pw-size" data-pw-size="3x1" aria-pressed="false" aria-label="3 by 1"></button>
-                <button type="button" class="btn btn-ghost btn-sm pw-size" data-pw-size="4x1" aria-pressed="false" aria-label="4 by 1"></button>
+                <button type="button" class="btn btn-ghost btn-sm pw-size" data-pw-size="4x1" aria-pressed="true" aria-label="4 by 1"></button>
                 <button type="button" class="btn btn-ghost btn-sm pw-size" data-pw-size="2x2" aria-pressed="false" aria-label="2 by 2"></button>
                 <button type="button" class="btn btn-ghost btn-sm pw-size" data-pw-size="3x2" aria-pressed="false" aria-label="3 by 2"></button>
-                <button type="button" class="btn btn-ghost btn-sm pw-size" data-pw-size="4x2" aria-pressed="true" aria-label="4 by 2"></button>
+                <button type="button" class="btn btn-ghost btn-sm pw-size" data-pw-size="4x2" aria-pressed="false" aria-label="4 by 2"></button>
               </div>
             </div>
           </article>
@@ -326,6 +330,11 @@
             </div>
             <div class="cell-shot">
               <div class="app-shot">
+                <div class="app-status" aria-hidden="true">
+                  <time class="app-time" data-clock><span data-k="h">10</span>:<span data-k="m">08</span></time>
+                  <span class="app-punch"></span>
+                  <span class="app-icons"><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 24"><use href="#i-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-battery-full"></use></svg></span>
+                </div>
                 <picture>
                   <source srcset="img/app-home-light.webp" media="(prefers-color-scheme: light)" />
                   <img src="img/app-home-dark.webp" width="720" height="1462" loading="lazy" decoding="async"

@@ -1041,8 +1041,8 @@
     const card = host.querySelector(".bw");
     const sizeButtons = $$("[data-pw-size]", host.closest(".cell") || document);
     const dark = matchMedia("(prefers-color-scheme: dark)");
-    let size = host.dataset.size || "4x2";
-    let layout = { cols: 4, stacked: true };
+    let size = host.dataset.size || "4x1";
+    let layout = { cols: 4, stacked: false };
     let last = null;
     const s = slot(
       card.querySelector(".swap-stack"),

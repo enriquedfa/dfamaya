@@ -27,7 +27,9 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
   launcher vectors
 - `brief/og.png` — link preview image (1200×630)
 - `brief/img/` — phone app screenshots (dark and light; the watch's Bluetooth
-  name is painted out)
+  name is painted out). They start at the app bar: the page draws the status
+  bar above them (the live clock, the camera, wifi, signal and battery), on
+  each screenshot's own background colour
 
 ### Wear OS Watch Faces (WatchSky)
 
