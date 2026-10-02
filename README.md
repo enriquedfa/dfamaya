@@ -22,6 +22,7 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
   in the Brief repo; only the layout lives here)
 - `brief/brief.css` — landing page + Brief's face styles (also used on the home page)
 - `brief/demo.js` — the demo: one glance state drawn on every surface
+  (the complications, the tile, the Wear OS widget and the phone widget)
 - `brief/icon.svg`, `brief/icon-180.png` — Brief's icon, redrawn from the app's
   launcher vectors
 - `brief/og.png` — link preview image (1200×630)
@@ -89,7 +90,7 @@ raw value.
 - **Radius.** `--radius-sm`, `--radius`, `--radius-lg` and `--radius-full`
   (pills).
 
-The watch faces, the tile and the phone widget are drawings of real
+The watch faces, the tile and the two widgets are drawings of real
 hardware, sized in `cqw` from the dial or copied from the apps' own values,
 so they keep their literal numbers.
 
@@ -157,9 +158,9 @@ the header, and FAQ answers fade in as they open.
 ## The Brief page
 
 `brief/demo.js` runs one glance state and draws it on every surface on the
-page at once: the three complication slots on the watch face, the tile and the
-phone widget. The clock, the event countdown and the song position are live;
-on Now playing the ring slot counts the song up from 00:00.
+page at once: the three complication slots on the watch face, the tile, the
+Wear OS widget and the phone widget. The clock, the countdowns and the song
+position are live; on Now playing the ring slot counts the song up from 00:00.
 
 - **The story.** The hero and the list of sources share one section. The watch
   is `position: sticky` (beside the list on desktop, pinned under the header
@@ -172,17 +173,43 @@ on Now playing the ring slot counts the song up from 00:00.
   page.
 - **What each slot shows** (title vs. text line, icon, uppercase short text,
   the weather ring's marker dot) follows the watch's `ComplicationRenderer`.
-  The tile follows `BriefTileRenderer` (Material 3 `primaryLayout`): a title,
-  one card layout per source, the edge button or "Updated" line, and the rim
-  progress ring for music and events. The widget follows the real phone
-  widget: badge, two lines, and a pill, play/pause or progress bar when the
-  glance has one.
+- **The tile** follows `BriefTileRenderer` (Material 3 `primaryLayout`, on a
+  227 dp screen): a title, then the Tiles Design Kit card each glance uses — a
+  data card with its ring inside (event, reminder, low battery), a title card
+  (the track, over its cover once the preview plays; the date, in the tonal
+  colour), an app card (a notification) or weather's own hero, rain chip and
+  high/low — and the glance's own action on the edge button (Calendar,
+  play/pause, mark done, open) or Brief's mark. Weather has no button, just
+  "Updated 4m ago". Countdowns read like the tile's: "12 min", "1 h", "Now".
+- **The Wear OS widget** follows `BriefWearWidget` at the code previews'
+  squircle sizes, a 166 × 60 dp card and a 166 × 96 dp one (8 dp container
+  padding, 26 dp corners), drawn at 1 dp = 1px and zoomed to the cell. Each
+  card leads with its source: a ring with the glyph, weather's gauge, or a
+  disc; the tall card trades the ring for a disc over a bar (weather's
+  carries today's low and high). A reminder gets the mark-done button
+  instead, music is a player (one ringed play/pause on the small card,
+  ⏮ ⏯ ⏭ on the tall one) and the date is just its lines. Colours are Brief's
+  dark scheme from `BriefWearWidgetTheme.kt`, each source on its tonal
+  container, as the widget always draws them.
+- **The phone widget** follows `BriefGlanceWidget`, ported from the widget
+  prototype: the launcher's grid cell for each size (`data-pw-size`), the
+  responsive bin the host picks, and that bin's template (CompactCard,
+  RowCard or StackCard), with Brief's light or dark scheme following the
+  page and the card at 70% over a wallpaper. The event pill is a ticking
+  Chronometer.
+- **Buttons work.** Play/pause, ⏮ and ⏭, and mark done (`data-act`) do the
+  same on every surface: ▶ is a tap on the watch (it plays the song), ⏸
+  pauses it (or, before the song has played, pauses the silent made-up
+  track where it is), ⏮ starts it over, ⏭ moves on to the next glance, and
+  mark done drops the reminder to the date.
 - **Colour.** Each source has its tone-30 / tone-90 pair from the phone app's
   `Theme.kt`. The page glow, the chips and the watch face all ease to the
   current source's colour. The headline gradient stays fixed, so no glance
   can wash it out.
 - **Icons** are an inline SVG sprite built from the watch app's own
-  `res/drawable` Material Symbols, plus a few rounded symbols for the page.
+  `res/drawable` Material Symbols, the phone widget's from `:mobile`'s
+  (the `m-` symbols: rounded, filled), plus a few rounded symbols for the
+  page.
 - It pauses when it's off screen or the tab is hidden, has a pause button, and
   uses a plain crossfade for people who prefer reduced motion.
 - **Running order.** The demo follows the app's priority order, the same
@@ -210,9 +237,11 @@ on Now playing the ring slot counts the song up from 00:00.
   a low volume (`SONG_VOLUME`; iOS ignores page volume). The sound belongs
   to the music glance: it fades out when another glance takes over and
   comes back when music does, until someone pauses it. While it plays, the
-  watch, tile and widget follow the real position, the complication's glyph
-  flips between play and pause like the watch app's, and the Media Session
-  API puts the track in the phone's own media controls. Only a page with
+  watch, tile and widgets follow the real position, the complication's glyph
+  flips between play and pause like the watch app's, the tile and the Wear
+  OS widget put Apple's cover art behind the track (it's only fetched once
+  the preview plays), and the Media Session API puts the track in the
+  phone's own media controls. Only a page with
   `data-song-autoplay` starts the song by itself, so the small watch on the
   home page stays silent. Browsers that can't play AAC never see any of it,
   and there ▶ just starts the demo. The track details are the `SONG` object

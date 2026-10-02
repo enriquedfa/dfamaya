@@ -1,15 +1,20 @@
 /* Brief demo — one glance state, drawn on every surface on the page.
  *
  * Like the app: a single "winning" source at a time, and the complications,
- * the tile and the phone widget all show it in lock-step. On its own it
- * cycles like the app's onboarding; while the visitor scrolls through the
- * list of sources, the step in the middle of the screen takes over. The
- * clock, the countdown and the song position are live.
+ * the tile, the Wear OS widget and the phone widget all show it in
+ * lock-step. On its own it cycles like the app's onboarding; while the
+ * visitor scrolls through the list of sources, the step in the middle of the
+ * screen takes over. The clock, the countdowns and the song position are
+ * live, and the surfaces' own buttons (play/pause, skip, mark done) work.
  *
  * Surfaces are opt-in by markup, so one script runs the landing page and the
  * small watch on the home page:
  *   [data-cx="long|ranged|short"]  complication slots on the watch face
- *   [data-surface="tile|widget"]   the tile and the phone widget
+ *   [data-surface="tile"]          the tile (BriefTileRenderer)
+ *   [data-surface="wear"]          the Wear OS widget, small and large
+ *                                  (BriefWearWidget)
+ *   [data-surface="phone"]         the phone widget (BriefGlanceWidget), with
+ *                                  [data-pw-size] buttons to resize it
  *   [data-chip="<id>"]             source picker buttons
  *   [data-step="<id>"]             scroll-story steps (pin the watch)
  *   [data-caption]                 name + one-liner for the current source
@@ -50,18 +55,44 @@
   const fmtWeekdayShort = new Intl.DateTimeFormat(dateLocale, { weekday: "short" });
   const fmtMonthDay = new Intl.DateTimeFormat(dateLocale, { month: "long", day: "numeric" });
 
-  // "10:54 AM" -> "10:54am", the compact form Brief uses on the wrist
-  const time = (ms) => fmtTime.format(ms).replace(/\s?([AP])\.?M\.?$/i, (_, a) => `${a.toLowerCase()}m`);
+  // "10:54 AM" -> "10:54am" and "9:00 AM" -> "9am", the compact form Brief
+  // uses on the wrist
+  const time = (ms) =>
+    fmtTime
+      .format(ms)
+      .replace(/\s?([AP])\.?M\.?$/i, (_, a) => `${a.toLowerCase()}m`)
+      .replace(/:00(?=[ap]m$)/, "");
+
+  // The phone draws times and dates the platform's way ("10:20 AM",
+  // "Thu, Oct 2"), not the wrist's compact one.
+  const phoneTime = (ms) => new Intl.DateTimeFormat(dateLocale, { hour: "numeric", minute: "2-digit", hour12 }).format(ms);
+  const fmtPhoneMedium = new Intl.DateTimeFormat(dateLocale, { weekday: "long", month: "short", day: "numeric" });
+  const fmtPhoneLong = new Intl.DateTimeFormat(dateLocale, { weekday: "long", month: "long", day: "numeric" });
+  const fmtMonthDayShort = new Intl.DateTimeFormat(dateLocale, { month: "short", day: "numeric" });
+  const fmtMonth = new Intl.DateTimeFormat(dateLocale, { month: "long" });
 
   // ---------------------------------------------------------------------------
   // Live state behind the glances
   // ---------------------------------------------------------------------------
   const MIN = 60_000;
+  const HOUR = 60 * MIN;
   const LOOKAHEAD_MIN = 30;
+  const EVENT_LEN = 15 * MIN;
   let eventStart = Date.now() + 12 * MIN;
+
+  // The reminder runs for an hour from the last quarter hour; the tile's ring
+  // drains to its end.
+  const REM_WINDOW = HOUR;
+  const quarter = (ms) => Math.floor(ms / (15 * MIN)) * 15 * MIN;
+  let remStart = quarter(Date.now());
+
+  const postedAt = Date.now() - 2 * MIN; // when the message came in
 
   const TRACK_LEN_S = 248; // 4:08
   let trackStartedAt = Date.now(); // restarts each time music comes on the watch
+  // A widget's or the tile's ⏸ pauses the made-up track (silently), at this
+  // many seconds in; ▶ then plays the real song.
+  let fakePausedAt = null;
 
   // The one real song: Apple's official 30 s preview, streamed from Apple
   // (never hosted here), credited with a link back to Apple Music. It only
@@ -105,8 +136,33 @@
   const pad = (n) => String(n).padStart(2, "0");
   const clamp01 = (v) => Math.min(1, Math.max(0, v));
 
+  // Where the music glance is: the real preview while it's loaded, the
+  // made-up track otherwise.
+  function musicState(now) {
+    if (songLive()) {
+      return { elapsed: audio.currentTime, progress: audio.currentTime / (audio.duration || 30), paused: !songPlaying() };
+    }
+    const elapsed = fakePausedAt ?? ((now - trackStartedAt) / 1000) % TRACK_LEN_S;
+    return { elapsed, progress: elapsed / TRACK_LEN_S, paused: fakePausedAt != null };
+  }
+
+  // The tile's and the Wear widget's countdown: minutes rounded up, whole
+  // hours from 60, never "1 h 5 min", and "Now" at zero.
+  const countdown = (ms) => {
+    if (ms <= 0) return "Now";
+    const min = Math.ceil(ms / MIN);
+    return min < 60 ? `${min} min` : `${Math.floor(min / 60)} h`;
+  };
+
+  const EVENT = { title: "Standup", place: "Room 4B" };
+  const NOTE = { app: "Messages", title: "Alex", text: "On my way, 5 min out" };
+
   // bg / fg are each source's identity colours from the app's Theme.kt (tone 30 / tone 90).
   // `icon` is the source's badge on the page; `face` is the glyph the complication draws.
+  // glance() returns what each surface shows: the three complication types,
+  // the tile (title, main card, edge button or foot line) and the Wear
+  // widget (its colour role, then a visual, two lines and maybe a bar or a
+  // button). The phone widget builds its own card: see phoneCard().
   const SOURCES = [
     {
       id: "music",
@@ -118,25 +174,27 @@
       face: "play",
       glance(now) {
         // While the preview is loaded, everything follows the audio itself.
-        const live = songLive();
-        const elapsed = live ? audio.currentTime : ((now - trackStartedAt) / 1000) % TRACK_LEN_S;
-        const progress = live ? audio.currentTime / (audio.duration || 30) : elapsed / TRACK_LEN_S;
-        const paused = live && !songPlaying();
-        const s = Math.floor(elapsed);
+        const m = musicState(now);
+        const s = Math.floor(m.elapsed);
+        // The cover shows once the preview plays: until someone asks for the
+        // song, the page fetches nothing from Apple.
+        const cover = songLive() ? SONG.art : null;
         return {
           // Like the watch: ▶ while playing, ⏸ while paused (a status glyph)
-          face: paused ? "pause" : "play",
+          face: m.paused ? "pause" : "play",
           long: { title: SONG.artist, text: SONG.title },
           // The ring counts up the song's position, 00:00 onwards
-          ranged: { lines: [`${pad(Math.floor(s / 60))}:${pad(s % 60)}`], value: progress },
+          ranged: { lines: [`${pad(Math.floor(s / 60))}:${pad(s % 60)}`], value: m.progress },
           short: { lines: [SONG.title] },
           tile: {
-            title: paused ? "Paused" : "Now playing",
-            ring: progress,
-            card: { kind: "music", title: SONG.title, artist: SONG.artist },
-            edge: { text: "Player" },
+            title: m.paused ? "Paused" : "Now playing",
+            card: { kind: "title", title: SONG.title, text: SONG.artist, cover },
+            edge: { icon: m.paused ? "play" : "pause", act: "play", label: m.paused ? "Play" : "Pause" },
           },
-          widget: { title: SONG.title, text: SONG.artist, bar: progress, button: paused ? "play" : "pause" },
+          wear: {
+            role: "primary",
+            music: { title: SONG.title, text: SONG.artist, paused: m.paused, progress: m.progress, cover },
+          },
         };
       },
       onShow(now) {
@@ -144,6 +202,7 @@
         // counts up from 00:00 every time music comes on. It starts on the
         // second, like the once-a-second tick, so each tick adds one.
         trackStartedAt = now - (now % 1000);
+        fakePausedAt = null;
       },
     },
     {
@@ -156,15 +215,16 @@
       face: "notification",
       glance() {
         return {
-          long: { title: "Messages", text: "Alex: On my way" },
-          ranged: { lines: ["Messages"], value: 0.7 },
-          short: { lines: ["Messages"] },
+          long: { title: NOTE.app, text: `${NOTE.title}: On my way` },
+          ranged: { lines: [NOTE.app], value: 0.7 },
+          short: { lines: [NOTE.app] },
           tile: {
             title: "Notification",
-            card: { kind: "notification", app: "Messages", headline: "Alex", body: "On my way, 5 min out" },
-            edge: { icon: "brief" },
+            card: { kind: "app", glyph: "chat", app: NOTE.app, time: time(postedAt), title: NOTE.title, text: NOTE.text },
+            edge: { icon: "open" },
           },
-          widget: { title: "Weekend plans: Alex", text: "On my way, 5 min out" },
+          // The app over the sender, as the long complication pairs them
+          wear: { role: "secondary", visual: "disc", glyph: "chat", title: NOTE.app, text: NOTE.title },
         };
       },
     },
@@ -179,18 +239,34 @@
       glance(now) {
         const mins = Math.max(1, Math.ceil((eventStart - now) / MIN));
         const inWords = mins === 1 ? "In 1 minute" : `In ${mins} mins`; // the wrist's wording
-        const range = `${time(eventStart)} – ${time(eventStart + 15 * MIN)}`;
+        const left = clamp01((eventStart - now) / (LOOKAHEAD_MIN * MIN)); // the ring drains as it nears
         return {
-          long: { title: inWords, text: "Standup" },
+          long: { title: inWords, text: EVENT.title },
           ranged: { lines: [`${mins}m`], value: clamp01(mins / LOOKAHEAD_MIN) },
           short: { lines: [`${mins}m`] },
           tile: {
             title: "Up next",
-            ring: clamp01(mins / LOOKAHEAD_MIN),
-            card: { kind: "event", title: "Standup", range, location: "Room 4B" },
+            min: true,
+            card: {
+              kind: "data",
+              glyph: "event",
+              ring: left,
+              value: countdown(eventStart - now),
+              label: EVENT.title,
+              // A large screen shows more: the start and the place
+              details: [`At ${time(eventStart)}`, EVENT.place],
+            },
             edge: { text: "Calendar" },
           },
-          widget: { title: "Standup", text: range, pill: `${mins} min` },
+          wear: {
+            role: "secondary",
+            visual: "ring",
+            glyph: "event",
+            value: left,
+            title: EVENT.title,
+            text: countdown(eventStart - now),
+            detail: EVENT.place,
+          },
         };
       },
       onShow(now) {
@@ -213,10 +289,11 @@
           short: { lines: ["15%"] },
           tile: {
             title: "Battery",
-            card: { kind: "battery", big: "15%", label: "Phone battery low" },
+            min: true,
+            card: { kind: "data", glyph: "battery", ring: 0.15, value: "15%", label: "Phone battery low" },
             edge: { icon: "brief" },
           },
-          widget: { title: "Phone battery low", text: "15%", bar: 0.15 },
+          wear: { role: "error", visual: "ring", glyph: "battery", value: 0.15, title: "15%", text: "Phone battery low" },
         };
       },
     },
@@ -237,10 +314,10 @@
           short: { lines: [`${t}°`] },
           tile: {
             title: "Weather",
-            card: { kind: "weather", temp: `${t}°${unit}`, sub: "Sunny", rain: "20%", hi, lo },
+            card: { kind: "weather", temp: `${t}°${unit}`, cond: "Clear", rain: "20%", hi, lo },
             foot: "Updated 4m ago",
           },
-          widget: { title: `${t}°${unit}`, text: "Sunny", hilo: [hi, lo], bar: pos, marker: true },
+          wear: { role: "tertiary", visual: "gauge", glyph: "sun", value: pos, title: `${t}°${unit}`, text: "Clear", lo, hi },
         };
       },
     },
@@ -252,18 +329,24 @@
       fg: "#FFDEAE",
       icon: "reminder",
       face: "pill",
-      glance() {
+      glance(now) {
+        const left = remStart + REM_WINDOW - now;
         return {
           long: { title: null, text: "Meds" },
-          ranged: { lines: ["Meds"], value: 0.62 },
+          ranged: { lines: ["Meds"], value: clamp01(left / REM_WINDOW) },
           short: { lines: ["Meds"] },
           tile: {
             title: "Reminder",
-            card: { kind: "reminder", text: "Meds" },
-            edge: { icon: "brief" },
+            min: true,
+            card: { kind: "data", glyph: "pill", ring: clamp01(left / REM_WINDOW), value: countdown(left), label: "Meds" },
+            edge: { icon: "check", act: "done", label: "Mark done" },
           },
-          widget: { title: "Meds", text: "Reminder" },
+          // No ring: the mark-done button takes its place
+          wear: { role: "tertiary", button: "done", title: "Meds", text: phoneTime(remStart) },
         };
+      },
+      onShow(now) {
+        if (remStart + REM_WINDOW - now < 5 * MIN) remStart = quarter(now);
       },
     },
     {
@@ -278,16 +361,18 @@
         const d = new Date(now);
         const midnight = new Date(d).setHours(0, 0, 0, 0);
         const day = String(d.getDate());
+        const weekday = fmtWeekday.format(d);
         return {
-          long: { title: fmtWeekday.format(d), text: day },
+          long: { title: weekday, text: day },
           ranged: { lines: [fmtWeekdayShort.format(d), day], value: (now - midnight) / (24 * 60 * MIN) },
           short: { lines: [fmtWeekdayShort.format(d), day] },
+          // The default date formats: the weekday over "dd"
           tile: {
             title: "Today",
-            card: { kind: "date", big: fmtWeekday.format(d), sub: fmtMonthDay.format(d) },
+            card: { kind: "title", tonal: true, display: weekday, text: pad(d.getDate()) },
             edge: { icon: "brief" },
           },
-          widget: { title: fmtWeekday.format(d), text: fmtMonthDay.format(d) },
+          wear: { role: "floor", plain: true, title: weekday, text: pad(d.getDate()) },
         };
       },
     },
@@ -339,6 +424,7 @@
     );
     old.forEach((n) => {
       n.classList.add("leaving");
+      n.inert = true;
       n.animate(
         soft
           ? [{ opacity: 1 }, { opacity: 0 }]
@@ -446,51 +532,87 @@
     });
   });
 
+  // The tile and the two widgets are drawn from an HTML string. mount()
+  // slides the new glance in; patch() redraws in place only when something
+  // visible changed, and keeps keyboard focus on the button it was on.
+  function slot(stack, cls, render, after) {
+    let src = null;
+    let node = null;
+    let html = "";
+    return {
+      mount(s, g, animate) {
+        src = s;
+        html = render(src, g);
+        node = document.createElement("div");
+        node.className = cls;
+        node.innerHTML = html;
+        after?.(node);
+        swap(stack, node, animate);
+      },
+      patch(g, { fade = false } = {}) {
+        if (!node) return;
+        const next = render(src, g);
+        if (next !== html) {
+          const focused = document.activeElement?.closest?.("[data-act]");
+          const act = focused && node.contains(focused) ? focused.dataset.act : null;
+          node.innerHTML = html = next;
+          if (act) node.querySelector(`[data-act="${act}"]`)?.focus({ preventScroll: true });
+          if (fade && node.animate && !reduceMotion.matches) {
+            node.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], {
+              duration: 260,
+              easing: "cubic-bezier(0.2, 0, 0, 1)",
+            });
+          }
+        }
+        after?.(node);
+      },
+    };
+  }
+
+  const pct = (v) => (clamp01(v) * 100).toFixed(2);
+
   // Tile: Material 3 primaryLayout, after the watch's BriefTileRenderer. A
-  // title up top, one card per source, an edge button (or, for weather, when
-  // it was updated) and, for music and events, a progress ring round the rim.
-  const tileCard = (src, c) => {
-    const k = (key, v, cls) => `<span class="${cls}" data-k="${key}">${esc(v)}</span>`;
+  // title up top, one card per glance (a data card with its ring, a title
+  // card, an app card, or weather's own layout), then the glance's own action
+  // on the edge button, or for weather when it was updated.
+  const tileRing = (v) =>
+    `<svg class="t-ring" viewBox="0 0 100 100" aria-hidden="true">` +
+    `<circle class="t-track" cx="50" cy="50" r="45" />` +
+    (v > 0.001 ? `<circle class="t-ind" cx="50" cy="50" r="45" pathLength="100" stroke-dasharray="${pct(v)} 100" />` : "") +
+    `</svg>`;
+
+  const tileCard = (c) => {
     switch (c.kind) {
-      case "event":
-        return `<div class="t-card t-start">
-          <span class="t-row">${svgIcon("event", "t-ico")}${k("t-title", c.title, "t-title clamp2")}</span>
-          ${k("t-range", c.range, "t-label")}
-          ${k("t-loc", c.location, "t-body")}
-        </div>`;
-      case "music":
-        return `<div class="t-card t-start">
-          <span class="t-row">${svgIcon("music", "t-ico")}${k("t-title", c.title, "t-title clamp2")}</span>
-          <span class="t-row t-gap">${svgIcon("artist", "t-ico-sm")}${k("t-artist", c.artist, "t-label-sm")}</span>
-        </div>`;
-      case "notification":
-        return `<div class="t-card t-start">
-          <span class="t-row">${svgIcon("notification", "t-ico")}${k("t-app", c.app, "t-label")}</span>
-          ${k("t-head", c.headline, "t-title")}
-          ${k("t-bodytext", c.body, "t-body")}
-        </div>`;
-      case "battery":
-        return `<div class="t-card">
-          <span class="t-row t-row-hero">${svgIcon("battery", "t-ico-hero")}
-            <span class="t-col">${k("t-big", c.big, "t-display")}${k("t-lbl", c.label, "t-label")}</span>
+      case "data":
+        return `<div class="t-data">
+          <span class="t-graph">${tileRing(c.ring)}${svgIcon(c.glyph, "t-glyph")}</span>
+          <span class="t-text">
+            <span class="t-value">${esc(c.value)}</span>
+            <span class="t-label">${esc(c.label)}</span>
+            ${(c.details || []).map((d) => `<span class="t-detail">${esc(d)}</span>`).join("")}
           </span>
         </div>`;
-      case "reminder":
-        return `<div class="t-card">
-          <span class="t-row t-row-hero">${svgIcon(src.face, "t-ico-rem")}${k("t-title", c.text, "t-title t-grow")}${svgIcon("check", "t-ico-check")}</span>
+      case "title":
+        if (c.display) {
+          return `<div class="t-tcard${c.tonal ? " tonal" : ""}"><span class="t-tc-display">${esc(c.display)}</span><span class="t-tc-text">${esc(c.text)}</span></div>`;
+        }
+        return `<div class="t-tcard${c.cover ? " cover" : ""}"${c.cover ? ` style="--cover: url('${c.cover}')"` : ""}>
+          <span class="t-tc-title">${esc(c.title)}</span><span class="t-tc-text">${esc(c.text)}</span>
         </div>`;
-      case "date":
-        return `<div class="t-card t-center">${k("t-big", c.big, "t-display-sm")}${k("t-sub", c.sub, "t-title")}</div>`;
+      case "app":
+        return `<div class="t-app">
+          <span class="t-app-head">${svgIcon(c.glyph)}<span class="t-app-name">${esc(c.app)}</span><span class="t-app-time">${esc(c.time)}</span></span>
+          <span class="t-app-title">${esc(c.title)}</span>
+          <span class="t-app-text">${esc(c.text)}</span>
+        </div>`;
       case "weather":
         return `<div class="t-weather">
-          <div class="t-card t-center t-hero">
-            ${svgIcon("sun", "t-ico-hero")}${k("t-temp", c.temp, "t-display")}${k("t-cond", c.sub, "t-label-sm")}
-          </div>
+          <div class="t-hero">${svgIcon("sun")}<span class="t-temp">${esc(c.temp)}</span><span class="t-cond">${esc(c.cond)}</span></div>
           <div class="t-side">
-            <div class="t-pill t-rain">${svgIcon("rain", "t-ico-rain")}${esc(c.rain)}</div>
-            <div class="t-pill t-hilo">
-              <span>${svgIcon("arrow-up", "t-ico-hilo")}${c.hi}°</span>
-              <span>${svgIcon("arrow-down", "t-ico-hilo")}${c.lo}°</span>
+            <div class="t-chip t-rain">${svgIcon("rain")}<span><span class="sr-only">Rain </span>${esc(c.rain)}</span></div>
+            <div class="t-chip t-hilo">
+              <span><span class="sr-only">High </span>${svgIcon("w-up")}${c.hi}°</span>
+              <span><span class="sr-only">Low </span>${svgIcon("w-down")}${c.lo}°</span>
             </div>
           </div>
         </div>`;
@@ -498,84 +620,494 @@
     return "";
   };
 
+  const tileHtml = (src, g) => {
+    const t = g.tile;
+    const e = t.edge;
+    const bottom = t.foot
+      ? `<div class="tile-foot">${esc(t.foot)}</div>`
+      : e.act
+        ? `<button type="button" class="tile-edge" data-act="${e.act}" aria-label="${esc(e.label)}" title="${esc(e.label)}">${svgIcon(e.icon)}</button>`
+        : e.text
+          ? `<div class="tile-edge">${esc(e.text)}</div>`
+          : `<div class="tile-edge">${svgIcon(e.icon)}</div>`;
+    return `<div class="tile-title">${esc(t.title)}</div>
+      <div class="tile-main${t.min ? " min" : ""}">${tileCard(t.card)}</div>
+      ${bottom}`;
+  };
+
   $$('[data-surface="tile"]').forEach((host) => {
-    const stack = host.querySelector(".swap-stack");
-    const ring = host.querySelector(".tile-ring");
-    const bar = host.querySelector(".tr-value");
-    const setRing = (v) => {
-      ring?.classList.toggle("on", v != null);
-      if (v != null) bar?.style.setProperty("stroke-dasharray", `${(clamp01(v) * 100).toFixed(2)} 100`);
+    const s = slot(host.querySelector(".swap-stack"), "tile-item", tileHtml);
+    surfaces.push({ host, mount: (src, g, animate) => s.mount(src, g, animate), patch: (g) => s.patch(g) });
+  });
+
+  // Wear OS widget, after BriefWearWidget: a card that leads with its source
+  // (a ring, weather's gauge, or a disc with the glyph) beside two lines. The
+  // tall card trades the ring for a disc over a bar; a button (mark done,
+  // play/pause) takes the visual's place; music is a player.
+  const arc44 = (cls, inner) => `<svg class="ww-arc ${cls}" viewBox="0 0 44 44" aria-hidden="true">${inner}</svg>`;
+  const wearRing = (v) =>
+    arc44(
+      "spin",
+      `<circle class="tr" cx="22" cy="22" r="19.5" />` +
+        (v > 0.001 ? `<circle class="in" cx="22" cy="22" r="19.5" pathLength="100" stroke-dasharray="${pct(v)} 100" />` : "")
+    );
+  // An arc open at the bottom (135° round to 45°), and a marker at the
+  // temperature's place in today's range, cut out of the arc by a ring of
+  // the card's own colour
+  const wearGauge = (p) => {
+    const a = ((135 + 270 * clamp01(p)) * Math.PI) / 180;
+    const x = (22 + 19.5 * Math.cos(a)).toFixed(2);
+    const y = (22 + 19.5 * Math.sin(a)).toFixed(2);
+    return arc44(
+      "gauge",
+      `<path class="tr" d="M8.21 35.79A19.5 19.5 0 1 1 35.79 35.79" />` +
+        `<circle class="gap" cx="${x}" cy="${y}" r="6" /><circle class="mk" cx="${x}" cy="${y}" r="4.5" />`
+    );
+  };
+  const wearDisc = (glyph) => `<span class="ww-vis disc">${svgIcon(glyph, "ww-glyph")}</span>`;
+  const wearLines = (h, s, { two = false, sTwo = two, detail = null } = {}) =>
+    `<span class="ww-lines"><span class="ww-h${two ? " two" : ""}">${esc(h)}</span>` +
+    `<span class="ww-s${sTwo ? " two" : ""}">${esc(s)}</span>` +
+    (detail ? `<span class="ww-d">${esc(detail)}</span>` : "") +
+    `</span>`;
+  // Every button is a 48 dp target with its filled circle drawn inside
+  const wearPlay = (m) =>
+    `<button type="button" class="ww-btn play" data-act="play" aria-label="${m.paused ? "Play" : "Pause"}">` +
+    `<svg class="ww-arc" viewBox="0 0 48 48" aria-hidden="true"><circle class="tr" cx="24" cy="24" r="22.5" />` +
+    (m.progress > 0.001 ? `<circle class="in" cx="24" cy="24" r="22.5" pathLength="100" stroke-dasharray="${pct(m.progress)} 100" />` : "") +
+    `</svg><span class="ww-fill">${svgIcon(m.paused ? "play" : "pause")}</span></button>`;
+  const wearSkip = (dir) =>
+    `<button type="button" class="ww-btn skip" data-act="${dir}" aria-label="${dir === "next" ? "Next track" : "Previous track"}">${svgIcon(dir === "next" ? "skip-next" : "skip-prev")}</button>`;
+  const wearDone = `<button type="button" class="ww-btn" data-act="done" aria-label="Mark done"><span class="ww-fill">${svgIcon("check")}</span></button>`;
+
+  function wearHtml(w, tall) {
+    // Music: on a tall card, a player (title and artist over ⏮ ⏯ ⏭); on a
+    // short one, its lines and the one button, ringed with the song
+    if (w.music) {
+      const m = w.music;
+      const lines = wearLines(m.title, m.text);
+      if (!tall) return `<div class="ww-row has-btn">${lines}${wearPlay(m)}</div>`;
+      return `<div class="ww-player">${lines}<div class="ww-transport">${wearSkip("prev")}${wearPlay(m)}${wearSkip("next")}</div></div>`;
+    }
+    // The date is the absence of a glance: just its lines
+    if (w.plain) return `<div class="ww-plain"><span class="ww-h">${esc(w.title)}</span><span class="ww-s">${esc(w.text)}</span></div>`;
+    if (w.button === "done") return `<div class="ww-row has-btn">${wearLines(w.title, w.text, { two: tall })}${wearDone}</div>`;
+    const progress = w.visual === "ring" || w.visual === "gauge";
+    if (!tall) {
+      const vis = w.visual === "ring" ? wearRing(w.value) : w.visual === "gauge" ? wearGauge(w.value) : null;
+      return `<div class="ww-row has-vis">${vis ? `<span class="ww-vis">${vis}${svgIcon(w.glyph, "ww-glyph")}</span>` : wearDisc(w.glyph)}${wearLines(w.title, w.text)}</div>`;
+    }
+    if (!progress) return `<div class="ww-row has-vis">${wearDisc(w.glyph)}${wearLines(w.title, w.text, { two: true })}</div>`;
+    // A tall card with progress: the disc and the lines over a bar. The lines
+    // grow into the room the card has: the support line's second line, then a
+    // detail (an event's place).
+    const bar =
+      w.visual === "gauge"
+        ? `<div class="ww-mbar" aria-hidden="true"><span>${w.lo}°</span><span class="trk" style="--v:${clamp01(w.value).toFixed(4)}"><i></i></span><span>${w.hi}°</span></div>`
+        : `<div class="ww-bar" style="--v:${clamp01(w.value).toFixed(4)}" aria-hidden="true">${w.value > 0.001 ? "<i></i>" : ""}</div>`;
+    return `<div class="ww-barbody"><div class="ww-top">${wearDisc(w.glyph)}${wearLines(w.title, w.text, { sTwo: true, detail: w.detail })}</div>${bar}</div>`;
+  }
+
+  $$('[data-surface="wear"]').forEach((host) => {
+    const cards = $$(".ww", host).map((box) => {
+      const tall = box.classList.contains("tall");
+      return { box, s: slot(box.querySelector(".swap-stack"), "ww-item", (src, g) => wearHtml(g.wear, tall)) };
+    });
+    const ground = (w) => {
+      const cover = w.music?.cover;
+      cards.forEach(({ box }) => {
+        box.dataset.role = w.role;
+        box.classList.toggle("cover", !!cover);
+        if (cover) box.style.setProperty("--cover", `url('${cover}')`);
+        else box.style.removeProperty("--cover");
+      });
     };
+    // Drawn at 1 dp = 1px, then zoomed to the cell (up to 1.4×, about the
+    // tile's scale)
+    const fit = () => {
+      const k = Math.min(1.4, Math.max(0.5, (host.parentElement.clientWidth - 32) / 182));
+      host.style.zoom = k.toFixed(3);
+    };
+    fit();
+    if ("ResizeObserver" in window) new ResizeObserver(fit).observe(host.parentElement);
     surfaces.push({
       host,
       mount(src, g, animate) {
-        const t = g.tile;
-        const bottom = t.foot
-          ? `<div class="tile-foot">${esc(t.foot)}</div>`
-          : t.edge?.text
-            ? `<div class="tile-edge text">${esc(t.edge.text)}</div>`
-            : `<div class="tile-edge">${svgIcon(t.edge?.icon || "brief")}</div>`;
-        this.node = el(`
-          <div class="tile-item">
-            <div class="tile-title" data-k="t-top">${esc(t.title)}</div>
-            <div class="tile-main">${tileCard(src, t.card)}</div>
-            ${bottom}
-          </div>`);
-        swap(stack, this.node, animate);
-        setRing(t.ring);
+        ground(g.wear);
+        cards.forEach((c) => c.s.mount(src, g, animate));
       },
       patch(g) {
-        setText(this.node, "t-top", g.tile.title);
-        const c = g.tile.card;
-        if (c.kind === "event") setText(this.node, "t-range", c.range);
-        if (c.kind === "date") {
-          setText(this.node, "t-big", c.big);
-          setText(this.node, "t-sub", c.sub);
-        }
-        setRing(g.tile.ring);
+        ground(g.wear);
+        cards.forEach((c) => c.s.patch(g));
       },
     });
   });
 
-  // Phone widget: badge, two lines, and whatever the glance carries on the
-  // right (a countdown pill, today's high/low, play/pause) and underneath
-  // (a progress bar, or the temperature's place in today's range).
-  $$('[data-surface="widget"]').forEach((host) => {
-    const stack = host.querySelector(".swap-stack");
-    const setBar = (node, w) => {
-      const b = node?.querySelector(".pw-bar");
-      if (b && w.bar != null) b.style.setProperty("--v", clamp01(w.bar).toFixed(4));
+  // ---------------------------------------------------------------------------
+  // Phone widget: BriefGlanceWidget, after the widget prototype. Sizes are dp
+  // at 1:1 (scaled down to fit), and every value below is the app's own.
+  // ---------------------------------------------------------------------------
+  const ROW_BIN_H = 48;
+  const TWO_ROW_BIN_H = 140;
+  // SIZE_2X1 … SIZE_4X2: a template applies from the width it fits (120 /
+  // 228 / 270 dp wide, 48 / 140 dp tall).
+  const BINS = [
+    { w: 120, h: ROW_BIN_H }, { w: 228, h: ROW_BIN_H }, { w: 270, h: ROW_BIN_H },
+    { w: 120, h: TWO_ROW_BIN_H }, { w: 228, h: TWO_ROW_BIN_H }, { w: 270, h: TWO_ROW_BIN_H },
+  ];
+  const layoutFor = (bin) => {
+    const cols = bin.w >= 270 ? 4 : bin.w >= 228 ? 3 : 2;
+    return { cols, stacked: bin.h >= TWO_ROW_BIN_H };
+  };
+  // How an Android 12+ launcher picks among SizeMode.Responsive bins: a bin
+  // fits under ceil(cell) + 1 dp on both axes, the nearest fitting one wins,
+  // and with none fitting it falls back to the smallest.
+  const hostPickBin = (cell) => {
+    let best = null;
+    let bestD = Infinity;
+    for (const b of BINS) {
+      if (!(Math.ceil(cell.w) + 1 > b.w && Math.ceil(cell.h) + 1 > b.h)) continue;
+      const d = (b.w - cell.w) ** 2 + (b.h - cell.h) ** 2;
+      if (d < bestD) {
+        best = b;
+        bestD = d;
+      }
+    }
+    return best || BINS[0];
+  };
+  const typeScaleFor = (cols) =>
+    cols >= 4
+      ? { hero: 28, heroNumeral: 57, heroSub: 15, aux: 16 }
+      : cols === 3
+        ? { hero: 24, heroNumeral: 45, heroSub: 13, aux: 13 }
+        : { hero: 20, heroNumeral: 36, heroSub: 12, aux: 13 };
+  // A Pixel-like 4-column grid: widget = 91.25 · n − 16 wide, 118 · m − 16 tall
+  const cellFor = (n, m) => ({ w: 91.25 * n - 16, h: 118 * m - 16 });
+
+  // Brief's own schemes (BriefLightColors / BriefDarkColors), what the widget
+  // draws with the app's default dynamicColor = false.
+  const SCHEMES = {
+    light: {
+      primary: "#006874", onPrimary: "#FFFFFF", primaryContainer: "#9EEFFD", onPrimaryContainer: "#004F58",
+      secondaryContainer: "#CDE7EC", onSecondaryContainer: "#334B4F", tertiaryContainer: "#DAE2FF", onTertiaryContainer: "#3B4665",
+      errorContainer: "#FFDAD6", onErrorContainer: "#93000A",
+      surface: "#F5FAFB", onSurface: "#171D1E", surfaceVariant: "#DBE4E6", onSurfaceVariant: "#3F484A",
+    },
+    dark: {
+      primary: "#82D3E1", onPrimary: "#00363D", primaryContainer: "#004F58", onPrimaryContainer: "#9EEFFD",
+      secondaryContainer: "#334B4F", onSecondaryContainer: "#CDE7EC", tertiaryContainer: "#3B4665", onTertiaryContainer: "#DAE2FF",
+      errorContainer: "#93000A", onErrorContainer: "#FFDAD6",
+      surface: "#0E1415", onSurface: "#DEE3E5", surfaceVariant: "#3F484A", onSurfaceVariant: "#BFC8CA",
+    },
+  };
+  // The countdown is a classic Chronometer: the static brand accent pair
+  const ACCENT = { light: { c: "#CDE7EC", on: "#334B4F" }, dark: { c: "#334B4F", on: "#CDE7EC" } };
+  const ROLE = {
+    primary: ["--primary-container", "--on-primary-container"],
+    secondary: ["--secondary-container", "--on-secondary-container"],
+    tertiary: ["--tertiary-container", "--on-tertiary-container"],
+    error: ["--error-container", "--on-error-container"],
+    variant: ["--surface-variant", "--on-surface-variant"],
+  };
+  const CARD_ALPHA = 0.7; // the default background opacity
+  const rgba = (hex, a) => {
+    const n = parseInt(hex.slice(1), 16);
+    return `rgb(${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255} / ${a})`;
+  };
+  const schemeVars = (s) =>
+    Object.entries(s)
+      .map(([k, v]) => `--${k.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())}:${v}`)
+      .join(";");
+
+  const fmtChrono = (ms) => {
+    let s = Math.trunc(ms / 1000);
+    const neg = s < 0;
+    if (neg) s = -s;
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const t = h > 0 ? `${h}:${pad(m)}:${pad(s % 60)}` : `${pad(m)}:${pad(s % 60)}`;
+    return neg ? "−" + t : t;
+  };
+
+  // buildCardContent: what each source puts in each slot, by width
+  function phoneCard(id, cols, now) {
+    const d = new Date(now);
+    const base = { showChip: true, detail: [], emphasis: false };
+    switch (id) {
+      case "music": {
+        const media = { playing: !musicState(now).paused };
+        return { ...base, icon: "m-music", role: "primary", cd: "Music",
+          title: SONG.title, subtitle: SONG.artist, media,
+          aux: { type: "controls", media, skips: cols >= 3 },
+          hero: { type: "text", text: SONG.title }, heroSub: SONG.artist };
+      }
+      case "notification":                       // one app, the app's mark and name over the sender
+        return { ...base, icon: "i-chat", role: "secondary", cd: "Notification",
+          title: NOTE.app, subtitle: NOTE.title,
+          trailing: cols >= 4 ? NOTE.text : null, trailingShares: true,
+          aux: cols >= 3 ? { type: "label", text: NOTE.app } : null,
+          hero: { type: "text", text: NOTE.title }, heroSub: NOTE.text };
+      case "event": {
+        const startTime = phoneTime(eventStart);
+        const range = `${startTime} - ${phoneTime(eventStart + EVENT_LEN)}`;
+        // In its last hour, a pill counts down to the start
+        const imminence = eventStart - now <= HOUR ? { countdownTo: eventStart } : null;
+        return { ...base, icon: "m-event", role: "secondary", cd: "Event",
+          title: EVENT.title, subtitle: range, subtitleCompact: startTime,
+          detail: imminence ? [imminence] : [], aux: imminence ? { type: "chip", chip: imminence } : null,
+          hero: { type: "text", text: EVENT.title }, heroSub: range };
+      }
+      case "battery":
+        return { ...base, icon: "i-phone-battery", role: "error", cd: "Battery",
+          title: "15%", subtitle: "Phone battery is low", subtitleCompact: "", emphasis: true,
+          aux: null, hero: { type: "numeral", text: "15%" }, heroSub: "Phone battery is low" };
+      case "weather": {
+        const { now: t, lo, hi, unit } = temps;
+        const hiLo = { hiLo: [`${hi}°`, `${lo}°`] };
+        return { ...base, icon: "m-sun", role: "tertiary", cd: "Weather",
+          title: `${t}°${unit}`, subtitle: "Clear",
+          trailing: cols >= 4 ? fmtPhoneMedium.format(d) : cols === 3 ? fmtShortDate.format(d) : null,
+          aux: cols >= 4 ? { type: "dateBlock", weekday: fmtWeekday.format(d), monthDay: fmtMonthDay.format(d) }
+            : cols === 3 ? { type: "label", text: fmtPhoneMedium.format(d), muted: true }
+            : { type: "label", text: fmtMonthDayShort.format(d), muted: true },
+          hero: { type: "numeral", text: `${t}°` }, heroSub: "Clear", detail: [hiLo], heroChip: hiLo };
+      }
+      case "reminder": {
+        const fire = phoneTime(remStart);
+        return { ...base, icon: "m-pill", role: "tertiary", cd: "Reminder",
+          title: "Meds", subtitle: fire, done: true,
+          aux: { type: "done" }, hero: { type: "text", text: "Meds" }, heroSub: fire };
+      }
+      default:                                   // the floor: a calendar page
+        return { ...base, icon: "m-event", role: "variant", cd: "Date",
+          title: fmtShortDate.format(d), titleFull: fmtPhoneLong.format(d), subtitle: null,
+          aux: { type: "label", text: fmtMonth.format(d) },
+          hero: { type: "numeral", text: String(d.getDate()) }, heroSub: fmtWeekday.format(d) };
+    }
+  }
+
+  const VARIANT = "var(--on-surface-variant)";
+  const pIcon = (name, size, color) =>
+    `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="color:${color}" aria-hidden="true" focusable="false"><use href="#${name}"></use></svg>`;
+  const gapX = (px) => `<span class="bw-gap" style="width:${px}px"></span>`;
+  const gapY = (px) => `<span class="bw-gap" style="height:${px}px"></span>`;
+  const txt = (t, { size, weight = 400, color = "var(--on-surface)", lines = 1, align = "", cls = "" }) =>
+    `<span class="bw-t${lines === 2 ? " l2" : ""}${cls ? " " + cls : ""}" style="font-size:${size}px;font-weight:${weight};color:${color}${align ? ";text-align:" + align : ""}">${esc(t)}</span>`;
+  const sourceChip = (c, diameter, iconSize) => {
+    const [bg, fg] = ROLE[c.role];
+    return `<span class="bw-chip" role="img" aria-label="${esc(c.cd)}" style="width:${diameter}px;height:${diameter}px;background:var(${bg})">${pIcon(c.icon, iconSize, `var(${fg})`)}</span>`;
+  };
+  const supportChipText = (chip, fs) => {
+    if (!chip.hiLo) return txt(chip.text, { size: fs, color: VARIANT, cls: "bw-sct" });
+    const a = fs + 2;
+    return `<span class="bw-row bw-sct" style="font-size:${fs}px;color:${VARIANT}">` +
+      `<span class="sr-only">High </span>${pIcon("i-arrow-up", a, "currentColor")}${txt(chip.hiLo[0], { size: fs, color: "currentColor" })}` +
+      gapX(6) +
+      `<span class="sr-only">, low </span>${pIcon("i-arrow-down", a, "currentColor")}${txt(chip.hiLo[1], { size: fs, color: "currentColor" })}</span>`;
+  };
+  // A launcher-ticked Chronometer: a fixed width (54 / 64 dp), filled in by tick()
+  const pill = (chip, big = false) => {
+    const box = `font-size:${big ? 13 : 11}px;padding:${big ? "5px 12px" : "3px 10px"}`;
+    if (chip.countdownTo != null) {
+      return `<span class="bw-cd" role="timer" data-countdown="${chip.countdownTo}" style="width:${big ? 64 : 54}px;${box}"></span>`;
+    }
+    const bg = chip.accent ? "var(--primary-container)" : "var(--surface-variant)";
+    const fg = chip.accent ? "var(--on-primary-container)" : VARIANT;
+    return `<span class="bw-pill" style="background:${bg};color:${fg};border-radius:${big ? 13 : 11}px;${box}">${esc(chip.text)}</span>`;
+  };
+  const badge = (t) => `<span class="bw-badge">${esc(t)}</span>`;
+  // Every action is one 40 dp disc inside a 48 dp touch target
+  const mediaButton = (media) => {
+    const bg = media.playing ? "var(--primary)" : "var(--secondary-container)";
+    const fg = media.playing ? "var(--on-primary)" : "var(--on-secondary-container)";
+    return `<button type="button" class="bw-tt" data-act="play" aria-label="${media.playing ? "Pause" : "Play"}"><span class="bw-disc" style="background:${bg}">${pIcon(media.playing ? "m-pause" : "m-play", 20, fg)}</span></button>`;
+  };
+  const doneButton = () =>
+    `<button type="button" class="bw-tt" data-act="done" aria-label="Mark done"><span class="bw-disc" style="background:var(--secondary-container)">${pIcon("m-check", 20, "var(--on-secondary-container)")}</span></button>`;
+  const skipButton = (dir) =>
+    `<button type="button" class="bw-tt" data-act="${dir}" aria-label="${dir === "next" ? "Next track" : "Previous track"}">${pIcon(dir === "next" ? "m-skip-next" : "m-skip-prev", 36, VARIANT)}</button>`;
+
+  // CompactCard (2×1): the chip and two lines, nothing else
+  const compactCard = (c) => {
+    const sub = c.subtitleCompact ?? c.subtitle;
+    return `<div class="bw-compact">` +
+      (c.showChip ? sourceChip(c, 36, 18) + gapX(8) : "") +
+      `<div class="bw-col bw-w1">` +
+      txt(c.title, { size: c.emphasis ? 16 : 14, weight: c.emphasis ? 700 : 500 }) +
+      (sub ? txt(sub, { size: 12, color: VARIANT }) : "") +
+      `</div></div>`;
+  };
+
+  // RowCard (3×1, 4×1): chip, two lines, then a trailing line or pill, a badge
+  // and a button
+  const rowCard = (c) => {
+    const tag = c.detail[0];
+    let right = "";
+    if (c.trailing != null || tag) {
+      right = gapX(8) + `<div class="bw-col end ${c.trailingShares ? "bw-w1" : "bw-nf"}">` +
+        (c.trailing != null ? txt(c.trailing, { size: 12, color: VARIANT, lines: 2, align: "end" }) : "") +
+        (c.trailing != null && tag ? gapY(4) : "") +
+        (tag ? (tag.hiLo ? supportChipText(tag, 12) : pill(tag)) : "") +
+        `</div>`;
+    }
+    return `<div class="bw-rowc"><div class="bw-row">` +
+      (c.showChip ? sourceChip(c, 40, 22) + gapX(12) : "") +
+      `<div class="bw-col bw-w1">` +
+      txt(c.titleFull ?? c.title, { size: c.emphasis ? 20 : 16, weight: c.emphasis ? 700 : 500 }) +
+      (c.subtitle != null ? txt(c.subtitle, { size: 12, color: VARIANT }) : "") +
+      `</div>` +
+      right +
+      (c.badge ? gapX(8) + badge(c.badge) : "") +
+      (c.media ? gapX(8) + mediaButton(c.media) : "") +
+      (c.done ? gapX(8) + doneButton() : "") +
+      `</div></div>`;
+  };
+
+  const auxSlot = (aux, scale) => {
+    switch (aux.type) {
+      case "label":
+        return `<span class="bw-aux">${txt(aux.text, {
+          size: aux.muted ? 12 : scale.aux, weight: aux.muted ? 400 : 500,
+          color: aux.muted ? VARIANT : "var(--on-surface)", align: "end" })}</span>`;
+      case "dateBlock":
+        return `<span class="bw-aux bw-col end">${txt(aux.weekday, { size: scale.aux, weight: 500, align: "end" })}${txt(aux.monthDay, { size: 12, color: VARIANT, align: "end" })}</span>`;
+      case "chip":
+        return pill(aux.chip, true);
+      case "controls":
+        return `<span class="bw-row bw-nf">${aux.skips ? skipButton("prev") : ""}${mediaButton(aux.media)}${aux.skips ? skipButton("next") : ""}</span>`;
+      case "done":
+        return doneButton();
+    }
+    return "";
+  };
+
+  const heroSubText = (t, size, narrow, cls = "") => txt(t, { size, color: VARIANT, lines: narrow ? 2 : 1, cls });
+
+  const heroSlot = (c, scale, cols) => {
+    const hero = c.hero || { type: "text", text: c.title };
+    const narrow = cols <= 2;
+    const sub = c.heroSub;
+    let out = "";
+    if (hero.type === "text") {
+      out += `<div class="bw-col">` +
+        txt(hero.text, { size: scale.hero, weight: 500, lines: hero.clampTwoLines || narrow ? 2 : 1 }) +
+        (sub != null ? gapY(2) + heroSubText(sub, scale.heroSub, narrow) : "") +
+        `</div>`;
+      if (c.heroChip) out += gapY(2) + supportChipText(c.heroChip, scale.heroSub);
+    } else if (cols >= 4 && sub != null) {
+      // Four columns: the numeral and its support block share a row, lifted
+      // 10 dp onto the baseline
+      out += `<div class="bw-row bottom">${txt(hero.text, { size: scale.heroNumeral, cls: "bw-num" })}${gapX(10)}` +
+        `<div class="bw-col" style="padding-bottom:10px;min-width:0">${txt(sub, { size: 15, color: VARIANT })}` +
+        (c.heroChip ? supportChipText(c.heroChip, 15) : "") + `</div></div>`;
+    } else {
+      const chip = c.heroChip;
+      out += `<div class="bw-col">${txt(hero.text, { size: scale.heroNumeral, cls: "bw-num" })}`;
+      if (chip && !narrow) {
+        out += gapY(2) + `<div class="bw-row" style="max-width:100%">` +
+          (sub != null ? heroSubText(sub, scale.heroSub, false, "bw-share") + gapX(10) : "") +
+          supportChipText(chip, scale.heroSub) + `</div>`;
+      } else {
+        if (sub != null) out += gapY(2) + heroSubText(sub, scale.heroSub, narrow && !chip);
+        if (chip) out += gapY(2) + supportChipText(chip, scale.heroSub);
+      }
+      out += `</div>`;
+    }
+    return `<div class="bw-col bw-heroslot">${out}</div>`;
+  };
+
+  // StackCard (two rows): the chip and the glance's action up top, the hero
+  // at the bottom
+  const stackCard = (c, cols) => {
+    const scale = typeScaleFor(cols);
+    return `<div class="bw-stack">` +
+      `<div class="bw-hdr">${c.showChip ? sourceChip(c, 40, 22) : ""}<span class="bw-w1"></span>` +
+      (c.badge ? badge(c.badge) + gapX(8) : "") +
+      (c.aux ? auxSlot(c.aux, scale) : "") +
+      `</div>` +
+      `<div class="bw-herobox">${heroSlot(c, scale, cols)}</div>` +
+      `</div>`;
+  };
+
+  const tickChrono = (node) => {
+    const now = Date.now();
+    node.querySelectorAll("[data-countdown]").forEach((n) => {
+      const t = fmtChrono(+n.dataset.countdown - now);
+      if (n.textContent !== t) n.textContent = t;
+    });
+  };
+
+  $$('[data-surface="phone"]').forEach((host) => {
+    const card = host.querySelector(".bw");
+    const sizeButtons = $$("[data-pw-size]", host.closest(".cell") || document);
+    const dark = matchMedia("(prefers-color-scheme: dark)");
+    let size = host.dataset.size || "4x2";
+    let layout = { cols: 4, stacked: true };
+    let last = null;
+    const s = slot(
+      card.querySelector(".swap-stack"),
+      "bw-item",
+      (src) => {
+        const c = phoneCard(src.id, layout.cols, Date.now());
+        return layout.stacked ? stackCard(c, layout.cols) : layout.cols === 2 ? compactCard(c) : rowCard(c);
+      },
+      tickChrono
+    );
+
+    const sizeGlyph = (n, m) => {
+      let r = "";
+      for (let y = 0; y < 2; y++) {
+        for (let x = 0; x < 4; x++) {
+          r += `<rect x="${x * 6}" y="${y * 6.5}" width="4.8" height="5.3" rx="1.2" opacity="${x < n && y < m ? 1 : 0.25}" />`;
+        }
+      }
+      return `<svg viewBox="0 0 23 12" aria-hidden="true">${r}</svg>`;
     };
+    sizeButtons.forEach((b) => {
+      const [n, m] = b.dataset.pwSize.split("x");
+      b.innerHTML = `${sizeGlyph(+n, +m)}<span aria-hidden="true">${n}×${m}</span>`;
+    });
+
+    // The launcher's grid cell, the bin it picks, and the theme
+    const frame = () => {
+      const [n, m] = size.split("x").map(Number);
+      const cell = cellFor(n, m);
+      layout = layoutFor(hostPickBin(cell));
+      const theme = dark.matches ? "dark" : "light";
+      const scheme = SCHEMES[theme];
+      card.style.cssText =
+        `width:${cell.w}px;height:${cell.h}px;${schemeVars(scheme)};` +
+        `--accent-c:${ACCENT[theme].c};--on-accent-c:${ACCENT[theme].on};--card:${rgba(scheme.surface, CARD_ALPHA)}`;
+      card.setAttribute("aria-label", `Brief's phone widget, ${n} by ${m}`);
+      sizeButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.pwSize === size)));
+      fit();
+    };
+    // Scaled down (never up) to the cell
+    const fit = () => {
+      const w = parseFloat(card.style.width) || 1;
+      card.style.zoom = Math.min(1, host.clientWidth / w).toFixed(3);
+    };
+    frame();
+    if ("ResizeObserver" in window) new ResizeObserver(fit).observe(host);
+    dark.addEventListener?.("change", frame);
+    sizeButtons.forEach((b) =>
+      b.addEventListener("click", () => {
+        if (b.dataset.pwSize === size) return;
+        size = b.dataset.pwSize;
+        frame();
+        if (last) s.patch(last, { fade: true });
+      })
+    );
+
     surfaces.push({
       host,
       mount(src, g, animate) {
-        const w = g.widget;
-        const right = w.button
-          ? `<span class="pw-btn">${svgIcon(w.button)}</span>`
-          : w.hilo
-            ? `<span class="pw-pill">${svgIcon("arrow-up")}${w.hilo[0]}°<span class="gap"></span>${svgIcon("arrow-down")}${w.hilo[1]}°</span>`
-            : w.pill
-              ? `<span class="pw-pill" data-k="pill">${esc(w.pill)}</span>`
-              : "";
-        this.node = el(`
-          <div class="pw-item${w.bar != null ? " has-bar" : ""}${w.button ? " has-btn" : ""}">
-            <span class="pw-badge">${svgIcon(src.icon)}</span>
-            <span class="pw-lines">
-              <span class="pw-title" data-k="title">${esc(w.title)}</span>
-              <span class="pw-text" data-k="text">${esc(w.text)}</span>
-            </span>
-            ${right}
-            ${w.bar != null ? `<span class="pw-bar${w.marker ? " marker" : ""}"><i></i></span>` : ""}
-          </div>`);
-        setBar(this.node, w);
-        swap(stack, this.node, animate);
+        last = g;
+        s.mount(src, g, animate);
       },
       patch(g) {
-        setText(this.node, "title", g.widget.title);
-        setText(this.node, "text", g.widget.text);
-        setText(this.node, "pill", g.widget.pill);
-        setBar(this.node, g.widget);
-        if (g.widget.button) this.node?.querySelector(".pw-btn use")?.setAttribute("href", `#i-${g.widget.button}`);
+        last = g;
+        s.patch(g);
       },
     });
   });
@@ -826,6 +1358,7 @@
   // Someone asked for the song: put music on the watch, and play.
   function playSong() {
     wantSound = true;
+    fakePausedAt = null;
     if (current?.id !== "music") show(musicIndex, { hold: Infinity });
     else startAudio();
   }
@@ -848,14 +1381,64 @@
       if (songPlaying()) return stopFollowing();
       // The first tap on the watch (its ▶) starts the demo too, straight
       // away, so the ▶ goes before the stream has loaded.
-      if (root.classList.contains("demo-waiting")) {
-        root.classList.remove("demo-waiting");
-        paused = false;
-        syncToggles();
-      }
+      leaveWaiting();
       playSong();
     })
   );
+
+  function leaveWaiting() {
+    if (!root.classList.contains("demo-waiting")) return;
+    root.classList.remove("demo-waiting");
+    paused = false;
+    syncToggles();
+  }
+
+  // ---------------------------------------------------------------------------
+  // The surfaces' own buttons: play/pause, skip, mark done
+  // ---------------------------------------------------------------------------
+  // ▶/⏸ on the tile or a widget does what tapping the watch does, except
+  // that ⏸ on the silent made-up track just pauses it where it is.
+  function toggleMusic() {
+    if (current?.id !== "music") return;
+    if (songPlaying()) return stopFollowing();
+    if (!songLive() && fakePausedAt == null) {
+      fakePausedAt = musicState(Date.now()).elapsed;
+      return patchMusic();
+    }
+    if (canPlaySong && !songFailed) {
+      leaveWaiting();
+      playSong();
+    } else {
+      trackStartedAt = Date.now() - fakePausedAt * 1000;
+      fakePausedAt = null;
+      patchMusic();
+    }
+  }
+
+  // ⏮ starts the song over. ⏭ moves on to the next glance, the nearest a
+  // one-song demo has to a next track.
+  function skipTrack(dir) {
+    if (current?.id !== "music") return;
+    if (dir > 0) return show(index + 1, { hold: PICKED_HOLD_MS });
+    if (songLive()) audio.currentTime = 0;
+    else {
+      trackStartedAt = Date.now();
+      if (fakePausedAt != null) fakePausedAt = 0;
+    }
+    patchMusic();
+  }
+
+  // ✓ marks the reminder done: it steps aside, and with nothing else due
+  // Brief falls to the date.
+  function markDone() {
+    if (current?.id === "reminder") show(indexOf("date"), { hold: PICKED_HOLD_MS });
+  }
+
+  const ACTIONS = { play: toggleMusic, prev: () => skipTrack(-1), next: () => skipTrack(1), done: markDone };
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest?.("[data-act]");
+    if (b && b.closest("[data-surface]") && !b.closest(".leaving")) ACTIONS[b.dataset.act]?.();
+  });
 
   // ---------------------------------------------------------------------------
   // Scroll story: the step nearest the reading line holds the watch

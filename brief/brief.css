@@ -663,6 +663,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-areas:
     "tile   tile"
+    "wear   wear"
     "widget widget"
     "batt   tick"
     "app    app"
@@ -677,21 +678,22 @@
     margin-top: var(--space-14);
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-areas:
-      "tile tile widget widget"
-      "tile tile batt   tick"
-      "priv priv priv   priv"
-      "app  app  taps   auto"
-      "app  app  free   quiet";
+      "tile   tile   wear   wear"
+      "widget widget widget widget"
+      "priv   priv   priv   priv"
+      "app    app    batt   tick"
+      "app    app    taps   auto"
+      "app    app    free   quiet";
   }
 }
 
 @media (min-width: 1080px) {
   .bento {
     grid-template-areas:
-      "tile widget widget app"
-      "tile batt   tick app"
-      "priv priv   priv   app"
-      "taps auto   free   quiet";
+      "tile wear widget widget"
+      "batt tick taps   app"
+      "priv priv priv   app"
+      "auto free quiet  app";
   }
 }
 
@@ -711,6 +713,7 @@
 .cell p { margin: var(--space-2) 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.5; }
 
 .cell-tile { grid-area: tile; }
+.cell-wear { grid-area: wear; }
 .cell-widget { grid-area: widget; }
 .cell-app { grid-area: app; }
 .cell-priv { grid-area: priv; }
@@ -733,7 +736,6 @@
     var(--bg-raised);
 }
 
-.cell-widget .cell-stage { min-height: 200px; }
 
 /* Small fact cells, a little tighter than the rest */
 .cell-sm .cell-body { padding: var(--space-5); }
@@ -824,15 +826,23 @@
   .cell-priv .cell-body { grid-template-columns: 0.9fr 1.6fr; align-items: center; gap: var(--space-7); padding: var(--space-8); }
 }
 
-/* Tile — after the watch's BriefTileRenderer (Material 3 primaryLayout) and
-   its rendered tile_preview.png. Sizes are the renderer's dp values on a
-   ~225dp round screen, in cqw so the whole tile scales as one. Colours follow
-   the source, the way a dynamic theme would. */
+/* ----------------------------------------------------------------------------
+   Tile — after the watch's BriefTileRenderer: a Material 3 primaryLayout (a
+   title, one main card per glance, then the edge button or the "Updated"
+   line) on a 227 dp round screen. Sizes are the renderer's dp in cqw (1 dp
+   is about 0.44cqw), so the whole tile scales as one. Colours follow the
+   source the way the watch face's dynamic theme would: a live glance's card
+   in the source's tone 30 (filled variant), the edge button in its tone 90,
+   the date's card in the neutral surface (tonal).
+---------------------------------------------------------------------------- */
 .tile {
-  --t-container: var(--src-fg);
-  --t-on-container: var(--src-bg);
-  --t-primary: var(--face-accent);
+  --t-container: var(--src-bg);
+  --t-on-container: var(--src-fg);
+  --t-primary: var(--src-fg);
+  --t-on-primary: color-mix(in oklab, var(--src-bg) 70%, #000);
   --t-surface: color-mix(in oklab, var(--src-fg) 10%, #1b1b1f);
+  --t-on-surface: #e6e1e5;
+  --t-on-surface-variant: #c9c5d0;
   position: relative;
   width: min(62vw, 240px);
   aspect-ratio: 1;
@@ -842,25 +852,6 @@
   container-type: inline-size;
   color: #fff;
   box-shadow: 0 0 0 8px #1a1b1f, 0 0 0 9px rgb(255 255 255 / 0.08), 0 24px 48px -16px rgb(0 0 0 / 0.6);
-}
-
-/* Progress ring round the rim, 220° to 500°: a gap at the bottom for the
-   edge button. Music fills with the song; an event drains as it nears. */
-.tile-ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.4s var(--ease);
-}
-.tile-ring.on { opacity: 1; }
-.tile-ring path { fill: none; stroke-width: 2.3; stroke-linecap: round; }
-.tr-track { stroke: var(--t-surface); }
-.tr-value {
-  stroke: var(--t-primary);
-  stroke-dasharray: 0 100;
-  transition: stroke-dasharray 0.9s var(--ease);
 }
 
 .tile-title {
@@ -877,100 +868,152 @@
   text-overflow: ellipsis;
 }
 
+/* The main slot. A card with a ring is fully rounded, so it takes the
+   layout's tighter margins (3% a side); every other card keeps 7.1%. */
 .tile-main {
   position: absolute;
-  left: 7.6%;
-  right: 7.6%;
+  left: 7.1%;
+  right: 7.1%;
   top: 23.5%;
   bottom: 23.5%;
   display: flex;
 }
+.tile-main.min { left: 3%; right: 3%; }
 
-.t-card {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1cqw;
-  padding: 5.3cqw;
-  border-radius: 11.6cqw;
-  background: var(--t-container);
-  color: var(--t-on-container);
-}
-.t-start { align-items: flex-start; }
-.t-center { align-items: center; text-align: center; }
+.tile-main svg { fill: currentColor; flex: none; }
 
-.t-row { display: flex; align-items: center; gap: 2.7cqw; min-width: 0; max-width: 100%; }
-.t-row.t-gap { margin-top: 0.8cqw; }
-.t-row-hero { gap: 3.6cqw; }
-.t-col { display: flex; flex-direction: column; min-width: 0; }
-.t-grow { flex: 1; }
-
-.t-card svg { fill: currentColor; flex: none; }
-.t-ico { width: 7.1cqw; height: 7.1cqw; }
-.t-ico-sm { width: 6.2cqw; height: 6.2cqw; }
-.t-ico-hero { width: 12.4cqw; height: 12.4cqw; }
-.t-ico-rem { width: 10.7cqw; height: 10.7cqw; }
-.t-ico-check { width: 8cqw; height: 8cqw; }
-
-.t-title,
-.t-label,
-.t-label-sm,
-.t-body,
-.t-display,
-.t-display-sm {
+.t-value,
+.t-detail,
+.t-tc-text,
+.t-tc-display,
+.t-app-name,
+.t-cond {
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.t-title { font-size: 6.2cqw; font-weight: 500; line-height: 1.2; }
-.t-title.clamp2 {
-  white-space: normal;
+.t-label,
+.t-tc-title,
+.t-app-title,
+.t-app-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
-.t-label { font-size: 5.5cqw; font-weight: 500; }
-.t-label-sm { font-size: 5cqw; font-weight: 500; }
-.t-body { font-size: 5.2cqw; opacity: 0.9; }
-.t-display { font-size: 12.5cqw; font-weight: 500; line-height: 1.05; letter-spacing: -0.02em; }
-.t-display-sm { font-size: 10cqw; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
-.t-center .t-display-sm + .t-title { font-size: 6.4cqw; font-weight: 600; opacity: 0.78; }
 
-/* Weather: a temperature card, with rain chance and today's high/low
-   stacked beside it */
-.t-weather { flex: 1; display: flex; gap: 1.8cqw; min-width: 0; }
-.t-hero { flex: 3; gap: 0.6cqw; padding: 3cqw; }
-.t-hero .t-display { font-size: 11cqw; }
-.t-side { flex: 2; display: flex; flex-direction: column; gap: 1.8cqw; }
-.t-pill {
+/* Data card with graph: the progress ring, its glyph in the middle, then the
+   value over the label (event, reminder, low battery) */
+.t-data {
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1.2cqw;
+  gap: 3.5cqw;
+  padding: 0 7cqw 0 5.3cqw;
   border-radius: 999px;
-  font-size: 5.5cqw;
-  font-weight: 500;
+  background: var(--t-container);
+  color: var(--t-on-container);
 }
-.t-pill svg { fill: currentColor; flex: none; }
-.t-rain { background: var(--t-surface); color: #e6e1e5; }
-.t-ico-rain { width: 8.9cqw; height: 8.9cqw; }
-.t-hilo {
-  flex-direction: column;
-  gap: 0;
-  background: var(--t-primary);
-  color: color-mix(in oklab, var(--src-bg) 70%, #000);
-  line-height: 1.15;
-}
-.t-hilo span { display: flex; align-items: center; gap: 0.6cqw; }
-.t-ico-hilo { width: 7.1cqw; height: 7.1cqw; }
+.t-graph { position: relative; flex: none; width: 28cqw; aspect-ratio: 1; }
+.t-ring { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; }
+.t-ring circle { fill: none; stroke-width: 9; stroke-linecap: round; }
+.t-track { stroke: color-mix(in oklab, var(--t-on-container) 22%, var(--t-container)); }
+.t-ind { stroke: var(--t-on-container); }
+.tile-main .t-glyph { position: absolute; inset: 0; margin: auto; width: 11cqw; height: 11cqw; }
+.t-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.t-value { font-size: 10.6cqw; font-weight: 500; line-height: 1.1; letter-spacing: -0.01em; }
+.t-label { font-size: 6.2cqw; font-weight: 500; line-height: 1.25; }
+.t-detail { font-size: 5.3cqw; line-height: 1.3; opacity: 0.85; }
 
-/* Edge button: soft top corners and a deep, rounded bottom, measured from
-   the rendered tile (48% wide, 20% tall, 78% down) */
+/* Title card: the track over its cover, or the date */
+.t-tcard {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9cqw;
+  padding: 4.4cqw 7cqw;
+  border-radius: 13cqw;
+  text-align: center;
+  background: var(--t-container);
+  color: var(--t-on-container);
+}
+.t-tcard.tonal { background: var(--t-surface); color: var(--t-on-surface); }
+/* Over a cover the library dims the art to 60% black */
+.t-tcard.cover {
+  background: linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.6)), var(--cover) center / cover, #000;
+  color: #fff;
+}
+.t-tc-title { font-size: 7.9cqw; font-weight: 600; line-height: 1.2; }
+.t-tc-text { font-size: 6.2cqw; font-weight: 500; opacity: 0.8; }
+.t-tc-display { font-size: 10.6cqw; font-weight: 500; line-height: 1.15; }
+.t-tc-display + .t-tc-text { font-size: 7cqw; color: var(--t-on-surface-variant); opacity: 1; }
+
+/* App card: the app's mark, name and time, then the message */
+.t-app {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.9cqw;
+  padding: 4.4cqw 6.2cqw;
+  border-radius: 11.6cqw;
+  background: var(--t-container);
+  color: var(--t-on-container);
+}
+.t-app-head { display: flex; align-items: center; gap: 1.8cqw; min-width: 0; font-size: 5.3cqw; font-weight: 500; }
+.t-app-head svg { width: 7.9cqw; height: 7.9cqw; }
+.t-app-name { flex: 1; }
+.t-app-time { flex: none; opacity: 0.8; }
+.t-app-title { font-size: 7cqw; font-weight: 600; line-height: 1.2; }
+.t-app-text { font-size: 6.2cqw; line-height: 1.25; opacity: 0.9; }
+
+/* Weather: the one hand-built layout. A hero card, and beside it the rain
+   chip over today's high and low. */
+.t-weather { flex: 1; min-width: 0; display: flex; gap: 1.8cqw; }
+.t-hero {
+  flex: 3;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5.3cqw;
+  border-radius: 11.6cqw;
+  background: var(--t-container);
+  color: var(--t-on-container);
+}
+.t-hero svg { width: 14cqw; height: 14cqw; }
+.t-temp { margin-top: 1.8cqw; font-size: 13.2cqw; font-weight: 500; line-height: 1.05; letter-spacing: -0.02em; white-space: nowrap; }
+.t-cond { margin-top: 0.9cqw; font-size: 5.7cqw; font-weight: 500; }
+.t-side { flex: 2; min-width: 0; display: flex; flex-direction: column; gap: 1.8cqw; }
+.t-chip {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9cqw;
+  padding: 3.5cqw;
+  border-radius: 999px;
+  font-size: 6.6cqw;
+  font-weight: 500;
+  line-height: 1.1;
+}
+.t-chip svg { width: 7cqw; height: 7cqw; }
+.t-rain { background: var(--t-surface); color: var(--t-on-surface); }
+.t-hilo { gap: 0.4cqw; background: var(--t-primary); color: var(--t-on-primary); }
+.t-hilo span { display: flex; align-items: center; gap: 0.9cqw; }
+
+/* Edge button: the glance's own action (play/pause, mark done), or Brief.
+   Soft top corners and a deep, rounded bottom, measured from the device
+   capture (48% wide, 20% tall, 78% down). */
 .tile-edge {
   position: absolute;
   left: 26%;
@@ -980,12 +1023,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
   border-radius: 16% 16% 50% 50% / 34% 34% 66% 66%;
-  background: var(--t-container);
-  color: var(--t-on-container);
+  background: var(--t-primary);
+  color: var(--t-on-primary);
+  font: inherit;
+  font-size: 5.6cqw;
+  font-weight: 600;
 }
-.tile-edge svg { width: 9.1cqw; height: 9.1cqw; fill: currentColor; }
-.tile-edge.text { font-size: 5.6cqw; font-weight: 600; }
+.tile-edge svg { width: 10.6cqw; height: 10.6cqw; fill: currentColor; }
+button.tile-edge {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter var(--dur-fast) var(--ease), scale var(--dur-spring) var(--ease-spring);
+}
+button.tile-edge:hover { filter: brightness(1.08); }
+button.tile-edge:active { scale: 0.94; transition-duration: 0.1s; }
+button.tile-edge:focus-visible { outline: 2px solid var(--t-on-primary); outline-offset: -5px; }
 
 .tile-foot {
   position: absolute;
@@ -993,114 +1049,292 @@
   left: 20%;
   right: 20%;
   text-align: center;
-  font-size: 4.8cqw;
+  font-size: 5.7cqw;
   font-weight: 500;
-  color: #c9c5d0;
+  color: var(--t-on-surface-variant);
 }
 
-/* Phone widget, drawn after the real one: a dark card with a badge, two
-   lines, and a pill, a play/pause button or a bar when the glance has one */
-.cell-widget .cell-stage {
-  background:
-    radial-gradient(50% 90% at 105% 50%, color-mix(in srgb, var(--src-bg) 85%, transparent), transparent),
-    radial-gradient(40% 70% at -5% 100%, rgb(99 102 200 / 0.25), transparent),
-    #050608;
-}
+/* ----------------------------------------------------------------------------
+   Wear OS widget — after BriefWearWidget (Glance Wear), at the code
+   previews' squircle sizes: a 166 × 60 dp card and a 166 × 96 dp one, each
+   inside 8 dp of container padding with 26 dp corners. Drawn at 1 dp = 1px
+   and zoomed to fit. Brief's own dark scheme, which is what the widget
+   always draws: each source on its tonal container, the date on the
+   neutral one.
+---------------------------------------------------------------------------- */
+.cell-wear .cell-stage { padding: var(--space-6) var(--space-4); }
+.ww-stack { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 
-.widget {
+.ww {
+  --ground: #1b2122;
+  --ink: #dee3e5;
+  --ind: #dee3e5;
+  --track: #252b2c;
   position: relative;
-  width: min(100% - 32px, 420px);
-  height: 112px;
-  border-radius: 30px;
-  background: #0b0f11;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.05), 0 24px 48px -24px rgb(0 0 0 / 0.7);
+  flex: none;
+  width: 182px;
+  height: 76px;
+  border-radius: 26px;
   overflow: hidden;
-  color: #e7ecee;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font);
+  line-height: 1.25;
+  text-align: start;
+  box-shadow: 0 14px 28px -18px rgb(0 0 0 / 0.7);
+  transition: background-color var(--dur-slow) var(--ease), color var(--dur-slow) var(--ease);
+}
+.ww.tall { height: 112px; }
+.ww[data-role="primary"] { --ground: #004f58; --ink: #9eeffd; --ind: #82d3e1; --track: #1b2122; }
+.ww[data-role="secondary"] { --ground: #334b4f; --ink: #cde7ec; --ind: #b1cbd0; --track: #1b2122; }
+.ww[data-role="tertiary"] { --ground: #3b4665; --ink: #dae2ff; --ind: #bac6ea; --track: #1b2122; }
+.ww[data-role="error"] { --ground: #93000a; --ink: #ffdad6; --ind: #ffb4ab; --track: #1b2122; }
+/* Music over its cover: Brief's ground under a scrim, 70% at the title to
+   85% under the buttons, and neutral text */
+.ww.cover {
+  --ground: #0e1415;
+  --ink: #dee3e5;
+  --track: #4a5456;
+  background: linear-gradient(rgb(14 20 21 / 0.7), rgb(14 20 21 / 0.85)), var(--cover) center / cover, #0e1415;
+}
+/* The document sits inside the container's 8 dp padding */
+.ww > .swap-stack { position: absolute; inset: 8px; }
+
+.ww svg { display: block; flex: none; }
+.ww-h,
+.ww-s,
+.ww-d { display: block; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ww-h { font-size: 18px; font-weight: 700; }
+.ww-s { font-size: 14px; font-weight: 450; line-height: 1.3; }
+.ww-d { font-size: 12px; line-height: 1.3; }
+.ww .two { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; }
+
+/* A row: the visual (or nothing), the lines, then a button (or nothing) */
+.ww-row { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 16px; }
+.ww-row.has-vis { padding-left: 12px; }
+.ww-row.has-btn { padding-right: 8px; }
+.ww-lines { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 0; }
+.ww-vis + .ww-lines { padding-left: 10px; }
+.ww-row.has-btn .ww-lines { padding-right: 8px; }
+
+/* Ring, gauge or disc: 44 dp, a 5 dp stroke, a 22 dp glyph */
+.ww-vis { position: relative; flex: none; width: 44px; height: 44px; }
+.ww-vis.disc { border-radius: 50%; background: var(--track); }
+.ww-arc { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ww-arc .tr,
+.ww-arc .in { fill: none; stroke-width: 5; stroke-linecap: round; }
+.ww-arc .tr { stroke: var(--track); }
+.ww-arc .in { stroke: var(--ind); }
+.ww-arc.spin { rotate: -90deg; }
+.ww-arc .gap { fill: var(--ground); }
+.ww-arc .mk { fill: var(--ind); }
+.ww-glyph { position: absolute; inset: 0; margin: auto; width: 22px; height: 22px; fill: var(--ink); }
+
+/* Tall card with progress: the row over a bar on the card's bottom edge */
+.ww-barbody { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 8px 0; }
+.ww-top { flex: 1; min-height: 0; display: flex; align-items: center; padding: 0 16px 6px 12px; }
+.ww-bar { --v: 0; position: relative; flex: none; height: 8px; margin: 0 14px; border-radius: 4px; background: var(--track); }
+.ww-bar i { position: absolute; inset: 0 auto 0 0; width: calc(8px + var(--v) * (100% - 8px)); border-radius: inherit; background: var(--ind); }
+.ww-bar::after { content: ""; position: absolute; top: 2px; right: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--ind); }
+/* Weather's bar: today's low and high either side of the temperature */
+.ww-mbar { flex: none; display: flex; align-items: center; height: 12px; margin: 0 12px; font-size: 12px; line-height: 1; }
+.ww-mbar .trk { --v: 0; position: relative; flex: 1; height: 12px; }
+.ww-mbar .trk::before { content: ""; position: absolute; left: 3.5px; right: 3.5px; top: 3.5px; height: 5px; border-radius: 3px; background: var(--track); }
+.ww-mbar .trk i {
+  position: absolute;
+  top: 50%;
+  left: calc(6px + var(--v) * (100% - 12px));
+  width: 9px;
+  height: 9px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: var(--ind);
+  box-shadow: 0 0 0 1.5px var(--ground);
 }
 
-.pw-item {
+/* Buttons: a 48 dp target with the filled circle drawn inside it */
+.ww-btn {
+  appearance: none;
+  position: relative;
+  flex: none;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-content: center;
-  align-items: center;
-  column-gap: 14px;
-  padding-inline: 20px;
-}
-
-.pw-badge {
-  grid-row: 1;
+  place-items: center;
   width: 48px;
   height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.ww-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.ww-fill {
   display: grid;
   place-items: center;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: var(--src-bg);
-  color: var(--src-fg);
+  background: #82d3e1;
+  color: #00363d;
+  transition: scale var(--dur-spring) var(--ease-spring);
 }
-.pw-badge svg { width: 24px; height: 24px; fill: currentColor; }
+.ww-btn:active .ww-fill { scale: 0.9; transition-duration: 0.1s; }
+.ww-fill svg { width: 24px; height: 24px; fill: currentColor; }
+.ww-btn.play .ww-fill { width: 36px; height: 36px; }
+.ww-btn .ww-arc { rotate: -90deg; }
+.ww-btn .ww-arc .tr,
+.ww-btn .ww-arc .in { stroke-width: 3; }
+.ww-btn.skip svg { width: 24px; height: 24px; fill: var(--ink); }
+.ww-btn.skip:active svg { scale: 0.9; }
 
-.pw-lines { grid-row: 1; display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
-.pw-title { font-size: 1.02rem; font-weight: 500; }
-.pw-text { color: rgb(231 236 238 / 0.62); font-size: 0.9rem; }
-.pw-title,
-.pw-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+/* Music on a tall card: a player, centred */
+.ww-player { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ww-player .ww-lines { flex: none; width: 100%; padding: 0 12px; text-align: center; }
+.ww-transport { display: flex; }
 
-.pw-pill {
-  grid-column: 3;
-  grid-row: 1;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: #1b2427;
-  color: rgb(231 236 238 / 0.78);
-  font-size: 0.85rem;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+/* The date: the bare lines, centred down the card */
+.ww-plain { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 16px; }
+.ww.tall .ww-plain .ww-h { font-size: 24px; line-height: 1.2; }
+.ww.tall .ww-plain .ww-s { font-size: 16px; font-weight: 500; }
+
+/* ----------------------------------------------------------------------------
+   Phone widget — BriefGlanceWidget, after the widget prototype: dp drawn at
+   1:1 px and scaled down to fit. Colour roles arrive as custom properties on
+   .bw (Brief's own light and dark schemes, the app's default, following
+   the page), and the card is the scheme's surface at 70% over a wallpaper.
+---------------------------------------------------------------------------- */
+.cell-widget .cell-stage {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 300px;
+  padding: var(--space-6) var(--space-4);
+  background:
+    radial-gradient(120% 70% at 88% 6%, rgb(255 142 110 / 0.95), rgb(255 142 110 / 0) 46%),
+    radial-gradient(90% 60% at 6% 96%, rgb(92 70 214 / 0.9), rgb(92 70 214 / 0) 62%),
+    linear-gradient(168deg, #17183a 0%, #372a67 48%, #8c3f6f 100%);
 }
-.pw-pill svg { width: 14px; height: 14px; fill: currentColor; }
-.pw-pill .gap { width: 8px; }
-
-.pw-btn {
-  grid-column: 3;
-  grid-row: 1 / span 2;
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--src-fg);
-  color: var(--src-bg);
+@media (prefers-color-scheme: light) {
+  .cell-widget .cell-stage {
+    background:
+      radial-gradient(100% 60% at 85% 10%, #fff, rgb(255 255 255 / 0) 55%),
+      radial-gradient(100% 70% at 8% 92%, rgb(170 160 235 / 0.85), rgb(170 160 235 / 0) 60%),
+      linear-gradient(170deg, #e9f0fb 0%, #cfdcf4 52%, #b5c2ea 100%);
+  }
 }
-.pw-btn svg { width: 24px; height: 24px; fill: currentColor; }
+.pw-wall { display: grid; place-items: center; width: 100%; }
 
-.pw-bar {
-  --v: 0;
-  grid-column: 2 / 4;
-  grid-row: 2;
+.bw {
   position: relative;
-  height: 5px;
-  margin-top: 12px;
-  border-radius: 3px;
-  background: color-mix(in srgb, var(--src-fg) 20%, #1b2427);
+  flex: none;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--card);
+  color: var(--on-surface);
+  font-family: var(--font);
+  line-height: 1.33;
+  text-align: start;
+  transition: background-color var(--dur-slow) var(--ease);
 }
-.has-btn .pw-bar { grid-column: 2 / 3; }
-.pw-bar i {
+.bw > .swap-stack { position: absolute; inset: 0; }
+.bw svg { display: block; flex: none; fill: currentColor; }
+
+.bw-t { display: block; max-width: 100%; min-width: 0; margin: 0; line-height: 1.33; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bw-t.l2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; overflow-wrap: break-word; }
+.bw-row { display: flex; flex-direction: row; align-items: center; min-width: 0; }
+.bw-row.bottom { align-items: flex-end; }
+.bw-col { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.bw-col.end { align-items: flex-end; text-align: end; }
+.bw-w1 { flex: 1 1 0; min-width: 0; }
+.bw-nf { flex: 0 0 auto; }
+.bw-gap { flex: none; }
+.bw-chip { flex: none; display: grid; place-items: center; border-radius: 50%; }
+
+/* Templates: CompactCard (2×1), RowCard (3×1, 4×1), StackCard (two rows) */
+.bw-compact,
+.bw-rowc,
+.bw-stack { width: 100%; height: 100%; }
+.bw-compact { display: flex; align-items: center; padding: 0 12px; }
+.bw-rowc { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 11px; }
+.bw-rowc > .bw-row { width: 100%; }
+.bw-stack { display: flex; flex-direction: column; padding: 10px 16px; }
+.bw-hdr { display: flex; align-items: center; flex: none; width: 100%; min-width: 0; height: 48px; }
+.bw-hdr .bw-aux { flex: 0 1 auto; min-width: 0; }
+.bw-herobox { flex: 1 1 0; min-height: 0; width: 100%; display: flex; align-items: flex-end; overflow: hidden; }
+.bw-heroslot { width: 100%; }
+.bw-num { flex: none; overflow: visible; text-overflow: clip; font-weight: 400; }
+.bw-sct { flex: none; }
+.bw-sct .bw-t { overflow: visible; }
+.bw-share { flex: 0 1 auto; }
+
+/* Pieces */
+.bw-pill { display: inline-block; flex: none; white-space: nowrap; line-height: 1.33; font-weight: 500; }
+/* The countdown is a Chronometer the launcher ticks: a fixed width, the
+   brand accent pair */
+.bw-cd {
+  display: block;
+  flex: none;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.33;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  border-radius: 20px;
+  background: var(--accent-c);
+  color: var(--on-accent-c);
+}
+.bw-badge {
+  flex: none;
+  padding: 4px 8px;
+  border-radius: 11px;
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.33;
+  white-space: nowrap;
+  text-align: center;
+}
+/* Every action is a 40 dp disc inside a 48 dp touch target */
+.bw-tt {
+  appearance: none;
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.bw-tt::after {
+  content: "";
   position: absolute;
-  inset: 0 auto 0 0;
-  width: calc(var(--v) * 100%);
-  border-radius: inherit;
-  background: var(--src-fg);
-  transition: width 1s linear;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--on-surface);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
 }
-.pw-bar.marker i {
-  inset: 50% auto auto calc(var(--v) * 100%);
-  width: 7px;
-  height: 16px;
-  translate: -50% -50%;
-  border-radius: 4px;
-}
+.bw-tt:hover::after { opacity: 0.08; }
+.bw-tt:active::after { opacity: 0.16; }
+.bw-tt:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+.bw-disc { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; }
+
+/* The size picker under the phone widget */
+/* Laid out like the sizes themselves: the one-row sizes, then the two-row ones */
+.pw-sizes { display: grid; grid-template-columns: repeat(3, max-content); gap: var(--space-2); margin-top: var(--space-4); }
+.pw-size { --btn-px: var(--space-3); gap: 6px; font-variant-numeric: tabular-nums; }
+.pw-size svg { width: 22px; height: 12px; }
+.pw-size[aria-pressed="true"] { background: var(--surface-2); border-color: var(--accent); }
 
 /* ----------------------------------------------------------------------------
    FAQ — answers open smoothly where ::details-content is supported
