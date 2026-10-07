@@ -10,9 +10,9 @@ for each page you changed, so they can open it without merging:
 
     https://raw.githack.com/enriquedfa/dfamaya/<branch>/<path>
 
-e.g. `https://raw.githack.com/enriquedfa/dfamaya/main/watchfaces/index.html`.
-Use the full `index.html` path (githack doesn't resolve folder URLs). Branch
-names with `/` go in as they are.
+e.g. `https://raw.githack.com/enriquedfa/dfamaya/main/watchfaces/`. Folder
+URLs serve their `index.html`, and branch names with `/` go in as they are.
+Check the link returns 200 before handing it over.
 
 ## Checking a change
 
