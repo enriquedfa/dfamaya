@@ -50,20 +50,32 @@
 .ws-clock,
 .ws-cx,
 .ws-bar,
+.ws-ground,
 .ws-edge { transition: opacity 0.5s var(--ease); }
 
 .is-aod .ws-day,
 .is-aod .ws-clock,
 .ws-cx.is-hidden,
-.ws-bar.is-hidden { opacity: 0; }
+.ws-bar.is-hidden,
+.ws-ground.is-hidden { opacity: 0; }
 .is-aod .ws-clock-aod { opacity: 1; }
+
+/* Dark ground: the sky wrapper's scaleY 0.7 about the top edge, so the sky
+   ends at the horizon and only its last 45 px spill below the line */
+.ws-sky {
+  transform-origin: 0 0;
+  transition: transform 0.5s var(--ease);
+}
+.ws-sky.is-squeezed { transform: scaleY(0.7); }
 
 .ws-bar {
   transform-box: fill-box;
   transform-origin: 0 50%;
 }
-/* The moon's halo screens over the sky (blendMode SCREEN) */
+/* The moon's halo screens over the sky (blendMode SCREEN), the sun's glow
+   adds to it (blendMode PLUS) */
 .ws-screen { mix-blend-mode: screen; }
+.ws-plus { mix-blend-mode: plus-lighter; }
 
 /* The glow behind the watch follows the sky */
 :where([data-ws-glow], [data-ws-page] .pg-stage) { transition: --ws-glow var(--dur-slower) var(--ease); }
@@ -136,3 +148,25 @@
 /* The editor icons' images (.pg-ico, ../style.css): the url() in --i
    resolves against this file, next to img/ */
 .pg-ico { -webkit-mask-image: var(--i); mask-image: var(--i); }
+
+/* Latitude: south to north, the track coloured by today's length of day */
+.ws-lat {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  color: var(--faint);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.ws-lat-note { margin: var(--space-1) 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.55; }
+.ws-lat-note strong { color: var(--text); font-weight: 600; }
+
+/* A moment the sun skips today at this latitude */
+.pg-moments .btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}

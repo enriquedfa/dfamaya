@@ -42,7 +42,7 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
 - `watchfaces/watchsky.css` — landing page + face styles
 - `watchfaces/img/` — assets from the WatchSky repo: the Play Store icon, the
   face's `preview.png` (shown until the script runs), the weather glyphs and
-  the editor icons, under their drawable names
+  the editor icons (`drawable-nodpi`, at 96px), under their drawable names
 - `watchfaces/og.png` — link preview image (1200×630)
 
 ### Spiralis
@@ -261,20 +261,37 @@ To change the sample content, edit the `SOURCES` array at the top of
 450×450 canvas. Coordinates, colours and timings are copied as they are, so
 the two read side by side:
 
-- **The sky** is the XML's base gradient plus ten layers, each fading in over
-  its slice of the day, anchored to the sunrise or sunset hour. Layers 4–8
-  swap palette by weather (clear, partly cloudy, overcast, stormy). The
-  slider's track is the same sky, sampled across 24 hours.
-- **The sun or moon** rides the dashed arc with the XML's orbit maths. Live
-  moon phase is worked out from the date.
-- **The settings** (weather, moon phase, middle bar, sunrise, sunset, date,
-  border shadow, always-on) are real radios and checkboxes, drawn with the
-  watch editor's own icons.
+- **The sun** follows the face's solar model (from 1.4): a latitude band and
+  the date give the declination, the hour angle and the sun's height, with
+  solar noon at 12:00 local, the equation of time and DST, as in the XML.
+  `tools/wff_solar_expressions.py` in the WatchSky repo generates the XML's
+  side of it; `sunDay()` / `sunAt()` are the same formulas.
+- **The sky** is the XML's base gradient plus five layers (nautical, blue
+  hour, civil, golden, day), each fading in over its band of solar altitude,
+  so evening is the morning in reverse and the seasons move dawn and dusk.
+  The civil, golden and day layers swap palette by weather (clear, partly
+  cloudy, overcast, stormy). The slider's track is today's sky at the chosen
+  latitude, sampled across 24 hours. **Dark ground** squeezes the sky into
+  the top 315px (the XML's `scaleY` 0.7) and fades its last 45px to black.
+- **The sun or moon** rides the dashed arc with the XML's orbit maths. The
+  sun is two discs (ochre under cream, the cream's alpha is the sun's
+  height) and its glow grows from half size on the horizon to full at 25°.
+  Live moon phase is worked out from the date.
+- **The stars** are the XML's 132-star field, clipped above the horizon and
+  turning 15° an hour about the pole |latitude| below it.
+- **The settings** (weather, moon phase, middle bar, latitude, date, border
+  shadow, dark ground, always-on) are real radios, checkboxes and a range,
+  drawn with the watch editor's own icons. The latitude slider's track is
+  today's length of day at each band; the moment buttons jump to when the
+  sun crosses an altitude today, and turn off when it doesn't (no sunrise in
+  the polar night).
 - The bottom complication shows a made-up calendar (`EVENTS` in the script).
 
 If the face changes in the WatchSky repo (a new palette, a new setting), make
 the same change here: the constants at the top of `watchsky.js` mirror the
 XML. The face stops ticking while it's off screen or the tab is hidden.
+`watchfaces/og.png` is a 1200×630 capture of this page's hero, so retake it
+when the hero copy or the face's look changes.
 
 ## The Spiralis page
 
