@@ -445,7 +445,9 @@
 .screen p { margin: 0; }
 .screen button { font: inherit; color: inherit; }
 
-/* Status bar: the clock, the camera, wifi, signal and battery */
+/* Status bar, as Android 16 draws it over the app: the time, the camera,
+   then signal, wifi and the pill battery. The renders below carry the same
+   one, drawn by the screenshot test. */
 .sb {
   position: absolute;
   inset: 0 0 auto;
@@ -454,7 +456,7 @@
   align-items: center;
   justify-content: space-between;
   height: calc(32 * var(--dp));
-  padding: 0 calc(22 * var(--dp)) 0 calc(26 * var(--dp));
+  padding: 0 calc(20 * var(--dp)) 0 calc(22 * var(--dp));
   font-size: calc(14 * var(--dp));
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -471,8 +473,10 @@
   border-radius: 50%;
   background: #000;
 }
-.sb-icons { display: flex; align-items: center; gap: calc(3 * var(--dp)); }
+.sb-icons { display: flex; align-items: center; gap: calc(6 * var(--dp)); }
 .sb-icons svg { width: calc(15 * var(--dp)); height: calc(15 * var(--dp)); }
+.sb-icons .sb-signal { height: calc(12 * var(--dp)); }
+.sb-icons .sb-battery { width: calc(24 * var(--dp)); height: calc(12 * var(--dp)); }
 .screen.on-hero .sb { color: #fff; }
 
 .navbar {
@@ -1205,8 +1209,8 @@
 .log-fine { margin: var(--space-4) 0 0; color: var(--faint); font-size: var(--text-xs); line-height: 1.45; }
 
 /* ----------------------------------------------------------------------------
-   Screenshots: the app's renders in a phone frame. They start at the top of
-   the app, so the status bar is drawn above them.
+   Screenshots: the app's renders in a phone frame. The renders carry their
+   own status bar and gesture bar, so only the camera is added here.
 ---------------------------------------------------------------------------- */
 .shot {
   position: relative;
@@ -1217,26 +1221,19 @@
   background: #1a1b1f;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), 0 30px 60px -30px rgb(0 0 0 / 0.6);
 }
-.shot img { display: block; width: 100%; height: auto; border-radius: 0 0 27px 27px; }
-.shot-status {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 24px;
-  padding: 2px 0 0 22px;
-  border-radius: 27px 27px 0 0;
-  background: #fff7fb;
-  color: #201a1d;
-  font: 500 11px/1 Roboto, system-ui, sans-serif;
-  font-variant-numeric: tabular-nums;
+.shot img { display: block; width: 100%; height: auto; border-radius: 27px; }
+.shot::after,
+.mock::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(7px + 2.2%);
+  width: 3.4%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: #000;
 }
-.shot-status .punch { top: 7px; width: 10px; height: 10px; margin-left: -5px; }
-.shot-status.on-dark { background: #191115; color: #e9e0e4; }
-/* Over a picture that runs under the status bar */
-.shot-status.on-photo { background: #231c1c; color: #fff; }
-.shot-status.on-sky { background: #9fd3e6; color: #1b1f22; }
-/* A light/dark pair follows the page, so its status bar does too */
-.shot-status.follows { background: light-dark(#fff7fb, #191115); color: light-dark(#201a1d, #e9e0e4); }
 
 /* Three ways in */
 .ways {
@@ -1266,25 +1263,27 @@
     var(--bg-raised);
   border-bottom: 1px solid var(--border);
 }
-.way-visual .shot {
+.way-visual .shot,
+.way-visual .mock {
   width: 210px;
+  flex: none;
   align-self: flex-start;
   -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent);
   mask-image: linear-gradient(to bottom, #000 72%, transparent);
 }
-/* Share: the bottom of the shot, where the confirmation is */
+/* Share: the bottom of the phone, where the share sheet is */
 .way-visual.from-bottom { align-items: flex-end; padding-top: 0; }
-.way-visual.from-bottom .shot {
+.way-visual.from-bottom > * {
   align-self: flex-end;
-  -webkit-mask-image: linear-gradient(to top, #000 72%, transparent);
-  mask-image: linear-gradient(to top, #000 72%, transparent);
+  -webkit-mask-image: linear-gradient(to top, #000 78%, transparent);
+  mask-image: linear-gradient(to top, #000 78%, transparent);
 }
-/* The sidebar: the middle of the shot, where the tile is */
+/* Selecting and the sidebar: the middle of the phone */
 .way-visual.from-middle { align-items: center; padding: 0 var(--space-6); }
-.way-visual.from-middle .shot {
+.way-visual.from-middle > * {
   align-self: center;
-  -webkit-mask-image: linear-gradient(transparent, #000 22%, #000 78%, transparent);
-  mask-image: linear-gradient(transparent, #000 22%, #000 78%, transparent);
+  -webkit-mask-image: linear-gradient(transparent, #000 20%, #000 80%, transparent);
+  mask-image: linear-gradient(transparent, #000 20%, #000 80%, transparent);
 }
 .way-copy { position: relative; padding: var(--card-pad); }
 .way-num {
@@ -1300,36 +1299,252 @@
   font-size: var(--text-xs);
 }
 .way h3 { font-size: var(--text-lg); letter-spacing: -0.015em; }
-.way p { margin: var(--space-2) 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.5; }
+.way-copy p { margin: var(--space-2) 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.5; }
 
-/* The text-selection toolbar, drawn over some selected words */
-.way-select { align-items: center; padding-top: 0; }
-.select-demo {
-  width: min(100%, 290px);
-  padding: var(--space-5);
-  border-radius: var(--radius);
-  background: light-dark(#ffffff, #1f1f23);
-  color: light-dark(#1f1f23, #e4e2e6);
-  box-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.5);
-  font: 400 15px/1.55 Roboto, system-ui, sans-serif;
+/* ----------------------------------------------------------------------------
+   Mocks of other apps' screens, drawn like the screenshots: a browser with
+   Android's share sheet open (Kakera's "Save" in it), and the same browser
+   with words selected and the selection menu's extra options open ("Save to
+   Kakera" is Kakera's PROCESS_TEXT entry). Sized in dp of a 411 dp screen.
+   The people, apps and site are made up.
+---------------------------------------------------------------------------- */
+.mock {
+  position: relative;
+  padding: 7px;
+  border-radius: 34px;
+  background: #1a1b1f;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), 0 30px 60px -30px rgb(0 0 0 / 0.6);
 }
-.select-demo p { margin: 0; }
-.select-demo mark { background: light-dark(#ffd8e9, #7a2754); color: inherit; border-radius: 2px; }
-.sel-menu {
+.m-screen {
+  --dp: calc(100cqw / 411);
+  --m-bg: light-dark(#ffffff, #141416);
+  --m-ink: light-dark(#1b1b1f, #e6e1e5);
+  --m-muted: light-dark(#5f5f66, #a8a6ad);
+  --m-line: light-dark(#e6e6ea, #2c2c31);
+  --m-card: light-dark(#f4f4f7, #232327);
+  --m-sel: light-dark(#c8dbf8, #2c4a78);
+  --m-handle: #3f7cf0;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 411 / 891;
+  border-radius: 27px;
+  background: var(--m-bg);
+  color: var(--m-ink);
+  container-type: inline-size;
+  font-family: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: normal;
+  user-select: none;
+}
+.m-screen svg { display: block; fill: currentColor; }
+.m-screen p { margin: 0; }
+
+.m-sb {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 3;
   display: flex;
-  flex-wrap: wrap;
-  width: max-content;
-  max-width: 100%;
-  margin: 0 0 var(--space-3) auto;
-  padding: 4px;
-  border-radius: 12px;
-  background: light-dark(#f3edf1, #2b292d);
-  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.35);
-  font-size: 13px;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(32 * var(--dp));
+  padding: 0 calc(20 * var(--dp)) 0 calc(22 * var(--dp));
+  font-size: calc(14 * var(--dp));
   font-weight: 500;
 }
-.sel-menu span { padding: 7px 10px; border-radius: 8px; }
-.sel-menu .on { background: light-dark(#ffd8e9, #7a2754); color: light-dark(#3d0025, #ffd8e9); }
+.m-sb-icons { display: flex; align-items: center; gap: calc(6 * var(--dp)); }
+.m-sb-icons svg { width: calc(15 * var(--dp)); height: calc(15 * var(--dp)); }
+.m-sb-icons svg:first-child { height: calc(12 * var(--dp)); }
+.m-sb-icons svg:last-child { width: calc(24 * var(--dp)); height: calc(12 * var(--dp)); }
+
+.m-page { padding-top: calc(32 * var(--dp)); }
+.m-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(56 * var(--dp));
+  padding: 0 calc(16 * var(--dp));
+  border-bottom: calc(1 * var(--dp)) solid var(--m-line);
+}
+.m-ico svg { width: calc(24 * var(--dp)); height: calc(24 * var(--dp)); }
+.m-brand { font: italic 600 calc(22 * var(--dp)) / 1 Georgia, "Times New Roman", serif; letter-spacing: -0.01em; }
+.m-h {
+  margin: 0;
+  padding: calc(22 * var(--dp)) calc(18 * var(--dp)) calc(14 * var(--dp));
+  font: 600 calc(28 * var(--dp)) / 1.15 Georgia, "Times New Roman", serif;
+  letter-spacing: -0.01em;
+}
+.m-center { text-align: center; }
+.m-hero {
+  aspect-ratio: 1200 / 630;
+  margin: 0 calc(18 * var(--dp));
+  border-radius: calc(12 * var(--dp));
+  background: url(img/samples/ramen.svg) center / cover;
+}
+.m-p {
+  padding: calc(14 * var(--dp)) calc(18 * var(--dp)) 0;
+  font-size: calc(16 * var(--dp));
+  line-height: calc(26 * var(--dp));
+}
+.m-scrim { position: absolute; inset: 0; z-index: 2; background: rgb(0 0 0 / 0.36); }
+.m-nav {
+  position: absolute;
+  left: 50%;
+  bottom: calc(8 * var(--dp));
+  z-index: 5;
+  width: calc(108 * var(--dp));
+  height: calc(4 * var(--dp));
+  translate: -50% 0;
+  border-radius: 99px;
+  background: var(--m-ink);
+  opacity: 0.6;
+}
+
+/* The share sheet */
+.m-sheet {
+  position: absolute;
+  left: calc(10 * var(--dp));
+  right: calc(10 * var(--dp));
+  bottom: calc(22 * var(--dp));
+  z-index: 4;
+  padding-bottom: calc(14 * var(--dp));
+  border-radius: calc(30 * var(--dp));
+  background: light-dark(#f7f7f9, #1d1d20);
+  box-shadow: 0 calc(-4 * var(--dp)) calc(24 * var(--dp)) rgb(0 0 0 / 0.18);
+}
+.m-sheet-title {
+  padding: calc(22 * var(--dp)) calc(26 * var(--dp)) calc(18 * var(--dp));
+  border-bottom: calc(1 * var(--dp)) solid var(--m-line);
+  font-size: calc(20 * var(--dp));
+  font-weight: 600;
+}
+.m-link {
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--dp));
+  margin: calc(12 * var(--dp));
+  padding: calc(12 * var(--dp)) calc(14 * var(--dp)) calc(12 * var(--dp)) calc(12 * var(--dp));
+  border-radius: calc(18 * var(--dp));
+  background: light-dark(#ffffff, #2a2a2e);
+}
+.m-link > svg { flex: none; width: calc(24 * var(--dp)); height: calc(24 * var(--dp)); color: var(--m-muted); }
+.m-thumb {
+  flex: none;
+  width: calc(46 * var(--dp));
+  height: calc(46 * var(--dp));
+  border-radius: calc(10 * var(--dp));
+  background: url(img/samples/ramen.svg) center / cover;
+}
+.m-lt { display: flex; flex-direction: column; gap: calc(2 * var(--dp)); min-width: 0; flex: 1; }
+.m-lt b,
+.m-lt small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.m-lt b { font-size: calc(15 * var(--dp)); font-weight: 500; }
+.m-lt small { color: var(--m-muted); font-size: calc(12 * var(--dp)); }
+.m-people,
+.m-apps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: calc(14 * var(--dp)) calc(8 * var(--dp));
+  border-top: calc(1 * var(--dp)) solid var(--m-line);
+  text-align: center;
+  font-size: calc(12 * var(--dp));
+  line-height: 1.25;
+}
+.m-people span,
+.m-apps span { display: flex; flex-direction: column; align-items: center; gap: calc(7 * var(--dp)); min-width: 0; }
+.m-people i {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: calc(50 * var(--dp));
+  height: calc(50 * var(--dp));
+  border-radius: 50%;
+  background: var(--c);
+  color: #fff;
+  font-style: normal;
+  font-size: calc(20 * var(--dp));
+  font-weight: 500;
+}
+.m-people i::after {
+  content: "";
+  position: absolute;
+  right: calc(-2 * var(--dp));
+  bottom: calc(-2 * var(--dp));
+  width: calc(18 * var(--dp));
+  height: calc(18 * var(--dp));
+  border: calc(2 * var(--dp)) solid light-dark(#f7f7f9, #1d1d20);
+  border-radius: 50%;
+  background: #2f6fdb;
+}
+.m-apps i {
+  display: grid;
+  place-items: center;
+  width: calc(52 * var(--dp));
+  height: calc(52 * var(--dp));
+  border-radius: calc(17 * var(--dp));
+  background: var(--c);
+  color: #fff;
+}
+.m-apps i svg { width: calc(28 * var(--dp)); height: calc(28 * var(--dp)); }
+.m-apps img { width: calc(52 * var(--dp)); height: calc(52 * var(--dp)); border-radius: calc(17 * var(--dp)); }
+.m-apps small { margin-top: calc(-5 * var(--dp)); color: var(--m-muted); font-size: calc(11 * var(--dp)); }
+/* Kakera's target, the one to tap: a soft ring that breathes */
+.m-apps .is-kakera img { box-shadow: 0 0 0 calc(3 * var(--dp)) light-dark(#ffffff, #1d1d20), 0 0 0 calc(5.5 * var(--dp)) #b0557f; }
+@media (prefers-reduced-motion: no-preference) {
+  .m-apps .is-kakera img { animation: breathe 2.4s var(--ease) infinite; }
+  @keyframes breathe {
+    50% { box-shadow: 0 0 0 calc(3 * var(--dp)) light-dark(#ffffff, #1d1d20), 0 0 0 calc(9 * var(--dp)) rgb(176 85 127 / 0.25); }
+  }
+}
+
+/* Selected words and the selection menu, opened to its extra options */
+.m-sel-p { position: relative; }
+.m-sel { background: var(--m-sel); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.m-handle { position: relative; display: inline-block; width: 0; height: 1em; vertical-align: text-bottom; }
+.m-handle::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  width: calc(18 * var(--dp));
+  height: calc(18 * var(--dp));
+  background: var(--m-handle);
+}
+.m-handle.l::after { right: 0; border-radius: 50% 0 50% 50%; }
+.m-handle.r::after { left: 0; border-radius: 0 50% 50% 50%; }
+.m-menu {
+  position: absolute;
+  top: 37%;
+  right: calc(30 * var(--dp));
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  width: calc(214 * var(--dp));
+  padding: calc(6 * var(--dp)) 0;
+  border-radius: calc(26 * var(--dp));
+  background: light-dark(#fbfbfd, #26262a);
+  box-shadow: 0 calc(6 * var(--dp)) calc(24 * var(--dp)) rgb(0 0 0 / 0.22);
+  font-size: calc(17 * var(--dp));
+  font-weight: 500;
+}
+.m-menu span { display: flex; align-items: center; height: calc(54 * var(--dp)); margin: 0 calc(8 * var(--dp)); padding: 0 calc(16 * var(--dp)); border-radius: calc(14 * var(--dp)); }
+.m-menu .m-back { height: calc(46 * var(--dp)); margin-bottom: calc(4 * var(--dp)); border-bottom: calc(1 * var(--dp)) solid var(--m-line); border-radius: 0; }
+.m-menu .m-back svg { width: calc(24 * var(--dp)); height: calc(24 * var(--dp)); }
+.m-menu .on { background: light-dark(#ffd8e9, #7a2754); color: light-dark(#3d0025, #ffd8e9); }
+.m-url {
+  position: absolute;
+  left: calc(16 * var(--dp));
+  right: calc(16 * var(--dp));
+  bottom: calc(26 * var(--dp));
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(8 * var(--dp));
+  height: calc(50 * var(--dp));
+  border-radius: calc(25 * var(--dp));
+  background: var(--m-card);
+  font-size: calc(16 * var(--dp));
+  font-weight: 500;
+}
+.m-url svg { width: calc(16 * var(--dp)); height: calc(16 * var(--dp)); }
 
 /* Filing and finding: words beside a screenshot */
 #filing,

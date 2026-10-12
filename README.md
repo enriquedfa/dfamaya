@@ -308,9 +308,20 @@ message and a PDF), each drawn as if it sat in another app.
 - **The screenshots** (`kakera/img/*.webp`) are drawn by the app's own code
   under Robolectric, the technique of the Kakera repo's `ScreenshotTest`
   (`docs/testing.md#screenshots`), with the same made-up pieces as the demo,
-  then converted to 720px-wide WebP. To retake them, render the screens with
-  a library seeded like `SAMPLES` and replace the files; they start at the app
-  bar, so the page draws the status bar above them.
+  then converted to 720px-wide WebP. The test hands the screens a 32 dp
+  status bar and a 24 dp gesture bar (`statusBars` and `navigationBars`, and
+  the same "ignoring visibility", which the hero's back button reads), the way
+  `CutoutInsets.kt` hands a cutout, and draws Android 16's status bar (time,
+  signal, wifi, pill battery) and the gesture handle over them, so heroes run
+  under the bar as on a phone. The page adds only the camera. To retake them,
+  render the screens with a library seeded like `SAMPLES` and replace the
+  files.
+- **Share and Select text** in "Three ways in" are HTML mocks of other apps
+  (`.mock` in `kakera.css`), not renders: a browser with the share sheet open
+  and Kakera's "Save" in it, and the same browser with words selected and the
+  selection menu's extra options open, "Save to Kakera" among them. The site,
+  the people and the apps are made up. The demo phone and the mocks draw the
+  same status bar as the renders.
 
 ## The WatchSky page
 
