@@ -20,9 +20,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
   <!-- The phone's text: Android's system font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Roboto+Mono:wght@400&display=swap" />
-  <link rel="stylesheet" href="../style.css?v=4" />
-  <link rel="stylesheet" href="kakera.css?v=4" />
-  <script src="demo.js?v=4" defer></script>
+  <link rel="stylesheet" href="../style.css?v=5" />
+  <link rel="stylesheet" href="kakera.css?v=5" />
+  <script src="demo.js?v=5" defer></script>
 </head>
 <body class="kakera">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -131,7 +131,7 @@
             </a>
             <a class="btn btn-ghost" href="#ways">How it works</a>
           </div>
-          <p class="fine rise" style="--d:4">Coming soon to Google Play. For Android&nbsp;8 and newer; the edge sidebar needs Android&nbsp;12.</p>
+          <p class="fine rise" style="--d:4">Coming soon to Google Play, for Android&nbsp;12 and newer.</p>
         </div>
 
         <!-- The pieces to drag: each looks like something in another app -->
@@ -232,23 +232,23 @@
               <i class="navbar" aria-hidden="true"></i>
             </div>
           </div>
-          <span class="kanji" lang="ja" aria-hidden="true">欠片</span>
         </div>
 
         <!-- What happened to the last piece, step by step -->
         <aside class="k-log rise" style="--d:4" aria-labelledby="log-title" data-log>
           <div class="log-head">
             <h2 id="log-title">How it was filed</h2>
-            <span class="log-piece" data-log-piece>Waiting for a piece</span>
+            <span class="log-piece" data-log-piece hidden></span>
           </div>
-          <ol class="log-steps">
+          <p class="log-empty" data-log-empty>Save a piece and watch it get filed here, step by step: saved first, then enriched, then Kakera’s rules, then Gemini Nano.</p>
+          <ol class="log-steps" data-log-steps hidden>
             <li data-step="saved"><span class="dot"></span><div><strong>Saved first</strong><span data-note>Written to the library before anything else, so a drop is never lost.</span></div></li>
             <li data-step="enrich"><span class="dot"></span><div><strong data-title>Enriched</strong><span data-note>Link previews, thumbnails and a file’s own words, in the background.</span></div></li>
             <li data-step="rules"><span class="dot"></span><div><strong>Kakera’s rules</strong><span data-note>On every phone: a first kind and tags, from what the piece is and where it came from.</span></div></li>
             <li data-step="nano"><span class="dot"></span><div><strong>Gemini Nano</strong><span data-note>Where the phone has it: a title, a kind, tags and a summary, on the phone.</span></div></li>
           </ol>
           <pre class="log-json" data-log-json hidden></pre>
-          <p class="log-fine">A demo: the samples carry the kind of answer Gemini Nano gives on a phone. Your own drops get Kakera’s rules, run here in your browser. Nothing is uploaded.</p>
+          <p class="log-fine" data-log-fine hidden>A demo: the samples carry the kind of answer Gemini Nano gives on a phone. Your own drops get Kakera’s rules, run here in your browser. Nothing is uploaded.</p>
         </aside>
       </div>
     </section>
@@ -369,7 +369,7 @@
             <div class="way-copy">
               <span class="way-num">3</span>
               <h3>Drag to the edge</h3>
-              <p>Drag a photo, some text or a link out of any app and drop it on the side of the screen. The sidebar shows only while you drag. Android&nbsp;12 and newer.</p>
+              <p>Drag a photo, some text or a link out of any app and drop it on the side of the screen. The sidebar shows only while you drag.</p>
             </div>
           </article>
         </div>
@@ -404,18 +404,9 @@
             </li>
           </ul>
 
-          <div class="kinds reveal" aria-label="The kinds Kakera files pieces as">
-            <p class="pg-sub">Kinds, by what you saved</p>
-            <dl>
-              <dt>Text</dt>
-              <dd><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-text-fields"></use></svg>Note</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-format-quote"></use></svg>Quote</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-checklist"></use></svg>List</span></dd>
-              <dt>Links</dt>
-              <dd><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-feed"></use></svg>Article</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-movie"></use></svg>Video</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-shopping-bag"></use></svg>Product</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-restaurant"></use></svg>Recipe</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-location-on"></use></svg>Place</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-event"></use></svg>Event</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-link"></use></svg>Page</span></dd>
-              <dt>Pictures</dt>
-              <dd><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-image"></use></svg>Photo</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-screenshot-monitor"></use></svg>Screenshot</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-sentiment-very-satisfied"></use></svg>Meme</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-palette"></use></svg>Artwork</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-description"></use></svg>Document</span></dd>
-              <dt>Files</dt>
-              <dd><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-description"></use></svg>Document</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-android"></use></svg>App</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-movie"></use></svg>Video</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-music-note"></use></svg>Audio</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-draft"></use></svg>File</span></dd>
-            </dl>
+          <div class="kinds reveal">
+            <p class="pg-sub">Eighteen kinds, each one only where it fits</p>
+            <div class="kind-list" aria-label="The kinds Kakera files pieces as"><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-text-fields"></use></svg>Note</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-format-quote"></use></svg>Quote</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-checklist"></use></svg>List</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-feed"></use></svg>Article</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-movie"></use></svg>Video</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-shopping-bag"></use></svg>Product</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-restaurant"></use></svg>Recipe</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-location-on"></use></svg>Place</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-event"></use></svg>Event</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-link"></use></svg>Page</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-image"></use></svg>Photo</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-screenshot-monitor"></use></svg>Screenshot</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-sentiment-very-satisfied"></use></svg>Meme</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-palette"></use></svg>Artwork</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-description"></use></svg>Document</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-android"></use></svg>App</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-music-note"></use></svg>Audio</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-draft"></use></svg>File</span></div>
           </div>
         </div>
 
@@ -548,7 +539,7 @@
         <div class="faq reveal">
           <details name="faq">
             <summary>Which phones does it work on?</summary>
-            <p>Android 8 and newer. The edge sidebar needs Android 12. Smart filing with Gemini Nano works on phones that have Android’s on-device model; every other phone files with Kakera’s own rules.</p>
+            <p>Phones with Android 12 or newer. Smart filing with Gemini Nano works on phones that have Android’s on-device model; every other phone files with Kakera’s own rules.</p>
           </details>
           <details name="faq">
             <summary>What does Gemini Nano do with my pieces?</summary>

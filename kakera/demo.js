@@ -281,6 +281,17 @@
       summary: 'A small sailboat on a mountain lake below snowy peaks.', tags: [tag('lake'), tag('mountains'), tag('sailboat')], key: 'seed-lake'
     }),
     makeItem({
+      type: 'LINK', app: 'browser', createdAt: now - 2 * DAY, kind: 'ARTICLE', state: 'done', analyzedBy: 'nano', kindSource: 'nano',
+      url: 'https://fieldnotes.blog/why-stories-stick', enriched: true, title: 'Why we remember stories better than facts', titleSource: 'PAGE',
+      page: { title: 'Why we remember stories better than facts', description: 'Memory researchers on why a narrative sticks when a list of facts slips away.' },
+      summary: 'Why a story is easier to remember than a list of facts.', tags: [tag('memory'), tag('reading'), tag('fieldnotes')], key: 'seed-article'
+    }),
+    makeItem({
+      type: 'TEXT', app: 'messages', createdAt: now - 3 * DAY, kind: 'NOTE', state: 'done', analyzedBy: 'nano', kindSource: 'nano',
+      rawText: 'Saturday: farmers market at 9, then the ferry at ten. Bring the big tote.', title: 'Saturday plans',
+      summary: 'Market at nine, then the ten o’clock ferry.', tags: [tag('weekend'), tag('plans')], key: 'seed-plans'
+    }),
+    makeItem({
       type: 'TEXT', app: 'notes', createdAt: now - 7 * DAY, kind: 'LIST', state: 'done', analyzedBy: 'nano', kindSource: 'nano',
       rawText: 'Groceries\n- oat milk\n- coffee beans\n- miso paste\n- eggs',
       summary: 'A short grocery list: oat milk, coffee beans, miso paste and eggs.', tags: [tag('groceries'), tag('shopping list')], key: 'seed-list'
@@ -324,7 +335,7 @@
     } else if (item.type === 'LINK') {
       var host = hostOf(item.url);
       if (item.enriched && item.page) {
-        p.pic = { src: item.page.image, aspect: item.page.aspect };
+        if (item.page.image) p.pic = { src: item.page.image, aspect: item.page.aspect };
         p.head = item.title;
         p.supp = item.page.description;
       } else {
@@ -356,7 +367,7 @@
       h += '<div class="tile-ico">' + icon(p.tile) + '</div>';
     }
     var txt = '';
-    if (p.head) txt += '<h3 class="headline">' + esc(p.head) + '</h3>';
+    if (p.head) txt += '<p class="headline">' + esc(p.head) + '</p>';
     if (p.body) txt += '<p class="body">' + esc(p.body.slice(0, 1500)) + '</p>';
     if (p.snippet) txt += '<pre class="snippet">' + esc(p.snippet) + '</pre>';
     if (p.supp) txt += '<p class="supp">' + esc(p.supp) + '</p>';
@@ -464,7 +475,7 @@
   function detailHTML(item, popTags) {
     var h = '', k = KINDS[item.kind || GENERIC[item.type]];
     var hero = item.type === 'IMAGE' ? item.picture
-      : item.type === 'LINK' ? (item.enriched && item.page ? { src: item.page.image, aspect: item.page.aspect } : null)
+      : item.type === 'LINK' ? (item.enriched && item.page && item.page.image ? { src: item.page.image, aspect: item.page.aspect } : null)
       : item.picture;
     if (hero && hero.src) {
       h += '<div class="hero' + (hero.wait ? ' wait' : '') + '" style="aspect-ratio:1/' + clampAspect(hero.aspect) + '"><img src="' + esc(hero.src) + '" alt="" draggable="false" /></div>';
@@ -473,7 +484,7 @@
       h += '<div class="det-top"></div><button type="button" class="back plain" data-back aria-label="Back">' + icon('arrow-back') + '</button>';
     }
     var title = item.title || (item.type === 'LINK' ? hostOf(item.url) : item.type === 'TEXT' ? null : item.fileName);
-    if (title) h += '<h3 class="d-title">' + esc(title) + '</h3>';
+    if (title) h += '<p class="d-title">' + esc(title) + '</p>';
     var src = item.app ? APPS[item.app].name + ' · ' : '';
     h += '<p class="d-src">' + appDot(item) + '<span>' + esc(src + longDate(item.createdAt)) + '</span></p>';
 
@@ -559,6 +570,7 @@
   -------------------------------------------------------------------------- */
   var logPiece = $('[data-log-piece]');
   var logJson = $('[data-log-json]');
+  var logEmpty = $('[data-log-empty]');
   var steps = {};
   $$('[data-step]').forEach(function (li) {
     var note = $('[data-note]', li), title = $('strong', li);
@@ -568,6 +580,13 @@
   function logStart(item, name) {
     logFor = item.id;
     logPiece.textContent = name;
+    // The first piece opens the log: until then it is one line, not four empty steps
+    if (!logEmpty.hidden) {
+      logEmpty.hidden = true;
+      logPiece.hidden = false;
+      $('[data-log-steps]').hidden = false;
+      $('[data-log-fine]').hidden = false;
+    }
     Object.keys(steps).forEach(function (k) {
       var s = steps[k];
       s.li.className = '';
@@ -998,6 +1017,9 @@
 
   $$('.sample').forEach(function (btn) {
     btn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    btn.addEventListener('pointerenter', function (e) {
+      if (e.pointerType === 'mouse' && !drag && sdState === 'idle') setSidebar('preview');
+    });
     // Mouse and pen: press, then move a few pixels
     btn.addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'touch' || e.button !== 0) return;
