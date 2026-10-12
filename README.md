@@ -316,12 +316,18 @@ message and a PDF), each drawn as if it sat in another app.
   under the bar as on a phone. The page adds only the camera. To retake them,
   render the screens with a library seeded like `SAMPLES` and replace the
   files.
-- **Share and Select text** in "Three ways in" are HTML mocks of other apps
-  (`.mock` in `kakera.css`), not renders: a browser with the share sheet open
-  and Kakera's "Save" in it, and the same browser with words selected and the
-  selection menu's extra options open, "Save to Kakera" among them. The site,
-  the people and the apps are made up. The demo phone and the mocks draw the
-  same status bar as the renders.
+- **"Three ways in"** shows three HTML mocks of other apps (`.mock` in
+  `kakera.css`), not renders: a browser with the share sheet open and
+  Kakera's "Save" in it; the same browser with words selected and the
+  selection menu's extra options open, "Save to Kakera" among them; and a
+  recipe page whose photo is being dragged (Android's see-through drag
+  shadow) to the edge sidebar, which turns to "Let go to save" on a loop.
+  The site, the people and the apps are made up. Each card shows part of a
+  phone and fades it out before the card's edge, so no frame is cut. The demo
+  phone and the mocks draw the same status bar as the renders.
+- **Screenshots never overlap.** Two phones side by side keep a gap: one
+  screen showing round the other's rounded corner reads as a screenshot
+  spilling out of its frame.
 
 ## The WatchSky page
 
