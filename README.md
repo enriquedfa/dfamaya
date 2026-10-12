@@ -328,6 +328,10 @@ message and a PDF), each drawn as if it sat in another app.
 - **Screenshots never overlap.** Two phones side by side keep a gap: one
   screen showing round the other's rounded corner reads as a screenshot
   spilling out of its frame.
+- **Galleries scroll sideways on phones only.** "A closer look" is Spiralis's
+  gallery pattern (inside the wrap, a bold title and a detail line under each
+  shot): a swipe row on phones, three across from 640px, all six from 1100px,
+  so a mouse never meets a sideways scrollbar.
 
 - **Versioned links.** The Kakera pages (and the home page, for
   `style.css`) link their stylesheets and script with a `?v=` number, so a
