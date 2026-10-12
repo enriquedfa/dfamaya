@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b2a6b"/>
+      <stop offset="0.38" stop-color="#b8487a"/>
+      <stop offset="0.62" stop-color="#f08a5d"/>
+      <stop offset="0.72" stop-color="#ffc77a"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e77d6a"/>
+      <stop offset="0.25" stop-color="#8a3f6e"/>
+      <stop offset="1" stop-color="#2a1d4a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff3c4" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffb36b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a2c4f"/>
+      <stop offset="1" stop-color="#2b1630"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <circle cx="720" cy="560" r="260" fill="url(#glow)"/>
+  <circle cx="720" cy="560" r="92" fill="#ffe7a8"/>
+  <g fill="#fff" opacity="0.18">
+    <ellipse cx="250" cy="250" rx="190" ry="22"/>
+    <ellipse cx="380" cy="290" rx="140" ry="14"/>
+    <ellipse cx="950" cy="200" rx="170" ry="18"/>
+    <ellipse cx="1060" cy="240" rx="110" ry="12"/>
+  </g>
+  <rect y="600" width="1200" height="300" fill="url(#sea)"/>
+  <g fill="#ffe2a0" opacity="0.75">
+    <rect x="650" y="612" width="140" height="6" rx="3"/>
+    <rect x="670" y="634" width="100" height="5" rx="2.5"/>
+    <rect x="630" y="656" width="180" height="5" rx="2.5"/>
+    <rect x="684" y="680" width="72" height="4" rx="2"/>
+    <rect x="610" y="704" width="220" height="4" rx="2"/>
+    <rect x="690" y="732" width="60" height="4" rx="2"/>
+    <rect x="640" y="760" width="160" height="3" rx="1.5"/>
+  </g>
+  <path d="M0 790 C 220 750, 420 770, 640 800 S 1000 830, 1200 790 L1200 900 L0 900 Z" fill="url(#sand)"/>
+  <g fill="#1d1024">
+    <path d="M168 820 C 176 720, 190 640, 222 560 L 230 562 C 204 640, 192 720, 186 820 Z"/>
+    <path d="M226 560 C 180 548, 130 560, 96 600 C 140 572, 186 570, 222 576 Z"/>
+    <path d="M226 560 C 270 530, 330 534, 368 566 C 320 548, 272 552, 232 572 Z"/>
+    <path d="M226 560 C 210 520, 170 500, 128 508 C 170 516, 200 536, 220 572 Z"/>
+    <path d="M226 560 C 252 516, 300 500, 344 510 C 300 516, 266 536, 236 572 Z"/>
+    <path d="M226 560 C 236 600, 268 630, 300 640 C 266 616, 246 596, 232 566 Z"/>
+    <path d="M226 560 C 206 596, 170 620, 134 626 C 170 606, 196 586, 220 562 Z"/>
+  </g>
+</svg>

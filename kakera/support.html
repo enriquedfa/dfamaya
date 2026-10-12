@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kakera support</title>
+  <meta name="description" content="Help with Kakera: where your library is kept, moving it to a new phone, backups, deleting your data, and the edge sidebar’s permissions." />
+  <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="kakera.css" />
+</head>
+<body class="kakera">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M16.18,13H5q-0.42,0-0.71-0.29Q4,12.43 4,12t0.29-0.71T5,11H16.18l-4.9-4.9q-0.3-0.3-0.29-0.7T11.3,4.7Q11.6,4.42 12,4.41T12.7,4.7l6.6,6.6q0.15,0.15 0.21,0.33T19.58,12t-0.06,0.38T19.3,12.7l-6.6,6.6q-0.28,0.27-0.69,0.27T11.3,19.3Q11,19 11,18.59q0-0.41 0.3-0.71L16.18,13Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4,20q-0.82,0-1.41-0.59T2,18V6Q2,5.18 2.59,4.59T4,4H20q0.83,0 1.41,0.59Q22,5.18 22,6V18q0,0.82-0.59,1.41T20,20H4Zm8.26-7.21q0.14-0.04 0.26-0.11L19.6,8.25q0.2-0.13 0.3-0.31T20,7.52q0-0.5-0.42-0.75T18.7,6.8L12,11L5.3,6.8Q4.85,6.52 4.43,6.79T4,7.52Q4,7.77 4.1,7.96T4.4,8.25l7.08,4.42q0.13,0.08 0.26,0.11T12,12.83t0.26-0.04Z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap bar">
+      <div class="crumbs">
+        <a class="parent" href="../">dfamaya</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a class="logo" href="./">
+          <img class="logo-mark kakera-mark" src="icon.svg" alt="" width="28" height="28" />
+          <span class="logo-text">Kakera</span>
+        </a>
+      </div>
+      <nav class="nav-links" aria-label="Kakera">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html" aria-current="page">Support</a>
+      </nav>
+      <a class="btn btn-sm btn-primary head-cta" href="./#try" aria-label="Try Kakera in your browser">
+        <span class="short">Try</span><span class="long">Try it</span>
+        <svg class="icon nudge-x" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap wrap-prose">
+      <header class="page-head">
+        <p class="eyebrow">Kakera</p>
+        <h1>Kakera support</h1>
+        <p class="lede">Questions, problems or ideas? Send me an email.</p>
+        <div class="btn-row stack-sm">
+          <a class="btn btn-primary" href="mailto:developerdfa@gmail.com">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"></use></svg>
+            developerdfa@gmail.com
+          </a>
+        </div>
+        <p class="updated">If you can, include your phone model and Android version. See also the <a href="privacy.html">privacy policy</a>.</p>
+      </header>
+
+      <article class="prose">
+        <h2>Common questions</h2>
+        <dl class="qa">
+          <dt id="where">Where is my library kept?</dt>
+          <dd>On your phone, in Kakera’s private storage. Kakera has no account and no sync.</dd>
+
+          <dt id="new-phone">How do I move my library to a new phone?</dt>
+          <dd>
+            <ul>
+              <li><strong>A backup file:</strong> export one in Settings › Backups, then restore it in Kakera on the new phone.</li>
+              <li><strong>Android’s transfer:</strong> use Android’s phone-to-phone transfer when you set up the new phone.</li>
+            </ul>
+          </dd>
+
+          <dt id="encrypted">Are backups encrypted?</dt>
+          <dd>No. A backup is a file you choose where to save, so keep it somewhere you trust.</dd>
+
+          <dt id="delete">How do I delete my data?</dt>
+          <dd>
+            <ul>
+              <li><strong>One piece at a time:</strong> delete it in the library, and it is gone for good about an hour later.</li>
+              <li><strong>Everything:</strong> uninstall Kakera, or clear its storage in Android’s Settings.</li>
+              <li><strong>Backup files</strong> you made are yours to delete.</li>
+            </ul>
+            The developer holds no copy of your data.
+          </dd>
+
+          <dt id="overlay">Why does the edge sidebar need to display over other apps?</dt>
+          <dd>Android calls this permission “Display over other apps”; Samsung phones call it “Appear on top”. The sidebar needs it to draw its drop zone over other apps when you drag something toward the edge of the screen. The sidebar is off until you turn it on.</dd>
+
+          <dt id="usage-access">Why does Kakera ask for usage access?</dt>
+          <dd>It is optional. With it, a piece dropped on the edge sidebar knows which app it came from. Kakera keeps only that app’s name, on your phone.</dd>
+
+          <dt id="offline">Does Kakera work offline?</dt>
+          <dd>Yes. Only link previews need a connection, plus the downloads you start: Gemini Nano and the text-in-pictures reader.</dd>
+        </dl>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
+      <nav aria-label="Footer">
+        <a href="./">Kakera</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="../">More apps</a>
+        <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>
+      </nav>
+    </div>
+  </footer>
+  <script>document.querySelectorAll('[data-year]').forEach(function (n) { n.textContent = new Date().getFullYear(); });</script>
+</body>
+</html>

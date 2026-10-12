@@ -1,8 +1,8 @@
 # dfamaya.github.io
 
-Static site for dfamaya's Wear OS apps: a home page, landing pages for Brief
-and the WatchSky and Spiralis watch faces, and per-app privacy policies and
-support. Plain
+Static site for dfamaya's Android and Wear OS apps: a home page, landing
+pages for Kakera, Brief and the WatchSky and Spiralis watch faces, and per-app
+privacy policies and support. Plain
 HTML, CSS and a little vanilla JS. No build step.
 
 Published at: <https://enriquedfa.github.io/dfamaya/>
@@ -14,6 +14,25 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
   pages, header and footer, the motion utilities, and the watch itself (case,
   strap, crown and dial, used by both apps). See [Design system](#design-system).
 - `assets/favicon.svg` — site icon
+
+### Kakera
+
+- `kakera/index.html` — landing page with the drag-to-the-edge demo
+- `kakera/privacy.html` — privacy policy (text mirrors
+  `docs/website/privacy-policy.md` in the Kakera repo; only the layout lives
+  here)
+- `kakera/support.html` — support (mirrors `docs/website/support.md`)
+- `kakera/kakera.css` — landing page, the demo's phone (Kakera's own UI,
+  rebuilt) and the two text pages' extras
+- `kakera/demo.js` — the demo: the library, a piece's screen, the edge
+  sidebar, dragging, and the filing pipeline with a port of the app's rules
+- `kakera/icon.svg`, `kakera/icon-180.png` — Kakera's icon, redrawn from the
+  app's launcher vectors (the background follows dark mode, as the
+  launcher's does)
+- `kakera/og.png` — link preview image (1200×630)
+- `kakera/img/` — screenshots rendered by the app's own code (see
+  [The Kakera page](#the-kakera-page)); `img/samples/` holds the demo's
+  made-up pictures (SVG, drawn for this page)
 
 ### Brief
 
@@ -254,6 +273,45 @@ position are live; on Now playing the ring slot counts the song up from 00:00.
 To change the sample content, edit the `SOURCES` array at the top of
 `demo.js`.
 
+## The Kakera page
+
+The hero is the demo: a phone running Kakera's library, with the **edge
+sidebar** on its right edge and four pieces beside it (a photo, a link, a
+message and a PDF), each drawn as if it sat in another app.
+
+- **Picking a piece up.** A mouse or pen drags it; on touch it's a long press
+  and then a drag, as on Android (the page doesn't scroll while a piece is
+  held). A tap or Enter sends it to the edge by itself.
+- **The sidebar** follows the app's `SidebarContent`: a 112 × 320 dp tile,
+  8 dp off the edge, that slides in when a drag starts, leans toward the
+  pointer, opens its box over it ("Let go to save"), swallows the drop
+  ("Got it"), then says "Saved" with Open and Undo for 4 s. A repeat says
+  "Already saved", moves the piece to the top and offers no Undo. The first
+  time the phone is on screen it shows itself for a moment, like the app's
+  Settings preview.
+- **Filing** runs one piece at a time, the way the app does, and the log
+  beside the phone narrates it: saved first, then enriched (the link preview,
+  the thumbnail, a file's words), then **Kakera's rules** (a port of
+  `KindRules` and `HeuristicAnalyzer`'s table in `demo.js`), then **Gemini
+  Nano**, whose answer replaces the rules' wholesale except a title that
+  outranks it (a page's own). The samples carry a hand-written answer in
+  Nano's shape (`SAMPLES` in `demo.js`); the log says so.
+- **Your own drops.** Files, links and text dragged in from elsewhere (another
+  tab, the desktop) get the rules for real, in the browser: a screenshot by
+  its name, a YouTube link as a video, a list by its shape. Pictures stay
+  object URLs in the tab and nothing is uploaded. There's no Nano and no
+  unfurl here, and the log says that too.
+- **The phone's UI** is the app's, rebuilt in `kakera.css` at its dp sizes
+  (1 dp is a 411th of the screen) in Ume's light and dark schemes. The card
+  footers wear each made-up app's colour as the app grows it. If the app's
+  library, card, piece screen or sidebar changes, change it here too.
+- **The screenshots** (`kakera/img/*.webp`) are drawn by the app's own code
+  under Robolectric, the technique of the Kakera repo's `ScreenshotTest`
+  (`docs/testing.md#screenshots`), with the same made-up pieces as the demo,
+  then converted to 720px-wide WebP. To retake them, render the screens with
+  a library seeded like `SAMPLES` and replace the files; they start at the app
+  bar, so the page draws the status bar above them.
+
 ## The WatchSky page
 
 `watchfaces/watchsky.js` redraws the watch face from the WatchSky repo's
@@ -367,6 +425,12 @@ policy, so these URLs never change)
 - Website URL: `https://enriquedfa.github.io/dfamaya/watchfaces/` (WatchSky) or
   `https://enriquedfa.github.io/dfamaya/spiralis/` (Spiralis)
 
+**Kakera**
+
+- Privacy policy URL: `https://enriquedfa.github.io/dfamaya/kakera/privacy.html`
+- Support URL: `https://enriquedfa.github.io/dfamaya/kakera/support.html`
+- Website URL: `https://enriquedfa.github.io/dfamaya/kakera/`
+
 **Brief**
 
 - Privacy policy URL: `https://enriquedfa.github.io/dfamaya/brief/privacy.html`
@@ -380,6 +444,9 @@ policy, so these URLs never change)
 - Brief: <https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication>
 - Wear OS Watch Faces: <https://play.google.com/store/apps/details?id=com.dfamaya.watchsky>
 - Spiralis: <https://play.google.com/store/apps/details?id=com.dfamaya.spiralis>
+- Kakera: not on Google Play yet (`dev.dfamaya.kakera`); its page says
+  "Coming soon". Once it's out, swap the hero's fine print and the closing
+  call to action for store buttons, and add the link here.
 
 ## Adding another app
 

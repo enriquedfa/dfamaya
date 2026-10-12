@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kakera · Save the pieces</title>
+  <meta name="description" content="Kakera saves text, links, photos and files from any Android app and files them for you, on your phone: a title, a kind and tags. Drag anything to the edge of the screen. No account, no sync, no ads." />
+  <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Kakera · Save the pieces" />
+  <meta property="og:description" content="Save text, links, photos and files from any Android app. Kakera files them for you, on your phone." />
+  <meta property="og:url" content="https://enriquedfa.github.io/dfamaya/kakera/" />
+  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/kakera/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
+  <!-- The phone's text: Android's system font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Roboto+Mono:wght@400&display=swap" />
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="kakera.css" />
+  <script src="demo.js" defer></script>
+</head>
+<body class="kakera">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <!-- Kakera's own icons: Material Symbols (rounded, opsz 24, wght 400, FILL 0, GRAD 0),
+         converted from the app's vendored ImageVectors in ui/icons -->
+    <symbol id="k-search" viewBox="0 0 24 24"><path d="M9.5 16Q6.78 16 4.89 14.11Q3 12.23 3 9.5Q3 6.77 4.89 4.89T9.5 3t4.61 1.89T16 9.5q0 1.1 -0.35 2.07T14.7 13.3l5.6 5.6q0.28 0.28 0.28 0.7q0 0.42 -0.28 0.7q-0.27 0.27 -0.7 0.27T18.9 20.3L13.3 14.7q-0.75 0.6 -1.72 0.95T9.5 16Zm0 -2q1.88 0 3.19 -1.31T14 9.5T12.69 6.31T9.5 5T6.31 6.31T5 9.5t1.31 3.19T9.5 14Z"/></symbol>
+    <symbol id="k-settings" viewBox="0 0 24 24"><path d="M10.83 22Q10.15 22 9.66 21.55T9.08 20.45L8.85 18.8Q8.53 18.68 8.24 18.5T7.68 18.13L6.13 18.77Q5.5 19.05 4.88 18.83T3.9 18.02L2.73 15.98Q2.38 15.4 2.53 14.75T3.2 13.68l1.33 -1Q4.5 12.5 4.5 12.34q0 -0.16 0 -0.34t0 -0.34T4.53 11.33l-1.33 -1Q2.68 9.9 2.53 9.25T2.73 8.02L3.9 5.97Q4.25 5.4 4.88 5.18T6.13 5.22L7.68 5.88Q7.95 5.68 8.25 5.5T8.85 5.2L9.08 3.55Q9.18 2.9 9.66 2.45T10.83 2h2.35q0.68 0 1.16 0.45t0.59 1.1L15.15 5.2q0.33 0.13 0.61 0.3t0.56 0.38L17.88 5.22Q18.5 4.95 19.13 5.18t0.98 0.8l1.18 2.05q0.35 0.58 0.2 1.23T20.8 10.33l-1.32 1q0.02 0.18 0.02 0.34t0 0.34t0 0.34t-0.05 0.34l1.32 1q0.52 0.43 0.68 1.08t-0.2 1.22l-1.2 2.05q-0.35 0.58 -0.98 0.8T17.83 18.77l-1.5 -0.65q-0.27 0.2 -0.57 0.38t-0.6 0.3l-0.22 1.65q-0.1 0.65 -0.59 1.1T13.18 22H10.83ZM11 20h1.98l0.35 -2.65q0.78 -0.2 1.44 -0.59t1.21 -0.94l2.47 1.03l0.98 -1.7L17.28 13.52q0.13 -0.35 0.17 -0.74T17.5 12T17.45 11.21Q17.4 10.83 17.28 10.48L19.43 8.85L18.45 7.15L15.98 8.2Q15.43 7.63 14.76 7.24T13.33 6.65L13 4H11.03L10.68 6.65Q9.9 6.85 9.24 7.24T8.03 8.17L5.55 7.15L4.58 8.85l2.15 1.6Q6.6 10.83 6.55 11.2T6.5 12q0 0.4 0.05 0.77t0.17 0.75L4.58 15.15l0.98 1.7L8.03 15.8q0.55 0.58 1.21 0.96t1.44 0.59L11 20Zm1.05 -4.5q1.45 0 2.47 -1.03T15.55 12T14.53 9.52T12.05 8.5q-1.47 0 -2.49 1.02T8.55 12t1.01 2.47t2.49 1.03ZM12 12Z"/></symbol>
+    <symbol id="k-dashboard" viewBox="0 0 24 24"><path d="M13 8V4Q13 3.57 13.29 3.29T14 3h6q0.43 0 0.71 0.29T21 4V8q0 0.42 -0.29 0.71T20 9H14Q13.58 9 13.29 8.71T13 8ZM3 12V4Q3 3.57 3.29 3.29T4 3h6q0.43 0 0.71 0.29T11 4v8q0 0.42 -0.29 0.71T10 13H4Q3.58 13 3.29 12.71Q3 12.43 3 12Zm10 8V12q0 -0.43 0.29 -0.71T14 11h6q0.43 0 0.71 0.29T21 12v8q0 0.43 -0.29 0.71T20 21H14q-0.42 0 -0.71 -0.29Q13 20.43 13 20ZM3 20V16Q3 15.58 3.29 15.29T4 15h6q0.43 0 0.71 0.29T11 16v4q0 0.43 -0.29 0.71T10 21H4Q3.58 21 3.29 20.71Q3 20.43 3 20ZM5 11H9V5H5v6Zm10 8h4V13H15v6ZM15 7h4V5H15V7ZM5 19H9V17H5v2ZM9 11ZM15 7Zm0 6ZM9 17Z"/></symbol>
+    <symbol id="k-text-fields" viewBox="0 0 24 24"><path d="M7.44 19.56Q7 19.13 7 18.5V7H3.5Q2.88 7 2.44 6.56T2 5.5T2.44 4.44T3.5 4h10q0.63 0 1.06 0.44T15 5.5T14.56 6.56T13.5 7H10V18.5q0 0.63 -0.44 1.06T8.5 20T7.44 19.56Zm9 0Q16 19.13 16 18.5V12H14.5q-0.63 0 -1.06 -0.44T13 10.5T13.44 9.44T14.5 9h6q0.63 0 1.06 0.44T22 10.5t-0.44 1.06T20.5 12H19v6.5q0 0.63 -0.44 1.06T17.5 20T16.44 19.56Z"/></symbol>
+    <symbol id="k-format-quote" viewBox="0 0 24 24"><path d="M6.55 16.5L8 14Q6.35 14 5.18 12.83T4 10T5.18 7.18T8 6t2.83 1.18T12 10q0 0.57 -0.14 1.06T11.45 12L8.28 17.5Q8.15 17.73 7.93 17.86T7.43 18Q6.85 18 6.56 17.5t-0.01 -1Zm9 0L17 14q-1.65 0 -2.82 -1.18T13 10T14.18 7.18T17 6t2.83 1.18T21 10q0 0.57 -0.14 1.06T20.45 12l-3.18 5.5q-0.13 0.23 -0.35 0.36T16.43 18q-0.57 0 -0.86 -0.5Q15.28 17 15.55 16.5ZM9.06 11.06Q9.5 10.63 9.5 10T9.06 8.94T8 8.5T6.94 8.94T6.5 10t0.44 1.06T8 11.5T9.06 11.06Zm9 0Q18.5 10.63 18.5 10T18.06 8.94T17 8.5T15.94 8.94T15.5 10t0.44 1.06T17 11.5t1.06 -0.44ZM17 10ZM8 10Z"/></symbol>
+    <symbol id="k-checklist" viewBox="0 0 24 24"><path d="M5.53 16.18L9.08 12.63q0.3 -0.3 0.7 -0.29t0.7 0.31q0.27 0.3 0.27 0.7t-0.27 0.7L6.25 18.3q-0.3 0.3 -0.7 0.3T4.85 18.3L2.7 16.15Q2.43 15.88 2.43 15.45q0 -0.42 0.27 -0.7T3.4 14.48t0.7 0.28l1.42 1.43Zm0 -8L9.08 4.63q0.3 -0.3 0.7 -0.29t0.7 0.31q0.27 0.3 0.27 0.7t-0.27 0.7L6.25 10.3q-0.3 0.3 -0.7 0.3T4.85 10.3L2.7 8.15Q2.43 7.88 2.43 7.45T2.7 6.75Q2.98 6.47 3.4 6.47T4.1 6.75L5.53 8.17ZM14 17q-0.42 0 -0.71 -0.29Q13 16.43 13 16t0.29 -0.71T14 15h7q0.43 0 0.71 0.29T22 16t-0.29 0.71T21 17H14ZM14 9Q13.58 9 13.29 8.71T13 8Q13 7.57 13.29 7.29T14 7h7q0.43 0 0.71 0.29T22 8q0 0.42 -0.29 0.71T21 9H14Z"/></symbol>
+    <symbol id="k-feed" viewBox="0 0 24 24"><path d="M5 21Q4.18 21 3.59 20.41T3 19V5Q3 4.17 3.59 3.59T5 3H15.18q0.4 0 0.76 0.15t0.64 0.43l3.85 3.85Q20.7 7.7 20.85 8.06Q21 8.42 21 8.82V19q0 0.82 -0.59 1.41T19 21H5ZM5 19H19V9H16Q15.58 9 15.29 8.71T15 8V5H5V19ZM16 17q0.43 0 0.71 -0.29Q17 16.43 17 16T16.71 15.29T16 15H8Q7.58 15 7.29 15.29T7 16t0.29 0.71T8 17h8ZM11 9q0.43 0 0.71 -0.29T12 8Q12 7.57 11.71 7.29T11 7H8Q7.58 7 7.29 7.29T7 8Q7 8.42 7.29 8.71T8 9h3Zm5 4q0.43 0 0.71 -0.29Q17 12.43 17 12T16.71 11.29T16 11H8Q7.58 11 7.29 11.29T7 12t0.29 0.71T8 13h8ZM5 5V9V5V9V19V5Z"/></symbol>
+    <symbol id="k-movie" viewBox="0 0 24 24"><path d="M4 4L5.63 7.25Q5.8 7.6 6.13 7.8T6.83 8Q7.58 8 7.98 7.36Q8.38 6.72 8.03 6.05L7 4H9l1.63 3.25Q10.8 7.6 11.13 7.8T11.83 8q0.75 0 1.15 -0.64q0.4 -0.64 0.05 -1.31L12 4h2l1.63 3.25Q15.8 7.6 16.13 7.8T16.83 8q0.75 0 1.15 -0.64q0.4 -0.64 0.05 -1.31L17 4h3q0.83 0 1.41 0.59Q22 5.18 22 6V18q0 0.82 -0.59 1.41T20 20H4Q3.18 20 2.59 19.41T2 18V6Q2 5.18 2.59 4.59T4 4Zm0 6v8H20V10H4Zm0 0v8V10Z"/></symbol>
+    <symbol id="k-shopping-bag" viewBox="0 0 24 24"><path d="M6 22Q5.18 22 4.59 21.41T4 20V8Q4 7.18 4.59 6.59T6 6H8Q8 4.35 9.18 3.17T12 2t2.83 1.17T16 6h2q0.82 0 1.41 0.59Q20 7.18 20 8V20q0 0.82 -0.59 1.41T18 22H6ZM6 20H18V8H16v2q0 0.42 -0.29 0.71T15 11T14.29 10.71Q14 10.43 14 10V8H10v2q0 0.42 -0.29 0.71T9 11Q8.58 11 8.29 10.71Q8 10.43 8 10V8H6V20ZM10 6h4Q14 5.18 13.41 4.59T12 4T10.59 4.59Q10 5.18 10 6ZM6 20V8V20Z"/></symbol>
+    <symbol id="k-restaurant" viewBox="0 0 24 24"><path d="M7 9V3Q7 2.57 7.29 2.29T8 2T8.71 2.29T9 3V9h1V3Q10 2.57 10.29 2.29T11 2t0.71 0.29T12 3V9q0 1.4 -0.86 2.45T9 12.85V21q0 0.43 -0.29 0.71T8 22Q7.58 22 7.29 21.71Q7 21.43 7 21V12.85Q5.73 12.5 4.86 11.45T4 9V3Q4 2.57 4.29 2.29T5 2T5.71 2.29T6 3V9H7Zm10 5H15q-0.42 0 -0.71 -0.29Q14 13.43 14 13V7Q14 5.25 15.29 3.63T17.95 2Q18.4 2 18.7 2.35T19 3.17V21q0 0.43 -0.29 0.71T18 22T17.29 21.71Q17 21.43 17 21V14Z"/></symbol>
+    <symbol id="k-location-on" viewBox="0 0 24 24"><path d="M12 19.35q3.05 -2.8 4.53 -5.09Q18 11.98 18 10.2Q18 7.47 16.26 5.74Q14.53 4 12 4T7.74 5.74Q6 7.47 6 10.2q0 1.78 1.48 4.06T12 19.35ZM11.3 21.2Q10.95 21.08 10.68 20.83Q9.05 19.33 7.8 17.9Q6.55 16.48 5.71 15.14T4.44 12.56T4 10.2Q4 6.45 6.41 4.22T12 2t5.59 2.22T20 10.2q0 1.13 -0.44 2.36t-1.27 2.57T16.2 17.9q-1.25 1.43 -2.87 2.93Q13.05 21.08 12.7 21.2T12 21.33T11.3 21.2ZM12 10Zm1.41 1.41Q14 10.83 14 10Q14 9.17 13.41 8.59T12 8T10.59 8.59T10 10t0.59 1.41T12 12t1.41 -0.59Z"/></symbol>
+    <symbol id="k-event" viewBox="0 0 24 24"><path d="M12.73 17.27Q12 16.55 12 15.5t0.73 -1.78T14.5 13t1.78 0.72T17 15.5t-0.72 1.77T14.5 18T12.73 17.27ZM5 22Q4.18 22 3.59 21.41T3 20V6Q3 5.18 3.59 4.59T5 4H6V3Q6 2.57 6.29 2.29T7 2T7.71 2.29T8 3V4h8V3Q16 2.57 16.29 2.29T17 2t0.71 0.29T18 3V4h1q0.83 0 1.41 0.59Q21 5.18 21 6V20q0 0.82 -0.59 1.41T19 22H5ZM5 20H19V10H5V20ZM5 8H19V6H5V8ZM5 8V6V8Z"/></symbol>
+    <symbol id="k-link" viewBox="0 0 24 24"><path d="M7 17Q4.93 17 3.46 15.54T2 12Q2 9.92 3.46 8.46T7 7h3q0.43 0 0.71 0.29T11 8q0 0.42 -0.29 0.71T10 9H7Q5.75 9 4.88 9.88T4 12t0.88 2.13T7 15h3q0.43 0 0.71 0.29T11 16t-0.29 0.71T10 17H7ZM9 13Q8.58 13 8.29 12.71Q8 12.43 8 12T8.29 11.29Q8.58 11 9 11h6q0.43 0 0.71 0.29T16 12t-0.29 0.71T15 13H9Zm5 4q-0.42 0 -0.71 -0.29Q13 16.43 13 16t0.29 -0.71T14 15h3q1.25 0 2.13 -0.88T20 12T19.13 9.88T17 9H14Q13.58 9 13.29 8.71T13 8Q13 7.57 13.29 7.29T14 7h3q2.07 0 3.54 1.46T22 12t-1.46 3.54T17 17H14Z"/></symbol>
+    <symbol id="k-image" viewBox="0 0 24 24"><path d="M5 21Q4.18 21 3.59 20.41T3 19V5Q3 4.17 3.59 3.59T5 3H19q0.83 0 1.41 0.59T21 5V19q0 0.82 -0.59 1.41T19 21H5ZM5 19H19V5H5V19Zm0 0V5V19ZM7 17H17q0.3 0 0.45 -0.27T17.4 16.2L14.65 12.52q-0.15 -0.2 -0.4 -0.2t-0.4 0.2L11.25 16L9.4 13.52Q9.25 13.33 9 13.33t-0.4 0.2l-2 2.68Q6.4 16.45 6.55 16.73T7 17Z"/></symbol>
+    <symbol id="k-screenshot-monitor" viewBox="0 0 24 24"><path d="M17.5 14.5H15.75q-0.32 0 -0.54 0.21T15 15.25t0.21 0.54T15.75 16H18q0.43 0 0.71 -0.29T19 15V12.75q0 -0.33 -0.21 -0.54T18.25 12t-0.54 0.21Q17.5 12.43 17.5 12.75V14.5Zm-11 -7H8.25q0.33 0 0.54 -0.21T9 6.75T8.79 6.21Q8.58 6 8.25 6H6Q5.58 6 5.29 6.29T5 7V9.25Q5 9.57 5.21 9.79T5.75 10Q6.08 10 6.29 9.79T6.5 9.25V7.5ZM4 19Q3.18 19 2.59 18.41T2 17V5Q2 4.17 2.59 3.59T4 3H20q0.83 0 1.41 0.59T22 5V17q0 0.82 -0.59 1.41T20 19H16v1q0 0.43 -0.29 0.71T15 21H9Q8.58 21 8.29 20.71Q8 20.43 8 20V19H4ZM4 17H20V5H4V17Zm0 0V5V17Z"/></symbol>
+    <symbol id="k-sentiment-very-satisfied" viewBox="0 0 24 24"><path d="M12 17.5q1.45 0 2.68 -0.7t1.98 -1.9Q16.8 14.6 16.63 14.3T16.1 14H7.9Q7.55 14 7.38 14.3T7.35 14.9q0.75 1.2 1.99 1.9T12 17.5ZM8.9 9.95l0.53 0.53Q9.65 10.7 9.95 10.7t0.53 -0.22T10.69 9.95T10.48 9.42L9.6 8.52Q9.3 8.23 8.89 8.23T8.18 8.52l-0.9 0.9Q7.05 9.65 7.05 9.95t0.22 0.53q0.2 0.2 0.51 0.21T8.33 10.5L8.9 9.95Zm6.2 0l0.57 0.55q0.22 0.2 0.52 0.2t0.53 -0.22T16.95 9.95T16.73 9.42l-0.9 -0.9q-0.3 -0.3 -0.71 -0.3T14.4 8.52l-0.9 0.9Q13.3 9.65 13.3 9.95t0.22 0.53t0.53 0.22t0.53 -0.22L15.1 9.95Zm-7 11.26Q6.28 20.43 4.93 19.08Q3.58 17.73 2.79 15.9T2 12Q2 9.92 2.79 8.1Q3.58 6.27 4.93 4.93Q6.28 3.57 8.1 2.79Q9.93 2 12 2t3.9 0.79t3.17 2.14q1.35 1.35 2.14 3.17Q22 9.92 22 12t-0.79 3.9t-2.14 3.17q-1.35 1.35 -3.17 2.14T12 22Q9.93 22 8.1 21.21ZM12 12Zm5.68 5.68Q20 15.35 20 12T17.68 6.32T12 4T6.33 6.32T4 12t2.33 5.68T12 20t5.68 -2.32Z"/></symbol>
+    <symbol id="k-palette" viewBox="0 0 24 24"><path d="M12 22Q9.95 22 8.13 21.21Q6.3 20.43 4.94 19.06Q3.58 17.7 2.79 15.88T2 12Q2 9.92 2.81 8.1Q3.63 6.27 5.01 4.93Q6.4 3.57 8.25 2.79T12.2 2q2 0 3.78 0.69t3.11 1.9t2.13 2.88Q22 9.13 22 11.05q0 2.88 -1.75 4.41T16 17H14.15q-0.22 0 -0.31 0.13T13.75 17.4q0 0.3 0.38 0.86t0.38 1.29q0 1.25 -0.69 1.85T12 22ZM12 12ZM7.58 12.58Q8 12.15 8 11.5T7.58 10.43T6.5 10T5.43 10.43T5 11.5t0.43 1.07T6.5 13T7.58 12.58Zm3 -4Q11 8.15 11 7.5T10.58 6.43T9.5 6T8.43 6.43T8 7.5T8.43 8.57T9.5 9T10.58 8.57Zm5 0Q16 8.15 16 7.5T15.58 6.43T14.5 6T13.43 6.43T13 7.5t0.43 1.07T14.5 9T15.58 8.57Zm3 4Q19 12.15 19 11.5T18.58 10.43T17.5 10t-1.07 0.42T16 11.5t0.43 1.07T17.5 13t1.07 -0.43ZM12 20q0.23 0 0.36 -0.13T12.5 19.55q0 -0.35 -0.38 -0.82T11.75 17.3q0 -1.05 0.73 -1.68T14.25 15H16q1.65 0 2.82 -0.96T20 11.05Q20 8.02 17.69 6.01T12.2 4Q8.8 4 6.4 6.32T4 12q0 3.32 2.34 5.66T12 20Z"/></symbol>
+    <symbol id="k-description" viewBox="0 0 24 24"><path d="M9 18h6q0.43 0 0.71 -0.29Q16 17.43 16 17T15.71 16.29T15 16H9Q8.58 16 8.29 16.29T8 17t0.29 0.71Q8.58 18 9 18ZM9 14h6q0.43 0 0.71 -0.29Q16 13.43 16 13T15.71 12.29T15 12H9Q8.58 12 8.29 12.29T8 13t0.29 0.71Q8.58 14 9 14ZM6 22Q5.18 22 4.59 21.41T4 20V4Q4 3.17 4.59 2.59T6 2h7.18q0.4 0 0.76 0.15t0.64 0.43l4.85 4.85Q19.7 7.7 19.85 8.06Q20 8.42 20 8.82V20q0 0.82 -0.59 1.41T18 22H6ZM13 8V4H6V20H18V9H14Q13.58 9 13.29 8.71T13 8ZM6 4V8Q6 8.42 6 8.71T6 9V4V8Q6 8.42 6 8.71T6 9V20V4Z"/></symbol>
+    <symbol id="k-android" viewBox="0 0 24 24"><path d="M1 18Q1.25 15.38 2.6 13.23T6.08 9.73L4.15 6.5Q3.93 6.15 4.04 5.75T4.5 5.15Q4.85 4.93 5.25 5.02q0.4 0.1 0.6 0.45l2 3.33Q8.8 8.4 9.84 8.2T12 8t2.16 0.2t1.99 0.6l2 -3.33q0.2 -0.35 0.6 -0.45q0.4 -0.1 0.75 0.13q0.35 0.2 0.45 0.6T19.85 6.5L17.93 9.73q2.13 1.35 3.48 3.5T23 18H1ZM18.01 14.21q0.04 -0.44 -0.24 -0.86T17.1 12.8t-0.73 0.1Q16.05 13.13 16 13.55q-0.05 0.43 0.23 0.85q0.27 0.43 0.69 0.56t0.74 -0.09t0.36 -0.66ZM7.1 14.95Q7.5 14.83 7.78 14.4Q8.05 13.98 8.01 13.54T7.65 12.88T6.91 12.79T6.23 13.35Q5.95 13.77 6 14.2t0.38 0.65t0.73 0.1Z"/></symbol>
+    <symbol id="k-music-note" viewBox="0 0 24 24"><path d="M7.18 19.83Q6 18.65 6 17T7.18 14.18T10 13q0.58 0 1.06 0.14T12 13.55V4Q12 3.57 12.29 3.29T13 3h4q0.43 0 0.71 0.29T18 4V6q0 0.43 -0.29 0.71T17 7H14V17q0 1.65 -1.17 2.82T10 21T7.18 19.83Z"/></symbol>
+    <symbol id="k-draft" viewBox="0 0 24 24"><path d="M6 22Q5.18 22 4.59 21.41T4 20V4Q4 3.17 4.59 2.59T6 2h7.18q0.4 0 0.76 0.15t0.64 0.43l4.85 4.85Q19.7 7.7 19.85 8.06Q20 8.42 20 8.82V20q0 0.82 -0.59 1.41T18 22H6ZM13 8V4H6V20H18V9H14Q13.58 9 13.29 8.71T13 8ZM6 4V8Q6 8.42 6 8.71T6 9V4V8Q6 8.42 6 8.71T6 9V20V4Z"/></symbol>
+    <symbol id="k-arrow-back" viewBox="0 0 24 24"><path d="M7.83 13l4.9 4.9q0.3 0.3 0.29 0.7T12.7 19.3Q12.4 19.58 12 19.59T11.3 19.3L4.7 12.7Q4.55 12.55 4.49 12.38T4.43 12T4.49 11.63T4.7 11.3L11.3 4.7Q11.58 4.42 11.99 4.42T12.7 4.7Q13 5 13 5.41T12.7 6.13L7.83 11H19q0.43 0 0.71 0.29T20 12t-0.29 0.71T19 13H7.83Z"/></symbol>
+    <symbol id="k-arrow-downward" viewBox="0 0 24 24"><path d="M11 16.18V5Q11 4.57 11.29 4.29T12 4t0.71 0.29T13 5V16.18l4.9 -4.9q0.3 -0.3 0.7 -0.29t0.7 0.31q0.28 0.3 0.29 0.7T19.3 12.7l-6.6 6.6q-0.15 0.15 -0.33 0.21T12 19.58T11.63 19.51T11.3 19.3L4.7 12.7Q4.43 12.43 4.43 12.01T4.7 11.3Q5 11 5.41 11t0.71 0.3L11 16.18Z"/></symbol>
+    <symbol id="k-lid" viewBox="0 0 24 24"><path d="M3 8.73Q2.55 8.45 2.28 8.01T2 7V4Q2 3.17 2.59 2.59T4 2H20q0.83 0 1.41 0.59T22 4V7q0 0.57 -0.27 1.01T21 8.73ZM4 7H20V4H4V7Z"/></symbol>
+    <symbol id="k-body" viewBox="0 0 24 24"><path d="M21 7V20q0 0.82 -0.59 1.41T19 22H5Q4.18 22 3.59 21.41T3 20V7ZM5 9V20H19V9H5ZM10 14h4q0.43 0 0.71 -0.29Q15 13.43 15 13T14.71 12.29T14 12H10Q9.58 12 9.29 12.29T9 13t0.29 0.71Q9.58 14 10 14Z"/></symbol>
+    <symbol id="k-check" viewBox="0 0 24 24"><path d="M9.55 15.15L18.03 6.68q0.3 -0.3 0.7 -0.3t0.7 0.3q0.3 0.3 0.3 0.71T19.43 8.1l-9.18 9.2q-0.3 0.3 -0.7 0.3T8.85 17.3L4.55 13Q4.25 12.7 4.26 12.29T4.58 11.58t0.71 -0.3T6 11.58l3.55 3.58Z"/></symbol>
+    <symbol id="k-undo" viewBox="0 0 24 24"><path d="M8 19Q7.58 19 7.29 18.71Q7 18.43 7 18T7.29 17.29T8 17h6.1q1.57 0 2.74 -1T18 13.5T16.84 11T14.1 10H7.8l1.9 1.9q0.28 0.28 0.28 0.7q0 0.42 -0.28 0.7T9 13.58q-0.42 0 -0.7 -0.28L4.7 9.7Q4.55 9.55 4.49 9.38T4.43 9T4.49 8.63T4.7 8.3L8.3 4.7Q8.58 4.42 9 4.42q0.43 0 0.7 0.28Q9.98 4.97 9.98 5.4T9.7 6.1L7.8 8h6.3q2.43 0 4.16 1.57T20 13.5t-1.74 3.93Q16.53 19 14.1 19H8Z"/></symbol>
+    <symbol id="k-open-in-new" viewBox="0 0 24 24"><path d="M5 21Q4.18 21 3.59 20.41T3 19V5Q3 4.17 3.59 3.59T5 3h6q0.43 0 0.71 0.29T12 4q0 0.42 -0.29 0.71T11 5H5V19H19V13q0 -0.43 0.29 -0.71T20 12q0.43 0 0.71 0.29T21 13v6q0 0.82 -0.59 1.41T19 21H5ZM19 6.4L10.4 15q-0.28 0.28 -0.7 0.28T9 15T8.73 14.3Q8.73 13.88 9 13.6L17.6 5H15Q14.58 5 14.29 4.71T14 4Q14 3.57 14.29 3.29T15 3h5q0.43 0 0.71 0.29T21 4V9q0 0.42 -0.29 0.71T20 10T19.29 9.71T19 9V6.4Z"/></symbol>
+    <symbol id="k-language" viewBox="0 0 24 24"><path d="M8.13 21.21Q6.3 20.43 4.94 19.06Q3.58 17.7 2.79 15.88T2 11.99T2.79 8.11T4.94 4.94T8.13 2.79T12.01 2t3.88 0.79t3.17 2.15t2.15 3.17T22 11.99t-0.79 3.89t-2.15 3.19t-3.17 2.15T12.01 22T8.13 21.21ZM12 19.95q0.65 -0.9 1.13 -1.88T13.9 16H10.1q0.3 1.1 0.77 2.07T12 19.95ZM9.4 19.55Q8.95 18.73 8.61 17.84T8.05 16H5.1q0.72 1.25 1.81 2.18T9.4 19.55Zm5.2 0Q16 19.1 17.09 18.18T18.9 16H15.95q-0.22 0.95 -0.56 1.84q-0.34 0.89 -0.79 1.71ZM4.25 14h3.4Q7.58 13.5 7.54 13.01T7.5 12T7.54 10.99T7.65 10H4.25Q4.13 10.5 4.06 10.99Q4 11.48 4 12q0 0.52 0.06 1.01T4.25 14Zm5.4 0h4.7q0.07 -0.5 0.11 -0.99T14.5 12T14.46 10.99T14.35 10H9.65Q9.58 10.5 9.54 10.99Q9.5 11.48 9.5 12q0 0.52 0.04 1.01Q9.58 13.5 9.65 14Zm6.7 0h3.4q0.13 -0.5 0.19 -0.99T20 12T19.94 10.99T19.75 10h-3.4q0.07 0.5 0.11 0.99Q16.5 11.48 16.5 12q0 0.52 -0.04 1.01T16.35 14ZM15.95 8H18.9Q18.18 6.75 17.09 5.82T14.6 4.45q0.45 0.82 0.79 1.71T15.95 8ZM10.1 8h3.8Q13.6 6.9 13.13 5.93T12 4.05q-0.65 0.9 -1.13 1.88T10.1 8Zm-5 0H8.05Q8.28 7.05 8.61 6.16T9.4 4.45Q8 4.9 6.91 5.82T5.1 8Z"/></symbol>
+    <symbol id="k-attach-file" viewBox="0 0 24 24"><path d="M18 15.75q0 2.6 -1.82 4.43T11.75 22T7.33 20.18T5.5 15.75V6.5Q5.5 4.63 6.81 3.31T10 2t3.19 1.31T14.5 6.5v8.75q0 1.15 -0.8 1.95T11.75 18T9.8 17.2T9 15.25V7Q9 6.57 9.29 6.29Q9.58 6 10 6t0.71 0.29T11 7v8.25q0 0.32 0.21 0.54T11.75 16t0.54 -0.21T12.5 15.25V6.5Q12.48 5.45 11.76 4.72T10 4T8.23 4.72T7.5 6.5v9.25q-0.02 1.77 1.22 3.01Q9.98 20 11.75 20q1.75 0 2.98 -1.24T16 15.75V7Q16 6.57 16.29 6.29T17 6t0.71 0.29T18 7v8.75Z"/></symbol>
+    <symbol id="k-auto-awesome" viewBox="0 0 24 24"><path d="M17.65 6.35L15.9 5.55Q15.75 5.47 15.69 5.35T15.63 5.1T15.69 4.85T15.9 4.65l1.75 -0.8L18.45 2.1q0.08 -0.15 0.2 -0.22T18.9 1.8t0.25 0.08t0.2 0.22l0.8 1.75l1.75 0.8q0.15 0.07 0.22 0.2T22.2 5.1T22.13 5.35T21.9 5.55l-1.75 0.8L19.35 8.1q-0.07 0.15 -0.2 0.21T18.9 8.38T18.65 8.31T18.45 8.1L17.65 6.35ZM6.5 14.5l-4 -1.83Q2.28 12.58 2.18 12.39T2.08 12t0.1 -0.39T2.5 11.33L6.5 9.5l1.83 -4Q8.43 5.27 8.61 5.18Q8.8 5.07 9 5.07t0.39 0.1Q9.58 5.27 9.68 5.5l1.82 4l4 1.82q0.23 0.1 0.33 0.29T15.93 12t-0.1 0.39T15.5 12.68l-4 1.83l-1.82 4q-0.1 0.23 -0.29 0.32Q9.2 18.93 9 18.93T8.61 18.83Q8.43 18.73 8.33 18.5L6.5 14.5ZM9 15.15L10 13l2.15 -1L10 11L9 8.85L8 11L5.85 12L8 13l1 2.15Zm8.75 5.1L16 19.45q-0.15 -0.07 -0.22 -0.2T15.7 19t0.07 -0.25T16 18.55l1.75 -0.8L18.55 16q0.07 -0.15 0.2 -0.22T19 15.7t0.25 0.08T19.45 16l0.8 1.75L22 18.55q0.15 0.07 0.23 0.2T22.3 19t-0.07 0.25T22 19.45l-1.75 0.8L19.45 22q-0.08 0.15 -0.2 0.23T19 22.3T18.75 22.23T18.55 22l-0.8 -1.75ZM9 12Z"/></symbol>
+    <symbol id="k-add" viewBox="0 0 24 24"><path d="M11 13H6Q5.58 13 5.29 12.71Q5 12.43 5 12T5.29 11.29T6 11h5V6Q11 5.57 11.29 5.29T12 5t0.71 0.29T13 6v5h5q0.43 0 0.71 0.29T19 12t-0.29 0.71T18 13H13v5q0 0.43 -0.29 0.71T12 19T11.29 18.71Q11 18.43 11 18V13Z"/></symbol>
+    <symbol id="k-close" viewBox="0 0 24 24"><path d="M12 13.4L7.1 18.3Q6.83 18.58 6.4 18.58T5.7 18.3Q5.43 18.02 5.43 17.6T5.7 16.9L10.6 12L5.7 7.1Q5.43 6.82 5.43 6.4T5.7 5.7T6.4 5.43T7.1 5.7L12 10.6L16.9 5.7Q17.18 5.43 17.6 5.43T18.3 5.7t0.27 0.7T18.3 7.1L13.4 12l4.9 4.9q0.27 0.28 0.27 0.7q0 0.42 -0.27 0.7t-0.7 0.27T16.9 18.3L12 13.4Z"/></symbol>
+    <symbol id="k-content-copy" viewBox="0 0 24 24"><path d="M9 18Q8.18 18 7.59 17.41T7 16V4Q7 3.17 7.59 2.59T9 2h9q0.82 0 1.41 0.59T20 4V16q0 0.82 -0.59 1.41T18 18H9ZM9 16h9V4H9V16ZM5 22Q4.18 22 3.59 21.41T3 20V7Q3 6.57 3.29 6.29T4 6T4.71 6.29T5 7V20H15q0.43 0 0.71 0.29T16 21t-0.29 0.71T15 22H5ZM9 16V4V16Z"/></symbol>
+    <symbol id="k-edit" viewBox="0 0 24 24"><path d="M5 19H6.43L16.2 9.23L14.78 7.8L5 17.58V19ZM4 21Q3.58 21 3.29 20.71Q3 20.43 3 20V17.58q0 -0.4 0.15 -0.76T3.58 16.18L16.2 3.57Q16.5 3.3 16.86 3.15T17.63 3q0.4 0 0.78 0.15T19.05 3.6L20.43 5q0.3 0.27 0.44 0.65T21 6.4q0 0.4 -0.14 0.76T20.43 7.82L7.83 20.43Q7.55 20.7 7.19 20.85Q6.83 21 6.43 21H4ZM19 6.4L17.6 5L19 6.4ZM15.48 8.52L14.78 7.8L16.2 9.23L15.48 8.52Z"/></symbol>
+    <symbol id="k-share" viewBox="0 0 24 24"><path d="M17 22q-1.25 0 -2.13 -0.88T14 19q0 -0.15 0.08 -0.7L7.05 14.2q-0.4 0.38 -0.93 0.59T5 15Q3.75 15 2.88 14.13T2 12T2.88 9.88T5 9Q5.6 9 6.13 9.21T7.05 9.8L14.08 5.7Q14.03 5.52 14.01 5.36T14 5Q14 3.75 14.88 2.88T17 2t2.13 0.88T20 5T19.13 7.13T17 8Q16.4 8 15.88 7.79T14.95 7.2L7.93 11.3q0.05 0.18 0.06 0.34T8 12T7.99 12.36T7.93 12.7l7.03 4.1q0.4 -0.38 0.92 -0.59T17 16q1.25 0 2.13 0.88T20 19t-0.88 2.13T17 22Zm0 -2q0.43 0 0.71 -0.29Q18 19.43 18 19T17.71 18.29T17 18t-0.71 0.29T16 19t0.29 0.71T17 20ZM5 13q0.43 0 0.71 -0.29Q6 12.43 6 12T5.71 11.29T5 11Q4.58 11 4.29 11.29T4 12t0.29 0.71T5 13ZM17.71 5.71Q18 5.43 18 5T17.71 4.29T17 4T16.29 4.29T16 5t0.29 0.71T17 6T17.71 5.71ZM17 19ZM5 12ZM17 5Z"/></symbol>
+    <symbol id="k-delete" viewBox="0 0 24 24"><path d="M7 21Q6.18 21 5.59 20.41T5 19V6Q4.58 6 4.29 5.71Q4 5.43 4 5T4.29 4.29T5 4H9Q9 3.57 9.29 3.29Q9.58 3 10 3h4q0.43 0 0.71 0.29T15 4h4q0.43 0 0.71 0.29T20 5T19.71 5.71T19 6V19q0 0.82 -0.59 1.41T17 21H7ZM17 6H7V19H17V6ZM10.71 16.71Q11 16.43 11 16V9Q11 8.57 10.71 8.29T10 8Q9.58 8 9.29 8.29T9 9v7q0 0.43 0.29 0.71Q9.58 17 10 17t0.71 -0.29Zm4 0Q15 16.43 15 16V9Q15 8.57 14.71 8.29T14 8T13.29 8.29T13 9v7q0 0.43 0.29 0.71T14 17t0.71 -0.29ZM7 6V19V6Z"/></symbol>
+    <symbol id="k-fullscreen" viewBox="0 0 24 24"><path d="M5 19H7q0.43 0 0.71 0.29T8 20T7.71 20.71T7 21H4Q3.58 21 3.29 20.71Q3 20.43 3 20V17Q3 16.58 3.29 16.29T4 16t0.71 0.29T5 17v2Zm14 0V17q0 -0.43 0.29 -0.71T20 16q0.43 0 0.71 0.29T21 17v3q0 0.43 -0.29 0.71T20 21H17q-0.43 0 -0.71 -0.29Q16 20.43 16 20t0.29 -0.71T17 19h2ZM5 5V7Q5 7.43 4.71 7.71T4 8T3.29 7.71Q3 7.43 3 7V4Q3 3.57 3.29 3.29T4 3H7Q7.43 3 7.71 3.29T8 4Q8 4.42 7.71 4.71T7 5H5ZM19 5H17Q16.58 5 16.29 4.71T16 4Q16 3.57 16.29 3.29T17 3h3q0.43 0 0.71 0.29T21 4V7q0 0.43 -0.29 0.71T20 8T19.29 7.71Q19 7.43 19 7V5Z"/></symbol>
+    <symbol id="k-sell" viewBox="0 0 24 24"><path d="M21.4 14.25L14.25 21.4q-0.3 0.3 -0.67 0.45T12.83 22T12.08 21.85T11.4 21.4L2.58 12.58Q2.3 12.3 2.15 11.94T2 11.18V4Q2 3.17 2.59 2.59T4 2h7.18q0.4 0 0.78 0.16T12.6 2.6l8.8 8.83q0.3 0.3 0.44 0.68t0.14 0.75t-0.14 0.74T21.4 14.25ZM12.83 20l7.15 -7.15L11.15 4H4v7.15L12.83 20ZM6.5 8Q7.13 8 7.56 7.56T8 6.5T7.56 5.44T6.5 5T5.44 5.44T5 6.5T5.44 7.56T6.5 8ZM12 12Z"/></symbol>
+    <symbol id="k-image-search" viewBox="0 0 24 24"><path d="M11.25 16L9.6 13.8Q9.38 13.5 9 13.5T8.4 13.8L6.6 16.2Q6.4 16.45 6.55 16.73T7 17H17q0.3 0 0.45 -0.27T17.4 16.2L14.93 12.9Q14.65 12.85 14.36 12.77T13.8 12.6L11.25 16ZM5 21Q4.18 21 3.59 20.41T3 19V5Q3 4.17 3.59 3.59T5 3H9Q9.43 3 9.71 3.29T10 4Q10 4.42 9.71 4.71T9 5H5V19H19V15.68q0 -0.42 0.29 -0.71T20 14.68q0.43 0 0.71 0.29T21 15.68V19q0 0.82 -0.59 1.41T19 21H5Zm7 -9Zm4.05 -1Q14.2 11 12.9 9.69T11.6 6.5T12.91 3.31T16.1 2t3.19 1.31T20.6 6.5q0 0.68 -0.2 1.3Q20.2 8.42 19.9 8.95l2.35 2.35q0.28 0.28 0.28 0.7t-0.28 0.7t-0.7 0.28T20.85 12.7l-2.4 -2.4q-0.52 0.35 -1.13 0.53Q16.73 11 16.05 11ZM16.1 9q1.05 0 1.77 -0.73T18.6 6.5T17.88 4.72T16.1 4T14.33 4.72T13.6 6.5t0.72 1.77T16.1 9Z"/></symbol>
+    <symbol id="k-view-sidebar" viewBox="0 0 24 24"><path d="M4 20Q3.18 20 2.59 19.41T2 18V6Q2 5.18 2.59 4.59T4 4H20q0.83 0 1.41 0.59Q22 5.18 22 6V18q0 0.82 -0.59 1.41T20 20H4ZM17.5 8.67H20V6H17.5V8.67Zm0 4.65H20V10.68H17.5v2.65ZM4 18H15.5V6H4V18Zm13.5 0H20V15.33H17.5V18Z"/></symbol>
+    <symbol id="k-inbox" viewBox="0 0 24 24"><path d="M5 21Q4.18 21 3.59 20.41T3 19V5Q3 4.17 3.59 3.59T5 3H19q0.83 0 1.41 0.59T21 5V19q0 0.82 -0.59 1.41T19 21H5ZM5 19H19V16H16q-0.75 0.95 -1.79 1.48T12 18T9.79 17.48T8 16H5v3Zm7 -3q0.8 0 1.48 -0.41t1.1 -1.09q0.15 -0.23 0.38 -0.36T15.45 14H19V5H5v9H8.55q0.28 0 0.5 0.14T9.43 14.5q0.43 0.67 1.1 1.09T12 16ZM5 19H8q0.75 0 1.79 0T12 19t2.21 0T16 19h3H5Z"/></symbol>
+    <symbol id="k-error" viewBox="0 0 24 24"><path d="M12.71 16.71Q13 16.43 13 16T12.71 15.29T12 15t-0.71 0.29T11 16t0.29 0.71T12 17t0.71 -0.29Zm0 -4Q13 12.43 13 12V8Q13 7.57 12.71 7.29T12 7T11.29 7.29T11 8v4q0 0.42 0.29 0.71T12 13t0.71 -0.29ZM12 22Q9.93 22 8.1 21.21Q6.28 20.43 4.93 19.08Q3.58 17.73 2.79 15.9T2 12Q2 9.92 2.79 8.1Q3.58 6.27 4.93 4.93Q6.28 3.57 8.1 2.79Q9.93 2 12 2t3.9 0.79t3.17 2.14q1.35 1.35 2.14 3.17Q22 9.92 22 12t-0.79 3.9t-2.14 3.17q-1.35 1.35 -3.17 2.14T12 22Z"/></symbol>
+    <symbol id="k-arrow-drop-down" viewBox="0 0 24 24"><path d="M11.48 14.48L7.85 10.85Q7.78 10.77 7.74 10.69T7.7 10.5q0 -0.2 0.14 -0.35T8.2 10h7.6q0.23 0 0.36 0.15T16.3 10.5q0 0.05 -0.15 0.35l-3.63 3.63Q12.4 14.6 12.28 14.65T12 14.7T11.73 14.65T11.48 14.48Z"/></symbol>
+    <symbol id="k-notifications" viewBox="0 0 24 24"><path d="M5 19Q4.58 19 4.29 18.71Q4 18.43 4 18T4.29 17.29T5 17H6V10Q6 7.93 7.25 6.31T10.5 4.2V3.5q0 -0.63 0.44 -1.06T12 2t1.06 0.44T13.5 3.5V4.2q2 0.5 3.25 2.11T18 10v7h1q0.43 0 0.71 0.29T20 18t-0.29 0.71T19 19H5Zm7 -7.5ZM12 22q-0.82 0 -1.41 -0.59T10 20h4q0 0.82 -0.59 1.41T12 22ZM8 17h8V10Q16 8.35 14.83 7.18T12 6T9.18 7.18T8 10v7Z"/></symbol>
+    <symbol id="k-backup" viewBox="0 0 24 24"><path d="M12 21Q8.85 21 6.43 19.09Q4 17.18 3.28 14.2Q3.18 13.83 3.43 13.51T4.1 13.15Q4.5 13.1 4.83 13.3t0.45 0.6q0.6 2.25 2.47 3.68T12 19q2.93 0 4.96 -2.04Q19 14.93 19 12Q19 9.07 16.96 7.04T12 5Q10.28 5 8.78 5.8T6.25 8H8Q8.43 8 8.71 8.29T9 9Q9 9.42 8.71 9.71T8 10H4Q3.58 10 3.29 9.71T3 9V5Q3 4.57 3.29 4.29T4 4T4.71 4.29T5 5V6.35Q6.28 4.75 8.11 3.88T12 3q1.88 0 3.51 0.71t2.85 1.93t1.93 2.85T21 12t-0.71 3.51t-1.93 2.85t-2.85 1.93T12 21Zm0 -7q-0.82 0 -1.41 -0.59T10 12t0.59 -1.41T12 10t1.41 0.59Q14 11.18 14 12t-0.59 1.41T12 14Z"/></symbol>
+    <!-- The site's own: page icons and the phone's status bar -->
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M6,22q-0.82,0-1.41-0.59T4,20V10Q4,9.17 4.59,8.59T6,8H7V6Q7,3.92 8.46,2.46T12,1t3.54,1.46T17,6V8h1q0.82,0 1.41,0.59T20,10V20q0,0.82-0.59,1.41T18,22H6Zm7.41-5.59Q14,15.83 14,15t-0.59-1.41T12,13t-1.41,0.59Q10,14.18 10,15t0.59,1.41T12,17t1.41-0.59ZM9,8h6V6q0-1.25-0.88-2.13T12,3T9.88,3.88T9,6V8Z"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M16.18,13H5q-0.42,0-0.71-0.29Q4,12.43 4,12t0.29-0.71T5,11H16.18l-4.9-4.9q-0.3-0.3-0.29-0.7T11.3,4.7Q11.6,4.42 12,4.41T12.7,4.7l6.6,6.6q0.15,0.15 0.21,0.33T19.58,12t-0.06,0.38T19.3,12.7l-6.6,6.6q-0.28,0.27-0.69,0.27T11.3,19.3Q11,19 11,18.59q0-0.41 0.3-0.71L16.18,13Z"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M11,16.18V5q0-0.43 0.29-0.71T12,4t0.71,0.29T13,5V16.18l4.9-4.9q0.3-0.3 0.7-0.29t0.7,0.31q0.28,0.3 0.29,0.7T19.3,12.7l-6.6,6.6q-0.15,0.15-0.33,0.21T12,19.58t-0.38-0.06T11.3,19.3L4.7,12.7q-0.28-0.28-0.28-0.69T4.7,11.3Q5,11 5.41,11t0.71,0.3L11,16.18Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4,20q-0.82,0-1.41-0.59T2,18V6Q2,5.18 2.59,4.59T4,4H20q0.83,0 1.41,0.59Q22,5.18 22,6V18q0,0.82-0.59,1.41T20,20H4Zm8.26-7.21q0.14-0.04 0.26-0.11L19.6,8.25q0.2-0.13 0.3-0.31T20,7.52q0-0.5-0.42-0.75T18.7,6.8L12,11L5.3,6.8Q4.85,6.52 4.43,6.79T4,7.52Q4,7.77 4.1,7.96T4.4,8.25l7.08,4.42q0.13,0.08 0.26,0.11T12,12.83t0.26-0.04Z"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M10.23,20.27Q9.5,19.55 9.5,18.5t0.73-1.77T12,16t1.78,0.73T14.5,18.5t-0.72,1.77T12,21t-1.77-0.73Zm5.34-9.67q1.69,0.6 3.06,1.65q0.5,0.38 0.51,0.99T18.7,14.3q-0.42,0.43-1.05,0.44T16.53,14.4q-0.95-0.65-2.1-1.02T12,13T9.58,13.38T7.48,14.4q-0.5,0.35-1.13,0.33T5.3,14.27q-0.43-0.45-0.43-1.06t0.5-0.99q1.38-1.05 3.06-1.64T12,10t3.56,0.6Zm2.32-5.58q2.76,1.03 4.96,2.9q0.5,0.42 0.52,1.05t-0.42,1.07q-0.43,0.43-1.05,0.44T20.78,10.1q-1.8-1.47-4.04-2.29T12,7T7.26,7.81T3.23,10.1q-0.5,0.4-1.13,0.39q-0.63-0.01-1.05-0.44Q0.6,9.6 0.63,8.98T1.15,7.93q2.2-1.88 4.96-2.9T12,4t5.89,1.02Z"/></symbol>
+    <symbol id="i-signal" viewBox="0 -960 960 960"><path d="M177-80q-18 0-29.5-12T136-120q0-8 3-15t9-13l664-664q6-6 13-9t15-3q16 0 28 11.5t12 29.5v643q0 25-17.5 42.5T820-80H177Z"/></symbol>
+    <symbol id="i-battery-full" viewBox="0 0 24 24"><path d="M8,22q-0.42,0-0.71-0.29Q7,21.43 7,21V5Q7,4.57 7.29,4.29T8,4h2V3q0-0.43 0.29-0.71T11,2h2q0.43,0 0.71,0.29T14,3V4h2q0.43,0 0.71,0.29T17,5V21q0,0.43-0.29,0.71T16,22H8Z"/></symbol>
+    <symbol id="i-gplay" viewBox="0 0 24 24"><path d="M6.5 3.6c-.6-.4-1.5 0-1.5.8v15.2c0 .8.9 1.2 1.5.8l12.3-7.6a1 1 0 0 0 0-1.7z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap bar">
+      <div class="crumbs">
+        <a class="parent" href="../">dfamaya</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a class="logo" href="./" aria-current="page">
+          <img class="logo-mark kakera-mark" src="icon.svg" alt="" width="28" height="28" />
+          <span class="logo-text">Kakera</span>
+        </a>
+      </div>
+      <nav class="nav-links" aria-label="Kakera">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html">Support</a>
+      </nav>
+      <a class="btn btn-sm btn-primary head-cta" href="#try" aria-label="Try Kakera in your browser">
+        <span class="short">Try</span><span class="long">Try it</span>
+        <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero + the demo: drag a piece onto the phone's edge ------------------->
+    <section class="k-hero" data-kakera-demo>
+      <div class="wrap k-grid">
+        <div class="k-intro hero-exit">
+          <p class="app-badge rise" style="--d:0">
+            <img src="icon.svg" alt="" width="26" height="26" />
+            Kakera for Android
+          </p>
+          <h1 class="rise" style="--d:1"><span class="hl">Save the pieces.</span> Kakera files them for&nbsp;you.</h1>
+          <p class="lede rise" style="--d:2">
+            Text, links, photos and files, from any app, kept in one place. Each one gets a title,
+            a kind and tags, worked out on your phone. <span class="lede-more">Nothing leaves it but
+            link previews.</span>
+          </p>
+          <div class="btn-row stack-sm rise" style="--d:3">
+            <a class="btn btn-primary" href="#try">
+              Try it here
+              <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+            </a>
+            <a class="btn btn-ghost" href="#ways">How it works</a>
+          </div>
+          <p class="fine rise" style="--d:4">Coming soon to Google Play. For Android&nbsp;8 and newer; the edge sidebar needs Android&nbsp;12.</p>
+        </div>
+
+        <!-- The pieces to drag: each looks like something in another app -->
+        <div class="k-tray rise" style="--d:3" id="try">
+          <p class="tray-head"><strong>Drag one onto the phone’s edge</strong> <span>or tap it</span></p>
+          <ul class="samples" aria-label="Pieces to save">
+            <li>
+              <button type="button" class="sample s-photo" data-sample="photo" aria-label="Save the photo IMG_2041.jpg, from Gallery">
+                <span class="s-from"><i class="app-dot" style="--app:#E0567A"></i>Gallery</span>
+                <img src="img/samples/beach.svg" alt="" width="1200" height="900" draggable="false" />
+                <span class="s-name">IMG_2041.jpg</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="sample s-link" data-sample="link" aria-label="Save the link noodlenotes.blog/miso-ramen, from Browser">
+                <span class="s-from"><i class="app-dot" style="--app:#2F6FDB"></i>Browser</span>
+                <span class="s-url">noodlenotes.blog/miso-ramen</span>
+                <span class="s-title">Miso Ramen at Home (30-Minute Recipe)</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="sample s-note" data-sample="note" aria-label="Save the message about dinner with Ana, from Messages">
+                <span class="s-from"><i class="app-dot" style="--app:#2E9E6A"></i>Messages</span>
+                <span class="s-bubble"><span>Dinner with Ana on Friday at 8pm at Casa Lola, 221 Baker Street. Call 555-0142 to book a table.</span></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="sample s-file" data-sample="file" aria-label="Save the file lease-agreement.pdf, from Files">
+                <span class="s-from"><i class="app-dot" style="--app:#1A9AA8"></i>Files</span>
+                <span class="s-doc">
+                  <span class="s-pdf">PDF</span>
+                  <span><span class="s-fname">lease-agreement.pdf</span><span class="s-size">1.2 MB</span></span>
+                </span>
+              </button>
+            </li>
+          </ul>
+          <p class="tray-own" data-own>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#k-attach-file"></use></svg>
+            <span>Or drop your own photo, file, link or text on the edge. It stays in this tab.</span>
+          </p>
+        </div>
+
+        <!-- The phone: Kakera's library, with the edge sidebar on its right -->
+        <div class="k-phone rise" style="--d:2">
+          <div class="phone">
+            <div class="screen" data-screen>
+              <div class="sb" aria-hidden="true">
+                <span data-clock>9:41</span>
+                <i class="punch"></i>
+                <span class="sb-icons">
+                  <svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg>
+                  <svg viewBox="0 -960 960 960"><use href="#i-signal"></use></svg>
+                  <svg viewBox="0 0 24 24"><use href="#i-battery-full"></use></svg>
+                </span>
+              </div>
+
+              <div class="view lib" data-view="library">
+                <div class="lib-bar">
+                  <label class="search">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-search"></use></svg>
+                    <input type="search" placeholder="Search your pieces" aria-label="Search the pieces in the demo" data-search autocomplete="off" />
+                  </label>
+                  <span class="bar-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#k-dashboard"></use></svg></span>
+                  <span class="bar-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#k-settings"></use></svg></span>
+                </div>
+                <div class="chips" data-kind-chips role="group" aria-label="Filter by kind"></div>
+                <div class="grid" data-grid aria-live="polite"></div>
+                <div class="empty" data-empty hidden>
+                  <span class="mark" lang="ja">欠片</span>
+                  <strong>Nothing saved yet</strong>
+                  <span>Share text, links, photos or files to Kakera, and they land here.</span>
+                </div>
+                <p class="nomatch" data-nomatch hidden>No matches</p>
+              </div>
+
+              <div class="view det" data-view="detail" hidden></div>
+
+              <!-- The edge sidebar: 112 × 320 dp, 8 dp off the edge, shown only while something is dragged -->
+              <div class="sidebar" data-sidebar data-state="idle" aria-live="polite">
+                <div class="sd-open">
+                  <span class="sd-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-arrow-downward"></use></svg></span>
+                  <span class="sd-box" aria-hidden="true">
+                    <svg class="sd-body" viewBox="0 0 24 24"><use href="#k-body"></use></svg>
+                    <svg class="sd-lid" viewBox="0 0 24 24"><use href="#k-lid"></use></svg>
+                  </span>
+                  <span class="sd-label" data-sd-label>Drop to save</span>
+                </div>
+                <div class="sd-saved">
+                  <button type="button" class="sd-btn sd-open-btn" data-sd-open>Open</button>
+                  <span class="sd-check">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-check"></use></svg>
+                    <span data-sd-saved>Saved</span>
+                  </span>
+                  <button type="button" class="sd-btn sd-undo" data-sd-undo>Undo</button>
+                </div>
+              </div>
+              <div class="toast" data-toast hidden></div>
+              <i class="navbar" aria-hidden="true"></i>
+            </div>
+          </div>
+          <span class="kanji" lang="ja" aria-hidden="true">欠片</span>
+        </div>
+
+        <!-- What happened to the last piece, step by step -->
+        <aside class="k-log rise" style="--d:4" aria-labelledby="log-title" data-log>
+          <div class="log-head">
+            <h2 id="log-title">How it was filed</h2>
+            <span class="log-piece" data-log-piece>Waiting for a piece</span>
+          </div>
+          <ol class="log-steps">
+            <li data-step="saved"><span class="dot"></span><div><strong>Saved first</strong><span data-note>Written to the library before anything else, so a drop is never lost.</span></div></li>
+            <li data-step="enrich"><span class="dot"></span><div><strong data-title>Enriched</strong><span data-note>Link previews, thumbnails and a file’s own words, in the background.</span></div></li>
+            <li data-step="rules"><span class="dot"></span><div><strong>Kakera’s rules</strong><span data-note>On every phone: a first kind and tags, from what the piece is and where it came from.</span></div></li>
+            <li data-step="nano"><span class="dot"></span><div><strong>Gemini Nano</strong><span data-note>Where the phone has it: a title, a kind, tags and a summary, on the phone.</span></div></li>
+          </ol>
+          <pre class="log-json" data-log-json hidden></pre>
+          <p class="log-fine">A demo: the samples carry the kind of answer Gemini Nano gives on a phone. Your own drops get Kakera’s rules, run here in your browser. Nothing is uploaded.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Three ways in ------------------------------------------------------>
+    <section class="section" id="ways">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <p class="eyebrow">Saving</p>
+          <h2>Three ways in, from any app</h2>
+          <p class="lede">Whatever you’re looking at, it’s one move to keep it. Kakera saves it first and works out the rest after.</p>
+        </div>
+
+        <div class="ways stagger">
+          <article class="way reveal lift">
+            <div class="way-visual from-bottom">
+              <figure class="shot">
+                <div class="shot-status on-photo"><span>9:41</span><i class="punch"></i></div>
+                <img src="img/capture.webp" alt="A photo of a bowl of ramen in another app, with Kakera’s confirmation at the bottom: Saved to Kakera, with Undo." width="720" height="1561" loading="lazy" />
+              </figure>
+            </div>
+            <div class="way-copy">
+              <span class="way-num">1</span>
+              <h3>Share</h3>
+              <p>Share anything to Kakera from the share sheet: a link, a photo, a PDF, a few at once. It says “Saved to Kakera” and gets out of the way.</p>
+            </div>
+          </article>
+
+          <article class="way reveal lift">
+            <div class="way-visual way-select">
+              <div class="select-demo" aria-hidden="true">
+                <div class="sel-menu">
+                  <span>Copy</span><span>Share</span><span>Select all</span><span class="on">Save to Kakera</span>
+                </div>
+                <p>The ramen place on 5th does a <mark>miso broth with charred corn and butter</mark>, and it’s worth the line.</p>
+              </div>
+            </div>
+            <div class="way-copy">
+              <span class="way-num">2</span>
+              <h3>Select text</h3>
+              <p>Select some words in any app and choose “Save to Kakera” in the menu over them. Just the part you wanted, nothing else.</p>
+            </div>
+          </article>
+
+          <article class="way reveal lift">
+            <div class="way-visual from-middle">
+              <figure class="shot">
+                <div class="shot-status on-sky"><span>9:41</span><i class="punch"></i></div>
+                <img src="img/sidebar-hover.webp" alt="The edge sidebar open on the right of the screen, over a photo, saying Let go to save." width="720" height="1561" loading="lazy" />
+              </figure>
+            </div>
+            <div class="way-copy">
+              <span class="way-num">3</span>
+              <h3>Drag to the edge</h3>
+              <p>Drag a photo, some text or a link out of any app and drop it on the side of the screen. The sidebar shows only while you drag. Android&nbsp;12 and newer.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filed for you -------------------------------------------------------->
+    <section class="section" id="filing">
+      <div class="wrap split">
+        <div class="split-copy">
+          <div class="section-head reveal">
+            <p class="eyebrow">Filing</p>
+            <h2>Filed for you, on your phone</h2>
+            <p class="lede">You never have to sort anything. Every piece gets a kind and tags the moment it lands, and a title when it needs one.</p>
+          </div>
+          <ul class="points reveal">
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-auto-awesome"></use></svg></span>
+              <div><strong>Gemini Nano where your phone has it</strong>Android’s on-device model reads each piece and gives it a title, a kind, tags and a one-line summary. Only while Kakera is open, and nothing is sent anywhere.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-checklist"></use></svg></span>
+              <div><strong>Kakera’s own rules everywhere else</strong>A recipe site, a shop, a map link, a list, a quote, a PDF: the rules know them on every phone, and they file first, before the model.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-edit"></use></svg></span>
+              <div><strong>Your titles and tags win</strong>Rename a piece, pick its kind or tag it yourself, and nothing files over you. A page’s own title outranks the model too.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-event"></use></svg></span>
+              <div><strong>Phone numbers, addresses and dates, marked</strong>Tap one in a note to call, get directions or add it to your calendar.</div>
+            </li>
+          </ul>
+
+          <div class="kinds reveal" aria-label="The kinds Kakera files pieces as">
+            <p class="pg-sub">Kinds, by what you saved</p>
+            <dl>
+              <dt>Text</dt>
+              <dd><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-text-fields"></use></svg>Note</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-format-quote"></use></svg>Quote</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-checklist"></use></svg>List</span></dd>
+              <dt>Links</dt>
+              <dd><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-feed"></use></svg>Article</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-movie"></use></svg>Video</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-shopping-bag"></use></svg>Product</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-restaurant"></use></svg>Recipe</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-location-on"></use></svg>Place</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-event"></use></svg>Event</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-link"></use></svg>Page</span></dd>
+              <dt>Pictures</dt>
+              <dd><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-image"></use></svg>Photo</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-screenshot-monitor"></use></svg>Screenshot</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-sentiment-very-satisfied"></use></svg>Meme</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-palette"></use></svg>Artwork</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-description"></use></svg>Document</span></dd>
+              <dt>Files</dt>
+              <dd><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-description"></use></svg>Document</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-android"></use></svg>App</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-movie"></use></svg>Video</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-music-note"></use></svg>Audio</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-draft"></use></svg>File</span></dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class="split-visual reveal">
+          <figure class="shot shot-lg">
+            <div class="shot-status on-photo"><span>9:41</span><i class="punch"></i></div>
+            <picture>
+              <source srcset="img/detail-recipe-dark.webp" media="(prefers-color-scheme: dark)" />
+              <img src="img/detail-recipe-light.webp" alt="A saved recipe link in Kakera: the page’s picture and title, its description, the link, then Kind · Gemini Nano: Recipe, with a one-line summary and the tags ramen, recipe, japanese, noodles and dinner." width="720" height="1561" loading="lazy" />
+            </picture>
+          </figure>
+          <figure class="shot shot-sm">
+            <div class="shot-status"><span>9:41</span><i class="punch"></i></div>
+            <img src="img/detail-note-light.webp" alt="A saved message in Kakera with Friday at 8pm, 221 Baker Street and 555-0142 underlined as tappable, filed as a Note by Gemini Nano with tags." width="720" height="1561" loading="lazy" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Find it again --------------------------------------------------------->
+    <section class="section" id="find">
+      <div class="wrap split split-rev">
+        <div class="split-copy">
+          <div class="section-head reveal">
+            <p class="eyebrow">Finding</p>
+            <h2>Find it again in a second</h2>
+            <p class="lede">The library keeps everything in one grid, newest on top. Save the same thing twice and it just moves back to the top.</p>
+          </div>
+          <ul class="points reveal">
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-search"></use></svg></span>
+              <div><strong>Search everything</strong>Titles, notes, page descriptions and a photo’s caption, as you type.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-image-search"></use></svg></span>
+              <div><strong>Text in pictures</strong>Turn it on and the words in your screenshots and photos become searchable too, read on your phone for Latin, Chinese, Devanagari, Japanese and Korean scripts.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-sell"></use></svg></span>
+              <div><strong>Filter by kind or tag</strong>Recipes, places, screenshots, “ramen”. Tap a tag on any piece to see everything filed under it.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-palette"></use></svg></span>
+              <div><strong>Colours that tell you where it came from</strong>Each card wears the colour of the app it came from, and the whole app comes in light and dark, in your wallpaper’s colours or one of five dyes.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="split-visual reveal">
+          <figure class="shot shot-lg">
+            <div class="shot-status follows"><span>9:41</span><i class="punch"></i></div>
+            <picture>
+              <source srcset="img/library-dark.webp" media="(prefers-color-scheme: dark)" />
+              <img src="img/library-light.webp" alt="Kakera’s library: a search bar, kind chips, and a two-column grid of cards for a recipe, a beach photo, a dinner note, a lease PDF, a quote, a list and a mountain photo, each footer in its app’s colour." width="720" height="1561" loading="lazy" />
+            </picture>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- More screens ---------------------------------------------------------->
+    <section class="section" id="screens">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <p class="eyebrow">Screens</p>
+          <h2>A closer look</h2>
+          <p class="lede">Drawn by the app’s own code, with a few made-up pieces.</p>
+        </div>
+      </div>
+      <div class="gallery reveal" tabindex="0" aria-label="Screenshots, scroll sideways">
+        <figure>
+          <div class="shot"><div class="shot-status on-dark"><span>9:41</span><i class="punch"></i></div><img src="img/library-dark.webp" alt="The library in dark theme." width="720" height="1561" loading="lazy" /></div>
+          <figcaption>The library, in the dark</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><div class="shot-status on-photo"><span>9:41</span><i class="punch"></i></div><img src="img/detail-photo-dark.webp" alt="A photo’s screen: the picture, its file, Kind · Gemini Nano: Photo with a caption, and tags." width="720" height="1561" loading="lazy" /></div>
+          <figcaption>A photo, captioned on the phone</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><div class="shot-status on-sky"><span>9:41</span><i class="punch"></i></div><img src="img/sidebar-saved.webp" alt="The edge sidebar after a drop: Open, Saved, Undo." width="720" height="1561" loading="lazy" /></div>
+          <figcaption>Dropped on the edge: Saved</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><div class="shot-status"><span>9:41</span><i class="punch"></i></div><img src="img/settings.webp" alt="Settings: theme, colours, card colours, the edge sidebar, remember the app, text in pictures and link previews." width="720" height="1561" loading="lazy" /></div>
+          <figcaption>Everything is a switch away</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><div class="shot-status on-dark"><span>9:41</span><i class="punch"></i></div><img src="img/onboarding.webp" alt="The welcome: the 欠片 mark, Save the pieces." width="720" height="1561" loading="lazy" /></div>
+          <figcaption>欠片, a fragment: the welcome</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Privacy --------------------------------------------------------------->
+    <section class="section" id="privacy">
+      <div class="wrap">
+        <div class="priv reveal">
+          <div class="priv-copy">
+            <p class="eyebrow">Privacy</p>
+            <h2>Your library lives on your phone</h2>
+            <p>No account, no sync, no ads, and no analytics of its own. The developer never sees what you save.</p>
+            <p class="more"><a href="privacy.html">Read the privacy policy</a></p>
+          </div>
+          <ul class="facts">
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"></use></svg>
+              <span><strong>It stays in Kakera’s private storage</strong>Pictures and files are copied in when you save them, so they keep working after the other app forgets them.</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-language"></use></svg>
+              <span><strong>Kakera itself sends one thing online: link previews</strong>Saving a link fetches its title and picture, over HTTPS, with no cookies. Turn previews off and Kakera makes no network requests of its own. (Google’s text-in-pictures reader, if you download it, may send Google diagnostics; the policy has the details.)</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-backup"></use></svg>
+              <span><strong>Your backups are your files</strong>Back up to a file you choose, by hand or on a schedule, and restore it on any phone. Android’s cloud backup never copies your library.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ ------------------------------------------------------------------>
+    <section class="section" id="faq">
+      <div class="wrap faq-wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Questions</p>
+          <h2>Good to know</h2>
+          <p class="lede">Something else? Email me at <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>, or see <a href="support.html">support</a>.</p>
+        </div>
+        <div class="faq reveal">
+          <details name="faq">
+            <summary>Which phones does it work on?</summary>
+            <p>Android 8 and newer. The edge sidebar needs Android 12. Smart filing with Gemini Nano works on phones that have Android’s on-device model; every other phone files with Kakera’s own rules.</p>
+          </details>
+          <details name="faq">
+            <summary>What does Gemini Nano do with my pieces?</summary>
+            <p>It reads each piece on your phone and answers with a title, a kind, a few tags and a one-line summary. Nothing is sent anywhere, and it only runs while Kakera is open. You can rethink any piece, or all of them, from the app.</p>
+          </details>
+          <details name="faq">
+            <summary>Does it work offline?</summary>
+            <p>Yes. Only link previews need a connection, plus the downloads you start yourself: Gemini Nano and the text-in-pictures reader.</p>
+          </details>
+          <details name="faq">
+            <summary>How do I move my library to a new phone?</summary>
+            <p>Export a backup file in Settings › Backups and restore it on the new phone, or use Android’s phone-to-phone transfer when you set it up.</p>
+          </details>
+          <details name="faq">
+            <summary>Why does the sidebar need “Display over other apps”?</summary>
+            <p>To draw its drop zone over the app you’re dragging from. Samsung phones call it “Appear on top”. The sidebar is off until you turn it on, and it shows only during a drag.</p>
+          </details>
+          <details name="faq">
+            <summary>What does “Kakera” mean?</summary>
+            <p>欠片, Japanese for a fragment or a shard: a piece of something. The app keeps the pieces.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA ------------------------------------------------------------------>
+    <section class="section cta">
+      <div class="wrap reveal">
+        <img src="icon.svg" alt="" width="72" height="72" />
+        <h2>Coming soon to Google Play</h2>
+        <p>Kakera is getting ready for release. Want to know when it’s out?</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:developerdfa@gmail.com?subject=Kakera">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"></use></svg>
+            Email me
+          </a>
+          <a class="btn btn-ghost" href="#try">Try it again</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
+      <nav aria-label="Footer">
+        <a href="../">More apps</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="support.html">Support</a>
+        <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>
+      </nav>
+    </div>
+  </footer>
+  <script>document.querySelectorAll('[data-year]').forEach(function (n) { n.textContent = new Date().getFullYear(); });</script>
+</body>
+</html>
