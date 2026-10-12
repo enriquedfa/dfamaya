@@ -329,6 +329,13 @@ message and a PDF), each drawn as if it sat in another app.
   screen showing round the other's rounded corner reads as a screenshot
   spilling out of its frame.
 
+- **Versioned links.** The Kakera pages (and the home page, for
+  `style.css`) link their stylesheets and script with a `?v=` number, so a
+  browser never pairs new HTML with a cached stylesheet: the hosts let CSS be
+  cached (GitHub Pages for 10 minutes, the githack preview for a minute and
+  then reused while it refetches). Bump the number in every page that links a
+  file when you change that file.
+
 ## The WatchSky page
 
 `watchfaces/watchsky.js` redraws the watch face from the WatchSky repo's
