@@ -798,19 +798,21 @@ code {
 
 /* A phone app's card shows its screenshot in a phone, cut off at the bottom */
 .app-phone {
+  --w: min(56vw, 230px);
   display: block;
-  width: min(56vw, 230px);
+  width: var(--w);
   height: min(86vw, 340px);
   margin-bottom: calc(-1 * var(--space-18));
   overflow: hidden;
   padding: 7px 7px 0;
-  border-radius: 34px 34px 0 0;
+  /* The screen's corner is 36/411 of its width, as on a phone, plus the bezel */
+  border-radius: calc((var(--w) - 14px) * 36 / 411 + 7px) calc((var(--w) - 14px) * 36 / 411 + 7px) 0 0;
   background: #1a1b1f;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), 0 30px 60px -30px rgb(0 0 0 / 0.6);
   -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent);
   mask-image: linear-gradient(to bottom, #000 80%, transparent);
 }
-.app-phone img { display: block; width: 100%; height: auto; border-radius: 27px 27px 0 0; }
+.app-phone img { display: block; width: 100%; height: auto; border-radius: calc((var(--w) - 14px) * 36 / 411) calc((var(--w) - 14px) * 36 / 411) 0 0; }
 .app-title img.seaglass-mark { view-transition-name: seaglass-mark; }
 
 @media (min-width: 860px) {
@@ -818,7 +820,7 @@ code {
   .app-card-feature .app-copy { align-self: center; padding: var(--space-12); }
   .app-visual { order: 0; border-bottom: 0; border-left: 1px solid var(--border); padding: var(--space-24) 0; }
   .app-visual .watch { --size: 270px; }
-  .app-phone { width: 250px; height: 400px; margin-bottom: calc(-1 * var(--space-24)); }
+  .app-phone { --w: 250px; height: 400px; margin-bottom: calc(-1 * var(--space-24)); }
 }
 
 /* ----------------------------------------------------------------------------

@@ -383,7 +383,9 @@
   position: relative;
   width: var(--pw);
   padding: 9px;
-  border-radius: 46px;
+  /* The screen's corner is 36 dp of its 411, as on a phone, so the status
+     bar clears the curve at any size; the frame's is that plus the bezel */
+  border-radius: calc((var(--pw) - 18px) * 36 / 411 + 9px);
   background: #1a1b1f;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.09), 0 40px 80px -36px rgb(0 0 0 / 0.65),
     0 18px 30px -18px rgb(0 0 0 / 0.4);
@@ -418,7 +420,7 @@
   width: 100%;
   aspect-ratio: 411 / 891;
   overflow: hidden;
-  border-radius: 37px;
+  border-radius: calc((var(--pw) - 18px) * 36 / 411);
   background: var(--surface);
   color: var(--on-surface);
   container-type: inline-size;
@@ -1049,9 +1051,9 @@
   cursor: pointer;
 }
 .sd-open-btn { padding: 0 calc(16 * var(--dp)); background: var(--primary); color: var(--on-primary) !important; }
+/* .back is already positioned (absolute), which its ::after needs too */
 .sd-btn,
-.chip-k,
-.back { position: relative; }
+.chip-k { position: relative; }
 .sd-btn::after,
 .chip-k::after,
 .back::after { content: ""; position: absolute; inset: -6px; }
@@ -1204,11 +1206,14 @@
   margin: 0;
   overflow: hidden;
   padding: 7px;
-  border-radius: 34px;
+  /* Corners in proportion, as on the demo phone: the screen's is 36/411 of
+     its width (8.76%, which is 4.04% of its height), and the frame's adds
+     the 7px bezel, worked back into percentages of the frame's own box */
+  border-radius: calc(8.76% + 5.77px) / calc(4.04% + 6.43px);
   background: #1a1b1f;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), 0 30px 60px -30px rgb(0 0 0 / 0.6);
 }
-.shot img { display: block; width: 100%; height: auto; border-radius: 27px; }
+.shot img { display: block; width: 100%; height: auto; border-radius: 8.76% / 4.04%; }
 .shot::after,
 .mock::after {
   content: "";
@@ -1300,7 +1305,7 @@
 .mock {
   position: relative;
   padding: 7px;
-  border-radius: 34px;
+  border-radius: calc(8.76% + 5.77px) / calc(4.04% + 6.43px);
   background: #1a1b1f;
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), 0 30px 60px -30px rgb(0 0 0 / 0.6);
 }
@@ -1316,7 +1321,7 @@
   position: relative;
   overflow: hidden;
   aspect-ratio: 411 / 891;
-  border-radius: 27px;
+  border-radius: 8.76% / 4.04%;
   background: var(--m-bg);
   color: var(--m-ink);
   container-type: inline-size;
