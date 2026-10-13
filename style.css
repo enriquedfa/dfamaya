@@ -673,6 +673,57 @@ code {
   font-size: var(--text-xs);
 }
 
+/* A gallery of screenshots, each captioned with a bold title and a detail
+   line. A swipe row on phones; from 640px a centred grid that wraps, so a
+   mouse never meets a sideways scrollbar; from 1100px all in one row. A page
+   sets the columns (--gallery-cols for the one row, --gallery-cols-md from
+   640px), a shot's width in the swipe row (--gallery-w), and draws its own
+   shots. */
+.gallery {
+  --gallery-gap: var(--space-5);
+  display: flex;
+  gap: var(--gallery-gap);
+  margin: var(--space-8) calc(-1 * var(--gutter)) 0;
+  padding: var(--space-2) var(--gutter) var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: thin;
+}
+.gallery:focus-visible { outline-offset: -4px; }
+.gallery figure {
+  --cols: var(--gallery-cols-md, 3);
+  flex: none;
+  width: var(--gallery-w, min(62vw, 220px));
+  margin: 0;
+  scroll-snap-align: start;
+}
+.gallery figcaption {
+  margin-top: var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+.gallery figcaption strong { display: block; color: var(--text); font-weight: 600; }
+@media (min-width: 640px) {
+  .gallery {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-10);
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+  }
+  .gallery figure { width: min(200px, (100% - (var(--cols) - 1) * var(--gallery-gap)) / var(--cols)); }
+}
+@media (min-width: 1100px) {
+  .gallery figure {
+    --cols: var(--gallery-cols, 6);
+    width: calc((100% - (var(--cols) - 1) * var(--gallery-gap)) / var(--cols));
+  }
+  .gallery figcaption { font-size: var(--text-xs); }
+}
+
 /* ----------------------------------------------------------------------------
    Home
 ---------------------------------------------------------------------------- */

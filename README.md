@@ -141,7 +141,15 @@ buttons, but they press and spring the same way.
 `.section` (a page section with a top border), `.section-head` (eyebrow,
 `h2` and `.lede`; add `.center` to centre it), `.lede`, `.app-badge` (the
 app's icon and name above a hero headline), `.fine` (small print under the
-hero buttons) and `.card`.
+hero buttons), `.card` and `.gallery`.
+
+`.gallery` is a row of screenshots, each a `figure` with a
+`<figcaption><strong>Title</strong>detail</figcaption>`. It is a swipe row on
+phones, a centred grid that wraps from 640px and one row from 1100px, so a
+mouse never meets a sideways scrollbar. A page sets `--gallery-cols` (the one
+row, default 6), `--gallery-cols-md` (from 640px, default 3) and
+`--gallery-w` (a shot's width in the swipe row), and draws its own shots:
+Kakera's are phones (`.shot`), Spiralis's are round faces (`.sp-gallery`).
 
 ### Playground
 
@@ -328,12 +336,10 @@ message and a PDF), each drawn as if it sat in another app.
 - **Screenshots never overlap.** Two phones side by side keep a gap: one
   screen showing round the other's rounded corner reads as a screenshot
   spilling out of its frame.
-- **Galleries scroll sideways on phones only.** "A closer look" is Spiralis's
-  gallery pattern (inside the wrap, a bold title and a detail line under each
-  shot): a swipe row on phones, three across from 640px, all six from 1100px,
-  so a mouse never meets a sideways scrollbar.
+- **"A closer look"** is the shared `.gallery` (see Shared blocks): six
+  phones, three across from 640px and all six from 1100px.
 
-- **Versioned links.** The Kakera pages (and the home page, for
+- **Versioned links.** The Kakera pages, Spiralis and the home page (for
   `style.css`) link their stylesheets and script with a `?v=` number, so a
   browser never pairs new HTML with a cached stylesheet: the hosts let CSS be
   cached (GitHub Pages for 10 minutes, the githack preview for a minute and

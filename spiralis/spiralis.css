@@ -239,39 +239,17 @@
 }
 
 /* Straight from the watch: the Play Store captures */
-.sp-gallery {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(150px, 1fr);
-  gap: var(--space-4);
-  margin: var(--space-8) calc(-1 * var(--gutter)) 0;
-  padding: var(--space-2) var(--gutter) var(--space-4);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--gutter);
-  scrollbar-width: thin;
-}
-.sp-gallery figure {
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: var(--space-3);
-  margin: 0;
-  scroll-snap-align: start;
-}
+/* The gallery is style.css's: seven faces in its one row, four across in
+   between. The faces are drawn round, in a rim like the watch's. */
+.sp-gallery { --gallery-cols: 7; --gallery-cols-md: 4; --gallery-w: 150px; }
 .sp-gallery img {
+  display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 1;
   border-radius: 50%;
   background: #000;
   box-shadow: 0 0 0 6px #17181c, 0 0 0 7px var(--border-strong), 0 18px 36px -18px var(--shadow-color, rgb(0 0 0 / 0.5));
-}
-.sp-gallery figcaption { color: var(--muted); font-size: var(--text-sm); text-align: center; }
-.sp-gallery figcaption strong { display: block; color: var(--text); font-weight: 600; }
-/* Wide enough for all seven in a row (the 8px keeps the watch rims in) */
-@media (min-width: 1180px) {
-  .sp-gallery { grid-auto-columns: minmax(0, 1fr); margin-inline: -8px; padding-inline: 8px; overflow: visible; }
 }
 
 /* How it works: the maths behind the face */
