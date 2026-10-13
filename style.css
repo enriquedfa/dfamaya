@@ -811,7 +811,7 @@ code {
   mask-image: linear-gradient(to bottom, #000 80%, transparent);
 }
 .app-phone img { display: block; width: 100%; height: auto; border-radius: 27px 27px 0 0; }
-.app-title img.kakera-mark { view-transition-name: kakera-mark; }
+.app-title img.seaglass-mark { view-transition-name: seaglass-mark; }
 
 @media (min-width: 860px) {
   .app-card-feature { grid-template-columns: 1.1fr 1fr; align-items: stretch; }

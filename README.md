@@ -1,7 +1,7 @@
 # dfamaya.github.io
 
 Static site for dfamaya's Android and Wear OS apps: a home page, landing
-pages for Kakera, Brief and the WatchSky and Spiralis watch faces, and per-app
+pages for Seaglass, Brief and the WatchSky and Spiralis watch faces, and per-app
 privacy policies and support. Plain
 HTML, CSS and a little vanilla JS. No build step.
 
@@ -15,23 +15,24 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
   strap, crown and dial, used by both apps). See [Design system](#design-system).
 - `assets/favicon.svg` — site icon
 
-### Kakera
+### Seaglass
 
-- `kakera/index.html` — landing page with the drag-to-the-edge demo
-- `kakera/privacy.html` — privacy policy (text mirrors
-  `docs/website/privacy-policy.md` in the Kakera repo; only the layout lives
-  here)
-- `kakera/support.html` — support (mirrors `docs/website/support.md`)
-- `kakera/kakera.css` — landing page, the demo's phone (Kakera's own UI,
+- `seaglass/index.html` — landing page with the drag-to-the-edge demo
+- `seaglass/privacy.html` — privacy policy (text mirrors
+  `docs/website/privacy-policy.md` in the app repo, `enriquedfa/Kakera`,
+  which kept its old name; only the layout lives here)
+- `seaglass/support.html` — support (mirrors `docs/website/support.md`)
+- `seaglass/seaglass.css` — landing page, the demo's phone (Seaglass's own UI,
   rebuilt) and the two text pages' extras
-- `kakera/demo.js` — the demo: the library, a piece's screen, the edge
+- `seaglass/demo.js` — the demo: the library, a piece's screen, the edge
   sidebar, dragging, and the filing pipeline with a port of the app's rules
-- `kakera/icon.svg`, `kakera/icon-180.png` — Kakera's icon, redrawn from the
-  app's launcher vectors (the background follows dark mode, as the
-  launcher's does)
-- `kakera/og.png` — link preview image (1200×630)
-- `kakera/img/` — screenshots rendered by the app's own code (see
-  [The Kakera page](#the-kakera-page)); `img/samples/` holds the demo's
+- `seaglass/icon.svg`, `seaglass/icon-180.png` — Seaglass's icon: the
+  designer's adaptive layers from the app repo's `brand/icon/` in one SVG (the
+  background follows dark mode, as the launcher's does); the PNG is the Play
+  icon, scaled
+- `seaglass/og.png` — link preview image (1200×630)
+- `seaglass/img/` — screenshots rendered by the app's own code (see
+  [The Seaglass page](#the-seaglass-page)); `img/samples/` holds the demo's
   made-up pictures (SVG, drawn for this page)
 
 ### Brief
@@ -149,7 +150,7 @@ phones, a centred grid that wraps from 640px and one row from 1100px, so a
 mouse never meets a sideways scrollbar. A page sets `--gallery-cols` (the one
 row, default 6), `--gallery-cols-md` (from 640px, default 3) and
 `--gallery-w` (a shot's width in the swipe row), and draws its own shots:
-Kakera's are phones (`.shot`), Spiralis's are round faces (`.sp-gallery`).
+Seaglass's are phones (`.shot`), Spiralis's are round faces (`.sp-gallery`).
 
 ### Playground
 
@@ -281,9 +282,9 @@ position are live; on Now playing the ring slot counts the song up from 00:00.
 To change the sample content, edit the `SOURCES` array at the top of
 `demo.js`.
 
-## The Kakera page
+## The Seaglass page
 
-The hero is the demo: a phone running Kakera's library, with the **edge
+The hero is the demo: a phone running Seaglass's library, with the **edge
 sidebar** on its right edge and four pieces beside it (a photo, a link, a
 message and a PDF), each drawn as if it sat in another app.
 
@@ -299,7 +300,7 @@ message and a PDF), each drawn as if it sat in another app.
   Settings preview.
 - **Filing** runs one piece at a time, the way the app does, and the log
   beside the phone narrates it: saved first, then enriched (the link preview,
-  the thumbnail, a file's words), then **Kakera's rules** (a port of
+  the thumbnail, a file's words), then **Seaglass's rules** (a port of
   `KindRules` and `HeuristicAnalyzer`'s table in `demo.js`), then **Gemini
   Nano**, whose answer replaces the rules' wholesale except a title that
   outranks it (a page's own). The samples carry a hand-written answer in
@@ -309,12 +310,12 @@ message and a PDF), each drawn as if it sat in another app.
   its name, a YouTube link as a video, a list by its shape. Pictures stay
   object URLs in the tab and nothing is uploaded. There's no Nano and no
   unfurl here, and the log says that too.
-- **The phone's UI** is the app's, rebuilt in `kakera.css` at its dp sizes
-  (1 dp is a 411th of the screen) in Ume's light and dark schemes. The card
+- **The phone's UI** is the app's, rebuilt in `seaglass.css` at its dp sizes
+  (1 dp is a 411th of the screen) in Seafoam's light and dark schemes. The card
   footers wear each made-up app's colour as the app grows it. If the app's
   library, card, piece screen or sidebar changes, change it here too.
-- **The screenshots** (`kakera/img/*.webp`) are drawn by the app's own code
-  under Robolectric, the technique of the Kakera repo's `ScreenshotTest`
+- **The screenshots** (`seaglass/img/*.webp`) are drawn by the app's own code
+  under Robolectric, the technique of the app repo's `ScreenshotTest`
   (`docs/testing.md#screenshots`), with the same made-up pieces as the demo,
   then converted to 720px-wide WebP. The test hands the screens a 32 dp
   status bar and a 24 dp gesture bar (`statusBars` and `navigationBars`, and
@@ -325,9 +326,9 @@ message and a PDF), each drawn as if it sat in another app.
   render the screens with a library seeded like `SAMPLES` and replace the
   files.
 - **"Three ways in"** shows three HTML mocks of other apps (`.mock` in
-  `kakera.css`), not renders: a browser with the share sheet open and
-  Kakera's "Save" in it; the same browser with words selected and the
-  selection menu's extra options open, "Save to Kakera" among them; and a
+  `seaglass.css`), not renders: a browser with the share sheet open and
+  Seaglass's "Save" in it; the same browser with words selected and the
+  selection menu's extra options open, "Save to Seaglass" among them; and a
   recipe page whose photo is being dragged (Android's see-through drag
   shadow) to the edge sidebar, which turns to "Let go to save" on a loop.
   The site, the people and the apps are made up. Each card shows part of a
@@ -339,7 +340,7 @@ message and a PDF), each drawn as if it sat in another app.
 - **"A closer look"** is the shared `.gallery` (see Shared blocks): six
   phones, three across from 640px and all six from 1100px.
 
-- **Versioned links.** The Kakera pages, Spiralis and the home page (for
+- **Versioned links.** The Seaglass pages, Spiralis and the home page (for
   `style.css`) link their stylesheets and script with a `?v=` number, so a
   browser never pairs new HTML with a cached stylesheet: the hosts let CSS be
   cached (GitHub Pages for 10 minutes, the githack preview for a minute and
@@ -459,11 +460,11 @@ policy, so these URLs never change)
 - Website URL: `https://enriquedfa.github.io/dfamaya/watchfaces/` (WatchSky) or
   `https://enriquedfa.github.io/dfamaya/spiralis/` (Spiralis)
 
-**Kakera**
+**Seaglass**
 
-- Privacy policy URL: `https://enriquedfa.github.io/dfamaya/kakera/privacy.html`
-- Support URL: `https://enriquedfa.github.io/dfamaya/kakera/support.html`
-- Website URL: `https://enriquedfa.github.io/dfamaya/kakera/`
+- Privacy policy URL: `https://enriquedfa.github.io/dfamaya/seaglass/privacy.html`
+- Support URL: `https://enriquedfa.github.io/dfamaya/seaglass/support.html`
+- Website URL: `https://enriquedfa.github.io/dfamaya/seaglass/`
 
 **Brief**
 
@@ -478,7 +479,7 @@ policy, so these URLs never change)
 - Brief: <https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication>
 - Wear OS Watch Faces: <https://play.google.com/store/apps/details?id=com.dfamaya.watchsky>
 - Spiralis: <https://play.google.com/store/apps/details?id=com.dfamaya.spiralis>
-- Kakera: not on Google Play yet (`dev.dfamaya.kakera`); its page says
+- Seaglass: not on Google Play yet (`dev.dfamaya.seaglass`); its page says
   "Coming soon". Once it's out, swap the hero's fine print and the closing
   call to action for store buttons, and add the link here.
 

@@ -1,13 +1,13 @@
 /* ============================================================================
-   Kakera — the demo on the landing page.
+   Seaglass — the demo on the landing page.
 
    Drag a piece (a photo, a link, a message, a PDF) onto the phone's right
-   edge, or tap it, and Kakera's edge sidebar takes it: "Let go to save",
+   edge, or tap it, and Seaglass's edge sidebar takes it: "Let go to save",
    "Got it", "Saved". Then the piece is filed the way the app files it:
 
      1. saved first (persist, then enrich: the app's core promise)
      2. enriched: the link preview, the thumbnail, a file's own words
-     3. Kakera's rules: a first kind and tags, on every phone (a port of
+     3. Seaglass's rules: a first kind and tags, on every phone (a port of
         KindRules + HeuristicAnalyzer's table, below)
      4. Gemini Nano: title, kind, tags and summary, overwriting the rules'
         answer wholesale, except a title that outranks it (a page's own)
@@ -17,12 +17,12 @@
    dragged in from elsewhere) get the rules for real, in the browser; nothing
    is uploaded, and pictures stay object URLs in this tab.
 
-   The UI is the app's, rebuilt: see kakera.css for the dp sizes and colours.
+   The UI is the app's, rebuilt: see seaglass.css for the dp sizes and colours.
 ============================================================================ */
 (function () {
   'use strict';
 
-  var root = document.querySelector('[data-kakera-demo]');
+  var root = document.querySelector('[data-seaglass-demo]');
   if (!root) return;
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -88,7 +88,7 @@
   };
 
   /* --------------------------------------------------------------------------
-     Kakera's rules, ported from KindRules.kt and HeuristicAnalyzer.kt.
+     Seaglass's rules, ported from KindRules.kt and HeuristicAnalyzer.kt.
      First match wins. Host rows match the host or the URL (www. stripped);
      word rows match whole words in the title, the page's words and the text.
   -------------------------------------------------------------------------- */
@@ -666,9 +666,9 @@
         item.title = item.page.title;
         item.titleSource = 'PAGE';
         changed(item);
-        logStep(item, 'enrich', 'done', 'The page’s title, description and picture: <b>the one thing Kakera fetches online</b>, and only with link previews on.', 'Link preview');
+        logStep(item, 'enrich', 'done', 'The page’s title, description and picture: <b>the one thing Seaglass fetches online</b>, and only with link previews on.', 'Link preview');
       } else {
-        logStep(item, 'enrich', 'skip', 'On a phone, Kakera would fetch this page’s title and picture now. This page can’t reach other sites, so the card keeps the address.', 'Link preview');
+        logStep(item, 'enrich', 'skip', 'On a phone, Seaglass would fetch this page’s title and picture now. This page can’t reach other sites, so the card keeps the address.', 'Link preview');
       }
     } else if (item.type === 'IMAGE') {
       logStep(item, 'enrich', 'busy', 'Writing the thumbnail…', 'Thumbnail');
@@ -690,7 +690,7 @@
       logStep(item, 'enrich', 'skip', 'Nothing to fetch for words. When you open it, the phone’s text classifier marks its dates, addresses and numbers.', 'Nothing to fetch');
     }
 
-    // 3. Kakera's rules, on every phone
+    // 3. Seaglass's rules, on every phone
     logStep(item, 'rules', 'busy', 'Running the rules…');
     await sleep(650);
     if (!alive()) return;
@@ -1122,7 +1122,7 @@
     return Promise.resolve({ pieces: [], failure: 'Nothing to save' });
   }
 
-  // Links, email addresses and phone numbers: what Kakera finds itself on Android 8
+  // Links, email addresses and phone numbers: what Seaglass finds itself on Android 8
   function findMarks(text) {
     var out = [], re = /(https?:\/\/[^\s]+|[\w.+-]+@[\w-]+\.[\w.-]+|\+?\d[\d\s().-]{6,}\d)/g, m;
     while ((m = re.exec(text)) && out.length < 12) out.push([m[1], 'mark']);

@@ -3,30 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Kakera · Save the pieces</title>
-  <meta name="description" content="Kakera saves text, links, photos and files from any Android app and files them for you, on your phone: a title, a kind and tags. Drag anything to the edge of the screen. No account, no sync, no ads." />
+  <title>Seaglass: Save Links for Later</title>
+  <meta name="description" content="Seaglass saves text, links, photos and files from any Android app and files them for you, on your phone: a title, a kind and tags. Drag anything to the edge of the screen. No account, no sync, no ads." />
   <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icon-180.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Kakera · Save the pieces" />
-  <meta property="og:description" content="Save text, links, photos and files from any Android app. Kakera files them for you, on your phone." />
-  <meta property="og:url" content="https://enriquedfa.github.io/dfamaya/kakera/" />
-  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/kakera/og.png" />
+  <meta property="og:title" content="Seaglass: Save Links for Later" />
+  <meta property="og:description" content="Save text, links, photos and files from any Android app. Seaglass files them for you, on your phone." />
+  <meta property="og:url" content="https://enriquedfa.github.io/dfamaya/seaglass/" />
+  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/seaglass/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
   <!-- The phone's text: Android's system font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Roboto+Mono:wght@400&display=swap" />
-  <link rel="stylesheet" href="../style.css?v=6" />
-  <link rel="stylesheet" href="kakera.css?v=7" />
-  <script src="demo.js?v=5" defer></script>
+  <link rel="stylesheet" href="../style.css?v=7" />
+  <link rel="stylesheet" href="seaglass.css?v=8" />
+  <script src="demo.js?v=6" defer></script>
 </head>
-<body class="kakera">
+<body class="seaglass">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <!-- Kakera's own icons: Material Symbols (rounded, opsz 24, wght 400, FILL 0, GRAD 0),
+    <!-- Seaglass's own icons: Material Symbols (rounded, opsz 24, wght 400, FILL 0, GRAD 0),
          converted from the app's vendored ImageVectors in ui/icons -->
     <symbol id="k-search" viewBox="0 0 24 24"><path d="M9.5 16Q6.78 16 4.89 14.11Q3 12.23 3 9.5Q3 6.77 4.89 4.89T9.5 3t4.61 1.89T16 9.5q0 1.1 -0.35 2.07T14.7 13.3l5.6 5.6q0.28 0.28 0.28 0.7q0 0.42 -0.28 0.7q-0.27 0.27 -0.7 0.27T18.9 20.3L13.3 14.7q-0.75 0.6 -1.72 0.95T9.5 16Zm0 -2q1.88 0 3.19 -1.31T14 9.5T12.69 6.31T9.5 5T6.31 6.31T5 9.5t1.31 3.19T9.5 14Z"/></symbol>
     <symbol id="k-settings" viewBox="0 0 24 24"><path d="M10.83 22Q10.15 22 9.66 21.55T9.08 20.45L8.85 18.8Q8.53 18.68 8.24 18.5T7.68 18.13L6.13 18.77Q5.5 19.05 4.88 18.83T3.9 18.02L2.73 15.98Q2.38 15.4 2.53 14.75T3.2 13.68l1.33 -1Q4.5 12.5 4.5 12.34q0 -0.16 0 -0.34t0 -0.34T4.53 11.33l-1.33 -1Q2.68 9.9 2.53 9.25T2.73 8.02L3.9 5.97Q4.25 5.4 4.88 5.18T6.13 5.22L7.68 5.88Q7.95 5.68 8.25 5.5T8.85 5.2L9.08 3.55Q9.18 2.9 9.66 2.45T10.83 2h2.35q0.68 0 1.16 0.45t0.59 1.1L15.15 5.2q0.33 0.13 0.61 0.3t0.56 0.38L17.88 5.22Q18.5 4.95 19.13 5.18t0.98 0.8l1.18 2.05q0.35 0.58 0.2 1.23T20.8 10.33l-1.32 1q0.02 0.18 0.02 0.34t0 0.34t0 0.34t-0.05 0.34l1.32 1q0.52 0.43 0.68 1.08t-0.2 1.22l-1.2 2.05q-0.35 0.58 -0.98 0.8T17.83 18.77l-1.5 -0.65q-0.27 0.2 -0.57 0.38t-0.6 0.3l-0.22 1.65q-0.1 0.65 -0.59 1.1T13.18 22H10.83ZM11 20h1.98l0.35 -2.65q0.78 -0.2 1.44 -0.59t1.21 -0.94l2.47 1.03l0.98 -1.7L17.28 13.52q0.13 -0.35 0.17 -0.74T17.5 12T17.45 11.21Q17.4 10.83 17.28 10.48L19.43 8.85L18.45 7.15L15.98 8.2Q15.43 7.63 14.76 7.24T13.33 6.65L13 4H11.03L10.68 6.65Q9.9 6.85 9.24 7.24T8.03 8.17L5.55 7.15L4.58 8.85l2.15 1.6Q6.6 10.83 6.55 11.2T6.5 12q0 0.4 0.05 0.77t0.17 0.75L4.58 15.15l0.98 1.7L8.03 15.8q0.55 0.58 1.21 0.96t1.44 0.59L11 20Zm1.05 -4.5q1.45 0 2.47 -1.03T15.55 12T14.53 9.52T12.05 8.5q-1.47 0 -2.49 1.02T8.55 12t1.01 2.47t2.49 1.03ZM12 12Z"/></symbol>
@@ -94,15 +94,15 @@
         <a class="parent" href="../">dfamaya</a>
         <span class="sep" aria-hidden="true">/</span>
         <a class="logo" href="./" aria-current="page">
-          <img class="logo-mark kakera-mark" src="icon.svg" alt="" width="28" height="28" />
-          <span class="logo-text">Kakera</span>
+          <img class="logo-mark seaglass-mark" src="icon.svg" alt="" width="28" height="28" />
+          <span class="logo-text">Seaglass</span>
         </a>
       </div>
-      <nav class="nav-links" aria-label="Kakera">
+      <nav class="nav-links" aria-label="Seaglass">
         <a href="privacy.html">Privacy</a>
         <a href="support.html">Support</a>
       </nav>
-      <a class="btn btn-sm btn-primary head-cta" href="#try" aria-label="Try Kakera in your browser">
+      <a class="btn btn-sm btn-primary head-cta" href="#try" aria-label="Try Seaglass in your browser">
         <span class="short">Try</span><span class="long">Try it</span>
         <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
       </a>
@@ -111,14 +111,14 @@
 
   <main id="main">
     <!-- Hero + the demo: drag a piece onto the phone's edge ------------------->
-    <section class="k-hero" data-kakera-demo>
+    <section class="k-hero" data-seaglass-demo>
       <div class="wrap k-grid">
         <div class="k-intro hero-exit">
           <p class="app-badge rise" style="--d:0">
             <img src="icon.svg" alt="" width="26" height="26" />
-            Kakera for Android
+            Seaglass for Android
           </p>
-          <h1 class="rise" style="--d:1"><span class="hl">Save the pieces.</span> Kakera files them for&nbsp;you.</h1>
+          <h1 class="rise" style="--d:1"><span class="hl">Save the pieces.</span> Seaglass files them for&nbsp;you.</h1>
           <p class="lede rise" style="--d:2">
             Text, links, photos and files, from any app, kept in one place. Each one gets a title,
             a kind and tags, worked out on your phone. <span class="lede-more">Nothing leaves it but
@@ -174,7 +174,7 @@
           </p>
         </div>
 
-        <!-- The phone: Kakera's library, with the edge sidebar on its right -->
+        <!-- The phone: Seaglass's library, with the edge sidebar on its right -->
         <div class="k-phone rise" style="--d:2">
           <div class="phone">
             <div class="screen" data-screen>
@@ -200,9 +200,8 @@
                 <div class="chips" data-kind-chips role="group" aria-label="Filter by kind"></div>
                 <div class="grid" data-grid aria-live="polite"></div>
                 <div class="empty" data-empty hidden>
-                  <span class="mark" lang="ja">欠片</span>
                   <strong>Nothing saved yet</strong>
-                  <span>Share text, links, photos or files to Kakera, and they land here.</span>
+                  <span>Share text, links, photos or files to Seaglass, and they wash up here.</span>
                 </div>
                 <p class="nomatch" data-nomatch hidden>No matches</p>
               </div>
@@ -240,15 +239,15 @@
             <h2 id="log-title">How it was filed</h2>
             <span class="log-piece" data-log-piece hidden></span>
           </div>
-          <p class="log-empty" data-log-empty>Save a piece and watch it get filed here, step by step: saved first, then enriched, then Kakera’s rules, then Gemini Nano.</p>
+          <p class="log-empty" data-log-empty>Save a piece and watch it get filed here, step by step: saved first, then enriched, then Seaglass’s rules, then Gemini Nano.</p>
           <ol class="log-steps" data-log-steps hidden>
             <li data-step="saved"><span class="dot"></span><div><strong>Saved first</strong><span data-note>Written to the library before anything else, so a drop is never lost.</span></div></li>
             <li data-step="enrich"><span class="dot"></span><div><strong data-title>Enriched</strong><span data-note>Link previews, thumbnails and a file’s own words, in the background.</span></div></li>
-            <li data-step="rules"><span class="dot"></span><div><strong>Kakera’s rules</strong><span data-note>On every phone: a first kind and tags, from what the piece is and where it came from.</span></div></li>
+            <li data-step="rules"><span class="dot"></span><div><strong>Seaglass’s rules</strong><span data-note>On every phone: a first kind and tags, from what the piece is and where it came from.</span></div></li>
             <li data-step="nano"><span class="dot"></span><div><strong>Gemini Nano</strong><span data-note>Where the phone has it: a title, a kind, tags and a summary, on the phone.</span></div></li>
           </ol>
           <pre class="log-json" data-log-json hidden></pre>
-          <p class="log-fine" data-log-fine hidden>A demo: the samples carry the kind of answer Gemini Nano gives on a phone. Your own drops get Kakera’s rules, run here in your browser. Nothing is uploaded.</p>
+          <p class="log-fine" data-log-fine hidden>A demo: the samples carry the kind of answer Gemini Nano gives on a phone. Your own drops get Seaglass’s rules, run here in your browser. Nothing is uploaded.</p>
         </aside>
       </div>
     </section>
@@ -259,13 +258,13 @@
         <div class="section-head center reveal">
           <p class="eyebrow">Saving</p>
           <h2>Three ways in, from any app</h2>
-          <p class="lede">Whatever you’re looking at, it’s one move to keep it. Kakera saves it first and works out the rest after.</p>
+          <p class="lede">Whatever you’re looking at, it’s one move to keep it. Seaglass saves it first and works out the rest after.</p>
         </div>
 
         <div class="ways stagger">
           <article class="way reveal lift">
             <div class="way-visual from-bottom">
-              <div class="mock" role="img" aria-label="A recipe page in a browser with Android’s share sheet open: Sharing link, the page’s title and address, people to share with, then apps, with Kakera’s Save among them.">
+              <div class="mock" role="img" aria-label="A recipe page in a browser with Android’s share sheet open: Sharing link, the page’s title and address, people to share with, then apps, with Seaglass’s Save among them.">
                 <div class="m-screen">
                   <div class="m-sb" aria-hidden="true"><span>9:41</span><span class="m-sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></div>
                   <div class="m-page">
@@ -292,7 +291,7 @@
                     <div class="m-apps">
                       <span><i style="--c:#2f6fdb"><svg viewBox="0 0 24 24"><use href="#i-chat"></use></svg></i>Messages</span>
                       <span><i style="--c:#e0567a"><svg viewBox="0 0 24 24"><use href="#i-mail"></use></svg></i>Mail</span>
-                      <span class="is-kakera"><img src="icon.svg" alt="" />Kakera<small>Save</small></span>
+                      <span class="is-seaglass"><img src="icon.svg" alt="" />Seaglass<small>Save</small></span>
                       <span><i style="--c:#e0a32b"><svg viewBox="0 0 24 24"><use href="#k-edit"></use></svg></i>Notes</span>
                     </div>
                   </div>
@@ -303,13 +302,13 @@
             <div class="way-copy">
               <span class="way-num">1</span>
               <h3>Share</h3>
-              <p>Share a link, a photo, a PDF, or a few at once, and pick Kakera’s “Save” in the share sheet. It says “Saved to Kakera” and gets out of the way.</p>
+              <p>Share a link, a photo, a PDF, or a few at once, and pick Seaglass’s “Save” in the share sheet. It says “Saved to Seaglass” and gets out of the way.</p>
             </div>
           </article>
 
           <article class="way reveal lift">
             <div class="way-visual from-middle">
-              <div class="mock" role="img" aria-label="A page in a browser with a sentence selected, and the selection menu’s extra options open: Web search, Share, Save to Kakera, Find and Manage apps.">
+              <div class="mock" role="img" aria-label="A page in a browser with a sentence selected, and the selection menu’s extra options open: Web search, Share, Save to Seaglass, Find and Manage apps.">
                 <div class="m-screen">
                   <div class="m-sb" aria-hidden="true"><span>9:41</span><span class="m-sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></div>
                   <div class="m-page">
@@ -323,7 +322,7 @@
                     <span class="m-back"><svg viewBox="0 0 24 24"><use href="#k-arrow-back"></use></svg></span>
                     <span>Web search</span>
                     <span>Share</span>
-                    <span class="on">Save to Kakera</span>
+                    <span class="on">Save to Seaglass</span>
                     <span>Find</span>
                     <span>Manage apps</span>
                   </div>
@@ -335,13 +334,13 @@
             <div class="way-copy">
               <span class="way-num">2</span>
               <h3>Select text</h3>
-              <p>Select some words in any app, open the menu’s extra options and tap “Save to Kakera”. Just the part you wanted, nothing else.</p>
+              <p>Select some words in any app, open the menu’s extra options and tap “Save to Seaglass”. Just the part you wanted, nothing else.</p>
             </div>
           </article>
 
           <article class="way reveal lift">
             <div class="way-visual from-middle">
-              <div class="mock" role="img" aria-label="A recipe page in a browser, its photo being dragged toward Kakera’s edge sidebar, open on the right: Drop to save.">
+              <div class="mock" role="img" aria-label="A recipe page in a browser, its photo being dragged toward Seaglass’s edge sidebar, open on the right: Drop to save.">
                 <div class="m-screen">
                   <div class="m-sb" aria-hidden="true"><span>9:41</span><span class="m-sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></div>
                   <div class="m-page">
@@ -388,11 +387,11 @@
           <ul class="points reveal">
             <li>
               <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-auto-awesome"></use></svg></span>
-              <div><strong>Gemini Nano where your phone has it</strong>Android’s on-device model reads each piece and gives it a title, a kind, tags and a one-line summary. Only while Kakera is open, and nothing is sent anywhere.</div>
+              <div><strong>Gemini Nano where your phone has it</strong>Android’s on-device model reads each piece and gives it a title, a kind, tags and a one-line summary. Only while Seaglass is open, and nothing is sent anywhere.</div>
             </li>
             <li>
               <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-checklist"></use></svg></span>
-              <div><strong>Kakera’s own rules everywhere else</strong>A recipe site, a shop, a map link, a list, a quote, a PDF: the rules know them on every phone, and they file first, before the model.</div>
+              <div><strong>Seaglass’s own rules everywhere else</strong>A recipe site, a shop, a map link, a list, a quote, a PDF: the rules know them on every phone, and they file first, before the model.</div>
             </li>
             <li>
               <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-edit"></use></svg></span>
@@ -406,7 +405,7 @@
 
           <div class="kinds reveal">
             <p class="pg-sub">Eighteen kinds, each one only where it fits</p>
-            <div class="kind-list" aria-label="The kinds Kakera files pieces as"><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-text-fields"></use></svg>Note</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-format-quote"></use></svg>Quote</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-checklist"></use></svg>List</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-feed"></use></svg>Article</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-movie"></use></svg>Video</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-shopping-bag"></use></svg>Product</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-restaurant"></use></svg>Recipe</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-location-on"></use></svg>Place</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-event"></use></svg>Event</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-link"></use></svg>Page</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-image"></use></svg>Photo</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-screenshot-monitor"></use></svg>Screenshot</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-sentiment-very-satisfied"></use></svg>Meme</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-palette"></use></svg>Artwork</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-description"></use></svg>Document</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-android"></use></svg>App</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-music-note"></use></svg>Audio</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-draft"></use></svg>File</span></div>
+            <div class="kind-list" aria-label="The kinds Seaglass files pieces as"><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-text-fields"></use></svg>Note</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-format-quote"></use></svg>Quote</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-checklist"></use></svg>List</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-feed"></use></svg>Article</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-movie"></use></svg>Video</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-shopping-bag"></use></svg>Product</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-restaurant"></use></svg>Recipe</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-location-on"></use></svg>Place</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-event"></use></svg>Event</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-link"></use></svg>Page</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-image"></use></svg>Photo</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-screenshot-monitor"></use></svg>Screenshot</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-sentiment-very-satisfied"></use></svg>Meme</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-palette"></use></svg>Artwork</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-description"></use></svg>Document</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-android"></use></svg>App</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-music-note"></use></svg>Audio</span><span class="kind"><svg viewBox="0 0 24 24"><use href="#k-draft"></use></svg>File</span></div>
           </div>
         </div>
 
@@ -414,11 +413,11 @@
           <figure class="shot shot-lg">
             <picture>
               <source srcset="img/detail-recipe-dark.webp" media="(prefers-color-scheme: dark)" />
-              <img src="img/detail-recipe-light.webp" alt="A saved recipe link in Kakera: the page’s picture and title, its description, the link, then Kind · Gemini Nano: Recipe, with a one-line summary and the tags ramen, recipe, japanese, noodles and dinner." width="720" height="1561" loading="lazy" />
+              <img src="img/detail-recipe-light.webp" alt="A saved recipe link in Seaglass: the page’s picture and title, its description, the link, then Kind · Gemini Nano: Recipe, with a one-line summary and the tags ramen, recipe, japanese, noodles and dinner." width="720" height="1561" loading="lazy" />
             </picture>
           </figure>
           <figure class="shot shot-sm">
-            <img src="img/detail-note-light.webp" alt="A saved message in Kakera with Friday at 8pm, 221 Baker Street and 555-0142 underlined as tappable, filed as a Note by Gemini Nano with tags." width="720" height="1561" loading="lazy" />
+            <img src="img/detail-note-light.webp" alt="A saved message in Seaglass with Friday at 8pm, 221 Baker Street and 555-0142 underlined as tappable, filed as a Note by Gemini Nano with tags." width="720" height="1561" loading="lazy" />
           </figure>
         </div>
       </div>
@@ -448,7 +447,7 @@
             </li>
             <li>
               <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-palette"></use></svg></span>
-              <div><strong>Colours that tell you where it came from</strong>Each card wears the colour of the app it came from, and the whole app comes in light and dark, in your wallpaper’s colours or one of five dyes.</div>
+              <div><strong>Colours that tell you where it came from</strong>Each card wears the colour of the app it came from, and the whole app comes in light and dark, in your wallpaper’s colours or one of five sea-glass colours.</div>
             </li>
           </ul>
         </div>
@@ -456,7 +455,7 @@
           <figure class="shot shot-lg">
             <picture>
               <source srcset="img/library-dark.webp" media="(prefers-color-scheme: dark)" />
-              <img src="img/library-light.webp" alt="Kakera’s library: a search bar, kind chips, and a two-column grid of cards for a recipe, a beach photo, a dinner note, a lease PDF, a quote, a list and a mountain photo, each footer in its app’s colour." width="720" height="1561" loading="lazy" />
+              <img src="img/library-light.webp" alt="Seaglass’s library: a search bar, kind chips, and a two-column grid of cards for a recipe, a beach photo, a dinner note, a lease PDF, a quote, a list and a mountain photo, each footer in its app’s colour." width="720" height="1561" loading="lazy" />
             </picture>
           </figure>
         </div>
@@ -481,7 +480,7 @@
             <figcaption><strong>A photo</strong>Captioned on the phone</figcaption>
           </figure>
           <figure>
-            <div class="shot"><img src="img/capture.webp" alt="Kakera’s confirmation over the app that shared: Saved to Kakera, with Undo." width="720" height="1561" loading="lazy" /></div>
+            <div class="shot"><img src="img/capture.webp" alt="Seaglass’s confirmation over the app that shared: Saved to Seaglass, with Undo." width="720" height="1561" loading="lazy" /></div>
             <figcaption><strong>Shared</strong>Saved, with Undo</figcaption>
           </figure>
           <figure>
@@ -493,8 +492,8 @@
             <figcaption><strong>Settings</strong>Everything a switch away</figcaption>
           </figure>
           <figure>
-            <div class="shot"><img src="img/onboarding.webp" alt="The welcome: the 欠片 mark, Save the pieces." width="720" height="1561" loading="lazy" /></div>
-            <figcaption><strong>Welcome</strong>欠片, a fragment</figcaption>
+            <div class="shot"><img src="img/onboarding.webp" alt="The welcome: Seaglass’s icon, Save the pieces." width="720" height="1561" loading="lazy" /></div>
+            <figcaption><strong>Welcome</strong>Save the pieces</figcaption>
           </figure>
         </div>
       </div>
@@ -513,11 +512,11 @@
           <ul class="facts">
             <li>
               <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"></use></svg>
-              <span><strong>It stays in Kakera’s private storage</strong>Pictures and files are copied in when you save them, so they keep working after the other app forgets them.</span>
+              <span><strong>It stays in Seaglass’s private storage</strong>Pictures and files are copied in when you save them, so they keep working after the other app forgets them.</span>
             </li>
             <li>
               <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-language"></use></svg>
-              <span><strong>Kakera itself sends one thing online: link previews</strong>Saving a link fetches its title and picture, over HTTPS, with no cookies. Turn previews off and Kakera makes no network requests of its own. (Google’s text-in-pictures reader, if you download it, may send Google diagnostics; the policy has the details.)</span>
+              <span><strong>Seaglass itself sends one thing online: link previews</strong>Saving a link fetches its title and picture, over HTTPS, with no cookies. Turn previews off and Seaglass makes no network requests of its own. (Google’s text-in-pictures reader, if you download it, may send Google diagnostics; the policy has the details.)</span>
             </li>
             <li>
               <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#k-backup"></use></svg>
@@ -539,11 +538,11 @@
         <div class="faq reveal">
           <details name="faq">
             <summary>Which phones does it work on?</summary>
-            <p>Phones with Android 12 or newer. Smart filing with Gemini Nano works on phones that have Android’s on-device model; every other phone files with Kakera’s own rules.</p>
+            <p>Phones with Android 12 or newer. Smart filing with Gemini Nano works on phones that have Android’s on-device model; every other phone files with Seaglass’s own rules.</p>
           </details>
           <details name="faq">
             <summary>What does Gemini Nano do with my pieces?</summary>
-            <p>It reads each piece on your phone and answers with a title, a kind, a few tags and a one-line summary. Nothing is sent anywhere, and it only runs while Kakera is open. You can rethink any piece, or all of them, from the app.</p>
+            <p>It reads each piece on your phone and answers with a title, a kind, a few tags and a one-line summary. Nothing is sent anywhere, and it only runs while Seaglass is open. You can rethink any piece, or all of them, from the app.</p>
           </details>
           <details name="faq">
             <summary>Does it work offline?</summary>
@@ -558,8 +557,8 @@
             <p>To draw its drop zone over the app you’re dragging from. Samsung phones call it “Appear on top”. The sidebar is off until you turn it on, and it shows only during a drag.</p>
           </details>
           <details name="faq">
-            <summary>What does “Kakera” mean?</summary>
-            <p>欠片, Japanese for a fragment or a shard: a piece of something. The app keeps the pieces.</p>
+            <summary>Why “Seaglass”?</summary>
+            <p>Sea glass is broken glass the sea has tumbled smooth and frosted, until someone picks it up and keeps it. Seaglass keeps the pieces you find on your phone.</p>
           </details>
         </div>
       </div>
@@ -570,9 +569,9 @@
       <div class="wrap reveal">
         <img src="icon.svg" alt="" width="72" height="72" />
         <h2>Coming soon to Google Play</h2>
-        <p>Kakera is getting ready for release. Want to know when it’s out?</p>
+        <p>Seaglass is getting ready for release. Want to know when it’s out?</p>
         <div class="btn-row">
-          <a class="btn btn-primary" href="mailto:developerdfa@gmail.com?subject=Kakera">
+          <a class="btn btn-primary" href="mailto:developerdfa@gmail.com?subject=Seaglass">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"></use></svg>
             Email me
           </a>

@@ -1,26 +1,28 @@
 /* ============================================================================
-   Kakera — landing page, the drag-to-the-edge demo, privacy and support.
+   Seaglass — landing page, the drag-to-the-edge demo, privacy and support.
 
-   The phone in the hero is Kakera's own UI rebuilt in HTML: the library
+   The phone in the hero is Seaglass's own UI rebuilt in HTML: the library
    grid, a piece's screen and the edge sidebar, at the app's dp sizes (1 dp is
-   a 411th of the screen, a Pixel's width) and in Ume, its brand scheme, as
+   a 411th of the screen, a Pixel's width) and in Seafoam, its brand scheme, as
    SeedScheme.kt generates it. Sizes and colours were read off the app's own
-   renders (Kakera's ScreenshotTest technique), so the demo and the
+   renders (Seaglass's ScreenshotTest technique), so the demo and the
    screenshots below it match.
 ============================================================================ */
 
-/* Ume: the page's brand pair and accent follow the app, not the site */
-.kakera {
-  --brand-a: #8e3a66;
-  --brand-b: #b0557f;
-  --brand-glow: #ffafd4;
-  --brand-gradient: linear-gradient(135deg, #8e3a66, #b0557f);
-  --accent: light-dark(#95416c, #ffafd4);
+/* Seafoam: the page's brand pair and accent follow the app, not the site.
+   The pair is Seafoam's primary (tone 40) into the icon's deep-sea blue, so
+   white text on a button keeps 4.5:1 across the whole gradient. */
+.seaglass {
+  --brand-a: #006a60;
+  --brand-b: #1f7a94;
+  --brand-glow: #57dbc9;
+  --brand-gradient: linear-gradient(135deg, #006a60, #1f7a94);
+  --accent: light-dark(#006a60, #57dbc9);
 }
 
-.logo-mark.kakera-mark { border-radius: 8px; }
-.site-head .logo-mark.kakera-mark,
-.app-title img.kakera-mark { view-transition-name: kakera-mark; }
+.logo-mark.seaglass-mark { border-radius: 8px; }
+.site-head .logo-mark.seaglass-mark,
+.app-title img.seaglass-mark { view-transition-name: seaglass-mark; }
 
 /* ----------------------------------------------------------------------------
    Hero: the copy, the pieces to drag, the phone and the filing log
@@ -52,7 +54,7 @@
   line-height: 1.02;
 }
 .k-intro h1 .hl {
-  background: linear-gradient(100deg, light-dark(#8e3a66, #ffafd4), light-dark(#b0557f, #ffd8e9) 60%, light-dark(#83523e, #f4b9a1));
+  background: linear-gradient(100deg, light-dark(#006a60, #57dbc9), light-dark(#1f7a94, #9cefe2) 60%, light-dark(#156684, #8ecff2));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -351,7 +353,7 @@
   isolation: isolate;
 }
 
-/* Glow, dot grid and the 欠片 mark behind the phone */
+/* Glow and dot grid behind the phone */
 .k-phone::before {
   content: "";
   position: absolute;
@@ -361,7 +363,7 @@
   aspect-ratio: 1;
   translate: -50% -50%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, color-mix(in srgb, light-dark(#ffd8e9, #7a2754) 70%, transparent), transparent 70%);
+  background: radial-gradient(closest-side, color-mix(in srgb, light-dark(#77f7e6, #005048) 70%, transparent), transparent 70%);
   z-index: -2;
   pointer-events: none;
 }
@@ -390,26 +392,26 @@
   .phone { --pw: min(300px, 74vw, calc((100svh - var(--header-h) - 150px) * 0.46)); }
 }
 
-/* Ume, light and dark, as SeedScheme.kt grows it (tones 40/90/98…) */
+/* Seafoam, light and dark, as SeedScheme.kt grows it (tones 40/90/98…) */
 .screen {
-  --primary: light-dark(#95416c, #ffafd4);
-  --on-primary: light-dark(#ffffff, #5f093d);
-  --primary-container: light-dark(#ffd8e9, #7a2754);
-  --on-primary-container: light-dark(#3d0025, #ffd8e9);
-  --secondary-container: light-dark(#fadae8, #593f4b);
-  --on-secondary-container: light-dark(#2b141f, #fadae8);
-  --tertiary-container: light-dark(#ffdbcd, #683b28);
-  --on-tertiary-container: light-dark(#331107, #ffdbcd);
-  --surface: light-dark(#fff7fb, #191115);
-  --on-surface: light-dark(#201a1d, #e9e0e4);
-  --on-surface-variant: light-dark(#524349, #d4c2c9);
-  --outline: light-dark(#83737a, #9d8c94);
-  --outline-variant: light-dark(#d4c2c9, #524349);
-  --sc-low: light-dark(#fbf1f5, #201a1d);
-  --sc: light-dark(#f5ebef, #241e21);
-  --sc-high: light-dark(#efe6ea, #2f282b);
-  --sc-highest: light-dark(#e9e0e4, #3a3336);
-  --surface-bright: light-dark(#fff7fb, #3f373a);
+  --primary: light-dark(#006a60, #57dbc9);
+  --on-primary: light-dark(#ffffff, #003731);
+  --primary-container: light-dark(#77f7e6, #005048);
+  --on-primary-container: light-dark(#00201c, #77f7e6);
+  --secondary-container: light-dark(#c5eae3, #2c4d47);
+  --on-secondary-container: light-dark(#00201c, #c5eae3);
+  --tertiary-container: light-dark(#c1e8ff, #004d66);
+  --on-tertiary-container: light-dark(#001e2b, #c1e8ff);
+  --surface: light-dark(#f1fcfa, #0b1514);
+  --on-surface: light-dark(#151d1c, #dae5e3);
+  --on-surface-variant: light-dark(#384a47, #b6cbc7);
+  --outline: light-dark(#677b77, #819591);
+  --outline-variant: light-dark(#b6cbc7, #384a47);
+  --sc-low: light-dark(#ebf6f4, #151d1c);
+  --sc: light-dark(#e5f0ee, #192120);
+  --sc-high: light-dark(#e0eae8, #232c2a);
+  --sc-highest: light-dark(#dae5e3, #2e3635);
+  --surface-bright: light-dark(#f1fcfa, #323b39);
   --dp: calc(100cqw / 411);
 
   position: relative;
@@ -586,23 +588,12 @@
   display: grid;
   justify-items: center;
   gap: calc(8 * var(--dp));
-  padding: calc(120 * var(--dp)) calc(40 * var(--dp)) 0;
+  padding: calc(160 * var(--dp)) calc(40 * var(--dp)) 0;
   text-align: center;
   color: var(--on-surface-variant);
   font-size: calc(14 * var(--dp));
 }
 .empty[hidden] { display: none; }
-.empty .mark {
-  display: grid;
-  place-items: center;
-  width: calc(96 * var(--dp));
-  height: calc(96 * var(--dp));
-  margin-bottom: calc(12 * var(--dp));
-  border-radius: 34%;
-  background: var(--primary-container);
-  color: var(--on-primary-container);
-  font-size: calc(28 * var(--dp));
-}
 .empty strong { color: var(--on-surface); font-size: calc(22 * var(--dp)); font-weight: 400; }
 .nomatch { padding: calc(48 * var(--dp)) 0; text-align: center; color: var(--on-surface-variant); font-size: calc(14 * var(--dp)); }
 .nomatch[hidden] { display: none; }
@@ -765,7 +756,7 @@
 .hero {
   position: relative;
   overflow: hidden;
-  background: #1e1a1c;
+  background: #131b1a;
 }
 /* A scrim under the status bar, so its white icons read over any picture */
 .hero::before {
@@ -1101,8 +1092,8 @@
   z-index: 6;
   padding: calc(14 * var(--dp)) calc(16 * var(--dp));
   border-radius: calc(4 * var(--dp));
-  background: light-dark(#362e32, #e9e0e4);
-  color: light-dark(#f8eef2, #362e32);
+  background: light-dark(#2a3231, #dae5e3);
+  color: light-dark(#e8f3f1, #2a3231);
   font-size: calc(14 * var(--dp));
   line-height: calc(20 * var(--dp));
   box-shadow: 0 calc(3 * var(--dp)) calc(8 * var(--dp)) rgb(0 0 0 / 0.25);
@@ -1168,7 +1159,7 @@
   top: 2.5px;
   width: 5px;
   height: 9px;
-  border: solid light-dark(#fff, #3d0025);
+  border: solid light-dark(#fff, #00201c);
   border-width: 0 2px 2px 0;
   rotate: 45deg;
 }
@@ -1255,7 +1246,7 @@
   padding: var(--space-8) var(--space-6) 0;
   overflow: hidden;
   background:
-    radial-gradient(closest-side, color-mix(in srgb, light-dark(#ffd8e9, #7a2754) 60%, transparent), transparent) center 40% / 110% 110% no-repeat,
+    radial-gradient(closest-side, color-mix(in srgb, light-dark(#77f7e6, #005048) 60%, transparent), transparent) center 40% / 110% 110% no-repeat,
     var(--bg-raised);
   border-bottom: 1px solid var(--border);
 }
@@ -1301,9 +1292,9 @@
 
 /* ----------------------------------------------------------------------------
    Mocks of other apps' screens, drawn like the screenshots: a browser with
-   Android's share sheet open (Kakera's "Save" in it), and the same browser
+   Android's share sheet open (Seaglass's "Save" in it), and the same browser
    with words selected and the selection menu's extra options open ("Save to
-   Kakera" is Kakera's PROCESS_TEXT entry). Sized in dp of a 411 dp screen.
+   Seaglass" is Seaglass's PROCESS_TEXT entry). Sized in dp of a 411 dp screen.
    The people, apps and site are made up.
 ---------------------------------------------------------------------------- */
 .mock {
@@ -1484,10 +1475,10 @@
 .m-apps i svg { width: calc(28 * var(--dp)); height: calc(28 * var(--dp)); }
 .m-apps img { width: calc(52 * var(--dp)); height: calc(52 * var(--dp)); border-radius: calc(17 * var(--dp)); }
 .m-apps small { margin-top: calc(-5 * var(--dp)); color: var(--m-muted); font-size: calc(11 * var(--dp)); }
-/* Kakera's target, the one to tap: a soft ring that breathes */
-.m-apps .is-kakera img { box-shadow: 0 0 0 calc(3 * var(--dp)) light-dark(#ffffff, #1d1d20), 0 0 0 calc(5.5 * var(--dp)) #b0557f; }
+/* Seaglass's target, the one to tap: a soft ring that breathes */
+.m-apps .is-seaglass img { box-shadow: 0 0 0 calc(3 * var(--dp)) light-dark(#ffffff, #1d1d20), 0 0 0 calc(5.5 * var(--dp)) #3e8f84; }
 @media (prefers-reduced-motion: no-preference) {
-  .m-apps .is-kakera img { animation: breathe 2.4s var(--ease) infinite; }
+  .m-apps .is-seaglass img { animation: breathe 2.4s var(--ease) infinite; }
   @keyframes breathe {
     50% { box-shadow: 0 0 0 calc(3 * var(--dp)) light-dark(#ffffff, #1d1d20), 0 0 0 calc(9 * var(--dp)) rgb(176 85 127 / 0.25); }
   }
@@ -1525,7 +1516,7 @@
 .m-menu span { display: flex; align-items: center; height: calc(54 * var(--dp)); margin: 0 calc(8 * var(--dp)); padding: 0 calc(16 * var(--dp)); border-radius: calc(14 * var(--dp)); }
 .m-menu .m-back { height: calc(46 * var(--dp)); margin-bottom: calc(4 * var(--dp)); border-bottom: calc(1 * var(--dp)) solid var(--m-line); border-radius: 0; }
 .m-menu .m-back svg { width: calc(24 * var(--dp)); height: calc(24 * var(--dp)); }
-.m-menu .on { background: light-dark(#ffd8e9, #7a2754); color: light-dark(#3d0025, #ffd8e9); }
+.m-menu .on { background: light-dark(#77f7e6, #005048); color: light-dark(#00201c, #77f7e6); }
 .m-url {
   position: absolute;
   left: calc(16 * var(--dp));
@@ -1577,10 +1568,10 @@
 .m-card dd { color: light-dark(#3a5fc4, #9db7ff); }
 
 .m-side {
-  --side-bg: light-dark(#ffd8e9, #7a2754);
-  --side-fg: light-dark(#3d0025, #ffd8e9);
-  --side-hover-bg: light-dark(#95416c, #ffafd4);
-  --side-hover-fg: light-dark(#ffffff, #5f093d);
+  --side-bg: light-dark(#77f7e6, #005048);
+  --side-fg: light-dark(#00201c, #77f7e6);
+  --side-hover-bg: light-dark(#006a60, #57dbc9);
+  --side-hover-fg: light-dark(#ffffff, #003731);
   position: absolute;
   top: 50%;
   right: calc(8 * var(--dp));
@@ -1677,7 +1668,7 @@
   aspect-ratio: 1;
   translate: -50% -50%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, color-mix(in srgb, light-dark(#ffd8e9, #7a2754) 60%, transparent), transparent 70%);
+  background: radial-gradient(closest-side, color-mix(in srgb, light-dark(#77f7e6, #005048) 60%, transparent), transparent 70%);
   z-index: -1;
 }
 .shot-lg { width: min(72vw, 300px); }
