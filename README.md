@@ -479,9 +479,10 @@ policy, so these URLs never change)
 - Brief: <https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication>
 - Wear OS Watch Faces: <https://play.google.com/store/apps/details?id=com.dfamaya.watchsky>
 - Spiralis: <https://play.google.com/store/apps/details?id=com.dfamaya.spiralis>
-- Seaglass: not on Google Play yet (`dev.dfamaya.seaglass`); its page says
-  "Coming soon". Once it's out, swap the hero's fine print and the closing
-  call to action for store buttons, and add the link here.
+- Seaglass: not on Google Play yet (`dev.dfamaya.seaglass`). Its closed test
+  takes testers from <https://groups.google.com/g/seaglass-testers>, which the
+  hero's fine print and the closing call to action link to. Once it's out, swap both
+  for store buttons, and add the link here.
 
 ## Adding another app
 
