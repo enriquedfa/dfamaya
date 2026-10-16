@@ -12,7 +12,7 @@
    - the center minute index, the optional red seconds hand
    - the four complication slots (two rings, two edge arcs), with the spiral
      hidden in a tight halo around each one
-   - the twelve palettes; numerals all, current hour or none, 12- or 24-hour;
+   - the thirteen palettes; numerals all, current hour or none, 12- or 24-hour;
      hour lines short, fading or vortex; and the always-on look in its four
      AOD colors
 
@@ -59,6 +59,7 @@
     lemongrass: { name: "Lemongrass", c: ["#E7E79F", "#CBCC58", "#48490C", "#B5B6F6"] },
     peony: { name: "Peony", c: ["#FFD9E5", "#FFB0CF", "#762D4F", "#D5BCF8"] },
     ember: { name: "Ember", c: ["#FFDAD5", "#FFB4A8", "#7F2A1F", "#FFB86E"] },
+    tangerine: { name: "Tangerine", c: ["#FFB599", "#FF8C5C", "#7F2B00", "#DCD794"] },
     monochrome: { name: "Monochrome", c: ["#E2E2E2", "#D4D4D4", "#454747", "#D4D4D5"] },
   };
 
