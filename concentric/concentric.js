@@ -26,7 +26,6 @@
        [data-cc-play]      run the clock fast (a minute a second)
        [data-cc-now]       back to the real time
        [data-cc-caption]   time + colorway readout
-       [data-cc-moment]    buttons that jump to a time (data-cc-moment="10:09")
        [data-cc-colorways] where the 64 colorway chips are drawn
        input[name=cc-*]    the settings (radios and checkboxes)
        [data-cc-value=…]   shows the chosen option's name
@@ -705,20 +704,6 @@
       stopPlay();
       state.live = true;
       render();
-    });
-
-    // data-cc-moment="10:09" (24-hour); "+1h" means the next hour on the dot
-    page.querySelectorAll("[data-cc-moment]").forEach((b) => {
-      b.addEventListener("click", () => {
-        stopPlay();
-        const v = b.dataset.ccMoment;
-        const t = displayTime();
-        state.minutes = v === "+1h"
-          ? (t.h + 1) * 60
-          : (([hh, mm, ss = 0]) => hh * 60 + mm + ss / 60)(v.split(":").map(Number));
-        state.live = false;
-        render();
-      });
     });
 
     page.addEventListener("change", (e) => {
