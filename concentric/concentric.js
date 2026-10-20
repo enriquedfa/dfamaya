@@ -195,7 +195,10 @@
   // Half Dial bulbs: left, top in 456 units, 100 × 100
   const BULB = Math.round(sc(100));
   const BC = BULB / 2;
-  const BULB_R = sc(100 - 6) / 2;
+  // The bulb ring is twice as thick as the corner arcs, its outer edge on
+  // the bulb's edge
+  const BULB_T = sc(8);
+  const BULB_R = sc(100 - 8) / 2;
   const BULBS = [
     { id: "top", x: Math.round(sc(290)), y: Math.round(sc(50)) },
     { id: "mid", x: Math.round(sc(340)), y: Math.round(sc(176)) },
@@ -207,6 +210,7 @@
     event: { vb: 24, d: "M5,22q-0.83,0-1.41-0.59T3,20V6Q3,5.18 3.59,4.59T5,4H6V2H8V4h8V2h2V4h1q0.83,0 1.41,0.59Q21,5.18 21,6V20q0,0.82-0.59,1.41T19,22H5Zm0-2H19V10H5V20Zm2-6h5v5H7v-5Z" },
     battery: { vb: 24, d: "M9,2h6v2h2q0.42,0 0.71,0.29T18,5v16q0,0.42-0.29,0.71T17,22H7q-0.42,0-0.71-0.29T6,21V5q0-0.42 0.29-0.71T7,4h2V2Zm-1,4v14h8V6H8Zm1,5h6v8H9v-8Z" },
     heart: { vb: 24, d: "M12,21l-1.45-1.3q-2.53-2.27-4.18-3.92q-1.65-1.65-2.63-2.96Q2.78,11.5 2.39,10.4T2,8.15Q2,5.8 3.58,4.22T7.5,2.65q1.3,0 2.48,0.55T12,4.75q0.85-1 2.03-1.55T16.5,2.65q2.35,0 3.93,1.57T22,8.15q0,1.15-0.39,2.25t-1.36,2.41q-0.97,1.31-2.63,2.96q-1.65,1.65-4.17,3.92L12,21Z" },
+    steps: { vb: 24, d: "M5.9,8a2.6,4.2 0 1,0 5.2,0a2.6,4.2 0 1,0 -5.2,0ZM6.3,15.6a2.2,1.9 0 1,0 4.4,0a2.2,1.9 0 1,0 -4.4,0ZM12.9,11a2.6,4.2 0 1,0 5.2,0a2.6,4.2 0 1,0 -5.2,0ZM13.3,18.6a2.2,1.9 0 1,0 4.4,0a2.2,1.9 0 1,0 -4.4,0Z" },
     moon: { vb: 24, d: "M12.1,22Q10,22 8.16,21.2q-1.84-0.8-3.2-2.16T2.8,15.84T2,11.9Q2,8.7 3.8,6.1T8.63,2.45q0.55-0.2 1.03,0.14T10.1,3.5q-0.08,2.13 0.67,4.05t2.25,3.42t3.42,2.25T20.5,13.9q0.65-0.02 0.96,0.44t0.11,1.04q-1.1,3-3.69,4.81T12.1,22Z" },
     sun: { vb: 960, oy: -960, d: "M440,-760v-160h80v160h-80Zm266,110 -55,-55 112,-115 56,57 -113,113Zm54,210v-80h160v80H760ZM440,-40v-160h80v160h-80ZM254,-652 140,-763l57,-56 113,113 -56,54Zm508,512L651,-255l54,-54 114,110 -57,59ZM40,-440v-80h160v80H40Zm157,300 -56,-57 112,-112 29,27 29,28 -114,114Zm113,-170q-70,-70 -70,-170t70,-170q70,-70 170,-70t170,70q70,70 70,170t-70,170q-70,70 -170,70t-170,-70Z" },
   };
@@ -245,6 +249,49 @@
     const g = el("g", attrs, parent);
     el("path", { d: ic.d, class: "cc-fd", "fill-rule": "evenodd", transform: `translate(${f2(cx - size / 2)} ${f2(cy - size / 2 - (ic.oy || 0) * k)}) scale(${f2(k * 1000) / 1000})` }, g);
     return g;
+  }
+
+  // A round-capped stroke along a circle, from a1 to a2. With `ramp`
+  // ([from, to]), it's the colorway's ramp, colour c into d over that span,
+  // which a provider's colour ramp (the weather's blue to red) becomes. SVG
+  // has no conic gradient, so a ramp is drawn in short pieces.
+  function stroke(parent, r, a1, a2, cx, cy, w, cls, ramp) {
+    if (a2 - a1 <= 0.05) return;
+    const width = `stroke-width:${f2(w)}px`;
+    if (!ramp) {
+      el("path", { d: arcD(r, a1, a2, cx, cy), class: `cc-track ${cls}`, style: width }, parent);
+      return;
+    }
+    const mix = (a) => `color-mix(in srgb, var(--cc-d) ${f2(clamp((a - ramp[0]) / (ramp[1] - ramp[0]), 0, 1) * 100)}%, var(--cc-c))`;
+    const n = Math.ceil((a2 - a1) / 3);
+    const step = (a2 - a1) / n;
+    for (let i = 0; i < n; i++) {
+      const from = a1 + i * step;
+      el("path", {
+        d: arcD(r, from, Math.min(a2, from + step + 0.4), cx, cy), class: "cc-track",
+        style: `${width};stroke:${mix(from + step / 2)};stroke-linecap:butt`,
+      }, parent);
+    }
+    for (const a of [a1, a2]) {
+      const [x, y] = pt(r, a, cx, cy);
+      el("circle", { cx: x, cy: y, r: f2(w / 2), style: `fill:${mix(a)}` }, parent);
+    }
+  }
+
+  // A rating: the dot (colour d) in an opening of its track. The track stops
+  // short either side of it with round ends: the dot's radius, 3 px and the
+  // round cap (Google's bars aren't notched by a halo). A ramp stays one ramp
+  // across the opening.
+  function rating(parent, r, lo, hi, value, cx, cy, w, dot, ramp) {
+    const at = lo + value * (hi - lo);
+    const gap = ((dot / 2 + sc(3) + w / 2) / r) * (180 / Math.PI);
+    const span = ramp ? [lo, hi] : null;
+    const before = clamp(at - gap, lo, hi);
+    const after = clamp(at + gap, lo, hi);
+    if (before - lo > 0.5) stroke(parent, r, lo, before, cx, cy, w, "cc-sc", span);
+    if (hi - after > 0.5) stroke(parent, r, after, hi, cx, cy, w, "cc-sc", span);
+    const [x, y] = pt(r, at, cx, cy);
+    el("circle", { cx: x, cy: y, r: f2(dot / 2), class: "cc-fd" }, parent);
   }
 
   let uid = 0;
@@ -313,6 +360,16 @@
       this.secArcs = secDigits(SECOND_DIGITS_ARCS);
 
       // Hour, masks, minute and the pill
+      // Half Dial: a screen-fixed shade over the rings fades their digits out
+      // at the screen's edge; the hour, minute and pill are drawn after it
+      // and stay bright. Clear to 5/8 of the radius, black at the edge.
+      const vg = `${this.id}-vignette`;
+      const rg = el("radialGradient", { id: vg, cx: 225, cy: 225, r: 225, gradientUnits: "userSpaceOnUse" }, this.defs);
+      for (const [o, a] of [[0, 0], [0.625, 0], [0.75, 1 / 3], [0.875, 2 / 3], [1, 1]]) {
+        el("stop", { offset: o, "stop-color": "#000", "stop-opacity": f2(a) }, rg);
+      }
+      el("rect", { x: -HALF_SHIFT, width: 450, height: 450, fill: `url(#${vg})`, class: "cc-vignette" }, this.clock);
+
       this.time = el("g", {}, this.clock);
       // Google's hour is larger and offset left; Concentric+ centres it
       // between its two pills, sized so "00" fits the gap
@@ -336,7 +393,7 @@
       this.pillHalf = pill(PILL_HALF, "cc-pill-half");
 
       // ------ Complications: drawn on demand (see layout()) ------
-      this.cx = el("g", {}, svg);
+      this.cx = el("g", { class: "cc-cx" }, svg);
     }
 
     // Arc text along the corner arc, cap height centred on its radius. Top
@@ -370,7 +427,7 @@
       const { s, e, flipped } = slot;
       const a0 = s + (data.icon ? ICON_DEG : 0);
       if (data.kind === "rating") {
-        // A rating (the weather's temperature) is a dot on a full track. A
+        // A rating (the weather's temperature) is a dot on its track. A
         // temperature also gets its low and high either side of the track,
         // when text, icon, both labels and 8° of track fit the arc.
         const w = textW(data.text);
@@ -386,11 +443,7 @@
           this.arcText(g, ts, minW, flipped, data.min, "cc-minmax");
           this.arcText(g, e - maxW, maxW, flipped, data.max, "cc-minmax");
         }
-        this.track(g, lo, hi, "cc-sc");
-        // The dot (colour d, r 6) on a black halo (r 10)
-        const [x, y] = pt(R_ARC, lo + data.value * (hi - lo));
-        el("circle", { cx: x, cy: y, r: f2(sc(10)), fill: "#000", class: "cc-marker" }, g);
-        el("circle", { cx: x, cy: y, r: f2(sc(6)), class: "cc-marker cc-fd" }, g);
+        rating(g, R_ARC, lo, hi, data.value, 225, 225, T, sc(12), data.ramp);
         this.arcText(g, a0, w, flipped, data.text, "cc-fa");
       } else if (data.kind === "ranged") {
         const w = textW(data.text);
@@ -449,15 +502,21 @@
       }
       // With an icon the ring opens at the bottom for it
       const [start, sweep] = data.icon ? [210, 300] : [180, 360];
-      el("path", { d: arcD(BULB_R, start, start + sweep, BC, BC), class: "cc-track cc-track-bg" }, g);
-      if (data.value > 0) el("path", { d: arcD(BULB_R, start, start + data.value * sweep, BC, BC), class: "cc-track cc-sc" }, g);
+      if (data.kind === "rating") {
+        rating(g, BULB_R, start, start + sweep, data.value, BC, BC, BULB_T, BULB_T, data.ramp);
+      } else {
+        // A fill (ranged) or a goal: colour c over the grey track
+        stroke(g, BULB_R, start, start + sweep, BC, BC, BULB_T, "cc-track-bg");
+        stroke(g, BULB_R, start, start + Math.min(1, data.value) * sweep, BC, BC, BULB_T, "cc-sc");
+      }
       if (data.title) {
         text(0.3, sc(20), data.title, 0.56);
         text(0.49, sc(26), data.text, 0.84);
       } else {
         text(0.5, sc(32), data.text, 0.64);
       }
-      if (data.icon) icon(g, data.icon, BC, BULB * 0.93, BULB * 0.24, { class: "cc-cx-keep" });
+      // Level with the ring's ends, in the opening
+      if (data.icon) icon(g, data.icon, BC, BULB * 0.87, BULB * 0.22, { class: "cc-cx-keep" });
     }
 
     // The complication layer, rebuilt when the layout or its data change
@@ -470,21 +529,21 @@
       this.cx.replaceChildren();
       this.paths = el("defs", {}, this.cx);
       this.pathN = 0;
-      // The sample data: the Play listing's, with the weather (20°, today
-      // 14° to 24°) in the bottom left and this device's battery
+      // The sample data: the Play listing's, with the weather (a rating with
+      // the provider's colour ramp) and this device's battery
       const battery = `${s.battery}%`;
       if (s.mode === 1) {
         const data = {
           tl: { kind: "short", icon: "event", text: "12:30", title: "Lunch" },
           tr: { kind: "ranged", icon: "battery", text: battery, value: s.battery / 100 },
-          bl: { kind: "rating", icon: night ? "moon" : "sun", text: "20°", min: "14", max: "24", value: (20 - 14) / (24 - 14) },
+          bl: { kind: "rating", icon: night ? "moon" : "sun", text: "20°", min: "14", max: "24", value: (20 - 14) / (24 - 14), ramp: true },
           br: { kind: "short", icon: "heart", text: "72" },
         };
         for (const slot of ARC_SLOTS) this.arcSlot(slot, data[slot.id], s.placeholder);
       }
       if (s.mode === 2) {
-        this.bulb(BULBS[0], { kind: "short", icon: "sun", title: "Sun", text: "12°" });
-        this.bulb(BULBS[1], { kind: "ranged", title: "Steps", text: "7400", value: 0.74 });
+        this.bulb(BULBS[0], { kind: "rating", icon: night ? "moon" : "sun", text: "28°", value: (28 - 16) / (34 - 16), ramp: true });
+        this.bulb(BULBS[1], { kind: "goal", icon: "steps", text: "7.4K", value: 0.74 });
         this.bulb(BULBS[2], { kind: "ranged", icon: "battery", text: battery, value: s.battery / 100 });
       } else if (s.leftPill) {
         this.leftPill({ title: "Sun", text: "12°" });

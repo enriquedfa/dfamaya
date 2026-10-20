@@ -478,7 +478,13 @@ written in Google's 456 units and scaled by 450/456, so the constants read
   this device's battery where the browser shares it. The bottom-left arc is
   the weather as a rating: the temperature, today's low and high either side
   of a track, and a dot for now; its icon is the sun or, from 19:00 to 6:00,
-  the moon.
+  the moon. A rating's track stops short either side of its dot with
+  round ends, and the weather's provider colour ramp becomes the
+  colorway's ramp, colour c into d (drawn in short pieces: SVG has no
+  conic gradient). The Half Dial bulbs (the weather, steps against a goal,
+  battery) have a ring twice as thick as the arcs, open at the bottom for
+  the icon, and a screen-fixed shade fades the rings out at the screen's
+  edge.
 - **Settings.** Flavors, the 64 colorways (`COLORWAYS`, in the picker's
   order), layout, ticks, the four always-on styles, complications in
   always-on, the left pill, placeholder bars and hiding the second digits
@@ -493,7 +499,8 @@ written in Google's 456 units and scaled by 450/456, so the constants read
   600 / 28, the complications at 600 / 12.
 - **Always-on** follows the XML's ambient variants: the rings shrink 3% and
   swap to their always-on ticks, the second digits go, the pill fades into a
-  ring, the arcs go while their text and icons stay.
+  ring, and the complications stay whole, arcs included (only a short-text
+  bulb's disc goes).
 
 If the face changes in the Concentric repo (new geometry, a colorway, an
 option), make the same change here: the constants at the top of

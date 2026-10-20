@@ -132,6 +132,8 @@
   text-anchor: middle;
 }
 .cc-disc { opacity: 0.2; }
+.cc-vignette { opacity: 0; }
+.is-half .cc-vignette { opacity: 1; }
 .cc-minmax { fill: #b8b8b8; }
 
 /* Always-on, as the XML's AMBIENT variants have it */
@@ -141,15 +143,10 @@
 .is-aod .cc-mask-circle { opacity: 1; }
 .is-aod .cc-pill { opacity: 0; }
 .is-aod .cc-pill-aod { opacity: 0.5; }
-/* Arcs, tracks and discs go; text and icons stay, unless Complications in
-   always-on is off */
-.is-aod .cc-track,
-.is-aod .cc-marker,
+/* Complications stay whole, arcs included, as on the Pixel (only a short
+   text bulb's disc goes), unless Complications in always-on is off */
 .is-aod .cc-disc { opacity: 0; }
-.is-aod.cx-aod-off .cc-arc-text,
-.is-aod.cx-aod-off .cc-cx-keep,
-.is-aod.cx-aod-off .cc-left-pill,
-.is-aod.cx-aod-off .cc-bulb-text { opacity: 0; }
+.is-aod.cx-aod-off .cc-cx { opacity: 0; }
 
 /* ----------------------------------------------------------------------------
    Landing page
