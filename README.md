@@ -101,8 +101,9 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
   the tick rings and the editor icons (`drawable-nodpi`, under their drawable
   names; the editor icons are small previews of the face, so they're shown
   as round thumbnails, not masks), the Play icon, the Play listing's Wear OS
-  screenshots (`docs/play/wear_*`, as `face_*.webp`: the flavor chips and the
-  gallery), the companion's phone screenshot, and `preview.webp`
+  screenshots (`docs/play/wear_*`, as `face_*.webp`: the flavor chips, the
+  gallery and the picture shown until the script runs) and the companion's
+  phone screenshot
 - `concentric/og.png` — link preview image (1200×630), the Play feature
   graphic on black
 
