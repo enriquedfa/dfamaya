@@ -208,6 +208,7 @@
     event: { vb: 24, d: "M5,22q-0.83,0-1.41-0.59T3,20V6Q3,5.18 3.59,4.59T5,4H6V2H8V4h8V2h2V4h1q0.83,0 1.41,0.59Q21,5.18 21,6V20q0,0.82-0.59,1.41T19,22H5Zm0-2H19V10H5V20Zm2-6h5v5H7v-5Z" },
     battery: { vb: 24, d: "M9,2h6v2h2q0.42,0 0.71,0.29T18,5v16q0,0.42-0.29,0.71T17,22H7q-0.42,0-0.71-0.29T6,21V5q0-0.42 0.29-0.71T7,4h2V2Zm-1,4v14h8V6H8Zm1,5h6v8H9v-8Z" },
     heart: { vb: 24, d: "M12,21l-1.45-1.3q-2.53-2.27-4.18-3.92q-1.65-1.65-2.63-2.96Q2.78,11.5 2.39,10.4T2,8.15Q2,5.8 3.58,4.22T7.5,2.65q1.3,0 2.48,0.55T12,4.75q0.85-1 2.03-1.55T16.5,2.65q2.35,0 3.93,1.57T22,8.15q0,1.15-0.39,2.25t-1.36,2.41q-0.97,1.31-2.63,2.96q-1.65,1.65-4.17,3.92L12,21Z" },
+    moon: { vb: 24, d: "M12.1,22Q10,22 8.16,21.2q-1.84-0.8-3.2-2.16T2.8,15.84T2,11.9Q2,8.7 3.8,6.1T8.63,2.45q0.55-0.2 1.03,0.14T10.1,3.5q-0.08,2.13 0.67,4.05t2.25,3.42t3.42,2.25T20.5,13.9q0.65-0.02 0.96,0.44t0.11,1.04q-1.1,3-3.69,4.81T12.1,22Z" },
     sun: { vb: 960, oy: -960, d: "M440,-760v-160h80v160h-80Zm266,110 -55,-55 112,-115 56,57 -113,113Zm54,210v-80h160v80H760ZM440,-40v-160h80v160h-80ZM254,-652 140,-763l57,-56 113,113 -56,54Zm508,512L651,-255l54,-54 114,110 -57,59ZM40,-440v-80h160v80H40Zm157,300 -56,-57 112,-112 29,27 29,28 -114,114Zm113,-170q-70,-70 -70,-170t70,-170q70,-70 170,-70t170,70q70,70 70,170t-70,170q-70,70 -170,70t-170,-70Z" },
   };
 
@@ -368,7 +369,30 @@
       const g = el("g", {}, this.cx);
       const { s, e, flipped } = slot;
       const a0 = s + (data.icon ? ICON_DEG : 0);
-      if (data.kind === "ranged") {
+      if (data.kind === "rating") {
+        // A rating (the weather's temperature) is a dot on a full track. A
+        // temperature also gets its low and high either side of the track,
+        // when text, icon, both labels and 8° of track fit the arc.
+        const w = textW(data.text);
+        const ts = clamp(a0 + w + GAP, s, e);
+        const minW = data.min.length * DEG_PER_CHAR;
+        const maxW = data.max.length * DEG_PER_CHAR;
+        const labels = data.text.endsWith("°") &&
+          w + minW + maxW + 4 * GAP + (data.icon ? ICON_DEG : 0) + 8 < e - s;
+        let [lo, hi] = [ts, e];
+        if (labels) {
+          lo = clamp(ts + minW + GAP, s, e);
+          hi = clamp(e - maxW - GAP, s, e);
+          this.arcText(g, ts, minW, flipped, data.min, "cc-minmax");
+          this.arcText(g, e - maxW, maxW, flipped, data.max, "cc-minmax");
+        }
+        this.track(g, lo, hi, "cc-sc");
+        // The dot (colour d, r 6) on a black halo (r 10)
+        const [x, y] = pt(R_ARC, lo + data.value * (hi - lo));
+        el("circle", { cx: x, cy: y, r: f2(sc(10)), fill: "#000", class: "cc-marker" }, g);
+        el("circle", { cx: x, cy: y, r: f2(sc(6)), class: "cc-marker cc-fd" }, g);
+        this.arcText(g, a0, w, flipped, data.text, "cc-fa");
+      } else if (data.kind === "ranged") {
         const w = textW(data.text);
         const ts = clamp(a0 + w + GAP, s, e);
         this.track(g, ts, e, "cc-track-bg");
@@ -424,19 +448,22 @@
 
     // The complication layer, rebuilt when the layout or its data change
     layout(s) {
-      const key = `${s.mode}|${s.leftPill}|${s.battery}`;
+      // The weather's icon follows the time shown: the moon from 19:00 to 6:00
+      const night = s.time.h < 6 || s.time.h >= 19;
+      const key = `${s.mode}|${s.leftPill}|${s.battery}|${night}`;
       if (key === this.last.layout) return;
       this.last.layout = key;
       this.cx.replaceChildren();
       this.paths = el("defs", {}, this.cx);
       this.pathN = 0;
-      // The sample data: the Play listing's, with this device's battery
+      // The sample data: the Play listing's, with the weather (20°, today
+      // 14° to 24°) in the bottom left and this device's battery
       const battery = `${s.battery}%`;
       if (s.mode === 1) {
         const data = {
           tl: { kind: "short", icon: "event", text: "12:30", title: "Lunch" },
           tr: { kind: "ranged", icon: "battery", text: battery, value: s.battery / 100 },
-          bl: { kind: "ranged", text: "7400", value: 0.74 },
+          bl: { kind: "rating", icon: night ? "moon" : "sun", text: "20°", min: "14", max: "24", value: (20 - 14) / (24 - 14) },
           br: { kind: "ranged", icon: "heart", text: "72", value: 0.62 },
         };
         for (const slot of ARC_SLOTS) this.arcSlot(slot, data[slot.id]);

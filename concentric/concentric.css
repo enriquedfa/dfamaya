@@ -132,6 +132,7 @@
   text-anchor: middle;
 }
 .cc-disc { opacity: 0.2; }
+.cc-minmax { fill: #b8b8b8; }
 
 /* Always-on, as the XML's AMBIENT variants have it */
 .is-aod .cc-ring { scale: 0.97; }
@@ -143,6 +144,7 @@
 /* Arcs, tracks and discs go; text and icons stay, unless Complications in
    always-on is off */
 .is-aod .cc-track,
+.is-aod .cc-marker,
 .is-aod .cc-disc { opacity: 0; }
 .is-aod.cx-aod-off .cc-arc-text,
 .is-aod.cx-aod-off .cc-cx-keep,

@@ -474,8 +474,11 @@ written in Google's 456 units and scaled by 450/456, so the constants read
   plus the left pill) and Half Dial (the clock shifted left, three bulbs).
   The arcs lay out as the XML does: icon, text, then the track, with the
   text's width estimated per character as the XML must. The sample data is
-  the Play listing's (an event, battery, steps, heart rate, the weather),
-  with this device's battery where the browser shares it.
+  the Play listing's (an event, battery, heart rate, the weather), with
+  this device's battery where the browser shares it. The bottom-left arc is
+  the weather as a rating: the temperature, today's low and high either side
+  of a track, and a dot for now; its icon is the sun or, from 19:00 to 6:00,
+  the moon.
 - **Settings.** Flavors, the 64 colorways (`COLORWAYS`, in the picker's
   order), layout, ticks, the four always-on styles, complications in
   always-on, the left pill and hiding the second digits are real radios and
