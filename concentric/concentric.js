@@ -363,9 +363,10 @@
     }
 
     // One corner slot, as the XML lays it out: the icon, the text, then the
-    // track. (Placeholder bars, which centre short text between two
-    // tracks, leave this sample as it is: its text fills the arc.)
-    arcSlot(slot, data) {
+    // track. With Placeholder bars, short text is centred instead, with a
+    // colour-c track either side (the event's text fills its arc, so only
+    // the heart rate shows it).
+    arcSlot(slot, data, placeholder) {
       const g = el("g", {}, this.cx);
       const { s, e, flipped } = slot;
       const a0 = s + (data.icon ? ICON_DEG : 0);
@@ -400,7 +401,21 @@
         this.arcText(g, a0, w, flipped, data.text, "cc-fa");
       } else {
         const content = data.title ? `${data.text} ${data.title}` : data.text;
-        this.arcText(g, a0, data.title ? titledW(data.text, data.title) : textW(data.text), flipped, content, "cc-fa");
+        const w = data.title ? titledW(data.text, data.title) : textW(data.text);
+        if (placeholder) {
+          const mid = (s + e) / 2;
+          const width = (data.icon ? ICON_DEG : 0) + w;
+          const left = clamp(mid - width / 2, s, mid);
+          const right = clamp(mid + width / 2, mid, e);
+          this.track(g, s, left - GAP, "cc-sc");
+          this.track(g, right + GAP, e, "cc-sc");
+          // Bottom arcs read counter-clockwise, so there the icon takes the
+          // larger angle to come first
+          this.arcText(g, flipped || !data.icon ? left : left + ICON_DEG, w, flipped, content, "cc-fa");
+          if (data.icon) this.arcIcon(g, data.icon, flipped ? right - ICON_W / 2 : left + ICON_W / 2, flipped);
+          return;
+        }
+        this.arcText(g, a0, w, flipped, content, "cc-fa");
       }
       if (data.icon) this.arcIcon(g, data.icon, s + ICON_W / 2, flipped);
     }
@@ -450,7 +465,7 @@
     layout(s) {
       // The weather's icon follows the time shown: the moon from 19:00 to 6:00
       const night = s.time.h < 6 || s.time.h >= 19;
-      const key = `${s.mode}|${s.leftPill}|${s.battery}|${night}`;
+      const key = `${s.mode}|${s.leftPill}|${s.placeholder}|${s.battery}|${night}`;
       if (key === this.last.layout) return;
       this.last.layout = key;
       this.cx.replaceChildren();
@@ -464,9 +479,9 @@
           tl: { kind: "short", icon: "event", text: "12:30", title: "Lunch" },
           tr: { kind: "ranged", icon: "battery", text: battery, value: s.battery / 100 },
           bl: { kind: "rating", icon: night ? "moon" : "sun", text: "20°", min: "14", max: "24", value: (20 - 14) / (24 - 14) },
-          br: { kind: "ranged", icon: "heart", text: "72", value: 0.62 },
+          br: { kind: "short", icon: "heart", text: "72" },
         };
-        for (const slot of ARC_SLOTS) this.arcSlot(slot, data[slot.id]);
+        for (const slot of ARC_SLOTS) this.arcSlot(slot, data[slot.id], s.placeholder);
       }
       if (s.mode === 2) {
         this.bulb(BULBS[0], { kind: "short", icon: "sun", title: "Sun", text: "12°" });
@@ -567,6 +582,7 @@
     aod: false,
     cxAod: true,
     leftPill: true,
+    placeholder: true,
     hideSeconds: false,
     battery: 76,
   };
@@ -594,7 +610,7 @@
       // The home page's faces keep their own flavor
       const own = i > 0 || !page;
       const r = f.face.render(own
-        ? { ...state, colorway: cwIndex(f.flavor.colorway), mode: f.flavor.mode, index: 0, aod: false, leftPill: true, hideSeconds: false, time, h24, smooth: smooth() }
+        ? { ...state, colorway: cwIndex(f.flavor.colorway), mode: f.flavor.mode, index: 0, aod: false, leftPill: true, placeholder: true, hideSeconds: false, time, h24, smooth: smooth() }
         : { ...state, time, h24, smooth: smooth() });
       f.glow?.style.setProperty("--cc-glow", r.cw[4]);
       if (f.watch) {

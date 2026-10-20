@@ -481,9 +481,10 @@ written in Google's 456 units and scaled by 450/456, so the constants read
   the moon.
 - **Settings.** Flavors, the 64 colorways (`COLORWAYS`, in the picker's
   order), layout, ticks, the four always-on styles, complications in
-  always-on, the left pill and hiding the second digits are real radios and
-  checkboxes. Placeholder bars are left out: with this sample's text they
-  change nothing.
+  always-on, the left pill, placeholder bars and hiding the second digits
+  are real radios and checkboxes. Placeholder bars start on here (on the
+  watch they start off): they centre the heart rate, a short text, between
+  two tracks.
 - **Colour.** The colorway's four roles are registered custom properties
   (`--cc-a` … `--cc-d`), so a colorway change eases across the face, the
   glow and the headline.
