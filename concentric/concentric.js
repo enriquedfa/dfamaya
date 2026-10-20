@@ -594,7 +594,10 @@
       // upright, so the current minute and second sit at the pill
       const { h, m, sec } = s.time;
       const minA = (m + sec / 60) * 6;
-      const secA = (s.smooth ? sec : Math.floor(sec)) * 6;
+      // In always-on the second ring holds where it was: the watch only
+      // redraws once a minute there
+      if (!aod || this.last.secA == null) this.last.secA = (s.smooth ? sec : Math.floor(sec)) * 6;
+      const secA = this.last.secA;
       this.minRot.setAttribute("transform", `rotate(${f2(minA)} ${MINUTE_RING / 2} ${MINUTE_RING / 2})`);
       for (const d of this.minTexts) d.t.setAttribute("transform", `rotate(${f2(-minA)} ${f2(d.cx)} ${f2(d.cy)})`);
       this.secRot.setAttribute("transform", `rotate(${f2(secA)} 225 225)`);
