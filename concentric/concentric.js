@@ -364,7 +364,9 @@
       // at the screen's edge; the hour, minute and pill are drawn after it
       // and stay bright. Clear to 5/8 of the radius, black at the edge.
       const vg = `${this.id}-vignette`;
-      const rg = el("radialGradient", { id: vg, cx: 225, cy: 225, r: 225, gradientUnits: "userSpaceOnUse" }, this.defs);
+      // (It lives in the shifted clock, so its centre is moved back to the
+      // screen's.)
+      const rg = el("radialGradient", { id: vg, cx: 225 - HALF_SHIFT, cy: 225, r: 225, gradientUnits: "userSpaceOnUse" }, this.defs);
       for (const [o, a] of [[0, 0], [0.625, 0], [0.75, 1 / 3], [0.875, 2 / 3], [1, 1]]) {
         el("stop", { offset: o, "stop-color": "#000", "stop-opacity": f2(a) }, rg);
       }
