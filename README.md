@@ -1,8 +1,8 @@
 # dfamaya.github.io
 
 Static site for dfamaya's Android and Wear OS apps: a home page, landing
-pages for Seaglass, Brief and the WatchSky and Spiralis watch faces, and per-app
-privacy policies and support. Plain
+pages for Seaglass, Brief and the WatchSky, Spiralis and Concentric+ watch
+faces, a watch faces page, and per-app privacy policies and support. Plain
 HTML, CSS and a little vanilla JS. No build step.
 
 Published at: <https://enriquedfa.github.io/dfamaya/>
@@ -51,19 +51,27 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
   bar above them (the live clock, the camera, wifi, signal and battery), on
   each screenshot's own background colour
 
-### Wear OS Watch Faces (WatchSky)
+### Wear OS Watch Faces
 
-- `watchfaces/index.html` — WatchSky landing page with a live copy of the face
-  and its settings
+- `watchfaces/index.html` — the watch faces page: every face as a card with
+  its live face (the same cards as the home page), and links to the shared
+  privacy policy and support
 - `watchfaces/privacy.html` — privacy policy (covers all watch faces by dfamaya)
 - `watchfaces/support.html` — support / contact info
-- `watchfaces/watchsky.js` — draws the face (also on the home page) and wires
-  up the page's controls
-- `watchfaces/watchsky.css` — landing page + face styles
-- `watchfaces/img/` — assets from the WatchSky repo: the Play Store icon, the
+
+### WatchSky
+
+- `watchsky/index.html` — WatchSky landing page with a live copy of the face
+  and its settings. Privacy and support are the shared watch-face pages in
+  `watchfaces/`. (It lived at `watchfaces/` until that became the page for
+  all the faces.)
+- `watchsky/watchsky.js` — draws the face (also on the home page and the
+  watch faces page) and wires up the page's controls
+- `watchsky/watchsky.css` — landing page + face styles
+- `watchsky/img/` — assets from the WatchSky repo: the Play Store icon, the
   face's `preview.png` (shown until the script runs), the weather glyphs and
   the editor icons (`drawable-nodpi`, at 96px), under their drawable names
-- `watchfaces/og.png` — link preview image (1200×630)
+- `watchsky/og.png` — link preview image (1200×630)
 
 ### Spiralis
 
@@ -80,6 +88,24 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
 - `spiralis/og.png` — link preview image (1200×630), cut from the Play
   feature graphic
 
+### Concentric+
+
+- `concentric/index.html` — Concentric+ landing page with a live copy of the
+  face and its settings, what makes it the closest replica of the Pixel
+  Watch's Concentric, and why Watch Face Format matters. Privacy and support
+  are the shared watch-face pages in `watchfaces/`.
+- `concentric/concentric.js` — draws the face (also on the home page and the
+  watch faces page) and wires up the page's controls
+- `concentric/concentric.css` — landing page + face styles
+- `concentric/img/` — assets from the Concentric repo (`enriquedfa/Concentric-Fork`):
+  the tick rings and the editor icons (`drawable-nodpi`, under their drawable
+  names; the editor icons are small previews of the face, so they're shown
+  as round thumbnails, not masks), the Play icon, the Play listing's Wear OS
+  screenshots (`docs/play/wear_*`, as `face_*.webp`: the flavor chips and the
+  gallery), the companion's phone screenshot, and `preview.webp`
+- `concentric/og.png` — link preview image (1200×630), the Play feature
+  graphic on black
+
 ### Redirect stubs
 
 The watch-face pages used to live at the repo root. To keep any URLs already
@@ -87,6 +113,9 @@ submitted to Google Play working, the old paths now redirect to their new home:
 
 - `privacy.html` → `watchfaces/privacy.html`
 - `support.html` → `watchfaces/support.html`
+
+`watchfaces/` itself was WatchSky's page and is now the page for all the
+faces, with a WatchSky card, so a link to it still finds WatchSky.
 
 ## Design system
 
@@ -154,7 +183,7 @@ Seaglass's are phones (`.shot`), Spiralis's are round faces (`.sp-gallery`).
 
 ### Playground
 
-The two watch-face pages share one layout, the `.pg-*` classes in
+The watch-face pages share one layout, the `.pg-*` classes in
 `style.css`: a hero (`.pg-hero`, `.pg-grid`, `.pg-intro`), the live watch
 pinned beside the settings (`.pg-visual`, `.pg-stage`, with a glow in
 `--pg-glow`), the time slider row (`.pg-scrub`, `.pg-play`, `.pg-range`,
@@ -162,7 +191,8 @@ pinned beside the settings (`.pg-visual`, `.pg-stage`, with a glow in
 `.pg-chips`, `.pg-chip`, `.pg-switches`, `.pg-switch`, `.pg-moments`) and the
 numbered steps below (`.pg-cards`, `.pg-card`). Each page draws its own
 face, sets `--pg-glow`, and adds its own touches (WatchSky's sky chips,
-Spiralis's palette swatches and preset captures).
+Spiralis's palette swatches and preset captures, Concentric+'s flavor and
+option thumbnails and its 64 colorway chips).
 
 One catch: a `url()` inside a custom property resolves against the
 stylesheet that *uses* it. The editor icons pass their image as
@@ -349,7 +379,7 @@ message and a PDF), each drawn as if it sat in another app.
 
 ## The WatchSky page
 
-`watchfaces/watchsky.js` redraws the watch face from the WatchSky repo's
+`watchsky/watchsky.js` redraws the watch face from the WatchSky repo's
 `watchface/src/main/res/raw/watchface.xml` into an SVG with the watch's own
 450×450 canvas. Coordinates, colours and timings are copied as they are, so
 the two read side by side:
@@ -383,7 +413,7 @@ the two read side by side:
 If the face changes in the WatchSky repo (a new palette, a new setting), make
 the same change here: the constants at the top of `watchsky.js` mirror the
 XML. The face stops ticking while it's off screen or the tab is hidden.
-`watchfaces/og.png` is a 1200×630 capture of this page's hero, so retake it
+`watchsky/og.png` is a 1200×630 capture of this page's hero, so retake it
 when the hero copy or the face's look changes.
 
 ## The Spiralis page
@@ -423,6 +453,49 @@ If the face changes in the Spiralis repo (a new palette, a new preset), make
 the same change here: the constants at the top of `spiralis.js` mirror the
 XML. The face stops ticking while it's off screen or the tab is hidden.
 
+## The Concentric+ page
+
+`concentric/concentric.js` redraws the face from the Concentric repo's
+`watchface.xml` (all three versions are generated by its face generator)
+into an SVG with the watch's 450×450 canvas. Like the XML, the geometry is
+written in Google's 456 units and scaled by 450/456, so the constants read
+1:1 against the face:
+
+- **The rings.** The minute ring (304 px) turns with the minute and second,
+  the second ring with the second; both sweep every frame (once a second
+  with reduced motion), and their twelve digits turn back to stay upright,
+  so the current minute and second sit at the pill. The ticks are the
+  watch's own images, tinted in colour b at 50% through an SVG mask.
+- **The time.** The hour (centred between the two pills, at 84 px), the
+  minute in its pill, and the two masks: a rounded rect that hides the ring
+  digit under the pill, a circle that does it in always-on.
+- **Layouts.** Dials (the left pill only), Dials and Arcs (four corner arcs
+  plus the left pill) and Half Dial (the clock shifted left, three bulbs).
+  The arcs lay out as the XML does: icon, text, then the track, with the
+  text's width estimated per character as the XML must. The sample data is
+  the Play listing's (an event, battery, steps, heart rate, the weather),
+  with this device's battery where the browser shares it.
+- **Settings.** Flavors, the 64 colorways (`COLORWAYS`, in the picker's
+  order), layout, ticks, the four always-on styles, complications in
+  always-on, the left pill and hiding the second digits are real radios and
+  checkboxes. Placeholder bars are left out: with this sample's text they
+  change nothing.
+- **Colour.** The colorway's four roles are registered custom properties
+  (`--cc-a` … `--cc-d`), so a colorway change eases across the face, the
+  glow and the headline.
+- **Type.** Google Sans Flex at the axes of the face's static fonts: the
+  hour at weight 500 / optical size 32, the minute and ring digits at
+  600 / 28, the complications at 600 / 12.
+- **Always-on** follows the XML's ambient variants: the rings shrink 3% and
+  swap to their always-on ticks, the second digits go, the pill fades into a
+  ring, the arcs go while their text and icons stay.
+
+If the face changes in the Concentric repo (new geometry, a colorway, an
+option), make the same change here: the constants at the top of
+`concentric.js` mirror the XML. The page tells the face's story (closest
+replica, Watch Face Format native), not how it's built: see
+[Public repo](#public-repo).
+
 ### Newer web platform features in use
 
 Most are progressive: a browser without one just skips the effect. The
@@ -430,7 +503,7 @@ exception is `light-dark()`, which the colour tokens depend on; it needs Chrome
 or Edge 123, Safari 17.5 or Firefox 120 (all from 2024).
 
 - Cross-document **view transitions** (`@view-transition`): the header stays
-  put between pages, and the Brief, WatchSky and Spiralis watches and icons morph from
+  put between pages, and the Brief, WatchSky, Spiralis and Concentric+ watches and icons morph from
   the home page into their pages.
 - **Scroll-driven animations**: the header's bottom border, sections fading
   in (`.reveal`, `.stagger`), heroes fading out (`.hero-exit`), the home
@@ -452,13 +525,15 @@ or Edge 123, Safari 17.5 or Firefox 120 (all from 2024).
 
 When submitting an app on Google Play, use:
 
-**Wear OS Watch Faces** (WatchSky, Spiralis and any later face: one shared
-policy, so these URLs never change)
+**Wear OS Watch Faces** (WatchSky, Spiralis, Concentric+ and any later face:
+one shared policy, so these URLs never change)
 
 - Privacy policy URL: `https://enriquedfa.github.io/dfamaya/watchfaces/privacy.html`
 - Support URL: `https://enriquedfa.github.io/dfamaya/watchfaces/support.html`
-- Website URL: `https://enriquedfa.github.io/dfamaya/watchfaces/` (WatchSky) or
-  `https://enriquedfa.github.io/dfamaya/spiralis/` (Spiralis)
+- Website URL: `https://enriquedfa.github.io/dfamaya/watchsky/` (WatchSky),
+  `https://enriquedfa.github.io/dfamaya/spiralis/` (Spiralis) or
+  `https://enriquedfa.github.io/dfamaya/concentric/` (Concentric+). WatchSky's
+  listing may still say `watchfaces/`, which now shows all the faces.
 
 **Seaglass**
 
@@ -479,6 +554,10 @@ policy, so these URLs never change)
 - Brief: <https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication>
 - Wear OS Watch Faces: <https://play.google.com/store/apps/details?id=com.dfamaya.watchsky>
 - Spiralis: <https://play.google.com/store/apps/details?id=com.dfamaya.spiralis>
+- Concentric+: not on Google Play yet (`com.dfamaya.concentric`). Its page
+  says "coming soon"; once it's out, add a store button to the header, the
+  hero and the install section (and the home and watch faces cards), and add
+  the link here.
 - Seaglass: not on Google Play yet (`dev.dfamaya.seaglass`). Its closed test
   takes testers from <https://groups.google.com/g/seaglass-testers>, which the
   hero's fine print and the closing call to action link to. Once it's out, swap both
@@ -488,11 +567,33 @@ policy, so these URLs never change)
 
 1. Create a folder for the app (e.g. `myapp/`).
 2. Add `myapp/index.html` and `myapp/privacy.html`, linking `../style.css`.
-   Copy the header from `watchfaces/index.html`: the `crumbs` block, two or
+   Copy the header from `spiralis/index.html`: the `crumbs` block, two or
    three `nav-links`, and the `head-cta` store button. Keep the header to one
    row: check it at 360px wide.
    Build the page from the shared pieces (`.section`, `.section-head`,
    `.btn`, the tokens) so it matches the others. A watch face can reuse the
    playground (`.pg-*`); `spiralis/` is the smallest example.
-3. Add an `app-card rise lift` for it in the Apps section of `index.html`.
+3. Add an `app-card rise lift` for it in the Apps section of `index.html`
+   (a watch face also gets one on `watchfaces/index.html`, and a link in the
+   footers that list the faces).
 4. List its Play Store link above.
+
+## Public repo
+
+This repo is public, and so is everything GitHub Pages serves from it. The
+apps' own repos are private. Keep it to what a visitor should see:
+
+- **No secrets.** No keys, tokens, keystores, passwords, signing details,
+  Play Console or Firebase internals, or private email addresses (only the
+  public contact address, `developerdfa@gmail.com`).
+- **No secret sauce.** Show what an app does, not how it's built. A page may
+  mirror an app's look and behaviour (that's what the demos are), but don't
+  copy over an app's source, its private docs or design notes, prompts, the
+  tooling behind it (generators, build scripts, pipelines), or unreleased
+  plans. Name an app's private repo only as a pointer for the maintainer, as
+  this README does, never as a link on a page.
+- **Assets** come from what ships or is already public: the store listing's
+  graphics, the drawables in the APK, screenshots. Not from a private repo's
+  `reference/` or research folders, and nothing taken from other companies'
+  apps.
+

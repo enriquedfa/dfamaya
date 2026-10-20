@@ -4,13 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>dfamaya · Apps for Android and Wear OS</title>
-  <meta name="description" content="Seaglass for Android, Brief and the WatchSky and Spiralis watch faces for Wear OS, made by Enrique Amaya. No ads, no accounts, no tracking." />
+  <meta name="description" content="Seaglass for Android, Brief and the WatchSky, Spiralis and Concentric+ watch faces for Wear OS, made by Enrique Amaya. No ads, no accounts, no tracking." />
   <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="dfamaya · Apps for Android and Wear OS" />
-  <meta property="og:description" content="Seaglass for Android, Brief and the WatchSky and Spiralis watch faces for Wear OS. No ads, no accounts, no tracking." />
+  <meta property="og:description" content="Seaglass for Android, Brief and the WatchSky, Spiralis and Concentric+ watch faces for Wear OS. No ads, no accounts, no tracking." />
   <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/brief/og.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,11 +20,13 @@
   <link rel="stylesheet" href="style.css?v=8" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300&text=0123456789%3A&display=swap" />
   <link rel="stylesheet" href="brief/brief.css" />
-  <link rel="stylesheet" href="watchfaces/watchsky.css" />
+  <link rel="stylesheet" href="watchsky/watchsky.css" />
   <link rel="stylesheet" href="spiralis/spiralis.css" />
+  <link rel="stylesheet" href="concentric/concentric.css?v=1" />
   <script src="brief/demo.js" defer></script>
-  <script src="watchfaces/watchsky.js" defer></script>
+  <script src="watchsky/watchsky.js" defer></script>
   <script src="spiralis/spiralis.js" defer></script>
+  <script src="concentric/concentric.js?v=1" defer></script>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -86,8 +88,8 @@
         <h1 class="rise" style="--d:0">Small apps for Android and Wear&nbsp;OS</h1>
         <p class="lede rise" style="--d:1">
           I'm Enrique Amaya. I make Seaglass for your phone, and Brief and
-          two watch faces, WatchSky and Spiralis, for your watch. None of
-          them have ads or accounts, and
+          three <a href="watchfaces/">watch faces</a>, WatchSky, Spiralis and
+          Concentric+, for your watch. None of them have ads or accounts, and
           none of them track you.
         </p>
       </div>
@@ -191,7 +193,7 @@
         <article class="app-card app-card-feature rise lift" style="--d:4">
           <div class="app-copy">
             <div class="app-title">
-              <img class="ws-mark" src="watchfaces/img/icon.webp" alt="" width="48" height="48" />
+              <img class="ws-mark" src="watchsky/img/icon.webp" alt="" width="48" height="48" />
               <div>
                 <h2>WatchSky</h2>
                 <p class="app-kind">Watch face</p>
@@ -204,7 +206,7 @@
               nothing.
             </p>
             <div class="btn-row">
-              <a class="btn btn-primary" href="watchfaces/">
+              <a class="btn btn-primary" href="watchsky/">
                 Try it live
                 <svg class="icon nudge-x" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
               </a>
@@ -215,14 +217,14 @@
             </div>
           </div>
 
-          <a class="app-visual" href="watchfaces/" tabindex="-1" aria-hidden="true" data-ws-glow data-tilt>
+          <a class="app-visual" href="watchsky/" tabindex="-1" aria-hidden="true" data-ws-glow data-tilt>
             <div class="watch ws-watch">
               <div class="watch-strap top"></div>
               <div class="watch-strap bottom"></div>
               <span class="watch-crown"></span>
               <div class="watch-case">
                 <div class="dial" data-ws-face data-ws-weather="partly">
-                  <img class="ws-fallback" src="watchfaces/img/preview.webp" alt="" width="454" height="454" />
+                  <img class="ws-fallback" src="watchsky/img/preview.webp" alt="" width="454" height="454" />
                 </div>
               </div>
             </div>
@@ -269,6 +271,42 @@
             </div>
           </a>
         </article>
+        <article class="app-card app-card-feature rise lift" style="--d:6">
+          <div class="app-copy">
+            <div class="app-title">
+              <img class="cc-mark" src="concentric/img/icon.webp" alt="" width="48" height="48" />
+              <div>
+                <h2>Concentric+</h2>
+                <p class="app-kind">Watch face · coming soon</p>
+              </div>
+            </div>
+            <p>
+              The closest recreation of the Pixel Watch's Concentric face, for
+              any Wear OS watch: sweeping minute and second rings, all 64
+              colorways, three layouts and Pixel-style complications. Built
+              natively in Watch Face Format.
+            </p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="concentric/">
+                Try it live
+                <svg class="icon nudge-x" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+              </a>
+            </div>
+          </div>
+
+          <a class="app-visual" href="concentric/" tabindex="-1" aria-hidden="true" data-cc-glow data-tilt>
+            <div class="watch cc-watch">
+              <div class="watch-strap top"></div>
+              <div class="watch-strap bottom"></div>
+              <span class="watch-crown"></span>
+              <div class="watch-case">
+                <div class="dial" data-cc-face data-cc-flavor="porcelain">
+                  <img class="cc-fallback" src="concentric/img/face_porcelain_dials_and_arcs.webp" alt="" width="454" height="454" />
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
       </div>
     </section>
   </main>
@@ -280,7 +318,9 @@
         <a href="seaglass/">Seaglass</a>
         <a href="brief/">Brief</a>
         <a href="watchfaces/">Watch Faces</a>
+        <a href="watchsky/">WatchSky</a>
         <a href="spiralis/">Spiralis</a>
+        <a href="concentric/">Concentric+</a>
         <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>
       </nav>
     </div>

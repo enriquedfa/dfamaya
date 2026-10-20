@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Concentric+ · The Pixel Watch's Concentric, on any Wear OS watch</title>
+  <meta name="description" content="Concentric+ is the closest recreation of the Pixel Watch's Concentric face for any Wear OS 5.1+ watch: sweeping minute and second rings, all 64 colorways, Dials, Dials and Arcs and Half Dial, Pixel-style complications and the always-on look. Built natively in Watch Face Format. No ads, no accounts, no tracking." />
+  <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="img/icon-180.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Concentric+ · The Pixel Watch's Concentric, on any Wear OS watch" />
+  <meta property="og:description" content="The closest recreation of the Pixel Watch's Concentric face, built natively in Watch Face Format." />
+  <meta property="og:url" content="https://enriquedfa.github.io/dfamaya/concentric/" />
+  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/concentric/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
+  <link rel="stylesheet" href="../style.css?v=8" />
+  <link rel="stylesheet" href="concentric.css?v=1" />
+  <script src="concentric.js?v=1" defer></script>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M11,16.18V5q0-0.43 0.29-0.71T12,4t0.71,0.29T13,5V16.18l4.9-4.9q0.3-0.3 0.7-0.29t0.7,0.31q0.28,0.3 0.29,0.7T19.3,12.7l-6.6,6.6q-0.15,0.15-0.33,0.21T12,19.58t-0.38-0.06T11.3,19.3L4.7,12.7q-0.28-0.28-0.28-0.69T4.7,11.3Q5,11 5.41,11t0.71,0.3L11,16.18Z"/></symbol>
+    <symbol id="i-play" viewBox="0 -960 960 960"><path d="M320,-200v-560l440,280 -440,280Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 -960 960 960"><path d="M560,-200v-560h160v560H560Zm-320,0v-560h160v560H240Z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap bar">
+      <div class="crumbs">
+        <a class="parent" href="../">dfamaya</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a class="logo" href="./" aria-current="page">
+          <img class="logo-mark" src="img/icon.webp" alt="" width="28" height="28" />
+          <span class="logo-text">Concentric+</span>
+        </a>
+      </div>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="../watchfaces/privacy.html">Privacy</a>
+        <a href="../watchfaces/support.html">Support</a>
+      </nav>
+      <a class="btn btn-sm btn-primary head-cta" href="#try" aria-label="Try Concentric+ in your browser">
+        <span class="short">Try</span><span class="long">Try it</span>
+        <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero + the settings. The watch stays pinned while the settings scroll. -->
+    <section class="pg-hero" data-cc-page>
+      <div class="wrap pg-grid">
+        <div class="pg-intro hero-exit">
+          <p class="app-badge rise" style="--d:0">
+            <img src="img/icon.webp" alt="" width="26" height="26" />
+            Concentric+ for Wear OS
+          </p>
+          <h1 class="rise" style="--d:1">The Pixel Watch's Concentric, <span class="hl">on any Wear&nbsp;OS watch</span></h1>
+          <p class="lede rise" style="--d:2">
+            The closest recreation of Google's Concentric face you can put on
+            your wrist. The rings sweep, the 64 colorways are all there, and
+            the complications and always-on look are drawn the way the Pixel
+            draws them. It's built natively in Watch Face Format, the way
+            Google builds its own faces.
+          </p>
+          <div class="btn-row stack-sm rise" style="--d:3">
+            <a class="btn btn-primary" href="#try">
+              Try it here
+              <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+            </a>
+            <a class="btn btn-ghost" href="#closest">What makes it the closest</a>
+          </div>
+          <p class="fine rise" style="--d:4">Coming soon to Google&nbsp;Play. Free, for Wear OS 5.1 and newer (Half Dial on Wear OS 7). No ads, no accounts, no tracking.</p>
+        </div>
+
+        <div class="pg-visual" data-tilt>
+          <div class="pg-stage rise" style="--d:2">
+            <div class="watch" role="img" aria-label="The Concentric+ watch face">
+              <div class="watch-strap top"></div>
+              <div class="watch-strap bottom"></div>
+              <span class="watch-crown"></span>
+              <div class="watch-case">
+                <div class="dial" data-cc-face data-cc-flavor="porcelain">
+                  <img class="cc-fallback" src="img/face_porcelain_dials_and_arcs.webp" alt="" width="454" height="454" />
+                </div>
+              </div>
+            </div>
+
+            <div class="pg-scrub">
+              <button type="button" class="btn btn-ghost btn-md btn-icon pg-play" data-cc-play aria-pressed="false" aria-label="Run the clock fast">
+                <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>
+                <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pause"></use></svg>
+              </button>
+              <input class="pg-range" type="range" min="0" max="1439" step="1" value="609" aria-label="Time of day" data-cc-range />
+              <button type="button" class="btn btn-ghost btn-md pg-now" data-cc-now aria-pressed="true">Now</button>
+            </div>
+            <p class="pg-caption" data-cc-caption><strong data-k="cw">Porcelain, Dials and Arcs</strong> · <span data-k="time">now</span></p>
+          </div>
+        </div>
+
+        <div class="pg-panel" id="try">
+          <div class="section-head">
+            <p class="eyebrow">Make it yours</p>
+            <h2>The watch's settings, to try here first</h2>
+            <p class="lede">
+              On the watch, long-press Concentric+ and tap
+              <strong>Customize</strong>. You get these same options. Try
+              them on the watch on this page.
+            </p>
+          </div>
+
+          <div class="pg-groups">
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3>Reading the time</h3></div>
+              <p>
+                The hour sits in the middle. Around it, the minute ring and
+                the second ring sweep, never ticking, so the current minute
+                and second always line up at the pill on the right. Drag the
+                slider under the watch, press play to run the clock a minute
+                a second, or jump to a time:
+              </p>
+              <div class="pg-moments">
+                <button type="button" class="btn btn-ghost btn-sm" data-cc-moment="10:09:35">10:09:35</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-cc-moment="+1h">On the hour</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-cc-moment="7:30">7:30</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-cc-moment="23:59:50">23:59:50</button>
+              </div>
+            </div>
+
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-flavor">
+              <div class="pg-group-head"><h3 id="g-flavor">Flavors</h3><span class="pg-val" data-cc-value="flavor" aria-hidden="true">Porcelain</span></div>
+              <p>
+                A colorway and a layout in one tap, like the flavors on the
+                Pixel. Porcelain, Google's default, is where a fresh install
+                starts. Campari and Unicorn use Half Dial, so they need
+                Wear&nbsp;OS&nbsp;7.
+              </p>
+              <div class="cc-picks">
+                <label class="cc-pick"><input type="radio" name="cc-flavor" value="porcelain" aria-label="Porcelain, Dials and Arcs" checked /><img src="img/face_porcelain_dials_and_arcs.webp" alt="" width="80" height="80" loading="lazy" /><span>Porcelain</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-flavor" value="glacier" aria-label="Glacier, Dials" /><img src="img/face_glacier_dials.webp" alt="" width="80" height="80" loading="lazy" /><span>Glacier</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-flavor" value="pebble" aria-label="Pebble, Dials" /><img src="img/face_pebble_dials.webp" alt="" width="80" height="80" loading="lazy" /><span>Pebble</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-flavor" value="ooze" aria-label="Ooze, Dials and Arcs" /><img src="img/face_ooze_dials_and_arcs.webp" alt="" width="80" height="80" loading="lazy" /><span>Ooze</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-flavor" value="jester" aria-label="Jester, Dials and Arcs" /><img src="img/face_jester_dials_and_arcs.webp" alt="" width="80" height="80" loading="lazy" /><span>Jester</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-flavor" value="campari" aria-label="Campari, Half Dial" /><img src="img/face_campari_half_dial.webp" alt="" width="80" height="80" loading="lazy" /><span>Campari</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-flavor" value="unicorn" aria-label="Unicorn, Half Dial" /><img src="img/face_unicorn_half_dial.webp" alt="" width="80" height="80" loading="lazy" /><span>Unicorn</span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3 id="g-colorway">Color</h3><span class="pg-val" data-cc-value="colorway" aria-hidden="true">Porcelain</span></div>
+              <p>
+                All 64 of the Pixel's colorways, in the same order. Each is
+                four colours with the same jobs as on the Pixel: the time, the
+                rings, the complication tracks and the icons. Complications
+                take on the colorway too, whatever colours the app behind
+                them sends.
+              </p>
+              <div class="pg-chips cc-colorways" role="radiogroup" aria-labelledby="g-colorway" data-cc-colorways></div>
+            </div>
+
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-mode">
+              <div class="pg-group-head"><h3 id="g-mode">Layout</h3><span class="pg-val" data-cc-value="mode" aria-hidden="true">Dials and Arcs</span></div>
+              <p>
+                <strong>Dials</strong> keeps just the rings.
+                <strong>Dials and Arcs</strong> adds four complications that
+                curve around the corners. <strong>Half Dial</strong> slides
+                the clock left to make room for three round ones, on
+                Wear&nbsp;OS&nbsp;7.
+              </p>
+              <div class="cc-picks">
+                <label class="cc-pick"><input type="radio" name="cc-mode" value="0" aria-label="Dials" /><img src="img/mode_icon_0.webp" alt="" width="80" height="80" loading="lazy" /><span>Dials</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-mode" value="1" aria-label="Dials and Arcs" checked /><img src="img/mode_icon_1.webp" alt="" width="80" height="80" loading="lazy" /><span>Dials and Arcs</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-mode" value="2" aria-label="Half Dial" /><img src="img/mode_icon_2.webp" alt="" width="80" height="80" loading="lazy" /><span>Half Dial</span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-index">
+              <div class="pg-group-head"><h3 id="g-index">Ticks</h3><span class="pg-val" data-cc-value="index" aria-hidden="true">Full</span></div>
+              <p>
+                Google's tick rings, a sparser ring with one tick every five,
+                or none at all for a face of just the numbers.
+              </p>
+              <div class="cc-picks">
+                <label class="cc-pick"><input type="radio" name="cc-index" value="0" aria-label="Full ticks" checked /><img src="img/index_icon_0.webp" alt="" width="80" height="80" loading="lazy" /><span>Full</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-index" value="1" aria-label="Partial ticks" /><img src="img/index_icon_1.webp" alt="" width="80" height="80" loading="lazy" /><span>Partial</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-index" value="2" aria-label="No ticks" /><img src="img/index_icon_2.webp" alt="" width="80" height="80" loading="lazy" /><span>None</span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3 id="g-aod">Always-on</h3><span class="pg-val" data-cc-value="aodStyle" aria-hidden="true">Minutes + seconds ring</span></div>
+              <p>
+                As on the Pixel, the rings shrink a little and switch to
+                lighter ticks, the second digits go, and the pill closes into
+                a ring around the minute. Complication text and icons stay,
+                their arcs don't. Three more styles go quieter still.
+              </p>
+              <div class="cc-picks" role="radiogroup" aria-labelledby="g-aod">
+                <label class="cc-pick"><input type="radio" name="cc-aodStyle" value="0" aria-label="Always-on: minutes only" /><img src="img/aod_icon_0.webp" alt="" width="80" height="80" loading="lazy" /><span>Minutes only</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-aodStyle" value="1" aria-label="Always-on: minutes and seconds ring" checked /><img src="img/aod_icon_1.webp" alt="" width="80" height="80" loading="lazy" /><span>Minutes + seconds ring</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-aodStyle" value="2" aria-label="Always-on: both rings only" /><img src="img/aod_icon_2.webp" alt="" width="80" height="80" loading="lazy" /><span>Both rings only</span></label>
+                <label class="cc-pick"><input type="radio" name="cc-aodStyle" value="3" aria-label="Always-on: only the time" /><img src="img/aod_icon_3.webp" alt="" width="80" height="80" loading="lazy" /><span>Only time</span></label>
+              </div>
+              <div class="pg-switches">
+                <label class="pg-switch"><input type="checkbox" name="cc-aod" /><span class="pg-switch-face"><span class="label">Preview always&#8209;on</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="cc-cxAod" checked /><span class="pg-switch-face"><span class="label">Complications in always&#8209;on</span><span class="track"></span></span></label>
+              </div>
+            </div>
+
+            <div class="pg-group reveal">
+              <div class="pg-group-head"><h3>And the extras</h3></div>
+              <p>
+                A few things the Pixel's face doesn't have. The left pill is
+                a fifth complication that mirrors the minute pill, and
+                placeholder bars can fill out an arc behind short text.
+                They're all off on a fresh install, so the face starts out
+                looking just like Google's.
+              </p>
+              <div class="pg-switches">
+                <label class="pg-switch"><input type="checkbox" name="cc-leftPill" checked /><span class="pg-switch-face"><span class="label">Left pill complication</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="cc-hideSeconds" /><span class="pg-switch-face"><span class="label">Hide the second digits</span><span class="track"></span></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="closest">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">The closest replica</p>
+          <h2>Measured against the original, not eyeballed</h2>
+          <p class="lede">
+            The idea of Concentric is easy to copy. What makes it feel like
+            the Pixel's is the details, so Concentric+ starts there: Google's
+            own layout, colours and complication rules, carried over one by
+            one.
+          </p>
+        </div>
+        <div class="pg-cards stagger">
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">1:1</span>
+            <h3>Google's geometry</h3>
+            <p>
+              Every ring, digit, tick and pill sits where it sits on the
+              Pixel, worked out from Google's own layout and scaled to the
+              Wear OS canvas. The rings sweep smoothly instead of ticking,
+              as they do on the Pixel.
+            </p>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">64</span>
+            <h3>Every colorway</h3>
+            <p>
+              The Pixel's full palette, from Fog to Mariner, in the same
+              order with the same default. Each colour does the same job
+              it does on the Pixel, down to the 50% rings and the grey of
+              an empty track.
+            </p>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">°</span>
+            <h3>Complications done right</h3>
+            <p>
+              Ratings get a dot on a full track, temperatures their low and
+              high, progress and goals a fill that brightens past the target.
+              Icons and colour ramps are repainted in the colorway, so no
+              app can clash with the face.
+            </p>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">Aa</span>
+            <h3>The right type</h3>
+            <p>
+              Google Sans Flex, tuned so the time matches the widths of the
+              Pixel's clock font to within about 1%. It's openly licensed,
+              so nothing is lifted from Google's apps.
+            </p>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">◐</span>
+            <h3>Always-on, eased</h3>
+            <p>
+              On Wear OS 6 and newer the switch to always-on uses Google's
+              own easing: the rings settle 3% smaller and the pill folds
+              into a ring.
+            </p>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">+</span>
+            <h3>Plus a little more</h3>
+            <p>
+              A left pill complication, four always-on styles, three tick
+              styles and a few switches. All of them are off until you want
+              them.
+            </p>
+          </article>
+        </div>
+
+        <div class="table-wrap cc-compare reveal">
+          <table>
+            <thead>
+              <tr><th scope="col">Feature</th><th scope="col">Pixel Watch Concentric</th><th scope="col">Concentric+</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Sweeping minute and second rings</th><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+              <tr><th scope="row">All 64 colorways</th><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+              <tr><th scope="row">Dials, and Dials and Arcs</th><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+              <tr><th scope="row">Half Dial</th><td class="yes">Yes</td><td class="yes">Wear OS 7</td></tr>
+              <tr><th scope="row">Pixel-style ratings, temperatures and goals</th><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+              <tr><th scope="row">Runs on other Wear OS watches</th><td class="no">Pixel Watch only</td><td class="yes">Wear OS 5.1+</td></tr>
+              <tr><th scope="row">Left pill complication</th><td class="no">No</td><td class="yes">Yes</td></tr>
+              <tr><th scope="row">Always-on and tick styles</th><td class="no">No</td><td class="yes">4 and 3</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="native">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Watch Face Format native</p>
+          <h2>No app running on your watch</h2>
+          <p class="lede">
+            Concentric+ is written entirely in Watch Face Format, the
+            declarative format Google made for Wear OS faces. There's no
+            code in it at all: the watch's own system draws it.
+          </p>
+        </div>
+        <div class="pg-cards stagger">
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">0</span>
+            <h3>Zero lines of code</h3>
+            <p>
+              Nothing of its own runs in the background, so there's nothing
+              to drain the battery, crash or phone home. It can't collect
+              anything, and it doesn't.
+            </p>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">3</span>
+            <h3>One face, three builds</h3>
+            <p>
+              Google Play sends each watch the best build it can run:
+              Wear&nbsp;OS&nbsp;5.1 gets the face, Wear&nbsp;OS&nbsp;6 adds
+              the eased always-on transitions, and Wear&nbsp;OS&nbsp;7 adds
+              Half Dial.
+            </p>
+          </article>
+          <article class="card pg-card reveal lift">
+            <span class="num" aria-hidden="true">✓</span>
+            <h3>Checked on every change</h3>
+            <p>
+              Every build passes Google's Watch Face Format validator and
+              its memory-footprint check, at the limits Google recommends
+              for Play, before it ships.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">The flavors</p>
+          <h2>Three layouts, 64 colorways</h2>
+          <p class="lede">
+            Rendered from the face itself, with sample complications. These
+            are the screenshots on the Play listing.
+          </p>
+        </div>
+        <div class="gallery cc-gallery" tabindex="0" aria-label="Screenshots">
+          <figure><img src="img/face_porcelain_dials_and_arcs.webp" alt="Concentric+ in Porcelain, Dials and Arcs, with an event, battery, steps and heart rate in the corners" width="454" height="454" loading="lazy" /><figcaption><strong>Porcelain</strong>Dials and Arcs</figcaption></figure>
+          <figure><img src="img/face_glacier_dials.webp" alt="Concentric+ in Glacier, Dials, blue rings with the left pill" width="454" height="454" loading="lazy" /><figcaption><strong>Glacier</strong>Dials</figcaption></figure>
+          <figure><img src="img/face_campari_half_dial.webp" alt="Concentric+ in Campari, Half Dial, the clock moved left with three round complications" width="454" height="454" loading="lazy" /><figcaption><strong>Campari</strong>Half Dial</figcaption></figure>
+          <figure><img src="img/face_always_on.webp" alt="Concentric+ in always-on mode, light ticks with the pill closed into a ring" width="454" height="454" loading="lazy" /><figcaption><strong>Always-on</strong>Porcelain</figcaption></figure>
+          <figure><img src="img/face_ooze_dials_and_arcs.webp" alt="Concentric+ in Ooze, Dials and Arcs, green" width="454" height="454" loading="lazy" /><figcaption><strong>Ooze</strong>Dials and Arcs</figcaption></figure>
+          <figure><img src="img/face_unicorn_half_dial.webp" alt="Concentric+ in Unicorn, Half Dial, pink and purple" width="454" height="454" loading="lazy" /><figcaption><strong>Unicorn</strong>Half Dial</figcaption></figure>
+          <figure><img src="img/face_jester_dials_and_arcs.webp" alt="Concentric+ in Jester, Dials and Arcs" width="454" height="454" loading="lazy" /><figcaption><strong>Jester</strong>Dials and Arcs</figcaption></figure>
+          <figure><img src="img/face_pebble_dials.webp" alt="Concentric+ in Pebble, Dials, grey" width="454" height="454" loading="lazy" /><figcaption><strong>Pebble</strong>Dials</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Install</p>
+          <h2>Coming soon to Google Play</h2>
+          <p class="lede">
+            Concentric+ will be free for watches with Wear OS 5.1 or newer.
+            Once it's out, it's on your wrist in a minute.
+          </p>
+        </div>
+        <div class="cc-install">
+          <div class="pg-cards stagger">
+            <article class="card pg-card reveal lift">
+              <span class="num" aria-hidden="true">1</span>
+              <h3>Get it from Google Play</h3>
+              <p>
+                Open the Play Store on your watch and search for
+                Concentric+, or install it to your watch from the listing on
+                your phone.
+              </p>
+            </article>
+            <article class="card pg-card reveal lift">
+              <span class="num" aria-hidden="true">2</span>
+              <h3>Phone won't offer it?</h3>
+              <p>
+                Some phones don't list watch faces. The same listing then
+                installs a small Concentric+ phone app. Tap
+                <strong>Install on watch</strong> and the listing opens on
+                your paired watch.
+              </p>
+            </article>
+            <article class="card pg-card reveal lift">
+              <span class="num" aria-hidden="true">3</span>
+              <h3>Set it as your face</h3>
+              <ol>
+                <li>Long-press your current watch face.</li>
+                <li>Swipe and tap <strong>Add watch face</strong> (+).</li>
+                <li>Pick <strong>Concentric+</strong> from the list.</li>
+              </ol>
+            </article>
+          </div>
+          <figure class="cc-phone reveal">
+            <img src="img/phone-app.webp" alt="The Concentric+ phone app: the watch face and an Install on watch button" width="600" height="1067" loading="lazy" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pg-more">
+      <div class="wrap wrap-prose">
+        <article class="prose reveal">
+          <h2>Credits</h2>
+          <p>
+            Concentric+ grew out of the open-source Concentric watch face by
+            <a href="https://github.com/lukakilic/concentric-watch-face" target="_blank" rel="noopener noreferrer">Luka Kilic</a>
+            (MIT License). The type is Google Sans Flex, under the SIL Open
+            Font License.
+          </p>
+          <p class="muted">
+            Concentric+ is an independent recreation, not affiliated with or
+            endorsed by Google. Pixel and Pixel Watch are trademarks of
+            Google LLC.
+          </p>
+
+          <h2>Privacy</h2>
+          <p>
+            The watch faces don't collect, store or send any personal data.
+            There are no accounts, ads or analytics.
+            <a href="../watchfaces/privacy.html">Read the privacy policy</a>.
+          </p>
+
+          <h2>Need help?</h2>
+          <p>
+            Have a look at the <a href="../watchfaces/support.html">support page</a>, or email
+            <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
+      <nav aria-label="Footer">
+        <a href="./">Concentric+</a>
+        <a href="../watchfaces/">All watch faces</a>
+        <a href="../watchfaces/privacy.html">Privacy policy</a>
+        <a href="../watchfaces/support.html">Support</a>
+        <a href="../">More apps</a>
+      </nav>
+    </div>
+  </footer>
+  <script>document.querySelectorAll('[data-year]').forEach(function (n) { n.textContent = new Date().getFullYear(); });</script>
+</body>
+</html>

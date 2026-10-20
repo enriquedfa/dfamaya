@@ -3,34 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>WatchSky · A living sky on your wrist</title>
-  <meta name="description" content="WatchSky is a Wear OS watch face that paints the real sky behind the time, following the sun for your latitude and the season: dawn, golden hour, sunset and wheeling stars, the sun and moon on their arc, live moon phases and the weather. No accounts, no ads, no data collection." />
+  <title>Watch Faces · dfamaya for Wear OS</title>
+  <meta name="description" content="Wear OS watch faces by dfamaya: WatchSky, Spiralis and Concentric+. Built in Watch Face Format, with no ads, no accounts and no data collection." />
   <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="img/icon-180.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="WatchSky · A living sky on your wrist" />
-  <meta property="og:description" content="A Wear OS watch face that paints the real sky behind the time, from dawn to the stars." />
+  <meta property="og:title" content="Watch Faces · dfamaya for Wear OS" />
+  <meta property="og:description" content="WatchSky, Spiralis and Concentric+: Wear OS watch faces with no ads, no accounts and no tracking." />
   <meta property="og:url" content="https://enriquedfa.github.io/dfamaya/watchfaces/" />
-  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/watchfaces/og.png" />
+  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/concentric/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
-  <!-- The watch's clock face, digits only -->
+  <!-- The watch faces' own type: WatchSky's clock digits, Spiralis's system font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100;300&text=0123456789%3A&display=swap" />
-  <link rel="stylesheet" href="../style.css" />
-  <link rel="stylesheet" href="watchsky.css" />
-  <script src="watchsky.js" defer></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" />
+  <link rel="stylesheet" href="../style.css?v=8" />
+  <link rel="stylesheet" href="../watchsky/watchsky.css" />
+  <link rel="stylesheet" href="../spiralis/spiralis.css?v=2" />
+  <link rel="stylesheet" href="../concentric/concentric.css?v=1" />
+  <script src="../watchsky/watchsky.js" defer></script>
+  <script src="../spiralis/spiralis.js?v=2" defer></script>
+  <script src="../concentric/concentric.js?v=1" defer></script>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <symbol id="i-watch" viewBox="0 0 24 24"><path d="M10.5,22q-0.65,0-1.19-0.39q-0.54-0.39-0.74-1.04L8,18.65q-0.15-0.5-0.46-1.01T6.73,16.58q-0.85-0.92-1.29-2.1T5,12q0-1.28 0.44-2.45Q5.88,8.38 6.73,7.43q0.5-0.58 0.81-1.08T8,5.35L8.58,3.42q0.2-0.65 0.74-1.04T10.5,2h3q0.65,0 1.19,0.39t0.74,1.04L16,5.35q0.15,0.5 0.46,1.01t0.81,1.06q0.85,0.92 1.29,2.1T19,12q0,1.27-0.44,2.45t-1.29,2.13q-0.5,0.57-0.81,1.07t-0.46,1l-0.57,1.93q-0.2,0.65-0.74,1.04T13.5,22h-3Zm5.04-6.46Q17,14.08 17,12q0-2.08-1.46-3.54T12,7Q9.93,7 8.46,8.46T7,12t1.46,3.54T12,17t3.54-1.46Z"/></symbol>
     <symbol id="i-gplay" viewBox="0 0 24 24"><path d="M6.5 3.6c-.6-.4-1.5 0-1.5.8v15.2c0 .8.9 1.2 1.5.8l12.3-7.6a1 1 0 0 0 0-1.7z"/></symbol>
-    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M11,16.18V5q0-0.43 0.29-0.71T12,4t0.71,0.29T13,5V16.18l4.9-4.9q0.3-0.3 0.7-0.29t0.7,0.31q0.28,0.3 0.29,0.7T19.3,12.7l-6.6,6.6q-0.15,0.15-0.33,0.21T12,19.58t-0.38-0.06T11.3,19.3L4.7,12.7q-0.28-0.28-0.28-0.69T4.7,11.3Q5,11 5.41,11t0.71,0.3L11,16.18Z"/></symbol>
-    <symbol id="i-play" viewBox="0 -960 960 960"><path d="M320,-200v-560l440,280 -440,280Z"/></symbol>
-    <symbol id="i-pause" viewBox="0 -960 960 960"><path d="M560,-200v-560h160v560H560Zm-320,0v-560h160v560H240Z"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M16.18,13H5q-0.42,0-0.71-0.29Q4,12.43 4,12t0.29-0.71T5,11H16.18l-4.9-4.9q-0.3-0.3-0.29-0.7T11.3,4.7Q11.6,4.42 12,4.41T12.7,4.7l6.6,6.6q0.15,0.15 0.21,0.33T19.58,12t-0.06,0.38T19.3,12.7l-6.6,6.6q-0.28,0.27-0.69,0.27T11.3,19.3Q11,19 11,18.59q0-0.41 0.3-0.71L16.18,13Z"/></symbol>
   </svg>
   <a class="skip-link" href="#main">Skip to content</a>
 
@@ -48,256 +50,155 @@
         <a href="privacy.html">Privacy</a>
         <a href="support.html">Support</a>
       </nav>
-      <a class="btn btn-sm btn-primary head-cta" href="https://play.google.com/store/apps/details?id=com.dfamaya.watchsky" target="_blank" rel="noopener noreferrer" aria-label="Get the watch faces on Google Play">
+      <a class="btn btn-sm btn-primary head-cta" href="https://play.google.com/store/apps/developer?id=Enrique+Amaya" target="_blank" rel="noopener noreferrer" aria-label="All apps on Google Play">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
-        <span class="short">Get</span><span class="long">Google Play</span>
+        <span class="short">Play</span><span class="long">Google Play</span>
       </a>
     </div>
   </header>
 
   <main id="main">
-    <!-- Hero + the settings. The watch stays pinned while the settings scroll. -->
-    <section class="pg-hero" data-ws-page>
-      <div class="wrap pg-grid">
-        <div class="pg-intro hero-exit">
-          <p class="app-badge rise" style="--d:0">
-            <img src="img/icon.webp" alt="" width="26" height="26" />
-            WatchSky for Wear OS
-          </p>
-          <h1 class="rise" style="--d:1">A living sky <span class="hl">on your wrist</span></h1>
-          <p class="lede rise" style="--d:2">
-            WatchSky paints the real sky behind the time. It follows the sun
-            where you live: it lightens at dawn, turns gold at sunset and
-            fills with stars at night, and dawn and dusk move with the
-            seasons. The sun and moon cross the face on an arc, and the sky
-            changes with the weather.
-          </p>
-          <div class="btn-row stack-sm rise" style="--d:3">
-            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.dfamaya.watchsky" target="_blank" rel="noopener noreferrer">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
-              Get it on Google Play
-            </a>
-            <a class="btn btn-ghost" href="#try">
-              Try it here
-              <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
-            </a>
-          </div>
-          <p class="fine rise" style="--d:4">Free. For Wear OS 5.1 and newer. No ads, no accounts, no tracking.</p>
-        </div>
+    <section class="home-hero">
+      <div class="wrap hero-exit">
+        <h1 class="rise" style="--d:0">Watch faces for Wear&nbsp;OS</h1>
+        <p class="lede rise" style="--d:1">
+          Three faces, each built in Watch Face Format, so the watch itself
+          draws them and nothing of mine runs in the background. None of
+          them have ads or accounts, and none of them collect anything.
+        </p>
+      </div>
+    </section>
 
-        <div class="pg-visual" data-tilt>
-          <div class="pg-stage rise" style="--d:2">
-            <div class="watch" role="img" aria-label="The WatchSky watch face">
+    <section class="home-apps" aria-label="Watch faces">
+      <div class="wrap">
+        <article class="app-card app-card-feature rise lift" style="--d:2">
+          <div class="app-copy">
+            <div class="app-title">
+              <img class="cc-mark" src="../concentric/img/icon.webp" alt="" width="48" height="48" />
+              <div>
+                <h2>Concentric+</h2>
+                <p class="app-kind">Watch face · coming soon</p>
+              </div>
+            </div>
+            <p>
+              The closest recreation of the Pixel Watch's Concentric face, for
+              any Wear OS watch: sweeping minute and second rings, all 64
+              colorways, three layouts and Pixel-style complications. Built
+              natively in Watch Face Format.
+            </p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="../concentric/">
+                Try it live
+                <svg class="icon nudge-x" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+              </a>
+            </div>
+          </div>
+
+          <a class="app-visual" href="../concentric/" tabindex="-1" aria-hidden="true" data-cc-glow>
+            <div class="watch cc-watch">
+              <div class="watch-strap top"></div>
+              <div class="watch-strap bottom"></div>
+              <span class="watch-crown"></span>
+              <div class="watch-case">
+                <div class="dial" data-cc-face data-cc-flavor="porcelain">
+                  <img class="cc-fallback" src="../concentric/img/face_porcelain_dials_and_arcs.webp" alt="" width="454" height="454" />
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+        <article class="app-card app-card-feature rise lift" style="--d:3">
+          <div class="app-copy">
+            <div class="app-title">
+              <img class="ws-mark" src="../watchsky/img/icon.webp" alt="" width="48" height="48" />
+              <div>
+                <h2>WatchSky</h2>
+                <p class="app-kind">Watch face</p>
+              </div>
+            </div>
+            <p>
+              The real sky behind the time: dawn, golden hour, sunset and
+              stars, with the sun and moon crossing the face and the weather
+              changing the sky. It runs entirely on the watch and collects
+              nothing.
+            </p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="../watchsky/">
+                Try it live
+                <svg class="icon nudge-x" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+              </a>
+              <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.dfamaya.watchsky" target="_blank" rel="noopener noreferrer">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+                Google Play
+              </a>
+            </div>
+          </div>
+
+          <a class="app-visual" href="../watchsky/" tabindex="-1" aria-hidden="true" data-ws-glow>
+            <div class="watch ws-watch">
               <div class="watch-strap top"></div>
               <div class="watch-strap bottom"></div>
               <span class="watch-crown"></span>
               <div class="watch-case">
                 <div class="dial" data-ws-face data-ws-weather="partly">
-                  <img class="ws-fallback" src="img/preview.webp" alt="" width="454" height="454" />
+                  <img class="ws-fallback" src="../watchsky/img/preview.webp" alt="" width="454" height="454" />
                 </div>
               </div>
             </div>
-
-            <div class="pg-scrub">
-              <button type="button" class="btn btn-ghost btn-md btn-icon pg-play" data-ws-play aria-pressed="false" aria-label="Play a whole day">
-                <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>
-                <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pause"></use></svg>
-              </button>
-              <input class="pg-range" type="range" min="0" max="1439" step="1" value="720" aria-label="Time of day" data-ws-range />
-              <button type="button" class="btn btn-ghost btn-md pg-now" data-ws-now aria-pressed="true">Now</button>
-            </div>
-            <p class="pg-caption" data-ws-caption><strong data-k="phase">Daytime</strong> · <span data-k="time">now</span></p>
-          </div>
-        </div>
-
-        <div class="pg-panel" id="try">
-          <div class="section-head">
-            <p class="eyebrow">Make it yours</p>
-            <h2>The watch's settings, to try here first</h2>
-            <p class="lede">
-              On the watch, long-press WatchSky and tap
-              <strong>Customize</strong>. You get these same options, with
-              the same icons. Try them on the watch on this page.
-            </p>
-          </div>
-
-          <div class="pg-groups">
-            <div class="pg-group reveal">
-              <div class="pg-group-head"><h3>A sky that keeps time</h3></div>
-              <p>
-                Six layers of sky blend into each other as the sun climbs and
-                sets: night, blue hour, sunrise, golden hour and a clear
-                midday blue. Each one follows the sun's real height, so the
-                evening plays the morning back in reverse. After dusk the
-                stars come out and wheel slowly across the sky, rising and
-                setting like the moon. Drag the slider under the watch, press
-                play to watch a whole day, or jump to a moment:
-              </p>
-              <div class="pg-moments">
-                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="rise:-7">Blue hour</button>
-                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="rise:0">Sunrise</button>
-                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="rise:5">Golden hour</button>
-                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="noon">Midday</button>
-                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="set:0">Sunset</button>
-                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="set:-14">Nightfall</button>
-                <button type="button" class="btn btn-ghost btn-sm" data-ws-moment="midnight">Night</button>
+          </a>
+        </article>
+        <article class="app-card app-card-feature rise lift" style="--d:4">
+          <div class="app-copy">
+            <div class="app-title">
+              <img class="sp-mark" src="../spiralis/img/icon.webp" alt="" width="48" height="48" />
+              <div>
+                <h2>Spiralis</h2>
+                <p class="app-kind">Watch face</p>
               </div>
             </div>
-
-            <div class="pg-group reveal">
-              <div class="pg-group-head"><h3 id="g-lat">Latitude</h3><span class="pg-val" data-ws-value="lat" aria-hidden="true">40° N</span></div>
-              <p>
-                Pick the band you live in. With the date, that's all the face
-                needs to work out sunrise, sunset and how high the sun
-                climbs, so the sky keeps up with the seasons by itself. The
-                sun is amber on the horizon and whitens as it rises, and its
-                glow grows with it. It never asks for your location.
-              </p>
-              <div class="ws-lat">
-                <span aria-hidden="true">S</span>
-                <input class="pg-range" type="range" name="ws-lat" min="-50" max="70" step="5" value="40" aria-labelledby="g-lat" />
-                <span aria-hidden="true">N</span>
-              </div>
-              <p class="ws-lat-note"><strong data-ws-value="cities">Madrid, New York, Beijing</strong></p>
-              <p class="ws-lat-note" data-ws-value="sun">Today the sun rises and sets with the band.</p>
-            </div>
-
-            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-weather">
-              <div class="pg-group-head"><h3 id="g-weather">Weather</h3><span class="pg-val" data-ws-value="weather" aria-hidden="true">Partly cloudy</span></div>
-              <p>
-                With <strong>Show weather</strong> on, an icon and the
-                temperature sit above the time. The sky follows the conditions
-                too: grey under cloud and snow, darker in the rain.
-              </p>
-              <div class="pg-chips">
-                <label class="pg-chip" title="Clear"><input type="radio" name="ws-weather" value="clear" aria-label="Clear" /><span class="pg-chip-face sky" style="--a:#2B5C8F;--b:#54AAD1"><span class="sun"></span></span></label>
-                <label class="pg-chip" title="Partly cloudy"><input type="radio" name="ws-weather" value="partly" aria-label="Partly cloudy" checked /><span class="pg-chip-face sky" style="--a:#4D7AA8;--b:#8FB6D8"><img src="img/weather_cloudy.webp" alt="" width="32" height="32" /></span></label>
-                <label class="pg-chip" title="Cloudy"><input type="radio" name="ws-weather" value="cloudy" aria-label="Cloudy" /><span class="pg-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_cloudy.webp" alt="" width="32" height="32" /></span></label>
-                <label class="pg-chip" title="Fog"><input type="radio" name="ws-weather" value="fog" aria-label="Fog" /><span class="pg-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_fog.webp" alt="" width="32" height="32" /></span></label>
-                <label class="pg-chip" title="Rain"><input type="radio" name="ws-weather" value="rain" aria-label="Rain" /><span class="pg-chip-face sky" style="--a:#353C45;--b:#52595E"><img src="img/weather_rain.webp" alt="" width="32" height="32" /></span></label>
-                <label class="pg-chip" title="Thunderstorm"><input type="radio" name="ws-weather" value="storm" aria-label="Thunderstorm" /><span class="pg-chip-face sky" style="--a:#353C45;--b:#52595E"><img src="img/weather_storm.webp" alt="" width="32" height="32" /></span></label>
-                <label class="pg-chip" title="Snow"><input type="radio" name="ws-weather" value="snow" aria-label="Snow" /><span class="pg-chip-face sky" style="--a:#6A7480;--b:#9DA8B2"><img src="img/weather_snow.webp" alt="" width="32" height="32" /></span></label>
-                <label class="pg-chip" title="Show weather off"><input type="radio" name="ws-weather" value="off" aria-label="Show weather off" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/weather_setting.webp)"></span></span></label>
-              </div>
-            </div>
-
-            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-moon">
-              <div class="pg-group-head"><h3 id="g-moon">Moon phase</h3><span class="pg-val" data-ws-value="moon" aria-hidden="true">Live</span></div>
-              <p>
-                At night the moon takes the sun's place on the arc. Live
-                follows the real phase, or you can keep your favourite.
-              </p>
-              <div class="pg-chips">
-                <label class="pg-chip" title="Live"><input type="radio" name="ws-moon" value="live" aria-label="Live. Follows the real moon phase." checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_live.webp)"></span></span></label>
-                <label class="pg-chip" title="New moon"><input type="radio" name="ws-moon" value="0" aria-label="New moon" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_new.webp)"></span></span></label>
-                <label class="pg-chip" title="Waxing crescent"><input type="radio" name="ws-moon" value="125" aria-label="Waxing crescent" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_waxing_crescent.webp)"></span></span></label>
-                <label class="pg-chip" title="First quarter"><input type="radio" name="ws-moon" value="250" aria-label="First quarter" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_first_quarter.webp)"></span></span></label>
-                <label class="pg-chip" title="Waxing gibbous"><input type="radio" name="ws-moon" value="375" aria-label="Waxing gibbous" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_waxing_gibbous.webp)"></span></span></label>
-                <label class="pg-chip" title="Full moon"><input type="radio" name="ws-moon" value="500" aria-label="Full moon" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_full.webp)"></span></span></label>
-                <label class="pg-chip" title="Waning gibbous"><input type="radio" name="ws-moon" value="625" aria-label="Waning gibbous" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_waning_gibbous.webp)"></span></span></label>
-                <label class="pg-chip" title="Last quarter"><input type="radio" name="ws-moon" value="750" aria-label="Last quarter" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_last_quarter.webp)"></span></span></label>
-                <label class="pg-chip" title="Waning crescent"><input type="radio" name="ws-moon" value="875" aria-label="Waning crescent" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/moon_waning_crescent.webp)"></span></span></label>
-              </div>
-            </div>
-
-            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-bar">
-              <div class="pg-group-head"><h3 id="g-bar">Middle bar</h3><span class="pg-val" data-ws-value="bar" aria-hidden="true">Seconds</span></div>
-              <p>
-                The thin line along the horizon fills up. Pick what it counts:
-                seconds, minutes or battery. You can also turn it off.
-                Minutes and battery stay on in always-on mode.
-              </p>
-              <div class="pg-chips">
-                <label class="pg-chip" title="Seconds"><input type="radio" name="ws-bar" value="0" aria-label="Seconds. Fills once a minute." checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/middle_bar_seconds.webp)"></span></span></label>
-                <label class="pg-chip" title="Minutes"><input type="radio" name="ws-bar" value="1" aria-label="Minutes. Fills once an hour." /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/middle_bar_minutes.webp)"></span></span></label>
-                <label class="pg-chip" title="Battery"><input type="radio" name="ws-bar" value="2" aria-label="Battery. Shows the charge left." /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/middle_bar_battery.webp)"></span></span></label>
-                <label class="pg-chip" title="Off"><input type="radio" name="ws-bar" value="3" aria-label="Off" /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/middle_bar_disabled.webp)"></span></span></label>
-              </div>
-            </div>
-
-            <div class="pg-group reveal">
-              <div class="pg-group-head"><h3>And the rest</h3></div>
-              <p>
-                The slot under the date shows your next event by default. You
-                can swap in any long-text complication. Tap the date to open
-                your calendar, or the time to open your alarms.
-                <strong>Dark ground</strong> ends the sky at the horizon and
-                lets its glow fade into black below.
-              </p>
-              <div class="pg-switches">
-                <label class="pg-switch"><input type="checkbox" name="ws-showDate" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/date_setting.webp)"></span><span class="label">Show date</span><span class="track"></span></span></label>
-                <label class="pg-switch"><input type="checkbox" name="ws-shadow" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/border_shadow_setting.webp)"></span><span class="label">Border shadow</span><span class="track"></span></span></label>
-                <label class="pg-switch"><input type="checkbox" name="ws-ground" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/dark_ground_setting.webp)"></span><span class="label">Dark ground</span><span class="track"></span></span></label>
-                <label class="pg-switch"><input type="checkbox" name="ws-aod" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Preview always‑on</span><span class="track"></span></span></label>
-                <label class="pg-switch"><input type="checkbox" name="ws-cxAod" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Complication in always‑on</span><span class="track"></span></span></label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="install">
-      <div class="wrap">
-        <div class="section-head reveal">
-          <p class="eyebrow">Install</p>
-          <h2>On your wrist in a minute</h2>
-          <p class="lede">
-            WatchSky is free on Google Play for watches with Wear OS 5.1 or
-            newer. It runs entirely on the watch.
-          </p>
-        </div>
-        <div class="pg-cards stagger">
-          <article class="card pg-card reveal lift">
-            <span class="num" aria-hidden="true">1</span>
-            <h3>Get it from Google Play</h3>
             <p>
-              Open the Play Store on your watch and search for WatchSky, or
-              use the Google Play button on this page and install it to your
-              watch.
+              A golden spiral is the hour hand. It turns 30° an hour and lands
+              on that hour's line, with four complications, thirteen palettes,
+              12- or 24-hour numerals (or none), hour lines that fade out or
+              swirl into the center, and a barely-lit always-on mode in four
+              colors. It runs entirely on the watch and collects nothing.
             </p>
-          </article>
-          <article class="card pg-card reveal lift">
-            <span class="num" aria-hidden="true">2</span>
-            <h3>Phone won't offer it?</h3>
-            <p>
-              Some phones don't list watch faces. The same listing then
-              installs a small WatchSky phone app. Tap
-              <strong>Install on watch</strong> in it and the listing opens
-              on your paired watch.
-            </p>
-          </article>
-          <article class="card pg-card reveal lift">
-            <span class="num" aria-hidden="true">3</span>
-            <h3>Set it as your face</h3>
-            <ol>
-              <li>Long-press your current watch face.</li>
-              <li>Swipe and tap <strong>Add watch face</strong> (+).</li>
-              <li>Pick <strong>WatchSky</strong> from the list.</li>
-            </ol>
-          </article>
-        </div>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="../spiralis/">
+                Try it live
+                <svg class="icon nudge-x" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+              </a>
+              <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.dfamaya.spiralis" target="_blank" rel="noopener noreferrer">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+                Google Play
+              </a>
+            </div>
+          </div>
+
+          <a class="app-visual" href="../spiralis/" tabindex="-1" aria-hidden="true" data-sp-glow>
+            <div class="watch sp-watch">
+              <div class="watch-strap top"></div>
+              <div class="watch-strap bottom"></div>
+              <span class="watch-crown"></span>
+              <div class="watch-case">
+                <div class="dial" data-sp-face data-sp-preset="minimal" data-sp-palette="golden">
+                  <img class="sp-fallback" src="../spiralis/img/face_golden.webp" alt="" width="454" height="454" />
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
       </div>
     </section>
 
     <section class="section pg-more">
       <div class="wrap wrap-prose">
         <article class="prose reveal">
-          <h2>New in 1.4</h2>
-          <ul>
-            <li>Pick your latitude instead of sunrise and sunset times. The sky now follows the real sun, so dawn and dusk shift with the seasons.</li>
-            <li>The sun turns amber near the horizon and whitens as it climbs, and its glow grows with it.</li>
-            <li>Stars wheel slowly across the night sky, rising and setting like the moon.</li>
-            <li>A new <strong>Dark ground</strong> option ends the sky at the horizon with a soft glow.</li>
-            <li>Tap the clock to open your alarms.</li>
-            <li>The <strong>Show date</strong> and always-on complication toggles now work reliably, and TalkBack reads out the weather.</li>
-          </ul>
-
           <h2>Privacy</h2>
           <p>
             The watch faces don't collect, store or send any personal data.
-            There are no accounts, ads or analytics.
-            <a href="privacy.html">Read the privacy policy</a>.
+            There are no accounts, ads or analytics. One
+            <a href="privacy.html">privacy policy</a> covers them all.
           </p>
 
           <h2>Need help?</h2>
@@ -314,7 +215,9 @@
     <div class="wrap">
       <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
       <nav aria-label="Footer">
-        <a href="./">Watch Faces</a>
+        <a href="../concentric/">Concentric+</a>
+        <a href="../watchsky/">WatchSky</a>
+        <a href="../spiralis/">Spiralis</a>
         <a href="privacy.html">Privacy policy</a>
         <a href="support.html">Support</a>
         <a href="../">More apps</a>

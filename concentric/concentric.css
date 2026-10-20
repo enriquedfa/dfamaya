@@ -1,0 +1,277 @@
+/* ============================================================================
+   Concentric+ — landing page + the face (the face is also on the home page
+   and the watch faces page). The watch hardware (.watch, .watch-case,
+   .dial…) and the playground layout (.pg-*) come from ../style.css. This
+   file keeps what is Concentric+'s own.
+============================================================================ */
+
+/* The colorway's four roles, set on each face by concentric.js. Registered
+   so a colorway change eases across the face, the glow and the headline. */
+@property --cc-a { syntax: "<color>"; inherits: true; initial-value: #f6f0e9; }
+@property --cc-b { syntax: "<color>"; inherits: true; initial-value: #c9bfb5; }
+@property --cc-c { syntax: "<color>"; inherits: true; initial-value: #8c7c74; }
+@property --cc-d { syntax: "<color>"; inherits: true; initial-value: #ffcaa8; }
+@property --cc-glow { syntax: "<color>"; inherits: true; initial-value: #ffcaa8; }
+
+[data-cc-face],
+[data-cc-page] {
+  transition: --cc-a var(--dur-slower) var(--ease), --cc-b var(--dur-slower) var(--ease),
+    --cc-c var(--dur-slower) var(--ease), --cc-d var(--dur-slower) var(--ease);
+}
+:where([data-cc-glow], [data-cc-page] .pg-stage) { transition: --cc-glow var(--dur-slower) var(--ease); }
+.app-visual[data-cc-glow] { --src-bg: color-mix(in srgb, var(--cc-glow) 45%, #000); }
+[data-cc-page] .pg-stage { --pg-glow: var(--cc-glow); }
+
+/* Morphs between the home page card and this page */
+.app-visual .watch.cc-watch,
+[data-cc-page] .pg-visual .watch { view-transition-name: concentric-watch; }
+.app-title img.cc-mark,
+[data-cc-page] .pg-intro .app-badge img { view-transition-name: concentric-mark; }
+
+/* ----------------------------------------------------------------------------
+   The face, drawn by concentric.js into a 450×450 SVG (the watch's own
+   canvas). Type is Google Sans Flex at the axes of the face's static fonts:
+   the clock at weight 500 / 600 and optical size 32 / 28, the complications
+   at 600 / 12.
+---------------------------------------------------------------------------- */
+.cc-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "Google Sans Flex", var(--font);
+  font-kerning: normal;
+  text-rendering: geometricPrecision;
+}
+
+.cc-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cc-fa { fill: var(--cc-a); }
+.cc-fb { fill: var(--cc-b); }
+.cc-fc { fill: var(--cc-c); }
+.cc-fd { fill: var(--cc-d); }
+.cc-sb { fill: none; stroke: var(--cc-b); }
+.cc-sc { stroke: var(--cc-c); }
+
+/* Tick rings: colour b at 50 % */
+.cc-ticks { opacity: 0.5; }
+
+.cc-digit {
+  font-size: 22px;
+  font-weight: 600;
+  font-variation-settings: "opsz" 28;
+  letter-spacing: 1px;
+  text-anchor: middle;
+}
+.cc-hour {
+  font-size: 84px;
+  font-weight: 500;
+  font-variation-settings: "opsz" 32;
+  letter-spacing: -0.75px;
+  text-anchor: middle;
+}
+.cc-hour-half { font-size: 98.68px; letter-spacing: -0.99px; }
+.cc-minute {
+  font-size: 35.53px;
+  font-weight: 600;
+  font-variation-settings: "opsz" 28;
+  text-anchor: middle;
+}
+
+.cc-mask-rect,
+.cc-mask-circle { fill: #000; }
+.cc-mask-circle { opacity: 0; }
+
+/* The minute pill: a 4 px stroke in colour b at 50 %. In always-on it
+   cross-fades into a ring around the minute, on Google's easing. */
+.cc-pill,
+.cc-pill-aod {
+  stroke-width: 3.95px;
+  transition: opacity 0.5s cubic-bezier(0.37, 0.54, 0.02, 1);
+}
+.cc-pill { opacity: 0.5; }
+.cc-left-border { stroke-width: 3.95px; opacity: 0.5; }
+.cc-pill-aod { opacity: 0; }
+.cc-pill-half { opacity: 0; }
+.is-half .cc-pill-full { opacity: 0; }
+.is-half .cc-pill-half { opacity: 0.5; }
+.cc-hour-half { opacity: 0; }
+.is-half .cc-hour:not(.cc-hour-half) { opacity: 0; }
+.is-half .cc-hour-half { opacity: 1; }
+
+/* Both rings shrink 3 % going always-on, the second ring a beat later */
+.cc-ring {
+  transform-origin: 225px 225px;
+  transition: scale 0.5s cubic-bezier(0.26, 0.54, 0.06, 1), opacity 0.3s;
+}
+.cc-ring-s { transition-delay: 0.08s; }
+
+/* Complications */
+.cc-track { fill: none; stroke-width: 3.95px; stroke-linecap: round; }
+.cc-track-bg { stroke: #333; }
+.cc-arc-text {
+  font-size: 24px;
+  font-weight: 600;
+  font-variation-settings: "opsz" 12;
+}
+.cc-pill-text {
+  font-size: 28px;
+  font-weight: 600;
+  font-variation-settings: "opsz" 12;
+  text-anchor: middle;
+}
+.cc-bulb-text {
+  font-weight: 600;
+  font-variation-settings: "opsz" 12;
+  text-anchor: middle;
+}
+.cc-disc { opacity: 0.2; }
+
+/* Always-on, as the XML's AMBIENT variants have it */
+.is-aod .cc-ring { scale: 0.97; }
+.is-aod.aod-time-only .cc-ring:not(.cc-ring-s) { opacity: 0; }
+.is-aod .cc-mask-rect { opacity: 0; }
+.is-aod .cc-mask-circle { opacity: 1; }
+.is-aod .cc-pill { opacity: 0; }
+.is-aod .cc-pill-aod { opacity: 0.5; }
+/* Arcs, tracks and discs go; text and icons stay, unless Complications in
+   always-on is off */
+.is-aod .cc-track,
+.is-aod .cc-disc { opacity: 0; }
+.is-aod.cx-aod-off .cc-arc-text,
+.is-aod.cx-aod-off .cc-cx-keep,
+.is-aod.cx-aod-off .cc-left-pill,
+.is-aod.cx-aod-off .cc-bulb-text { opacity: 0; }
+
+/* ----------------------------------------------------------------------------
+   Landing page
+---------------------------------------------------------------------------- */
+/* The headline follows the colorway: its time colour into its accent, with
+   the lightness pinned per theme so it stays readable on a light page */
+[data-cc-page] .pg-intro .hl {
+  background: linear-gradient(100deg, light-dark(#8a5a3c, #f6f0e9), light-dark(#b4532a, #ffcaa8));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@supports (color: oklch(from red l c h)) {
+  [data-cc-page] .pg-intro .hl {
+    background-image: linear-gradient(100deg,
+      light-dark(oklch(from var(--cc-a) 0.48 max(c, 0.04) h), oklch(from var(--cc-a) 0.93 c h)),
+      light-dark(oklch(from var(--cc-d) 0.5 max(c, 0.06) h), oklch(from var(--cc-d) 0.82 c h)));
+  }
+}
+
+/* The slider's track: a day, the hours notched */
+[data-cc-page] .pg-range {
+  --track:
+    repeating-linear-gradient(90deg, transparent 0 calc(100% / 24 - 1px), rgb(255 255 255 / 0.18) 0 calc(100% / 24)),
+    linear-gradient(90deg, #111, color-mix(in srgb, var(--cc-c) 70%, #111) 50%, #111);
+}
+
+/* Pickers drawn as the watch editor draws them: round previews with a name
+   (the flavors, layouts, tick styles and always-on styles) */
+.cc-picks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+  gap: var(--space-4) var(--space-3);
+  margin-top: var(--space-4);
+}
+.cc-pick { position: relative; display: grid; justify-items: center; align-content: start; gap: var(--space-2); }
+.cc-pick input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.cc-pick img {
+  width: 100%;
+  max-width: 80px;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: 0 0 0 1px var(--border-strong);
+  transition: box-shadow var(--dur-fast) var(--ease),
+    scale var(--press-dur, var(--dur-spring)) var(--press-ease, var(--ease-spring));
+}
+.cc-pick span {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  transition: color var(--dur-fast) var(--ease);
+}
+.cc-pick:hover span,
+.cc-pick input:checked ~ span { color: var(--text); }
+.cc-pick input:checked ~ img { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+.cc-pick input:focus-visible ~ img { outline: 2px solid var(--accent); outline-offset: 6px; }
+.cc-pick input:active ~ img { --press-dur: 0.1s; --press-ease: var(--ease); scale: 0.94; }
+
+/* 64 colorways: smaller chips, each split into its four colours (time,
+   rings, tracks, icons) */
+.cc-colorways { gap: var(--space-2); }
+.cc-chip { width: 36px; height: 36px; }
+.pg-chip-face.cc-swatch {
+  border: 0;
+  background: conic-gradient(var(--a) 0 25%, var(--d) 0 50%, var(--c) 0 75%, var(--b) 0);
+}
+
+/* The comparison table */
+.cc-compare { margin-top: var(--space-8); }
+.cc-compare th[scope="row"] { font-weight: 500; text-align: left; }
+.cc-compare td,
+.cc-compare thead th:not(:first-child) { text-align: center; }
+.cc-compare .yes { color: light-dark(#1f7a4d, #7ad9a6); font-weight: 600; }
+.cc-compare .no { color: var(--faint); }
+
+/* Straight from the face file: round renders in a rim like the watch's */
+.cc-gallery { --gallery-cols: 8; --gallery-cols-md: 4; --gallery-w: 150px; }
+.cc-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: 0 0 0 6px #17181c, 0 0 0 7px var(--border-strong), 0 18px 36px -18px var(--shadow-color, rgb(0 0 0 / 0.5));
+}
+
+/* Install: the steps beside the phone app */
+.cc-install {
+  display: grid;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+  align-items: center;
+}
+.cc-install .pg-cards { margin-top: 0; grid-template-columns: minmax(0, 1fr); }
+.cc-phone {
+  justify-self: center;
+  width: min(100%, 300px);
+  margin: 0;
+}
+.cc-phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent);
+}
+@media (min-width: 900px) {
+  .cc-install { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-16); }
+}
+/* Three short columns fit a phone */
+.cc-compare table { min-width: 0; }
+.cc-compare th, .cc-compare td { vertical-align: middle; }
