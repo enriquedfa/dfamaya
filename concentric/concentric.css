@@ -89,21 +89,25 @@
 .cc-mask-circle { opacity: 0; }
 
 /* The minute pill: a 4 px stroke in colour b at 50 %. In always-on it
-   cross-fades into a ring around the minute, on Google's easing. */
-.cc-pill,
-.cc-pill-aod {
-  stroke-width: 3.95px;
-  transition: opacity 0.5s cubic-bezier(0.37, 0.54, 0.02, 1);
-}
+   collapses onto its left cap and shrinks into a ring around the minute,
+   over the whole transition on Android's standard easing; it grows back out
+   on wake. */
 .cc-pill { opacity: 0.5; }
+.cc-pill,
+.cc-pill-edges,
+.cc-pill-cap-r { transition: scale 0.5s cubic-bezier(0.2, 0, 0, 1), translate 0.5s cubic-bezier(0.2, 0, 0, 1); }
+.cc-pill-line { stroke-width: 3.95px; }
 .cc-left-border { stroke-width: 3.95px; opacity: 0.5; }
-.cc-pill-aod { opacity: 0; }
 .cc-pill-half { opacity: 0; }
 .is-half .cc-pill-full { opacity: 0; }
 .is-half .cc-pill-half { opacity: 0.5; }
 .cc-hour-half { opacity: 0; }
 .is-half .cc-hour:not(.cc-hour-half) { opacity: 0; }
 .is-half .cc-hour-half { opacity: 1; }
+/* Google's larger, offset hour, while the left pill is empty */
+.cc-hour-big { font-size: 110.53px; letter-spacing: -0.99px; opacity: 0; }
+.pill-empty:not(.is-half) .cc-hour:not(.cc-hour-big) { opacity: 0; }
+.pill-empty:not(.is-half) .cc-hour-big { opacity: 1; }
 
 /* Both rings shrink 3 % going always-on, the second ring a beat later */
 .cc-ring {
@@ -141,8 +145,9 @@
 .is-aod.aod-time-only .cc-ring:not(.cc-ring-s) { opacity: 0; }
 .is-aod .cc-mask-rect { opacity: 0; }
 .is-aod .cc-mask-circle { opacity: 1; }
-.is-aod .cc-pill { opacity: 0; }
-.is-aod .cc-pill-aod { opacity: 0.5; }
+.is-aod .cc-pill { scale: var(--cc-ring); }
+.is-aod .cc-pill-edges { scale: 0 1; }
+.is-aod .cc-pill-cap-r { translate: var(--cc-travel) 0; }
 /* Complications stay whole, arcs included, as on the Pixel (only a short
    text bulb's disc goes), unless Complications in always-on is off */
 .is-aod .cc-disc { opacity: 0; }

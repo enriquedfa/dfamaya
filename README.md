@@ -467,13 +467,15 @@ written in Google's 456 units and scaled by 450/456, so the constants read
   with reduced motion), and their twelve digits turn back to stay upright,
   so the current minute and second sit at the pill. The ticks are the
   watch's own images, tinted in colour b at 50% through an SVG mask.
-- **The time.** The hour (centred between the two pills, at 84 px), the
-  minute in its pill, and the two masks: a rounded rect that hides the ring
-  digit under the pill, a circle that does it in always-on.
+- **The time.** The hour (centred between the two pills, at 84 px; with the
+  left pill off it's Google's larger hour, offset left), the minute in its
+  pill, and the two masks: a rounded rect that hides the ring digit under
+  the pill, a circle that does it in always-on.
 - **Layouts.** Dials (the left pill only), Dials and Arcs (four corner arcs
   plus the left pill) and Half Dial (the clock shifted left, three bulbs).
-  The arcs lay out as the XML does: icon, text, then the track, with the
-  text's width estimated per character as the XML must. The sample data is
+  The arcs lay out as the XML does: icon, text, then the track, short text
+  centred, with the text's width estimated per character as the XML must.
+  With the left pill off, the left arcs reach 13.5° from 9 o'clock. The sample data is
   the Play listing's (an event, battery, heart rate, the weather), with
   this device's battery where the browser shares it. The bottom-left arc is
   the weather as a rating: the temperature, today's low and high either side
@@ -489,8 +491,8 @@ written in Google's 456 units and scaled by 450/456, so the constants read
   order), layout, ticks, the four always-on styles, complications in
   always-on, the left pill, placeholder bars and hiding the second digits
   are real radios and checkboxes. Placeholder bars start on here (on the
-  watch they start off): they centre the heart rate, a short text, between
-  two tracks.
+  watch they start off): they put a track either side of the heart rate, a
+  short text.
 - **Colour.** The colorway's four roles are registered custom properties
   (`--cc-a` … `--cc-d`), so a colorway change eases across the face, the
   glow and the headline.
@@ -498,8 +500,8 @@ written in Google's 456 units and scaled by 450/456, so the constants read
   hour at weight 500 / optical size 32, the minute and ring digits at
   600 / 28, the complications at 600 / 12.
 - **Always-on** follows the XML's ambient variants: the rings shrink 3% and
-  swap to their always-on ticks, the second digits go, the pill fades into a
-  ring, and the complications stay whole, arcs included (only a short-text
+  swap to their always-on ticks, the second digits go, the pill collapses
+  onto its left cap and shrinks into a ring (and grows back on wake), and the complications stay whole, arcs included (only a short-text
   bulb's disc goes).
 
 If the face changes in the Concentric repo (new geometry, a colorway, an

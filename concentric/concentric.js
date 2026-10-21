@@ -191,6 +191,9 @@
     { id: "bl", s: 189, e: 252, flipped: true },
     { id: "br", s: 108, e: 171, flipped: true },
   ];
+  // While the left pill is empty the left arcs reach 13.5° from 9 o'clock,
+  // their tips level with the minute pill's edges
+  const ARC_PILL_EMPTY = { tl: { s: 283.5 }, bl: { e: 256.5 } };
 
   // Half Dial bulbs: left, top in 456 units, 100 × 100
   const BULB = Math.round(sc(100));
@@ -374,9 +377,11 @@
 
       this.time = el("g", {}, this.clock);
       // Google's hour is larger and offset left; Concentric+ centres it
-      // between its two pills, sized so "00" fits the gap
+      // between its two pills, sized so "00" fits the gap. Google's comes
+      // back while the left pill is empty.
       const capCentre = HOUR_BASE - 0.358 * sc(112);
       this.hour = el("text", { x: 225, y: f2(capCentre + 0.358 * 84), class: "cc-hour cc-fa" }, this.time);
+      this.hourBig = el("text", { x: f2(sc(0.48 * 456 + CONT_X)), y: f2(HOUR_BASE), class: "cc-hour cc-hour-big cc-fa" }, this.time);
       this.hourHalf = el("text", { x: f2(sc(0.48 * 456 + CONT_X)), y: f2(HOUR_BASE), class: "cc-hour cc-hour-half cc-fa" }, this.time);
       // The rect mask hides the ring digit under the pill; the circle mask
       // does it in always-on
@@ -386,11 +391,26 @@
       }, this.time);
       el("circle", { cx: f2(MINUTE_CX), cy: f2(sc(228)), r: f2(sc(36)), class: "cc-mask-circle" }, this.time);
       this.minute = el("text", { x: f2(MINUTE_CX), y: f2(MINUTE_BASE), class: "cc-minute cc-fa" }, this.time);
-      el("circle", { cx: f2(MINUTE_CX), cy: f2(sc(228)), r: f2(sc(37) - T / 2), class: "cc-pill-aod cc-sb" }, this.time);
-      const pill = (box, cls) => el("rect", {
-        x: f2(box.x + T / 2), y: f2(box.y + T / 2), width: f2(box.w - T), height: f2(box.h - T),
-        rx: f2((box.h - T) / 2), class: `cc-pill cc-sb ${cls}`,
-      }, this.time);
+      // In always-on the pill collapses onto its left cap, as the XML's
+      // three Parts do: the edges scale to 0 from the left cap's centre, the
+      // right cap slides onto the left one, and the ring they make shrinks
+      // to the AOD ring around the minute
+      const pill = (box, cls) => {
+        const r = (box.h - T) / 2;
+        const cx = box.x + box.h / 2;
+        const cy = box.y + box.h / 2;
+        const travel = box.w - box.h;
+        const g = el("g", { class: `cc-pill ${cls}`, style: `transform-origin:${f2(cx)}px ${f2(cy)}px;--cc-ring:${f2((sc(37) - T / 2) / r)}` }, this.time);
+        const cap = (x, side) => el("path", { d: `M${f2(x)} ${f2(cy - r)}A${f2(r)} ${f2(r)} 0 0 ${side} ${f2(x)} ${f2(cy + r)}`, class: "cc-pill-line cc-sb" }, g);
+        cap(cx, 0);
+        el("path", {
+          d: `M${f2(cx)} ${f2(cy - r)}H${f2(cx + travel)}M${f2(cx)} ${f2(cy + r)}H${f2(cx + travel)}`,
+          class: "cc-pill-line cc-pill-edges cc-sb", style: `transform-origin:${f2(cx)}px ${f2(cy)}px`,
+        }, g);
+        cap(cx + travel, 1).classList.add("cc-pill-cap-r");
+        g.style.setProperty("--cc-travel", `${f2(-travel)}px`);
+        return g;
+      };
       this.pill = pill(PILL, "cc-pill-full");
       this.pillHalf = pill(PILL_HALF, "cc-pill-half");
 
@@ -421,9 +441,9 @@
     }
 
     // One corner slot, as the XML lays it out: the icon, the text, then the
-    // track. With Placeholder bars, short text is centred instead, with a
+    // track. Short text is centred, as on the Pixel; Placeholder bars add a
     // colour-c track either side (the event's text fills its arc, so only
-    // the heart rate shows it).
+    // the heart rate shows them).
     arcSlot(slot, data, placeholder) {
       const g = el("g", {}, this.cx);
       const { s, e, flipped } = slot;
@@ -456,20 +476,19 @@
       } else {
         const content = data.title ? `${data.text} ${data.title}` : data.text;
         const w = data.title ? titledW(data.text, data.title) : textW(data.text);
+        const mid = (s + e) / 2;
+        const width = (data.icon ? ICON_DEG : 0) + w;
+        const left = clamp(mid - width / 2, s, mid);
+        const right = clamp(mid + width / 2, mid, e);
         if (placeholder) {
-          const mid = (s + e) / 2;
-          const width = (data.icon ? ICON_DEG : 0) + w;
-          const left = clamp(mid - width / 2, s, mid);
-          const right = clamp(mid + width / 2, mid, e);
           this.track(g, s, left - GAP, "cc-sc");
           this.track(g, right + GAP, e, "cc-sc");
-          // Bottom arcs read counter-clockwise, so there the icon takes the
-          // larger angle to come first
-          this.arcText(g, flipped || !data.icon ? left : left + ICON_DEG, w, flipped, content, "cc-fa");
-          if (data.icon) this.arcIcon(g, data.icon, flipped ? right - ICON_W / 2 : left + ICON_W / 2, flipped);
-          return;
         }
-        this.arcText(g, a0, w, flipped, content, "cc-fa");
+        // Bottom arcs read counter-clockwise, so there the icon takes the
+        // larger angle to come first
+        this.arcText(g, flipped || !data.icon ? left : left + ICON_DEG, w, flipped, content, "cc-fa");
+        if (data.icon) this.arcIcon(g, data.icon, flipped ? right - ICON_W / 2 : left + ICON_W / 2, flipped);
+        return;
       }
       if (data.icon) this.arcIcon(g, data.icon, s + ICON_W / 2, flipped);
     }
@@ -541,7 +560,9 @@
           bl: { kind: "rating", icon: night ? "moon" : "sun", text: "20°", min: "14", max: "24", value: (20 - 14) / (24 - 14), ramp: true },
           br: { kind: "short", icon: "heart", text: "72" },
         };
-        for (const slot of ARC_SLOTS) this.arcSlot(slot, data[slot.id], s.placeholder);
+        for (const slot of ARC_SLOTS) {
+          this.arcSlot(s.leftPill ? slot : { ...slot, ...ARC_PILL_EMPTY[slot.id] }, data[slot.id], s.placeholder);
+        }
       }
       if (s.mode === 2) {
         this.bulb(BULBS[0], { kind: "rating", icon: night ? "moon" : "sun", text: "28°", value: (28 - 16) / (34 - 16), ramp: true });
@@ -565,6 +586,7 @@
       host.classList.toggle("is-aod", aod);
       host.classList.toggle("is-half", half);
       host.classList.toggle("cx-aod-off", !s.cxAod);
+      host.classList.toggle("pill-empty", !s.leftPill);
       this.clock.setAttribute("transform", half ? `translate(${HALF_SHIFT} 0)` : "");
       this.time.setAttribute("transform", half ? `translate(0 ${f2(sc(6))})` : "");
       this.layout(s);
@@ -607,7 +629,7 @@
       for (const d of digits.texts) d.t.setAttribute("transform", `rotate(${f2(-secA)} ${f2(d.cx)} ${f2(d.cy)})`);
 
       const hh = s.h24 ? pad(h) : pad(h % 12 || 12);
-      if (hh !== this.last.hh) this.hour.textContent = this.hourHalf.textContent = this.last.hh = hh;
+      if (hh !== this.last.hh) this.hour.textContent = this.hourBig.textContent = this.hourHalf.textContent = this.last.hh = hh;
       const mm = pad(m);
       if (mm !== this.last.mm) this.minute.textContent = this.last.mm = mm;
       return { hh, mm, cw };
