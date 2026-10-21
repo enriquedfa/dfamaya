@@ -14,7 +14,9 @@
    - the sun or moon riding the dashed arc, the sun's colour and glow, the
      moon's phase, and the stars wheeling about the pole below the horizon
    - the weather glyph and temperature, the date, the middle bar, the bottom
-     complication, the clock, the border shadow and the always-on look
+     complication (or, as in the wff5 face for Wear OS 7, src/wff5/res/raw/
+     watchface.xml, the curved pair), the clock, the border shadow and the
+     always-on look
 
    Markup hooks:
      [data-ws-face]        a .dial to draw the face into. Optional
@@ -135,6 +137,19 @@
     750: "Last quarter", 875: "Waning crescent",
   };
   const BAR = { 0: "Seconds", 1: "Minutes", 2: "Battery", 3: "Off" };
+  const LAYOUT = { long: "Single line", curved: "Curved pair" };
+
+  // The curved pair (wff5 only): two slots on the sun arc's circle, mirrored
+  // about 6 o'clock. Their default providers: battery (a ranged value) on
+  // the right, steps (short text with an icon) on the left.
+  const ARC_R = 165;
+  const ARC_TEXT_R = ARC_R + 8; // the baseline, so the 22 px glyphs centre on the arc
+  const STEPS = "7,432";
+  // Material Symbols, as the providers send them
+  const ICONS = {
+    battery: "M9,2h6v2h2q0.42,0 0.71,0.29T18,5v16q0,0.42-0.29,0.71T17,22H7q-0.42,0-0.71-0.29T6,21V5q0-0.42 0.29-0.71T7,4h2V2Zm-1,4v14h8V6H8Zm1,5h6v8H9v-8Z",
+    steps: "M5.9,8a2.6,4.2 0 1,0 5.2,0a2.6,4.2 0 1,0 -5.2,0ZM6.3,15.6a2.2,1.9 0 1,0 4.4,0a2.2,1.9 0 1,0 -4.4,0ZM12.9,11a2.6,4.2 0 1,0 5.2,0a2.6,4.2 0 1,0 -5.2,0ZM13.3,18.6a2.2,1.9 0 1,0 4.4,0a2.2,1.9 0 1,0 -4.4,0Z",
+  };
 
   // Sample calendar for the bottom complication (the default provider is
   // NEXT_EVENT: the time as the title, the event as the text).
@@ -153,6 +168,16 @@
   const rad = (d) => (d * Math.PI) / 180;
   const deg = (r) => (r * 180) / Math.PI;
   const sinD = (d) => Math.sin(rad(d));
+
+  // A point on a circle about the canvas centre, the angle clockwise from 12
+  const at = (r, a) => [225 + r * Math.sin(rad(a)), 225 - r * Math.cos(rad(a))];
+  // An arc from a1 to a2: clockwise, or counter-clockwise when a2 < a1
+  function arcD(r, a1, a2) {
+    const [x1, y1] = at(r, a1);
+    const [x2, y2] = at(r, a2);
+    const f = (v) => v.toFixed(2);
+    return `M${f(x1)} ${f(y1)}A${r} ${r} 0 ${Math.abs(a2 - a1) > 180 ? 1 : 0} ${a2 > a1 ? 1 : 0} ${f(x2)} ${f(y2)}`;
+  }
 
   function el(name, attrs = {}, parent) {
     const n = document.createElementNS(SVG, name);
@@ -373,8 +398,36 @@
       this.bar = el("rect", { y: 270, width: 450, height: 2, fill: "#fff", "fill-opacity": 0.6, class: "ws-bar" }, svg);
 
       this.cx = el("g", { class: "ws-cx" }, svg);
-      this.cxTitle = el("text", { x: 225, class: "ws-text" }, this.cx);
-      this.cxText = el("text", { x: 225, class: "ws-text" }, this.cx);
+      this.cxLong = el("g", { class: "ws-cx-layout" }, this.cx);
+      this.cxTitle = el("text", { x: 225, class: "ws-text" }, this.cxLong);
+      this.cxText = el("text", { x: 225, class: "ws-text" }, this.cxLong);
+
+      // The curved pair. Bottom text runs counter-clockwise to stand upright.
+      this.cxCurved = el("g", { class: "ws-cx-layout" }, this.cx);
+      const arcText = (pid, a1, a2) => {
+        el("path", { id: pid, d: arcD(ARC_TEXT_R, a1, a2), fill: "none" }, defs);
+        const t = el("text", { class: "ws-text ws-arc-text" }, this.cxCurved);
+        const tp = el("textPath", { href: `#${pid}` }, t);
+        return { t, tp };
+      };
+      const stroke = (cls) => el("path", { class: `ws-arc ${cls}` }, this.cxCurved);
+      const icon = (name) => {
+        const g = el("g", {}, this.cxCurved);
+        el("path", { d: ICONS[name], fill: "#fff", transform: "translate(-13 -13) scale(1.0833)" }, g);
+        return g;
+      };
+      // Right: battery, a ranged value. Icon then text from 171°, the track
+      // from where the text ends up to 112°.
+      this.rTrack = stroke("ws-arc-track");
+      this.rFill = stroke("ws-arc-fill");
+      this.rText = arcText(`${id}cxr`, 171, 100);
+      this.rIcon = icon("battery");
+      // Left: steps, short text with an icon, centred between two bars
+      this.lBars = [stroke("ws-arc-bar"), stroke("ws-arc-bar")];
+      this.lText = arcText(`${id}cxl`, 260, 177);
+      this.lText.tp.setAttribute("startOffset", "50%");
+      this.lText.t.classList.add("ws-arc-mid");
+      this.lIcon = icon("steps");
 
       this.clock = el("text", { x: 225, y: 260, class: "ws-clock", filter: `url(#${id}shadow)` }, svg);
       this.clockAod = el("text", { x: 225, y: 260, class: "ws-clock ws-clock-aod" }, svg);
@@ -382,7 +435,7 @@
       this.edge = el("rect", { width: 450, height: 450, fill: `url(#${id}edge)`, class: "ws-edge" }, svg);
     }
 
-    // s: { date, lat, weather, moon, bar, showDate, aod, cxAod, shadow, ground, battery }
+    // s: { date, lat, weather, moon, bar, layout, showDate, aod, cxAod, shadow, ground, battery }
     render(s, ease = false) {
       const d = s.date;
       const h = d.getHours();
@@ -452,6 +505,10 @@
       this.cxText.setAttribute("y", 370);
       this.cxText.setAttribute("font-size", 26);
       this.cx.classList.toggle("is-hidden", s.aod && !s.cxAod);
+      const curved = s.layout === "curved";
+      this.cxLong.classList.toggle("is-hidden", curved);
+      this.cxCurved.classList.toggle("is-hidden", !curved);
+      if (curved) this.drawCurved(s.battery);
 
       // Clock
       this.clock.textContent = this.clockAod.textContent = timeText(h, m);
@@ -460,6 +517,40 @@
       this.edge.style.opacity = s.shadow ? 1 : 0;
 
       return { t, top: target[0], bottom: target[1], wx, phase: phaseName(sun) };
+    }
+
+    // The curved pair, as the wff5 XML lays it out. The XML estimates text
+    // widths from the character count; the angles below use the same rules.
+    drawCurved(battery) {
+      const pct = `${battery}%`;
+      const span = clamp(46 - pct.length * 4.5, 0, 46);
+      const from = 112 + span;
+      this.rTrack.setAttribute("d", arcD(ARC_R, from, 112));
+      const f = battery / 100;
+      this.rFill.setAttribute("d", arcD(ARC_R, from, from - f * span + (f ? 0 : 0.01)));
+      // Icon (26 px) first, then a space and the value
+      const iconDeg = deg(26 / ARC_R);
+      this.rText.tp.setAttribute("startOffset", (rad(iconDeg) * ARC_TEXT_R).toFixed(1));
+      this.rText.tp.textContent = `\u00a0${pct}`;
+      this.placeIcon(this.rIcon, 171 - iconDeg / 2);
+
+      // Steps: the bars stop short of the text by its estimated width (icon
+      // and space count as 2.5 characters)
+      const gap = clamp(21.5 - (STEPS.length + 2.5) * 2.25, 0, 21.5);
+      this.lBars[0].setAttribute("d", arcD(ARC_R, 189, 189 + gap));
+      this.lBars[1].setAttribute("d", arcD(ARC_R, 248 - gap, 248));
+      // Text, a space, then the icon nearest 6 o'clock, centred on 218.5°
+      this.lText.tp.textContent = `${STEPS}\u00a0`;
+      const tw = this.lText.t.getComputedTextLength?.() || STEPS.length * 12 + 6;
+      const half = deg((tw + 26) / 2 / ARC_TEXT_R);
+      this.lText.t.setAttribute("dx", "-13");
+      this.placeIcon(this.lIcon, 218.5 - half + deg(13 / ARC_TEXT_R));
+    }
+
+    // An icon on the arc, its top towards the centre (upright at 6 o'clock)
+    placeIcon(g, a) {
+      const [x, y] = at(ARC_R, a);
+      g.setAttribute("transform", `translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${(a - 180).toFixed(2)})`);
     }
 
     drawMoon(p, isNew) {
@@ -518,6 +609,7 @@
     weather: faces[0].face.host.dataset.wsWeather || "partly",
     moon: "live",
     bar: "0",
+    layout: "long",
     showDate: true,
     aod: false,
     cxAod: true,
@@ -645,6 +737,7 @@
     setValue("weather", (WEATHER[state.weather] || WEATHER.off).name);
     setValue("moon", MOON[state.moon]);
     setValue("bar", BAR[state.bar]);
+    setValue("layout", LAYOUT[state.layout]);
     setValue("lat", latName(state.lat));
     setValue("cities", CITIES[state.lat]);
     const day = sunDay(displayDate(), state.lat);

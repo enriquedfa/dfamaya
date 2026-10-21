@@ -81,7 +81,7 @@
               <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
             </a>
           </div>
-          <p class="fine rise" style="--d:4">Free. For Wear OS 5.1 and newer. No ads, no accounts, no tracking.</p>
+          <p class="fine rise" style="--d:4">Free. For Wear OS 5.1 and newer (curved complications on Wear OS 7). No ads, no accounts, no tracking.</p>
         </div>
 
         <div class="pg-visual" data-tilt>
@@ -214,12 +214,28 @@
               </div>
             </div>
 
+            <div class="pg-group reveal" role="radiogroup" aria-labelledby="g-layout">
+              <div class="pg-group-head"><h3 id="g-layout">Bottom complication</h3><span class="pg-val" data-ws-value="layout" aria-hidden="true">Single line</span></div>
+              <p>
+                <strong>Single line</strong> puts one long complication under
+                the date, your next event by default, and you can swap in any
+                long-text one. <strong>Curved pair</strong> swaps it for two
+                mirrored complications that follow the sun's arc up either
+                side, battery and steps to start, each able to show a
+                progress bar, short text or an icon. The curved pair needs
+                Wear&nbsp;OS&nbsp;7.
+              </p>
+              <div class="pg-chips">
+                <label class="pg-chip" title="Single line"><input type="radio" name="ws-layout" value="long" aria-label="Single line. One long complication under the date." checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/layout_long.webp)"></span></span></label>
+                <label class="pg-chip" title="Curved pair"><input type="radio" name="ws-layout" value="curved" aria-label="Curved pair. Two curved complications, Wear OS 7 only." /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/layout_curved.webp)"></span></span></label>
+              </div>
+            </div>
+
             <div class="pg-group reveal">
               <div class="pg-group-head"><h3>And the rest</h3></div>
               <p>
-                The slot under the date shows your next event by default. You
-                can swap in any long-text complication. Tap the date to open
-                your calendar, or the time to open your alarms.
+                Tap the date to open your calendar, or the time to open your
+                alarms.
                 <strong>Dark ground</strong> ends the sky at the horizon and
                 lets its glow fade into black below.
               </p>
@@ -228,7 +244,7 @@
                 <label class="pg-switch"><input type="checkbox" name="ws-shadow" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/border_shadow_setting.webp)"></span><span class="label">Border shadow</span><span class="track"></span></span></label>
                 <label class="pg-switch"><input type="checkbox" name="ws-ground" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/dark_ground_setting.webp)"></span><span class="label">Dark ground</span><span class="track"></span></span></label>
                 <label class="pg-switch"><input type="checkbox" name="ws-aod" /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Preview always‑on</span><span class="track"></span></span></label>
-                <label class="pg-switch"><input type="checkbox" name="ws-cxAod" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Complication in always‑on</span><span class="track"></span></span></label>
+                <label class="pg-switch"><input type="checkbox" name="ws-cxAod" checked /><span class="pg-switch-face"><span class="pg-ico" style="--i:url(img/aod_setting.webp)"></span><span class="label">Complications in always‑on</span><span class="track"></span></span></label>
               </div>
             </div>
           </div>

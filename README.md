@@ -403,13 +403,18 @@ the two read side by side:
   Live moon phase is worked out from the date.
 - **The stars** are the XML's 132-star field, clipped above the horizon and
   turning 15° an hour about the pole |latitude| below it.
-- **The settings** (weather, moon phase, middle bar, latitude, date, border
-  shadow, dark ground, always-on) are real radios, checkboxes and a range,
+- **The settings** (weather, moon phase, middle bar, bottom complication,
+  latitude, date, border shadow, dark ground, always-on) are real radios, checkboxes and a range,
   drawn with the watch editor's own icons. The latitude slider's track is
   today's length of day at each band; the moment buttons jump to when the
   sun crosses an altitude today, and turn off when it doesn't (no sunrise in
   the polar night).
 - The bottom complication shows a made-up calendar (`EVENTS` in the script).
+  **Bottom complication: Curved pair** draws the wff5 face's layout (Wear OS
+  7 only, from `src/wff5/res/raw/watchface.xml`): two slots on the sun
+  arc's circle, mirrored about 6 o'clock, with their default providers,
+  battery as a ranged value on the right and steps as short text with an
+  icon on the left, laid out with the XML's per-character width estimates.
 
 If the face changes in the WatchSky repo (a new palette, a new setting), make
 the same change here: the constants at the top of `watchsky.js` mirror the

@@ -49,6 +49,7 @@
 .ws-day,
 .ws-clock,
 .ws-cx,
+.ws-cx-layout,
 .ws-bar,
 .ws-ground,
 .ws-edge { transition: opacity 0.5s var(--ease); }
@@ -56,9 +57,17 @@
 .is-aod .ws-day,
 .is-aod .ws-clock,
 .ws-cx.is-hidden,
+.ws-cx-layout.is-hidden,
 .ws-bar.is-hidden,
 .ws-ground.is-hidden { opacity: 0; }
 .is-aod .ws-clock-aod { opacity: 1; }
+
+/* The curved pair (wff5): 22 px text on the sun arc's circle, a 4 px track
+   at 20 % with a 5 px fill, and 5 px bars beside short text */
+.ws-arc-text { font-size: 22px; fill-opacity: 1; text-anchor: start; }
+.ws-arc-text.ws-arc-mid { text-anchor: middle; }
+.ws-arc { fill: none; stroke: #fff; stroke-width: 5px; stroke-linecap: round; }
+.ws-arc-track { stroke-opacity: 0.2; stroke-width: 4px; }
 
 /* Dark ground: the sky wrapper's scaleY 0.7 about the top edge, so the sky
    ends at the horizon and only its last 45 px spill below the line */
