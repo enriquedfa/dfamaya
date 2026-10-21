@@ -93,7 +93,8 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
 
 - `concentric/index.html` — Concentric+ landing page with a live copy of the
   face and its settings, what makes it the closest replica of the Pixel
-  Watch's Concentric, and why Watch Face Format matters. Privacy and support
+  Watch's Concentric, and why Watch Face Format matters. A short FAQ (the
+  shared `.faq`) covers Half Dial and the Wear OS versions. Privacy and support
   are the shared watch-face pages in `watchfaces/`.
 - `concentric/concentric.js` — draws the face (also on the home page and the
   watch faces page) and wires up the page's controls
