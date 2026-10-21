@@ -62,8 +62,9 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
 ### WatchSky
 
 - `watchsky/index.html` — WatchSky landing page with a live copy of the face
-  and its settings. Privacy and support are the shared watch-face pages in
-  `watchfaces/`. (It lived at `watchfaces/` until that became the page for
+  and its settings, and a short FAQ (the same `.faq` as Brief's, in
+  `style.css`; the full list is the shared support page). Privacy and
+  support are the shared watch-face pages in `watchfaces/`. (It lived at `watchfaces/` until that became the page for
   all the faces.)
 - `watchsky/watchsky.js` — draws the face (also on the home page and the
   watch faces page) and wires up the page's controls

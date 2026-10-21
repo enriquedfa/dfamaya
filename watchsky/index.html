@@ -223,7 +223,7 @@
                 mirrored complications that follow the sun's arc up either
                 side, battery and steps to start, each able to show a
                 progress bar, short text or an icon. The curved pair needs
-                Wear&nbsp;OS&nbsp;7.
+                Wear&nbsp;OS&nbsp;7, where it's the default.
               </p>
               <div class="pg-chips">
                 <label class="pg-chip" title="Single line"><input type="radio" name="ws-layout" value="long" aria-label="Single line. One long complication under the date." checked /><span class="pg-chip-face"><span class="pg-ico" style="--i:url(img/layout_long.webp)"></span></span></label>
@@ -291,6 +291,38 @@
               <li>Pick <strong>WatchSky</strong> from the list.</li>
             </ol>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="wrap faq-wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Questions</p>
+          <h2>Good to know</h2>
+          <p class="lede">More on the <a href="../watchfaces/support.html">support page</a>, or email me at <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>.</p>
+        </div>
+        <div class="faq reveal">
+          <details name="faq">
+            <summary>What do I need?</summary>
+            <p>A watch with Wear OS 5.1 or newer. The curved pair of complications needs Wear OS 7; on Wear OS 5.1 and 6 you get the single long complication under the date. Google Play installs the right version for your watch automatically.</p>
+          </details>
+          <details name="faq">
+            <summary>Does it use my location?</summary>
+            <p>No. You pick a latitude band in Customize, and the face works out the sun from that and the date. Nothing leaves the watch.</p>
+          </details>
+          <details name="faq">
+            <summary>The sky gets dark too early or too late</summary>
+            <p>Check that <strong>Latitude</strong> is the band nearest where you live. WatchSky doesn't know your longitude, so it takes solar noon as 12:00: sunrise and sunset can be up to half an hour off, or about an hour at the edge of a time zone.</p>
+          </details>
+          <details name="faq">
+            <summary>The weather doesn't show</summary>
+            <p>Check that <strong>Show weather</strong> is on in Customize. WatchSky uses the weather your watch gives watch faces, so the icon stays hidden until the watch has a forecast.</p>
+          </details>
+          <details name="faq">
+            <summary>How do I get the curved complications?</summary>
+            <p>On a Wear OS 7 watch they're what you start with. To switch between them and the single line, long-press the face, tap <strong>Customize</strong> and change <strong>Bottom layout</strong>. Each side of the pair takes its own complication: a progress bar, short text or an icon.</p>
+          </details>
         </div>
       </div>
     </section>
