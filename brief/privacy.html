@@ -45,7 +45,7 @@
       <header class="page-head">
         <p class="eyebrow">Brief</p>
         <h1>Privacy policy</h1>
-        <p class="updated">Last updated: 29 July 2026</p>
+        <p class="updated">Last updated: 28 October 2026</p>
       </header>
 
       <article class="prose">
@@ -65,11 +65,29 @@
         This policy explains exactly what Brief accesses, why, and where it goes.
         The short version: <strong>Brief has no servers, no account, no
         analytics, and no ads. Almost everything stays on your own
-        devices.</strong> The only thing that ever leaves your devices for a
-        third party is an approximate location &mdash; rounded to about a
-        kilometre &mdash; sent to a weather provider so it can return your local
-        forecast. Everything else &mdash; including whatever is shown as a glance
-        &mdash; only ever travels between your own phone and your paired watch.
+        devices.</strong> The only piece of <em>your</em> information Brief itself
+        sends to a third party is an approximate location &mdash; rounded to
+        about a kilometre &mdash; to a weather provider so it can return your
+        local forecast. Everything else &mdash; including whatever is shown as a
+        glance &mdash; only ever travels between your own phone and your paired
+        watch.
+      </p>
+      <p>
+        Google Play handles three things on the app&rsquo;s behalf &mdash; a
+        voluntary tip, its own rating card, and app updates &mdash; but none of
+        those carries anything Brief has gathered about you, and Brief never
+        sees your payment details. See
+        <a href="#google-play-services">Google Play services</a> below.
+      </p>
+      <p>
+        There is one thing <strong>you</strong> can choose to send: if you use
+        &ldquo;Send feedback&rdquo; and tick <strong>Attach diagnostics</strong>,
+        Brief prepares a file describing what it was doing and attaches it to an
+        email you write and send yourself. Nothing is transmitted unless you tick
+        that box and send that email &mdash; and the detailed logging that file
+        can carry is itself a setting that is <strong>off by default</strong>. See
+        <a href="#send-feedback-and-diagnostics">&ldquo;Send feedback&rdquo; and
+        diagnostics</a> below.
       </p>
       </div>
 
@@ -111,15 +129,15 @@
               <td data-label="Permission">Notification access (<code>BIND_NOTIFICATION_LISTENER_SERVICE</code>)</td>
             </tr>
             <tr>
-              <td data-label="Data"><strong>Notifications from apps you pick</strong> (app name, title, text)</td>
+              <td data-label="Data"><strong>Notifications from apps you pick</strong> (app name, title, text, and the app&rsquo;s status bar icon)</td>
               <td data-label="Where it&rsquo;s read">Your phone, read-only</td>
               <td data-label="Why">To mirror a chosen app&rsquo;s alert as a glance on your watch</td>
               <td data-label="Permission">Notification access (<code>BIND_NOTIFICATION_LISTENER_SERVICE</code>)</td>
             </tr>
             <tr>
-              <td data-label="Data"><strong>Phone battery level</strong></td>
+              <td data-label="Data"><strong>Phone battery level</strong>, and while charging Android&rsquo;s own estimate of when it will be full</td>
               <td data-label="Where it&rsquo;s read">Your phone</td>
-              <td data-label="Why">To warn you when your phone&rsquo;s battery is running low</td>
+              <td data-label="Why">To warn you when your phone&rsquo;s battery is running low, and to show the level and the charge countdown when you pick the phone-battery glance floor</td>
               <td data-label="Permission">&mdash; (local read, no permission)</td>
             </tr>
             <tr>
@@ -129,16 +147,28 @@
               <td data-label="Permission">&mdash; (local read, no permission)</td>
             </tr>
             <tr>
-              <td data-label="Data"><strong>Reminders you create</strong> (text, time, icon)</td>
+              <td data-label="Data"><strong>Reminders you create</strong> (text, time, repeat days or a single date, icon)</td>
               <td data-label="Where it&rsquo;s read">Authored by you in the app</td>
               <td data-label="Why">To show your own scheduled nudges</td>
               <td data-label="Permission">&mdash;</td>
+            </tr>
+            <tr>
+              <td data-label="Data"><strong>A glance another app on your phone sends Brief</strong> (a title, a line of text, an icon name, a duration, optionally the name of a task) &mdash; <strong>only if you turn on the Automation source</strong> and give that app your access key</td>
+              <td data-label="Where it&rsquo;s read">Your phone, from apps you set up (Tasker and similar)</td>
+              <td data-label="Why">To show what your own automations tell Brief to show</td>
+              <td data-label="Permission">&mdash; (the sending app needs your access key; Brief needs no permission)</td>
             </tr>
             <tr>
               <td data-label="Data"><strong>Your settings</strong> (priority order, units, masking, etc.)</td>
               <td data-label="Where it&rsquo;s read">Authored by you in the app</td>
               <td data-label="Why">To configure what shows and how</td>
               <td data-label="Permission">&mdash;</td>
+            </tr>
+            <tr>
+              <td data-label="Data"><strong>A diagnostics log</strong> (what Brief decided to show, and when) &mdash; <strong>only if you turn it on</strong></td>
+              <td data-label="Where it&rsquo;s read">Your phone and your watch</td>
+              <td data-label="Why">So a bug report you choose to send can explain what happened</td>
+              <td data-label="Permission">&mdash; (local file, no permission)</td>
             </tr>
           </tbody>
         </table>
@@ -168,7 +198,10 @@
           <a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener">https://open-meteo.com/en/terms</a>.
           If you set a manual location instead of using your phone&rsquo;s
           location, only that manual location is sent. You can disable weather
-          entirely.
+          entirely. While the <em>Air quality</em> alert is on, the same rounded
+          coordinates also go to Open-Meteo&rsquo;s air-quality service
+          (<code>air-quality-api.open-meteo.com</code>), under the same terms,
+          for the air-quality forecast.
         </li>
         <li>
           <strong>A location search you type</strong> (when choosing a manual
@@ -177,16 +210,174 @@
         </li>
       </ul>
       <p>
-        Nothing else is sent off your devices to a third party. There is
-        <strong>no Brief server</strong> &mdash; calendar titles, media details,
-        the alerts you choose to mirror, reminders, and settings are never
-        uploaded to the developer or any third party. (Your settings file can be
+        Apart from that, Brief sends <strong>none of the information it
+        gathers</strong> off your devices on its own. There is <strong>no Brief
+        server</strong> &mdash; calendar titles, media details, the alerts you
+        choose to mirror, reminders, and settings are never uploaded to the
+        developer or any third party by the app. (Your settings file can be
         included in your own device&rsquo;s Android Backup &mdash; a system
         feature under your Google account that the developer has no access to;
         see &ldquo;Where data is stored&rdquo; below.)
       </p>
+      <p>Two other things do cross the app&rsquo;s boundary, and neither carries what Brief has gathered about you:</p>
+      <ul>
+        <li>
+          A <strong>feedback email you write and send yourself</strong> &mdash;
+          entirely under your control and never automatic. Described next.
+        </li>
+        <li>
+          Google Play&rsquo;s own <strong>purchase, rating and update</strong>
+          flows, which are about the app rather than about you. See
+          <a href="#google-play-services">Google Play services</a>.
+        </li>
+      </ul>
 
-      <h2>Between your phone and your watch</h2>
+      <h2 id="send-feedback-and-diagnostics">&ldquo;Send feedback&rdquo; and diagnostics</h2>
+      <p>
+        Settings &rarr; <strong>Send feedback</strong> opens your email app so you
+        can write to the developer. Before it does, it asks whether to attach a
+        <strong>diagnostics file</strong>. Both parts of that choice are yours:
+      </p>
+      <ul>
+        <li>
+          <strong>Leave &ldquo;Attach diagnostics&rdquo; unticked</strong> and the
+          email carries only what it always has: your app version, Android
+          version, and device model, plus whatever you type.
+        </li>
+        <li>
+          <strong>Tick it</strong> and Brief builds a <code>.zip</code> on your
+          phone and attaches it to that email.
+        </li>
+      </ul>
+      <p>
+        <strong>What the attachment contains.</strong> App and watch versions,
+        device models, OS versions, locale and time zone; which permissions are
+        granted; whether your watch is connected and running the watch app; your
+        settings; what Brief and your watch are showing right now and why; and
+        &mdash; <strong>only if you have switched on the logging setting described
+        below</strong> &mdash; a recent timeline of what Brief resolved, sent to
+        your watch, and displayed, including, when the box below is ticked, the
+        calendar titles, track names, and reminder and notification text that
+        appeared in those glances.
+      </p>
+      <p>
+        <strong>&ldquo;Include titles and text&rdquo;</strong> is a second,
+        nested tick box. Untick it and every piece of that content is replaced by
+        its length (<code>[redacted:7 chars]</code>) before the file is written,
+        and the free text in your settings &mdash; reminder text, the keywords you
+        hide, your custom fallback message, and any custom weather coordinates
+        &mdash; is replaced the same way. The timeline itself is kept, which is
+        usually enough to diagnose a problem without it.
+      </p>
+      <p>
+        <strong>How it is sent.</strong> Brief writes the file to its own
+        temporary storage and hands it to whichever email app you pick, which is
+        granted permission to read that one file. <strong>Brief does not upload
+        it, and does not send the email.</strong> Nothing leaves your phone unless
+        you press send in your email app, and you can open the zip and read it
+        first &mdash; it is plain text. Once sent, the email is in your outbox and
+        the developer&rsquo;s inbox like any other email you write; it is used
+        only to investigate what you reported, and is not shared, published, or
+        used for anything else. Files Brief prepared are deleted from its
+        temporary storage within a day, and are never backed up.
+      </p>
+      <p>
+        <strong>Asking your watch.</strong> When you tick the box, your phone asks
+        your paired watch for its side of the picture &mdash; what it currently
+        has cached and why it is showing what it is showing. That request travels
+        only between your own paired devices, exactly like every other glance, and
+        happens <strong>only</strong> at that moment. If your watch is off or out
+        of range, the file is built without it.
+      </p>
+      <p>
+        <strong>The log itself &mdash; off unless you turn it on.</strong> So that
+        an attachment can describe a problem that has <em>already</em> happened,
+        Brief can keep a small local log of its own decisions: what the calendar
+        query found, what was sent to the watch, what the watch displayed or hid,
+        what a music button asked your music app to do (the app&rsquo;s package
+        name and the command, never the track), and why. This is a setting
+        &mdash; <strong>Settings &rarr; Log diagnostics data</strong> &mdash; and
+        it is <strong>off by default</strong>. Nothing is recorded until you
+        switch it on.
+      </p>
+      <p>
+        While it is on, the log lives in each app&rsquo;s private storage on your
+        phone and your watch, is capped at roughly 190 KB per device (the oldest
+        entries are discarded as new ones arrive), is excluded from every backup
+        and device transfer, and is deleted when you uninstall Brief. It is never
+        transmitted anywhere on its own &mdash; it exists solely so that, if you
+        choose to send a report, there is something to attach.
+      </p>
+      <p>
+        <strong>Turning it off deletes it.</strong> Switching the setting off
+        erases what has been recorded &mdash; on your phone immediately, and on
+        your watch as soon as the change reaches it. If you never turn it on, an
+        attachment still works; it just describes what Brief is doing at that
+        moment rather than what led up to it.
+      </p>
+
+      <h2 id="google-play-services">Google Play services</h2>
+      <p>
+        Brief is distributed through Google Play and uses three of Play&rsquo;s own
+        flows. All three are run by the Play Store on your device &mdash; Brief
+        hands off to it and gets back only the result described below.
+        <strong>None of them sends Google, or the developer, anything Brief has
+        gathered about you:</strong> no calendar events, no notification content,
+        no now-playing details, no location, no settings.
+      </p>
+      <ul>
+        <li>
+          <strong>The tip jar (Google Play Billing).</strong> Settings &rarr;
+          <em>Support development</em> offers a voluntary one-time tip. The payment
+          happens <strong>entirely inside Google Play&rsquo;s own purchase
+          sheet</strong>: Brief never sees, asks for, or stores your payment
+          method, card number, billing address, or Google account. What Brief gets
+          back from Play is the tier names and prices to display (localized by
+          Play) and, after a tip, a purchase token it immediately hands back to
+          Play to finalize the purchase. <strong>Brief keeps no record of the
+          tip</strong> &mdash; there is no &ldquo;has tipped&rdquo; flag anywhere
+          in the app, because a tip deliberately <strong>unlocks nothing</strong>:
+          every feature is identical before and after, and there is nothing in the
+          app to buy. The only lasting record is the one Google Play keeps in your
+          own purchase history. Brief also contacts the on-device Play Billing
+          service once per app launch to finalize any tip that completed while the
+          app was closed (Play automatically refunds a purchase the app never
+          finalizes); if you have never tipped, that check finds nothing and there
+          is no purchase data to see.
+        </li>
+        <li>
+          <strong>The rating card (Play In-App Review).</strong> Now and then Brief
+          asks Play to show its own in-app rating card. Anything you type or rate
+          there goes to Google Play, not to Brief: the API returns no result, so
+          Brief cannot tell whether you rated, what you said, or even whether the
+          card was shown &mdash; only whether the request itself failed. To avoid
+          nagging, Brief keeps three numbers <strong>on your phone only</strong>
+          &mdash; how many times you have opened the app, when you first opened it,
+          and when it last asked &mdash; and asks only after onboarding is done, at
+          least 5 opens spread over at least 7 days, and at most once every 90
+          days. Settings &rarr; <em>Rate Brief</em> is the deterministic
+          alternative: it just opens Brief&rsquo;s Play Store listing.
+        </li>
+        <li>
+          <strong>Update prompts (Play In-App Update).</strong> While the app is
+          open, Brief asks Play whether a newer version of Brief exists and, if one
+          does, lets Play offer its &ldquo;flexible&rdquo; update &mdash; the
+          download runs in the background while the app stays usable, and Brief
+          offers a restart once it is ready. That is a question about the
+          app&rsquo;s version number; it carries nothing about you.
+        </li>
+      </ul>
+      <p>
+        None of these is required to use Brief, and on a device without Google
+        Play (or a build installed from outside it) all three simply do nothing.
+      </p>
+      <p>
+        The phone&harr;watch link described next also runs on Google Play
+        services, but it is a separate, device-to-device channel &mdash; see
+        <a href="#between-your-phone-and-your-watch">Between your phone and your watch</a>.
+      </p>
+
+      <h2 id="between-your-phone-and-your-watch">Between your phone and your watch</h2>
       <p>
         Brief&rsquo;s phone companion sends the resolved glance, your settings,
         and media play/pause commands to your paired watch over the
@@ -197,20 +388,39 @@
       </p>
       <p>
         When the Notifications source is on, the resolved glance can include a
-        selected app&rsquo;s name and the notification&rsquo;s title and text.
-        Like every other glance, this goes <strong>only to your paired
+        selected app&rsquo;s name, the notification&rsquo;s title and text, and
+        &mdash; while &ldquo;Show app icon&rdquo; is on &mdash; the app&rsquo;s own
+        status bar icon, so the watch can show the mark you already recognise
+        instead of a generic bell. That icon is artwork supplied by the app
+        itself; it carries none of your content, and turning the setting off stops
+        Brief from reading it at all. Like every other glance, this goes <strong>only to your paired
         watch</strong> and never to a server. On the phone, the winning glance
         &mdash; including any mirrored notification content &mdash; is kept in
         Brief&rsquo;s private app storage so the home-screen widget can render
         it; it is <strong>excluded from every backup</strong>, replaced as soon
         as a different glance wins (for example, when you dismiss the alert or
-        its show window ends), and deleted when you uninstall Brief.
+        its show window ends), and deleted when you uninstall Brief. On Samsung
+        phones you can also place Brief on the lock screen and Always On Display,
+        which anyone holding the phone can read: by default that widget shows only
+        the notifying app&rsquo;s name and &ldquo;Busy&rdquo; for an event, and the
+        <em>Hide details on the lock screen</em> switch in <em>Widget
+        appearance</em> is what lets it show the text itself.
       </p>
       <p>
         If you turn on <strong>&ldquo;mask titles,&rdquo;</strong> event titles
         and locations are replaced with a generic placeholder
         <strong>before</strong> they ever leave the phone, so the real text is
         never sent to the watch.
+      </p>
+      <p>
+        When the <strong>Automation source</strong> is on, the resolved glance can
+        include the title, text and task name an automation app on your phone sent
+        Brief; it goes only to your paired watch, like every other glance. The
+        <strong>access key</strong> that lets an app send a glance is generated on
+        your phone and stays there: it is never synced to the watch, never included
+        in a settings backup or export, and never part of a diagnostics bundle.
+        Regenerating it in Brief&rsquo;s settings revokes every app using the old
+        one.
       </p>
 
       <h2>Where data is stored, and for how long</h2>
@@ -238,19 +448,58 @@
         </li>
         <li>
           <strong>Your settings take part in Android Backup</strong>, so a new or
-          reset phone comes back set up the way you left it. Only the settings
-          file (priority order, source toggles, units, the reminders you created,
-          and the keywords you choose to hide) is backed up. Cloud copies are
+          reset phone comes back set up the way you left it. <strong>One file is
+          backed up: Brief&rsquo;s settings file</strong> &mdash; the same settings
+          document the export below writes, so it carries the same things
+          (including a manual weather location, if you set one), plus a few local
+          app-state values: whether onboarding is finished, whether you dismissed a
+          one-time hint, the counters that decide when Play&rsquo;s rating card may
+          appear, and two housekeeping entries &mdash; when Brief last synced to
+          your watch, and which source won that glance. Nothing else goes into the
+          backup &mdash; no glance content, not the weather cache or its
+          coordinates, not the diagnostics log. Cloud copies are
           made <strong>only on devices that can end-to-end encrypt them with your
           screen lock</strong>, are stored under your own Google account, and are
           never visible to the developer. Backup is controlled by Android&rsquo;s
           system Backup setting, which you can turn off at any time.
         </li>
         <li>
+          <strong>You can also export your settings to a file you choose</strong>
+          (Settings &rarr; Backup and restore). The file is a plain JSON copy of
+          Brief&rsquo;s settings document, written to the location you pick and
+          read back when you restore &mdash; so it contains exactly what that
+          document holds, and nothing else: priority order, source toggles, units,
+          the reminders you created (their text included), the calendars and apps
+          you selected, the keywords you hide, your custom fallback text, and
+          &mdash; <strong>if you chose a manual weather location instead of using
+          your phone&rsquo;s location</strong> &mdash; that place&rsquo;s name and
+          its coordinates, saved exactly as you picked them rather than rounded,
+          because there they are a setting rather than a reading. What the file
+          cannot contain is anything that never enters that settings document: no
+          event content, no now-playing details, no mirrored notification content,
+          no location fix from your phone&rsquo;s location services, and no weather
+          cache. Brief has no access to the file beyond the moment you pick it, and
+          where it ends up is entirely your choice &mdash; if you save it to a
+          cloud folder or send it to another device, a manual weather location
+          travels with it, and that provider&rsquo;s terms apply to it.
+        </li>
+        <li>
+          <strong>The diagnostics log</strong> (see
+          <a href="#send-feedback-and-diagnostics">&ldquo;Send feedback&rdquo; and
+          diagnostics</a>) exists only while you have <strong>Settings &rarr; Log
+          diagnostics data</strong> switched on &mdash; it is off by default. While
+          on, it lives in each app&rsquo;s private storage on the phone and on the
+          watch, is capped at roughly 190 KB per device with the oldest entries
+          discarded as new ones arrive, is erased when you switch the setting off,
+          and is deleted when you uninstall Brief. Any diagnostics file you asked
+          Brief to prepare is written to temporary storage and removed within a
+          day. Neither is backed up or transferred to a new device.
+        </li>
+        <li>
           <strong>Everything else stays out of the backup.</strong> The cached
           weather forecast and its location coordinates, the last resolved
-          glance, any mirrored notification content, and the watch&rsquo;s caches
-          are excluded from Android cloud backup and device-to-device transfer.
+          glance, any mirrored notification content, the diagnostics log, and the
+          watch&rsquo;s caches are excluded from Android cloud backup and device-to-device transfer.
         </li>
         <li>Uninstalling Brief removes all of this on-device data.</li>
       </ul>
@@ -261,9 +510,22 @@
         or use it for any purpose other than showing your glance &mdash; and that
         includes the alerts mirrored by the Notifications source, which only ever
         reach your own watch. There are no third-party analytics, advertising, or
-        tracking SDKs in the app. The only third party that receives anything is
-        the weather provider (Open-Meteo), and only the approximate location
-        needed to return a forecast.
+        tracking SDKs in the app, and <strong>no automatic crash, usage, or
+        diagnostic reporting of any kind</strong>. The only third party that
+        receives any of <strong>your data</strong> from the app is the weather
+        provider (Open-Meteo), and only the approximate location needed to return
+        a forecast. Google Play mediates three things &mdash; a voluntary tip, its
+        own rating card, and app updates &mdash; but what passes there is about the
+        app and your own Play purchase, never anything Brief has gathered about
+        you; see <a href="#google-play-services">Google Play services</a>.
+      </p>
+      <p>
+        If you choose to email a diagnostics file to the developer, its contents
+        are used solely to investigate the problem you reported and are not shared
+        with anyone else &mdash; see
+        <a href="#send-feedback-and-diagnostics">&ldquo;Send feedback&rdquo; and
+        diagnostics</a>. You can ask for it to be deleted at any time at the
+        contact address below.
       </p>
 
       <h2>Permissions, in plain terms</h2>
@@ -302,7 +564,8 @@
       </ul>
       <p>
         The low-battery source reads your phone&rsquo;s own battery level locally
-        and needs no permission.
+        and needs no permission, as does the charge-time estimate the phone-battery
+        glance floor shows while you are plugged in.
       </p>
       <p>
         You can revoke any of these in Android Settings at any time; Brief
