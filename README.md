@@ -51,6 +51,17 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
   bar above them (the live clock, the camera, wifi, signal and battery), on
   each screenshot's own background colour
 
+### Capsule
+
+No landing page yet: only the privacy policy, at the URL the Play listing
+uses. The header logo points at the policy itself until `capsule/index.html`
+exists.
+
+- `capsule/privacy.html` — privacy policy (text mirrors
+  `docs/website/privacy-policy.md` in the app repo, `enriquedfa/Spec-Browser`;
+  only the layout lives here)
+- `capsule/icon.svg` — Capsule's launcher icon
+
 ### Wear OS Watch Faces
 
 - `watchfaces/index.html` — the watch faces page: every face as a card with
@@ -567,6 +578,10 @@ one shared policy, so these URLs never change)
 - Privacy policy URL: `https://enriquedfa.github.io/dfamaya/brief/privacy.html`
 - Website URL: `https://enriquedfa.github.io/dfamaya/brief/`
 
+**Capsule**
+
+- Privacy policy URL: `https://enriquedfa.github.io/dfamaya/capsule/privacy.html`
+
 **Contact email:** `developerdfa@gmail.com`
 
 ## Google Play links
@@ -580,6 +595,8 @@ one shared policy, so these URLs never change)
   hero and the install section (and the home and watch faces cards), and add
   the link here.
 - Seaglass: <https://play.google.com/store/apps/details?id=com.dfamaya.seaglass>
+- Capsule: not on Google Play yet (`com.dfamaya.capsule`). Once it's out, add
+  a store button to the policy's header and the link here.
 
 ## Adding another app
 
