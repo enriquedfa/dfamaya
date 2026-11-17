@@ -579,10 +579,7 @@ one shared policy, so these URLs never change)
   says "coming soon"; once it's out, add a store button to the header, the
   hero and the install section (and the home and watch faces cards), and add
   the link here.
-- Seaglass: not on Google Play yet (`dev.dfamaya.seaglass`). Its closed test
-  takes testers from <https://groups.google.com/g/seaglass-testers>, which the
-  hero's fine print and the closing call to action link to. Once it's out, swap both
-  for store buttons, and add the link here.
+- Seaglass: <https://play.google.com/store/apps/details?id=com.dfamaya.seaglass>
 
 ## Adding another app
 
