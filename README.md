@@ -590,10 +590,7 @@ one shared policy, so these URLs never change)
 - Brief: <https://play.google.com/store/apps/details?id=com.dfamaya.briefcomplication>
 - Wear OS Watch Faces: <https://play.google.com/store/apps/details?id=com.dfamaya.watchsky>
 - Spiralis: <https://play.google.com/store/apps/details?id=com.dfamaya.spiralis>
-- Concentric+: not on Google Play yet (`com.dfamaya.concentric`). Its page
-  says "coming soon"; once it's out, add a store button to the header, the
-  hero and the install section (and the home and watch faces cards), and add
-  the link here.
+- Concentric+: <https://play.google.com/store/apps/details?id=com.dfamaya.concentric>
 - Seaglass: <https://play.google.com/store/apps/details?id=com.dfamaya.seaglass>
 - Capsule: not on Google Play yet (`com.dfamaya.capsule`). Once it's out, add
   a store button to the policy's header and the link here.
