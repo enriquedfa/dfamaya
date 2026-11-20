@@ -1,7 +1,7 @@
 # dfamaya.github.io
 
 Static site for dfamaya's Android and Wear OS apps: a home page, landing
-pages for Seaglass, Brief and the WatchSky, Spiralis and Concentric+ watch
+pages for Seaglass, Capsule, Brief and the WatchSky, Spiralis and Concentric+ watch
 faces, a watch faces page, and per-app privacy policies and support. Plain
 HTML, CSS and a little vanilla JS. No build step.
 
@@ -53,14 +53,33 @@ Published at: <https://enriquedfa.github.io/dfamaya/>
 
 ### Capsule
 
-No landing page yet: only the privacy policy, at the URL the Play listing
-uses. The header logo points at the policy itself until `capsule/index.html`
-exists.
-
+- `capsule/index.html` — landing page: blocking (before and after), Hide
+  things, Summarise and Ask, Reader, three clips (tabs, site search, open in
+  the app), a gallery, privacy, a FAQ. The call to action is the alpha's
+  testers group (<https://groups.google.com/g/capsule-browser>) until Capsule
+  is public on Play
+- `capsule/capsule.css` — the page's look: Capsule's indigo (the app's
+  palette, `brand/palette.json` in the app repo), the phone frame with a
+  drawn status bar, and the sections it shares in shape with Seaglass's
 - `capsule/privacy.html` — privacy policy (text mirrors
   `docs/website/privacy-policy.md` in the app repo, `enriquedfa/Spec-Browser`;
   only the layout lives here)
-- `capsule/icon.svg` — Capsule's launcher icon
+- `capsule/icon.svg`, `capsule/icon-180.png` — Capsule's launcher icon; the
+  PNG is the Play icon, scaled
+- `capsule/og.png` — link preview image (1200×630)
+- `capsule/img/` — real screenshots and screen recordings from Capsule 0.8.1
+  on a Galaxy S26 Ultra, on public sites. Screenshots are 720 px wide WebP;
+  recordings are muted H.264 MP4 at 720 px and 30 fps with a WebP poster of
+  their first frame, cropped to the screenshots' area (the phone's 112 px
+  status bar and 42 px gesture bar removed), and play only while on screen
+  (never with Reduce motion). The frame draws a status bar above each, on the
+  capture's own top colour. Most come in pairs: `name` (light theme) and
+  `name-dark`. Pictures switch with `<picture>`; a clip's dark file is in its
+  `data-dark` and `data-dark-poster`, and the page's script swaps it in while
+  the page is dark (and back when the theme changes). `hero.mp4` is the
+  hero's demo (tabs, Hide things, the mini player, Open in app);
+  `hero-light.webp` and `hero-dark.webp` are its stills for the home card and
+  `og.png`. `landscape` is the phone sideways
 
 ### Wear OS Watch Faces
 

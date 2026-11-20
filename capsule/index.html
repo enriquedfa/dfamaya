@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Capsule: a Simple, Private Browser</title>
+  <meta name="description" content="A simple, private browser for Android. Ads and trackers never load, and nothing about you is collected." />
+  <meta name="theme-color" content="#0b0c10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Capsule: a Simple, Private Browser" />
+  <meta property="og:description" content="A simple, private browser for Android. Ads and trackers never load, and nothing about you is collected." />
+  <meta property="og:url" content="https://enriquedfa.github.io/dfamaya/capsule/" />
+  <meta property="og:image" content="https://enriquedfa.github.io/dfamaya/capsule/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..700&display=swap" />
+  <!-- The status bar's clock: Android's system font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" />
+  <link rel="stylesheet" href="../style.css?v=8" />
+  <link rel="stylesheet" href="capsule.css?v=2" />
+</head>
+<body class="capsule">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <!-- Capsule's own icons: Material Symbols (rounded, opsz 24, wght 400, FILL 0, GRAD 0),
+         converted from the app's vendored ImageVectors in ui/icons -->
+    <symbol id="c-block" viewBox="0 0 24 24"><path d="M8.1 21.21Q6.28 20.43 4.93 19.08Q3.58 17.73 2.79 15.9T2 12Q2 9.92 2.79 8.1Q3.58 6.27 4.93 4.93Q6.28 3.57 8.1 2.79Q9.93 2 12 2t3.9 0.79t3.17 2.14q1.35 1.35 2.14 3.17Q22 9.92 22 12t-0.79 3.9t-2.14 3.17q-1.35 1.35 -3.17 2.14T12 22Q9.93 22 8.1 21.21ZM12 20q1.35 0 2.6 -0.44T16.9 18.3L5.7 7.1Q4.88 8.15 4.44 9.4T4 12q0 3.35 2.33 5.68T12 20Zm6.3 -3.1q0.82 -1.05 1.26 -2.3T20 12Q20 8.65 17.68 6.32T12 4Q10.65 4 9.4 4.44T7.1 5.7L18.3 16.9ZM12 12Z"/></symbol>
+    <symbol id="c-cookie" viewBox="0 0 24 24"><path d="M12 22Q9.93 22 8.1 21.21Q6.28 20.43 4.93 19.08Q3.58 17.73 2.79 15.9T2 12Q2 9.98 2.84 8.06T5.16 4.7T8.7 2.5T13.2 2.05q0.38 0.05 0.57 0.31Q13.98 2.63 14 3.07q0.05 1.6 1.19 2.74T17.9 7q0.52 0.02 0.8 0.3Q18.98 7.57 19 8.15q0.05 1.05 0.64 1.73t1.64 1.02q0.35 0.13 0.54 0.36T22 11.85q0.05 2.07 -0.72 3.93t-2.13 3.24t-3.2 2.19T12 22Zm0 -2q3.05 0 5.41 -2.1T20 12.55Q18.75 12 18.04 11.05T17.08 8.92Q15.15 8.65 13.78 7.27t-1.7 -3.3Q10.08 3.92 8.56 4.7Q7.05 5.47 6.04 6.69T4.51 9.32T4 12q0 3.32 2.34 5.66T12 20Zm0 -8.1ZM10.5 10q0.63 0 1.06 -0.44T12 8.5T11.56 7.44T10.5 7T9.44 7.44T9 8.5T9.44 9.56T10.5 10Zm-2 5q0.63 0 1.06 -0.44T10 13.5T9.56 12.44T8.5 12T7.44 12.44T7 13.5t0.44 1.06T8.5 15ZM15 16q0.43 0 0.71 -0.29T16 15T15.71 14.29T15 14t-0.71 0.29T14 15t0.29 0.71T15 16Z"/></symbol>
+    <symbol id="c-ink-eraser" viewBox="0 0 24 24"><path d="M17.25 18H21q0.43 0 0.71 0.29T22 19t-0.29 0.71T21 20H15.25l2 -2ZM5.18 20Q4.98 20 4.79 19.93T4.45 19.7L2.63 17.88Q2.05 17.3 2.04 16.45T2.6 15L13.6 3.6Q14.18 3 15.01 3t1.41 0.57L21.4 8.55q0.57 0.58 0.57 1.43T21.4 11.4l-8.1 8.3q-0.15 0.15 -0.34 0.23T12.58 20H5.18Zm6.98 -2L20 9.95L15.05 5L4 16.4L5.6 18h6.55ZM12 12Z"/></symbol>
+    <symbol id="c-auto-awesome" viewBox="0 0 24 24"><path d="M17.65 6.35L15.9 5.55Q15.75 5.47 15.69 5.35T15.63 5.1T15.69 4.85T15.9 4.65l1.75 -0.8L18.45 2.1q0.08 -0.15 0.2 -0.22T18.9 1.8t0.25 0.08t0.2 0.22l0.8 1.75l1.75 0.8q0.15 0.07 0.22 0.2T22.2 5.1T22.13 5.35T21.9 5.55l-1.75 0.8L19.35 8.1q-0.07 0.15 -0.2 0.21T18.9 8.38T18.65 8.31T18.45 8.1L17.65 6.35ZM6.5 14.5l-4 -1.83Q2.28 12.58 2.18 12.39T2.08 12t0.1 -0.39T2.5 11.33L6.5 9.5l1.83 -4Q8.43 5.27 8.61 5.18Q8.8 5.07 9 5.07t0.39 0.1Q9.58 5.27 9.68 5.5l1.82 4l4 1.82q0.23 0.1 0.33 0.29T15.93 12t-0.1 0.39T15.5 12.68l-4 1.83l-1.82 4q-0.1 0.23 -0.29 0.32Q9.2 18.93 9 18.93T8.61 18.83Q8.43 18.73 8.33 18.5L6.5 14.5ZM9 15.15L10 13l2.15 -1L10 11L9 8.85L8 11L5.85 12L8 13l1 2.15Zm8.75 5.1L16 19.45q-0.15 -0.07 -0.22 -0.2T15.7 19t0.07 -0.25T16 18.55l1.75 -0.8L18.55 16q0.07 -0.15 0.2 -0.22T19 15.7t0.25 0.08T19.45 16l0.8 1.75L22 18.55q0.15 0.07 0.23 0.2T22.3 19t-0.07 0.25T22 19.45l-1.75 0.8L19.45 22q-0.08 0.15 -0.2 0.23T19 22.3T18.75 22.23T18.55 22l-0.8 -1.75ZM9 12Z"/></symbol>
+    <symbol id="c-forum" viewBox="0 0 24 24"><path d="M21 20.6q-0.2 0 -0.38 -0.08T20.3 20.3L18 18H8Q7.18 18 6.59 17.41T6 16V15H17q0.82 0 1.41 -0.59T19 13V6h1q0.83 0 1.41 0.59Q22 7.18 22 8V19.58q0 0.45 -0.3 0.74T21 20.6ZM4 12.18L5.18 11H15V4H4v8.17ZM3 15.6q-0.4 0 -0.7 -0.29T2 14.58V4Q2 3.17 2.59 2.59T4 2H15q0.83 0 1.41 0.59T17 4v7q0 0.82 -0.59 1.41T15 13H6L3.7 15.3Q3.55 15.45 3.38 15.53T3 15.6ZM4 11V4v7Z"/></symbol>
+    <symbol id="c-reader-mode" viewBox="0 0 24 24"><path d="M4 20Q3.18 20 2.59 19.41T2 18V6Q2 5.18 2.59 4.59T4 4H20q0.83 0 1.41 0.59Q22 5.18 22 6V18q0 0.82 -0.59 1.41T20 20H4ZM4 18h7V6H4V18Zm9 0h7V6H13V18Zm5.25 -3q0.32 0 0.54 -0.21T19 14.25T18.79 13.71T18.25 13.5h-3.5q-0.32 0 -0.54 0.21Q14 13.93 14 14.25t0.21 0.54T14.75 15h3.5Zm0 -2.5q0.32 0 0.54 -0.21T19 11.75T18.79 11.21T18.25 11h-3.5q-0.32 0 -0.54 0.21Q14 11.43 14 11.75t0.21 0.54t0.54 0.21h3.5Zm0 -2.5q0.32 0 0.54 -0.21T19 9.25Q19 8.92 18.79 8.71T18.25 8.5h-3.5q-0.32 0 -0.54 0.21T14 9.25q0 0.32 0.21 0.54T14.75 10h3.5ZM4 18V6V18Z"/></symbol>
+    <symbol id="c-translate" viewBox="0 0 24 24"><path d="M15.08 18.95l-0.85 2.43q-0.1 0.27 -0.35 0.45T13.33 22q-0.5 0 -0.81 -0.41Q12.2 21.18 12.4 20.68L16.2 10.63q0.13 -0.28 0.38 -0.45T17.13 10h0.75q0.3 0 0.55 0.17t0.38 0.45L22.6 20.7q0.2 0.48 -0.1 0.89T21.7 22q-0.33 0 -0.56 -0.18T20.78 21.35l-0.85 -2.4H15.08ZM9.05 13.98L4.7 18.3Q4.43 18.58 4.01 18.59T3.3 18.3Q3.03 18.02 3.03 17.6T3.3 16.9L7.65 12.55q-0.88 -0.88 -1.59 -2T4.75 8h2.1q0.5 0.97 1 1.7t1.2 1.45Q9.88 10.33 10.76 8.84T12.1 6H2Q1.58 6 1.29 5.71Q1 5.43 1 5T1.29 4.29T2 4H8V3Q8 2.57 8.29 2.29Q8.58 2 9 2Q9.43 2 9.71 2.29T10 3V4h6q0.43 0 0.71 0.29T17 5T16.71 5.71T16 6H14.1Q13.58 7.8 12.53 9.7t-2.07 2.9l2.4 2.45L12.1 17.1L9.05 13.98ZM15.7 17.2h3.6L17.5 12.1l-1.8 5.1Z"/></symbol>
+    <symbol id="c-print" viewBox="0 0 24 24"><path d="M8 21Q7.18 21 6.59 20.41T6 19V17H4Q3.18 17 2.59 16.41T2 15V11Q2 9.73 2.88 8.86T5 8H19q1.28 0 2.14 0.86Q22 9.73 22 11v4q0 0.82 -0.59 1.41T20 17H18v2q0 0.82 -0.59 1.41T16 21H8ZM4 15H6Q6 14.18 6.59 13.59T8 13h8q0.82 0 1.41 0.59Q18 14.18 18 15h2V11q0 -0.43 -0.29 -0.71T19 10H5Q4.58 10 4.29 10.29T4 11v4ZM16 8V5H8V8H6V5Q6 4.17 6.59 3.59T8 3h8q0.82 0 1.41 0.59T18 5V8H16Zm2 4.5q0.43 0 0.71 -0.29Q19 11.93 19 11.5T18.71 10.79T18 10.5t-0.71 0.29T17 11.5t0.29 0.71T18 12.5ZM16 19V15H8v4h8ZM4 10q0 0 0.29 0T5 10H19q0.43 0 0.71 0T20 10H18q0 0 -0.59 0T16 10H8Q7.18 10 6.59 10T6 10H4Z"/></symbol>
+    <symbol id="c-dark-mode" viewBox="0 0 24 24"><path d="M12 21Q8.23 21 5.61 18.39Q3 15.78 3 12Q3 8.55 5.25 6.01T11 3.05Q11.33 3 11.58 3.14t0.4 0.36q0.15 0.22 0.16 0.52T11.95 4.6Q11.53 5.25 11.31 5.97T11.1 7.5q0 2.25 1.57 3.82T16.5 12.9q0.78 0 1.54 -0.22T19.4 12.05q0.27 -0.17 0.56 -0.16t0.51 0.14q0.25 0.13 0.39 0.38T20.95 13q-0.35 3.45 -2.94 5.73Q15.43 21 12 21Zm0 -2q2.2 0 3.95 -1.21T18.5 14.63q-0.5 0.13 -1 0.2t-1 0.08q-3.07 0 -5.24 -2.16Q9.1 10.58 9.1 7.5Q9.1 7 9.18 6.5t0.2 -1Q7.43 6.3 6.21 8.05T5 12q0 2.9 2.05 4.95T12 19ZM11.75 12.25Z"/></symbol>
+    <symbol id="c-search" viewBox="0 0 24 24"><path d="M9.5 16Q6.78 16 4.89 14.11Q3 12.23 3 9.5Q3 6.77 4.89 4.89T9.5 3t4.61 1.89T16 9.5q0 1.1 -0.35 2.07T14.7 13.3l5.6 5.6q0.28 0.28 0.28 0.7q0 0.42 -0.28 0.7q-0.27 0.27 -0.7 0.27T18.9 20.3L13.3 14.7q-0.75 0.6 -1.72 0.95T9.5 16Zm0 -2q1.88 0 3.19 -1.31T14 9.5T12.69 6.31T9.5 5T6.31 6.31T5 9.5t1.31 3.19T9.5 14Z"/></symbol>
+    <symbol id="c-open-in-new" viewBox="0 0 24 24"><path d="M5 21Q4.18 21 3.59 20.41T3 19V5Q3 4.17 3.59 3.59T5 3h6q0.43 0 0.71 0.29T12 4q0 0.42 -0.29 0.71T11 5H5V19H19V13q0 -0.43 0.29 -0.71T20 12q0.43 0 0.71 0.29T21 13v6q0 0.82 -0.59 1.41T19 21H5ZM19 6.4L10.4 15q-0.28 0.28 -0.7 0.28T9 15T8.73 14.3Q8.73 13.88 9 13.6L17.6 5H15Q14.58 5 14.29 4.71T14 4Q14 3.57 14.29 3.29T15 3h5q0.43 0 0.71 0.29T21 4V9q0 0.42 -0.29 0.71T20 10T19.29 9.71T19 9V6.4Z"/></symbol>
+    <symbol id="c-bookmarks" viewBox="0 0 24 24"><path d="M10 19L5.45 21.28Q4.95 21.53 4.48 21.24T4 20.38V8Q4 7.18 4.59 6.59T6 6h8q0.83 0 1.41 0.59Q16 7.18 16 8V20.38q0 0.57 -0.47 0.86t-0.97 0.04L10 19ZM6 18.98L9.05 17.33Q9.5 17.08 10 17.08t0.95 0.25L14 18.98V8H6V18.98ZM18.29 17.71Q18 17.43 18 17V4H8Q7.58 4 7.29 3.71T7 3Q7 2.57 7.29 2.29T8 2H18q0.82 0 1.41 0.59T20 4V17q0 0.43 -0.29 0.71T19 18T18.29 17.71ZM6 8h8H10.95Q10.5 8 10 8T9.05 8H6Z"/></symbol>
+    <symbol id="c-lock" viewBox="0 0 24 24"><path d="M6 22Q5.18 22 4.59 21.41T4 20V10Q4 9.17 4.59 8.59T6 8H7V6Q7 3.92 8.46 2.46T12 1t3.54 1.46T17 6V8h1q0.82 0 1.41 0.59T20 10V20q0 0.82 -0.59 1.41T18 22H6ZM6 20H18V10H6V20Zm7.41 -3.59Q14 15.83 14 15T13.41 13.59T12 13t-1.41 0.59Q10 14.18 10 15t0.59 1.41T12 17t1.41 -0.59ZM9 8h6V6Q15 4.75 14.13 3.88T12 3T9.88 3.88T9 6V8ZM6 20V10V20Z"/></symbol>
+    <symbol id="c-language" viewBox="0 0 24 24"><path d="M8.13 21.21Q6.3 20.43 4.94 19.06Q3.58 17.7 2.79 15.88T2 11.99T2.79 8.11T4.94 4.94T8.13 2.79T12.01 2t3.88 0.79t3.17 2.15t2.15 3.17T22 11.99t-0.79 3.89t-2.15 3.19t-3.17 2.15T12.01 22T8.13 21.21ZM12 19.95q0.65 -0.9 1.13 -1.88T13.9 16H10.1q0.3 1.1 0.77 2.07T12 19.95ZM9.4 19.55Q8.95 18.73 8.61 17.84T8.05 16H5.1q0.72 1.25 1.81 2.18T9.4 19.55Zm5.2 0Q16 19.1 17.09 18.18T18.9 16H15.95q-0.22 0.95 -0.56 1.84q-0.34 0.89 -0.79 1.71ZM4.25 14h3.4Q7.58 13.5 7.54 13.01T7.5 12T7.54 10.99T7.65 10H4.25Q4.13 10.5 4.06 10.99Q4 11.48 4 12q0 0.52 0.06 1.01T4.25 14Zm5.4 0h4.7q0.07 -0.5 0.11 -0.99T14.5 12T14.46 10.99T14.35 10H9.65Q9.58 10.5 9.54 10.99Q9.5 11.48 9.5 12q0 0.52 0.04 1.01Q9.58 13.5 9.65 14Zm6.7 0h3.4q0.13 -0.5 0.19 -0.99T20 12T19.94 10.99T19.75 10h-3.4q0.07 0.5 0.11 0.99Q16.5 11.48 16.5 12q0 0.52 -0.04 1.01T16.35 14ZM15.95 8H18.9Q18.18 6.75 17.09 5.82T14.6 4.45q0.45 0.82 0.79 1.71T15.95 8ZM10.1 8h3.8Q13.6 6.9 13.13 5.93T12 4.05q-0.65 0.9 -1.13 1.88T10.1 8Zm-5 0H8.05Q8.28 7.05 8.61 6.16T9.4 4.45Q8 4.9 6.91 5.82T5.1 8Z"/></symbol>
+    <symbol id="c-update" viewBox="0 0 24 24"><path d="M12 21Q10.13 21 8.49 20.29T5.64 18.36T3.71 15.51T3 12T3.71 8.49T5.64 5.64Q6.85 4.42 8.49 3.71T12 3q2.05 0 3.89 0.88T19 6.35V5Q19 4.57 19.29 4.29T20 4q0.43 0 0.71 0.29T21 5V9q0 0.42 -0.29 0.71T20 10H16Q15.58 10 15.29 9.71T15 9Q15 8.57 15.29 8.29T16 8h1.75Q16.73 6.6 15.23 5.8T12 5Q9.08 5 7.04 7.04T5 12t2.04 4.96T12 19q2.38 0 4.25 -1.43T18.73 13.9q0.13 -0.4 0.45 -0.6T19.9 13.15q0.43 0.05 0.68 0.36t0.15 0.69Q20 17.18 17.58 19.09T12 21Zm1 -9.4l2.5 2.5q0.28 0.28 0.28 0.7q0 0.43 -0.28 0.7t-0.7 0.28T14.1 15.5L11.3 12.7Q11.15 12.55 11.08 12.36T11 11.98V8Q11 7.57 11.29 7.29T12 7t0.71 0.29T13 8v3.6Z"/></symbol>
+    <symbol id="c-markdown" viewBox="0 0 24 24"><path d="M15.25 12.13L14.58 11.45Q14.35 11.23 14.05 11.24t-0.53 0.24T13.3 12t0.22 0.52L15.3 14.3q0.3 0.3 0.7 0.3t0.7 -0.3l1.78 -1.78Q18.7 12.3 18.7 12T18.48 11.48T17.94 11.25T17.4 11.48l-0.65 0.65V9.75q0 -0.33 -0.21 -0.54T16 9T15.46 9.21T15.25 9.75v2.38ZM4 20Q3.18 20 2.59 19.41T2 18V6Q2 5.18 2.59 4.59T4 4H20q0.83 0 1.41 0.59Q22 5.18 22 6V18q0 0.82 -0.59 1.41T20 20H4ZM4 18H20V6H4V18Zm0 0V6V18ZM7 10.5H8v2.25q0 0.32 0.21 0.54T8.75 13.5q0.33 0 0.54 -0.21T9.5 12.75V10.5h1v3.75q0 0.32 0.21 0.54T11.25 15t0.54 -0.21T12 14.25V10Q12 9.57 11.71 9.29T11 9H6.5Q6.08 9 5.79 9.29T5.5 10v4.25q0 0.32 0.21 0.54T6.25 15q0.33 0 0.54 -0.21T7 14.25V10.5Z"/></symbol>
+    <symbol id="c-swipe" viewBox="0 0 24 24"><path d="M7.78 3.27Q5.75 4.05 4.1 5.5H6.25q0.33 0 0.54 0.21Q7 5.93 7 6.25T6.79 6.79T6.25 7H3Q2.58 7 2.29 6.71Q2 6.43 2 6V2.75Q2 2.42 2.21 2.21Q2.43 2 2.75 2T3.29 2.21T3.5 2.75V4.02Q5.3 2.55 7.48 1.77T12 1t4.53 0.77T20.5 4.02V2.75q0 -0.33 0.21 -0.54T21.25 2t0.54 0.21T22 2.75V6q0 0.43 -0.29 0.71T21 7H17.75Q17.43 7 17.21 6.79T17 6.25T17.21 5.71T17.75 5.5H19.9Q18.25 4.05 16.23 3.27T12 2.5T7.78 3.27ZM11.83 22q-0.6 0 -1.15 -0.23T9.7 21.13L5.3 16.7Q5.03 16.43 5.01 16.01T5.28 15.3L5.35 15.23q0.4 -0.4 0.94 -0.54T7.35 14.7L9 15.18V7Q9 6.57 9.29 6.29Q9.58 6 10 6t0.71 0.29T11 7v9.5q0 0.5 -0.4 0.8T9.73 17.48L8.58 17.15l2.55 2.55q0.13 0.13 0.31 0.21T11.83 20H16q0.82 0 1.41 -0.59T18 18V14q0 -0.43 0.29 -0.71T19 13t0.71 0.29T20 14v4q0 1.65 -1.18 2.82T16 22H11.83ZM13.71 10.29Q14 10.58 14 11v3q0 0.42 -0.29 0.71T13 15q-0.42 0 -0.71 -0.29T12 14V11q0 -0.43 0.29 -0.71T13 10t0.71 0.29Zm3 1Q17 11.58 17 12v2q0 0.42 -0.29 0.71T16 15q-0.42 0 -0.71 -0.29T15 14V12q0 -0.43 0.29 -0.71T16 11q0.43 0 0.71 0.29ZM14.28 17Z"/></symbol>
+    <symbol id="c-music-note" viewBox="0 0 24 24"><path d="M7.18 19.83Q6 18.65 6 17T7.18 14.18T10 13q0.58 0 1.06 0.14T12 13.55V4Q12 3.57 12.29 3.29T13 3h4q0.43 0 0.71 0.29T18 4V6q0 0.43 -0.29 0.71T17 7H14V17q0 1.65 -1.17 2.82T10 21T7.18 19.83Z"/></symbol>
+    <symbol id="c-download" viewBox="0 0 24 24"><path d="M11.63 15.51Q11.45 15.45 11.3 15.3L7.7 11.7Q7.4 11.4 7.41 11T7.7 10.3Q8 10 8.41 9.99Q8.83 9.98 9.13 10.27L11 12.15V5Q11 4.57 11.29 4.29T12 4t0.71 0.29T13 5v7.15l1.88 -1.88q0.3 -0.3 0.71 -0.29T16.3 10.3q0.27 0.3 0.29 0.7T16.3 11.7l-3.6 3.6q-0.15 0.15 -0.33 0.21T12 15.58T11.63 15.51ZM6 20Q5.18 20 4.59 19.41T4 18V16Q4 15.58 4.29 15.29T5 15t0.71 0.29T6 16v2H18V16q0 -0.43 0.29 -0.71T19 15t0.71 0.29T20 16v2q0 0.82 -0.59 1.41T18 20H6Z"/></symbol>
+    <symbol id="c-shield-person" viewBox="0 0 24 24"><path d="M9.51 11.99Q8.5 10.98 8.5 9.5Q8.5 8.02 9.51 7.01T12 6t2.49 1.01T15.5 9.5t-1.01 2.49T12 13Q10.53 13 9.51 11.99Zm3.56 -1.41Q13.5 10.15 13.5 9.5T13.08 8.42T12 8T10.93 8.42T10.5 9.5t0.43 1.07T12 11t1.08 -0.43ZM12 12ZM12 4.13L6 6.38V11.1q0 1.35 0.38 2.63t1.03 2.4Q8.45 15.6 9.6 15.3T12 15t2.4 0.3t2.2 0.83Q17.25 15 17.63 13.73T18 11.1V6.38L12 4.13ZM10.25 17.2Q9.4 17.4 8.63 17.75q0.72 0.75 1.58 1.3T12 19.9q0.95 -0.3 1.8 -0.85t1.57 -1.3Q14.6 17.4 13.75 17.2T12 17t-1.75 0.2Zm1.43 4.68Q11.53 21.85 11.38 21.8Q8 20.68 6 17.64T4 11.1V6.38Q4 5.75 4.36 5.25Q4.73 4.75 5.3 4.52l6 -2.25Q11.65 2.15 12 2.15t0.7 0.13l6 2.25q0.58 0.23 0.94 0.73T20 6.38V11.1q0 3.5 -2 6.54q-2 3.04 -5.38 4.16q-0.15 0.05 -0.3 0.07T12 21.9T11.68 21.88Z"/></symbol>
+    <symbol id="c-travel-explore" viewBox="0 0 24 24"><path d="M2 12Q2 9.92 2.79 8.1Q3.58 6.27 4.93 4.93Q6.28 3.57 8.1 2.79Q9.93 2 12 2q3.18 0 5.66 1.75t3.61 4.52q0.18 0.43 0.01 0.85T20.7 9.7Q20.3 9.82 19.94 9.63Q19.58 9.42 19.43 9.02Q18.83 7.52 17.7 6.38Q16.58 5.22 15 4.6V5q0 0.82 -0.59 1.41T13 7H11V9q0 0.42 -0.29 0.71T10 10H8v2H9q0.43 0 0.71 0.29T10 13v2H9L4.2 10.2Q4.13 10.65 4.06 11.1T4 12q0 3.05 2.01 5.32t5.06 2.63q0.4 0.05 0.66 0.34T12 21t-0.29 0.71t-0.69 0.24Q7.2 21.58 4.6 18.75T2 12Zm18.4 8.8L17.9 18.3q-0.53 0.3 -1.13 0.5T15.5 19q-1.88 0 -3.19 -1.31T11 14.5t1.31 -3.19T15.5 10t3.19 1.31T20 14.5q0 0.67 -0.2 1.28T19.3 16.9l2.5 2.5q0.28 0.28 0.28 0.7T21.8 20.8t-0.7 0.27T20.4 20.8ZM17.28 16.27Q18 15.55 18 14.5T17.28 12.73T15.5 12t-1.77 0.72T13 14.5t0.73 1.77T15.5 17t1.78 -0.73Z"/></symbol>
+    <symbol id="c-format-list-bulleted" viewBox="0 0 24 24"><path d="M10 19Q9.58 19 9.29 18.71Q9 18.43 9 18T9.29 17.29Q9.58 17 10 17H20q0.43 0 0.71 0.29T21 18t-0.29 0.71T20 19H10Zm0 -6Q9.58 13 9.29 12.71Q9 12.43 9 12T9.29 11.29Q9.58 11 10 11H20q0.43 0 0.71 0.29T21 12t-0.29 0.71T20 13H10ZM10 7Q9.58 7 9.29 6.71Q9 6.43 9 6T9.29 5.29Q9.58 5 10 5H20q0.43 0 0.71 0.29T21 6T20.71 6.71T20 7H10ZM5 20Q4.18 20 3.59 19.41T3 18T3.59 16.59T5 16t1.41 0.59Q7 17.18 7 18T6.41 19.41T5 20ZM5 14Q4.18 14 3.59 13.41T3 12T3.59 10.59T5 10t1.41 0.59Q7 11.18 7 12T6.41 13.41T5 14ZM3.59 7.41Q3 6.82 3 6T3.59 4.59T5 4T6.41 4.59Q7 5.18 7 6T6.41 7.41T5 8T3.59 7.41Z"/></symbol>
+    <symbol id="c-visibility-off" viewBox="0 0 24 24"><path d="M15.18 8.32q0.72 0.72 1.06 1.65t0.24 1.9q0 0.38 -0.28 0.64q-0.27 0.26 -0.65 0.26T14.91 12.51T14.65 11.88q0.13 -0.65 -0.07 -1.25Q14.38 10.02 13.95 9.6Q13.53 9.17 12.93 8.95T11.65 8.85q-0.38 0 -0.64 -0.28T10.75 7.93T11.01 7.29T11.65 7.02q0.95 -0.1 1.88 0.24t1.65 1.06ZM12 6Q11.53 6 11.08 6.04t-0.9 0.14Q9.75 6.25 9.41 6.05Q9.08 5.85 8.95 5.45T9.04 4.67T9.65 4.22Q10.23 4.1 10.81 4.05T12 4q3.43 0 6.26 1.8t4.34 4.85q0.1 0.2 0.15 0.41q0.05 0.21 0.05 0.44t-0.04 0.44t-0.14 0.41q-0.45 1 -1.11 1.88t-1.46 1.6q-0.3 0.28 -0.7 0.23T18.7 15.65T18.49 14.89T18.83 14.2q0.6 -0.57 1.1 -1.25T20.8 11.5Q19.55 8.98 17.19 7.49T12 6Zm0 13Q8.65 19 5.88 17.19T1.5 12.43Q1.38 12.23 1.31 11.99T1.25 11.5T1.3 11.02T1.48 10.58q0.5 -1 1.16 -1.91T4.15 7L2.08 4.9Q1.8 4.6 1.81 4.19Q1.83 3.77 2.1 3.5Q2.38 3.22 2.8 3.22T3.5 3.5l17 17q0.28 0.27 0.29 0.69T20.5 21.9q-0.27 0.28 -0.7 0.28T19.1 21.9L15.6 18.45q-0.88 0.28 -1.78 0.41T12 19ZM5.55 8.4Q4.83 9.05 4.23 9.82T3.2 11.5q1.25 2.52 3.61 4.01T12 17q0.5 0 0.98 -0.06T13.95 16.8l-0.9 -0.95q-0.28 0.07 -0.53 0.11T12 16Q10.13 16 8.81 14.69T7.5 11.5q0 -0.28 0.04 -0.53T7.65 10.45L5.55 8.4Zm7.98 2.33ZM9.75 12.6Z"/></symbol>
+    <symbol id="c-smartphone" viewBox="0 0 24 24"><path d="M7 23Q6.18 23 5.59 22.41T5 21V3Q5 2.17 5.59 1.59T7 1H17q0.82 0 1.41 0.59T19 3V6.1q0.45 0.18 0.73 0.55T20 7.5v2q0 0.47 -0.27 0.85T19 10.9V21q0 0.82 -0.59 1.41T17 23H7ZM7 21H17V3H7V21Zm0 0V3V21ZM12.71 5.71Q13 5.43 13 5T12.71 4.29T12 4T11.29 4.29T11 5t0.29 0.71T12 6T12.71 5.71Z"/></symbol>
+    <symbol id="c-domino-mask" viewBox="0 0 24 24"><path d="M7.8 18Q6.53 18 5.36 17.55T3.28 16.23Q2.08 15.1 1.54 13.56Q1 12.02 1 10.38Q1 8.42 1.95 7.21T4.73 6Q5.08 6 5.39 6.06T6.03 6.25L12 8.48L17.98 6.25Q18.3 6.13 18.61 6.06T19.28 6q1.82 0 2.77 1.21T23 10.38q0 1.65 -0.54 3.19t-1.74 2.66Q19.8 17.1 18.64 17.55Q17.48 18 16.2 18q-1.65 0 -2.8 -0.75T12.25 16.5h-0.5q0 0 -1.15 0.75T7.8 18Zm0 -2q0.92 0 1.72 -0.44T11 14.5h2q0.68 0.63 1.48 1.06T16.2 16q0.9 0 1.74 -0.31q0.84 -0.31 1.49 -0.96q0.85 -0.85 1.21 -2T21 10.38Q21 9.35 20.58 8.66Q20.15 7.97 19.23 8Q19.15 8 18.68 8.1L12 10.6L5.33 8.1Q5.2 8.05 5.06 8.02T4.78 8Q3.85 8 3.43 8.67T3 10.38q0 1.22 0.36 2.38t1.24 2q0.65 0.63 1.47 0.94T7.8 16ZM9.03 14.5q0.93 0 1.45 -0.41Q11 13.68 11 12.95Q11 11.73 9.39 10.61T5.98 9.5Q5.05 9.5 4.53 9.91T4 11.05q0 1.22 1.61 2.34T9.03 14.5ZM8.88 13Q7.93 13 6.81 12.38T5.5 11.1Q5.63 11.05 5.79 11.01T6.13 10.98q0.95 0 2.06 0.64T9.5 12.9Q9.38 12.95 9.21 12.98T8.88 13Zm6.1 1.53q1.8 0 3.41 -1.13T20 11.05Q20 10.33 19.49 9.9Q18.98 9.48 18.03 9.48q-1.8 0 -3.41 1.13T13 12.95q0 0.72 0.53 1.15t1.45 0.43ZM15.13 13Q14.95 13 14.8 12.98T14.53 12.9q0.2 -0.65 1.31 -1.27T17.9 11q0.17 0 0.32 0.02T18.5 11.1q-0.2 0.65 -1.31 1.28T15.13 13ZM12 12Z"/></symbol>
+    <!-- The site's own: page icons and the phone's status bar -->
+    <symbol id="sb-signal" viewBox="0 0 15 12"><rect x="0" y="7.2" width="3.26" height="4.8" rx="1.63"/><rect x="3.91" y="4.8" width="3.26" height="7.2" rx="1.63"/><rect x="7.83" y="2.4" width="3.26" height="9.6" rx="1.63"/><rect x="11.74" y="0" width="3.26" height="12" rx="1.63"/></symbol>
+    <symbol id="sb-battery" viewBox="0 0 24 12"><rect x="0" y="0" width="21.5" height="12" rx="4.6"/><rect x="22.1" y="3.6" width="1.6" height="4.8" rx="0.8" opacity="0.5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M6,22q-0.82,0-1.41-0.59T4,20V10Q4,9.17 4.59,8.59T6,8H7V6Q7,3.92 8.46,2.46T12,1t3.54,1.46T17,6V8h1q0.82,0 1.41,0.59T20,10V20q0,0.82-0.59,1.41T18,22H6Zm7.41-5.59Q14,15.83 14,15t-0.59-1.41T12,13t-1.41,0.59Q10,14.18 10,15t0.59,1.41T12,17t1.41-0.59ZM9,8h6V6q0-1.25-0.88-2.13T12,3T9.88,3.88T9,6V8Z"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M16.18,13H5q-0.42,0-0.71-0.29Q4,12.43 4,12t0.29-0.71T5,11H16.18l-4.9-4.9q-0.3-0.3-0.29-0.7T11.3,4.7Q11.6,4.42 12,4.41T12.7,4.7l6.6,6.6q0.15,0.15 0.21,0.33T19.58,12t-0.06,0.38T19.3,12.7l-6.6,6.6q-0.28,0.27-0.69,0.27T11.3,19.3Q11,19 11,18.59q0-0.41 0.3-0.71L16.18,13Z"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M11,16.18V5q0-0.43 0.29-0.71T12,4t0.71,0.29T13,5V16.18l4.9-4.9q0.3-0.3 0.7-0.29t0.7,0.31q0.28,0.3 0.29,0.7T19.3,12.7l-6.6,6.6q-0.15,0.15-0.33,0.21T12,19.58t-0.38-0.06T11.3,19.3L4.7,12.7q-0.28-0.28-0.28-0.69T4.7,11.3Q5,11 5.41,11t0.71,0.3L11,16.18Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4,20q-0.82,0-1.41-0.59T2,18V6Q2,5.18 2.59,4.59T4,4H20q0.83,0 1.41,0.59Q22,5.18 22,6V18q0,0.82-0.59,1.41T20,20H4Zm8.26-7.21q0.14-0.04 0.26-0.11L19.6,8.25q0.2-0.13 0.3-0.31T20,7.52q0-0.5-0.42-0.75T18.7,6.8L12,11L5.3,6.8Q4.85,6.52 4.43,6.79T4,7.52Q4,7.77 4.1,7.96T4.4,8.25l7.08,4.42q0.13,0.08 0.26,0.11T12,12.83t0.26-0.04Z"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M10.23,20.27Q9.5,19.55 9.5,18.5t0.73-1.77T12,16t1.78,0.73T14.5,18.5t-0.72,1.77T12,21t-1.77-0.73Zm5.34-9.67q1.69,0.6 3.06,1.65q0.5,0.38 0.51,0.99T18.7,14.3q-0.42,0.43-1.05,0.44T16.53,14.4q-0.95-0.65-2.1-1.02T12,13T9.58,13.38T7.48,14.4q-0.5,0.35-1.13,0.33T5.3,14.27q-0.43-0.45-0.43-1.06t0.5-0.99q1.38-1.05 3.06-1.64T12,10t3.56,0.6Zm2.32-5.58q2.76,1.03 4.96,2.9q0.5,0.42 0.52,1.05t-0.42,1.07q-0.43,0.43-1.05,0.44T20.78,10.1q-1.8-1.47-4.04-2.29T12,7T7.26,7.81T3.23,10.1q-0.5,0.4-1.13,0.39q-0.63-0.01-1.05-0.44Q0.6,9.6 0.63,8.98T1.15,7.93q2.2-1.88 4.96-2.9T12,4t5.89,1.02Z"/></symbol>
+    <symbol id="i-gplay" viewBox="0 0 24 24"><path d="M6.5 3.6c-.6-.4-1.5 0-1.5.8v15.2c0 .8.9 1.2 1.5.8l12.3-7.6a1 1 0 0 0 0-1.7z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap bar">
+      <div class="crumbs">
+        <a class="parent" href="../">dfamaya</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a class="logo" href="./" aria-current="page">
+          <img class="logo-mark capsule-mark" src="icon.svg" alt="" width="28" height="28" />
+          <span class="logo-text">Capsule</span>
+        </a>
+      </div>
+      <nav class="nav-links" aria-label="Capsule">
+        <a href="privacy.html">Privacy</a>
+      </nav>
+      <a class="btn btn-sm btn-primary head-cta" href="https://groups.google.com/g/capsule-browser" target="_blank" rel="noopener noreferrer" aria-label="Join Capsule’s alpha">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+        <span class="short">Join</span><span class="long">Join the alpha</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero ------------------------------------------------------------------>
+    <section class="c-hero">
+      <div class="wrap c-grid">
+        <div class="c-intro hero-exit">
+          <p class="app-badge rise" style="--d:0">
+            <img class="capsule-mark" src="icon.svg" alt="" width="26" height="26" />
+            Capsule for Android
+          </p>
+          <h1 class="rise" style="--d:1"><span class="hl">Just the page.</span> Nothing&nbsp;else.</h1>
+          <p class="lede rise" style="--d:2">
+            A simple, private browser for Android. Ads and trackers never load, and nothing about you
+            is collected.
+          </p>
+          <div class="btn-row stack-sm rise" style="--d:3">
+            <a class="btn btn-primary" href="https://groups.google.com/g/capsule-browser" target="_blank" rel="noopener noreferrer">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+              Join the alpha
+            </a>
+            <a class="btn btn-ghost" href="#blocking">
+              See it work
+              <svg class="icon nudge-y" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-down"></use></svg>
+            </a>
+          </div>
+          <p class="fine rise" style="--d:4">Android&nbsp;12 and up. In alpha on Google&nbsp;Play.</p>
+        </div>
+        <div class="split-visual rise" style="--d:2">
+          <div class="shot shot-lg" role="img" aria-label="Capsule in use: switching tabs, hiding a box on a page, music playing on in the mini player, and the site’s sheet opening the page in Spotify." style="--sb:light-dark(#fffeff, #1b191a)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><video data-clip src="img/hero.mp4" poster="img/hero-poster.webp" data-dark="img/hero-dark.mp4" data-dark-poster="img/hero-dark-poster.webp" width="720" height="1458" muted loop playsinline preload="none" aria-hidden="true"></video></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blocking --------------------------------------------------------------->
+    <section class="section" id="blocking">
+      <div class="wrap split">
+        <div class="split-copy">
+          <div class="section-head reveal">
+            <p class="eyebrow">Blocking</p>
+            <h2>Ads and trackers never load</h2>
+            <p class="lede">They’re blocked before they reach your phone, so pages load faster.</p>
+          </div>
+          <ul class="points reveal">
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-block"></use></svg></span>
+              <div><strong>On from the start</strong>Built on EasyList, EasyPrivacy and uBlock Origin’s lists, kept up to date in the background.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-cookie"></use></svg></span>
+              <div><strong>Cookie pop-ups too</strong>Most cookie banners never show up.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-shield-person"></use></svg></span>
+              <div><strong>Site broken? Turn it off there</strong>Tap the address and switch off <em>Block on this site</em>.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="split-visual compare reveal">
+          <figure>
+            <div class="shot" style="--sb:light-dark(#fefefe, #1e1e1e)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/before-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/before.webp" alt="The same news page in another browser: an advertisement for a finance app between the stories, and another at the bottom." width="720" height="1457" loading="lazy" /></picture></div></div>
+            <figcaption class="shot-label"><strong>Another browser</strong></figcaption>
+          </figure>
+          <figure>
+            <div class="shot" style="--sb:light-dark(#fefefe, #201f1f)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/after-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/after.webp" alt="The same news page in Capsule: only the stories, one after another." width="720" height="1457" loading="lazy" /></picture></div></div>
+            <figcaption class="shot-label"><strong>Capsule</strong></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hide things ------------------------------------------------------------>
+    <section class="section" id="hide">
+      <div class="wrap split split-rev">
+        <div class="split-copy">
+          <div class="section-head reveal">
+            <p class="eyebrow">Hide things</p>
+            <h2>Hide anything else</h2>
+            <p class="lede">Open <em>Hide things</em> and tap whatever’s in the way. It stays hidden next time too.</p>
+          </div>
+          <ul class="points reveal">
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-ink-eraser"></use></svg></span>
+              <div><strong>Didn’t get all of it?</strong>Tap <em>Bigger</em>.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-update"></use></svg></span>
+              <div><strong>Changed your mind?</strong>Undo it, or <em>Reset</em> the site.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="split-visual reveal">
+          <div class="shot shot-lg" role="img" aria-label="Hiding things on a Wikipedia article: tapping a notice box, then the language button, each one disappearing with “Hidden on this site” and Undo." style="--sb:light-dark(#eaebf0, #26272a)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><video data-clip src="img/hide.mp4" poster="img/hide-poster.webp" data-dark="img/hide-dark.mp4" data-dark-poster="img/hide-dark-poster.webp" width="720" height="1458" muted loop playsinline preload="none" aria-hidden="true"></video></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- On-device AI ----------------------------------------------------------->
+    <section class="section" id="ai">
+      <div class="wrap split">
+        <div class="split-copy">
+          <div class="section-head reveal">
+            <p class="eyebrow">Gemini Nano</p>
+            <h2>Summaries, on your phone</h2>
+            <p class="lede">Summarise a page or ask it a question. It runs on your phone, only when you ask.</p>
+          </div>
+          <ul class="points reveal">
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-format-list-bulleted"></use></svg></span>
+              <div><strong>Summarise</strong>A few bullet points, written as you watch.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-forum"></use></svg></span>
+              <div><strong>Ask about this page</strong>Ask anything about what’s on it.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-smartphone"></use></svg></span>
+              <div><strong>Where it works</strong>Phones with Gemini Nano built in.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="split-visual reveal">
+          <div class="shot shot-lg" role="img" aria-label="Summarise on a Wikipedia article about a web browser: the page draws back, the sheet’s edge glows, and four points appear word by word." style="--sb:light-dark(#ecebf2, #26272a)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><video data-clip src="img/summarise.mp4" poster="img/summarise-poster.webp" data-dark="img/summarise-dark.mp4" data-dark-poster="img/summarise-dark-poster.webp" width="720" height="1458" muted loop playsinline preload="none" aria-hidden="true"></video></div></div>
+          <div class="shot shot-sm" style="--sb:light-dark(#acc5dd, #242e3c)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/ask-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/ask.webp" alt="Ask about this page: the question “Will Jensen return as CEO?” and the answer, “No, the board does not intend to reinstate Jensen as CEO.”" width="720" height="1457" loading="lazy" /></picture></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reading ---------------------------------------------------------------->
+    <section class="section" id="reading">
+      <div class="wrap split split-rev">
+        <div class="split-copy">
+          <div class="section-head reveal">
+            <p class="eyebrow">Reading</p>
+            <h2>Reader mode</h2>
+            <p class="lede">Just the article, in the theme, font and size you like.</p>
+          </div>
+          <ul class="points reveal">
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-translate"></use></svg></span>
+              <div><strong>Translate</strong>Pages translate on your phone.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-dark-mode"></use></svg></span>
+              <div><strong>Darken every site</strong>Dark mode for every site, off for the ones you pick.</div>
+            </li>
+            <li>
+              <span class="p-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-markdown"></use></svg></span>
+              <div><strong>Print or copy</strong>Print the article, or copy it as Markdown.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="split-visual trio reveal">
+          <div class="shot" style="--sb:#ffffff"><div class="screen"><span class="sb" data-tone="light" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><img src="img/reader-light.webp" alt="Reader in its light theme: a news article set in Literata, with the site’s name and buttons for Markdown, Print and text size." width="720" height="1457" loading="lazy" /></div></div>
+          <div class="shot" style="--sb:#f6eedc"><div class="screen"><span class="sb" data-tone="light" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><img src="img/reader-sepia.webp" alt="The same article in Reader’s sepia theme, in a sans font." width="720" height="1457" loading="lazy" /></div></div>
+          <div class="shot" style="--sb:#121216"><div class="screen"><span class="sb" data-tone="dark" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><img src="img/reader-dark.webp" alt="The same article in Reader’s dark theme, in Literata at a larger size." width="720" height="1457" loading="lazy" /></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Made for Android ------------------------------------------------------->
+    <section class="section" id="android">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <p class="eyebrow">Made for Android</p>
+          <h2>Feels at home</h2>
+        </div>
+        <div class="clips stagger">
+          <article class="clip reveal lift">
+            <div class="clip-visual"><div class="shot" role="img" aria-label="The tab switcher: the page shrinks into a row of tab cards, the row slides to another tab, which grows back to fill the screen." style="--sb:light-dark(#eaebf0, #26272a)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><video data-clip src="img/tabs.mp4" poster="img/tabs-poster.webp" data-dark="img/tabs-dark.mp4" data-dark-poster="img/tabs-dark-poster.webp" width="720" height="1458" muted loop playsinline preload="none" aria-hidden="true"></video></div></div></div>
+            <div class="clip-copy">
+              <h3>Tabs</h3>
+              <p>Pull down to see them, swipe the bar to switch, flick up to close.</p>
+            </div>
+          </article>
+          <article class="clip reveal lift">
+            <div class="clip-visual"><div class="shot" role="img" aria-label="Typing “yo” in the bar, picking Search YouTube, typing “xpeng l03” and landing on YouTube’s results." style="--sb:light-dark(#faf7ff, #13121b)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><video data-clip src="img/site-search.mp4" poster="img/site-search-poster.webp" data-dark="img/site-search-dark.mp4" data-dark-poster="img/site-search-dark-poster.webp" width="720" height="1458" muted loop playsinline preload="none" aria-hidden="true"></video></div></div></div>
+            <div class="clip-copy">
+              <h3>Search inside a site</h3>
+              <p>Type a site’s name and search it right from the bar.</p>
+            </div>
+          </article>
+          <article class="clip reveal lift">
+            <div class="clip-visual"><div class="shot" role="img" aria-label="On YouTube’s site, the YouTube icon in the bar; Open in YouTube in the page’s sheet hands the page to the YouTube app." style="--sb:light-dark(#ffffff, #0f0f0f)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><video data-clip src="img/open-in-app.mp4" poster="img/open-in-app-poster.webp" data-dark="img/open-in-app-dark.mp4" data-dark-poster="img/open-in-app-dark-poster.webp" width="720" height="1458" muted loop playsinline preload="none" aria-hidden="true"></video></div></div></div>
+            <div class="clip-copy">
+              <h3>Open in the app</h3>
+              <p>If a page has an app, its icon shows in the bar. Tap it to open the page there.</p>
+            </div>
+          </article>
+        </div>
+        <article class="clip clip-wide reveal lift">
+          <div class="clip-visual"><div class="shot shot-land" style="--sb:light-dark(#ffffff, #121212)"><div class="screen"><picture><source srcset="img/landscape-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/landscape.webp" alt="A recipe page with the phone sideways: the page fills the screen and the bar sits in a slim column at the right edge." width="1200" height="489" loading="lazy" /></picture></div></div></div>
+          <div class="clip-copy">
+            <h3>Sideways too</h3>
+            <p>Turn your phone and the bar moves to the side.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- More screens ----------------------------------------------------------->
+    <section class="section" id="screens">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <p class="eyebrow">Straight from the app</p>
+          <h2>A closer look</h2>
+        </div>
+        <div class="gallery reveal" tabindex="0" aria-label="Screenshots">
+          <figure>
+            <div class="shot" style="--sb:light-dark(#fcf8ff, #13131b)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/typing-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/typing.webp" alt="Typing “no knead” in the bar: search suggestions above the keyboard, and a page from history." width="720" height="1457" loading="lazy" /></picture></div></div>
+            <figcaption><strong>Search</strong></figcaption>
+          </figure>
+          <figure>
+            <div class="shot" style="--sb:light-dark(#adadad, #0a0a0a)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/menu-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/menu.webp" alt="The menu over a page: the address with Save and Share, then Find, Pin this page, Reader and Hide things, Summarise and Ask, and Site settings." width="720" height="1457" loading="lazy" /></picture></div></div>
+            <figcaption><strong>Menu</strong></figcaption>
+          </figure>
+          <figure>
+            <div class="shot" style="--sb:light-dark(#acacac, #0b0e10)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/site-settings-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/site-settings.webp" alt="The site’s sheet: a secure connection, then switches for Block on this site, Desktop site, Darken this site, Mini player and Open in app, and Text size." width="720" height="1457" loading="lazy" /></picture></div></div>
+            <figcaption><strong>Site settings</strong></figcaption>
+          </figure>
+          <figure>
+            <div class="shot" style="--sb:light-dark(#0095ee, #0095ee)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/translate-after-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/translate-after.webp" alt="A Japanese shopping site translated into English, with the Japanese to English bar at the bottom and Show original." width="720" height="1457" loading="lazy" /></picture></div></div>
+            <figcaption><strong>Translate</strong></figcaption>
+          </figure>
+          <figure>
+            <div class="shot" style="--sb:light-dark(#efecf8, #1f1f27)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/bookmarks-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/bookmarks.webp" alt="Bookmarks: spaces called Bookmarks and Work, and folders for Recipes, Car stuff and Gym Routines, each with its icon." width="720" height="1457" loading="lazy" /></picture></div></div>
+            <figcaption><strong>Bookmarks</strong></figcaption>
+          </figure>
+          <figure>
+            <div class="shot" style="--sb:light-dark(#efecf8, #1f1f27)"><div class="screen"><span class="sb" data-tone="auto" aria-hidden="true"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 15 12"><use href="#sb-signal"></use></svg><svg viewBox="0 0 24 24"><use href="#i-wifi"></use></svg><svg viewBox="0 0 24 12"><use href="#sb-battery"></use></svg></span></span><picture><source srcset="img/settings-dark.webp" media="(prefers-color-scheme: dark)" /><img src="img/settings.webp" alt="Settings: theme, wallpaper colours, Darken every site, the navigation bar, gestures, tabs and bookmarks." width="720" height="1457" loading="lazy" /></picture></div></div>
+            <figcaption><strong>Settings</strong></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy ---------------------------------------------------------------->
+    <section class="section" id="privacy">
+      <div class="wrap">
+        <div class="priv reveal">
+          <div class="priv-copy">
+            <p class="eyebrow">Privacy</p>
+            <h2>Nothing about you is collected</h2>
+            <p>No account, no ads, no analytics. Your history and bookmarks stay on your phone.</p>
+            <p class="more"><a href="privacy.html">Read the privacy policy</a></p>
+          </div>
+          <ul class="facts">
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-lock"></use></svg>
+              <span><strong>HTTPS by default</strong>And tracking codes are stripped from links.</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-domino-mask"></use></svg>
+              <span><strong>Private tabs</strong>No history, and everything’s deleted when you close them.</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#c-language"></use></svg>
+              <span><strong>What Capsule sends</strong>Only what it needs, like search suggestions and block-list updates. The privacy policy lists all of it.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -------------------------------------------------------------------->
+    <section class="section" id="faq">
+      <div class="wrap faq-wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Questions</p>
+          <h2>Good to know</h2>
+          <p class="lede">Something else? Email me at <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>.</p>
+        </div>
+        <div class="faq reveal">
+          <details name="faq">
+            <summary>How do I get it?</summary>
+            <p>Join the <a href="https://groups.google.com/g/capsule-browser" target="_blank" rel="noopener noreferrer">testers group</a>, then install it from Google Play.</p>
+          </details>
+          <details name="faq">
+            <summary>Which phones does it work on?</summary>
+            <p>Android 12 and up. Summarise and Ask need a phone with Gemini Nano.</p>
+          </details>
+          <details name="faq">
+            <summary>What is it built on?</summary>
+            <p>Android System WebView, the same engine as Chrome. Google keeps it updated through Play.</p>
+          </details>
+          <details name="faq">
+            <summary>A site doesn’t work right. What can I do?</summary>
+            <p>Tap the address and switch off <em>Block on this site</em>. And let me know which site it was.</p>
+          </details>
+          <details name="faq">
+            <summary>Can I bring my bookmarks?</summary>
+            <p>Yes. Export them from a desktop browser as an HTML file, then import it in Settings › Bookmarks.</p>
+          </details>
+          <details name="faq">
+            <summary>Which search engine does it use?</summary>
+            <p>DuckDuckGo by default. You can switch to Google, Brave, Kagi, Ecosia, Bing or Qwant.</p>
+          </details>
+          <details name="faq">
+            <summary>Can it be my default browser?</summary>
+            <p>Yes, from Settings.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -------------------------------------------------------------------->
+    <section class="section cta">
+      <div class="wrap reveal">
+        <img src="icon.svg" alt="" width="72" height="72" />
+        <h2>Try Capsule</h2>
+        <p>It’s in alpha on Google&nbsp;Play.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://groups.google.com/g/capsule-browser" target="_blank" rel="noopener noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gplay"></use></svg>
+            Join the alpha
+          </a>
+          <a class="btn btn-ghost" href="mailto:developerdfa@gmail.com?subject=Capsule">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"></use></svg>
+            Email me
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <span>&copy; <span data-year>2026</span> Enrique Amaya</span>
+      <nav aria-label="Footer">
+        <a href="../">More apps</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="mailto:developerdfa@gmail.com">developerdfa@gmail.com</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    document.querySelectorAll('[data-year]').forEach(function (n) { n.textContent = new Date().getFullYear(); });
+    // Each recording comes in the page's theme: the light one is in the markup, and a dark
+    // one, where there is one, swaps in while the page is dark (and back when it changes).
+    // They play only while on screen, and not at all with Reduce motion (the poster stays,
+    // with controls to play it by hand).
+    (function () {
+      var vids = [].slice.call(document.querySelectorAll('video[data-clip]'));
+      var dark = matchMedia('(prefers-color-scheme: dark)');
+      var still = matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window);
+      vids.forEach(function (v) {
+        v.dataset.light = v.getAttribute('src');
+        v.dataset.lightPoster = v.getAttribute('poster');
+      });
+      function play(v) { var p = v.play(); if (p) p.catch(function () {}); }
+      function theme() {
+        vids.forEach(function (v) {
+          if (!v.dataset.dark) return;
+          var src = dark.matches ? v.dataset.dark : v.dataset.light;
+          if (v.getAttribute('src') === src) return;
+          var wasPlaying = !v.paused;
+          v.poster = dark.matches ? v.dataset.darkPoster : v.dataset.lightPoster;
+          v.src = src;
+          if (wasPlaying) play(v);
+        });
+      }
+      theme();
+      dark.addEventListener('change', theme);
+      if (still) {
+        vids.forEach(function (v) { v.controls = true; });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) play(e.target);
+          else e.target.pause();
+        });
+      }, { threshold: 0.35 });
+      vids.forEach(function (v) { io.observe(v); });
+    })();
+  </script>
+</body>
+</html>

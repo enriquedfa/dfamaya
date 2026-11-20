@@ -22,7 +22,7 @@
       <div class="crumbs">
         <a class="parent" href="../">dfamaya</a>
         <span class="sep" aria-hidden="true">/</span>
-        <a class="logo" href="privacy.html">
+        <a class="logo" href="./">
           <img class="logo-mark capsule-mark" src="icon.svg" alt="" width="28" height="28" />
           <span class="logo-text">Capsule</span>
         </a>
@@ -38,7 +38,7 @@
       <header class="page-head">
         <p class="eyebrow">Capsule</p>
         <h1>Capsule privacy policy</h1>
-        <p class="updated">Effective date: 16 November 2026</p>
+        <p class="updated">Effective date: 20 November 2026</p>
       </header>
 
       <article class="prose">
@@ -53,7 +53,7 @@
         <div class="summary-box">
           <ul>
             <li>Capsule has no account, no sync, no ads, no analytics and no crash reporter of its own. The developer receives none of your data.</li>
-            <li>Your history, tabs, pins, settings and the things you hide on pages stay on your phone.</li>
+            <li>Your history, tabs, pins, bookmarks, settings and the things you hide on pages stay on your phone.</li>
             <li>The websites you open see what any website sees when you visit it. That is browsing, and what each site does with it is up to that site.</li>
             <li>Apart from the pages you open, Capsule itself sends only what is listed under <a href="#what-capsule-itself-sends">What Capsule itself sends</a>, and most of it can be turned off.</li>
           </ul>
@@ -103,12 +103,23 @@
           functionality, optional, and not shared.
         </p>
 
+        <h3 id="suggestions-from-sites">Suggestions from sites</h3>
+        <p>
+          When you search inside a site from the address bar (its name shows as a chip there), and that site
+          publishes search suggestions (Wikipedia, Wiktionary and MDN do), Capsule sends what you have typed
+          so far to that site, to show its suggestions. As with the search engine, the request carries your
+          typing and nothing else: no cookies and no identifier. It is never sent from a private tab. The
+          site handles it under its own privacy policy. Turn it off in Settings › Privacy › Suggestions from
+          sites.
+        </p>
+
         <h3 id="block-list-updates">Block-list updates</h3>
         <p>
-          Once a day, on Wi-Fi, Capsule downloads fresh copies of its block lists from the lists’ own
-          websites (EasyList, Fanboy and uBlock Origin’s lists). The requests carry nothing about you or
-          your browsing. Turn it off in Settings › Privacy › Block lists, and Capsule uses the copy built
-          into the app.
+          Every six hours, on Wi-Fi or another unmetered connection, Capsule downloads fresh copies of its
+          block lists from the lists’ own websites (EasyList, Fanboy, uBlock Origin’s and AdGuard’s lists,
+          and a regional list for your phone’s languages). The requests carry nothing about you or your
+          browsing. Turn it off in Settings › Privacy › Update automatically, and Capsule uses the copy
+          built into the app.
         </p>
 
         <h3 id="translation-languages">Translation languages</h3>
@@ -152,6 +163,8 @@
         <ul>
           <li><strong>History</strong> of the pages you visited (not in private tabs), your open tabs and recently closed tabs.</li>
           <li><strong>Pins</strong>, and the icons of the pinned sites.</li>
+          <li><strong>Bookmarks</strong>, their spaces and folders, and the icons of bookmarks you import.</li>
+          <li><strong>Sites you can search from the address bar,</strong> learned from the search boxes you use on them (not in private tabs).</li>
           <li><strong>Your settings</strong>, your settings for each site, the things you hid on sites, and your answers to sites’ permission requests.</li>
           <li><strong>Cookies and site data</strong>, kept by WebView, as in any browser, so you stay signed in.</li>
           <li><strong>Downloads</strong> you start, which Android saves to your Downloads folder.</li>
@@ -166,6 +179,7 @@
         <ul>
           <li><strong>Links you open from other apps</strong> come to Capsule from that app, which already knows the link. When an app opens a link in a Capsule tab over itself (a Custom Tab), Capsule tells that app nothing about what you do there.</li>
           <li><strong>When you share a page or open a link in another app,</strong> it goes to the app you pick, because you asked.</li>
+          <li><strong>Finding the app that owns a link.</strong> To show an installed app’s icon in the bar, name it in prompts before leaving Capsule, and offer “Open in [App]” in Page info and the link menu, Capsule asks Android which installed app handles the current address (using Android’s <code>QUERY_ALL_PACKAGES</code> permission, as other web browsers do). That lookup runs only on your phone, is never stored or sent anywhere, and is never exposed to websites.</li>
         </ul>
 
         <h2 id="sharing">Sharing</h2>
@@ -183,7 +197,8 @@
 
         <h2 id="keeping-and-deleting">Keeping and deleting your data</h2>
         <ul>
-          <li><strong>History</strong> stays until you delete it, the pages you select or all of it, in History.</li>
+          <li><strong>History</strong> stays until you delete it, the pages you select or all of it, in History. Clearing history also forgets the sites learned for searching from the address bar in that time.</li>
+          <li><strong>Bookmarks</strong> stay until you delete them, in Bookmarks.</li>
           <li><strong>A site’s settings, hidden things and permissions</strong> go with Settings › Website settings › Forget this site, or Forget all sites.</li>
           <li><strong>Everything</strong> goes when you uninstall Capsule or clear its storage in Android’s Settings. Your downloads stay in your Downloads folder until you delete them.</li>
           <li><strong>The developer</strong> holds no copy of your data, so there is nothing to ask them to delete. Websites and search engines keep what they log under their own policies.</li>

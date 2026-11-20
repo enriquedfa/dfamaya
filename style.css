@@ -814,6 +814,7 @@ code {
 }
 .app-phone img { display: block; width: 100%; height: auto; border-radius: calc((var(--w) - 14px) * 36 / 411) calc((var(--w) - 14px) * 36 / 411) 0 0; }
 .app-title img.seaglass-mark { view-transition-name: seaglass-mark; }
+.app-title img.capsule-mark { view-transition-name: capsule-mark; }
 
 @media (min-width: 860px) {
   .app-card-feature { grid-template-columns: 1.1fr 1fr; align-items: stretch; }
